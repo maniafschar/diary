@@ -54,7 +54,7 @@ class action {
 			document.querySelector('login error').innerText = 'Ein Passwort wird benötigt.';
 		else
 			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', contact => {
-				document.querySelector('body>h2').innerText = contact.name;
+				document.querySelector('body>h2').innerText = contact.client.name;
 				document.dispatchEvent(new CustomEvent('event'));
 			});
 	}
@@ -107,6 +107,7 @@ class action {
 		var legalCheck = document.querySelector('login input-checkbox[name="legal"]');
 		legalCheck.style.color = '';
 		var client = {
+			name: document.querySelector('login textarea[name="clientName"]').value,
 			note: document.querySelector('login textarea[name="clientNote"]')?.value,
 			contacts: [
 				{

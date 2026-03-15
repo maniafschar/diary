@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 public class Client extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String note;
+	private String name;
 	private String image;
 	@OneToMany
 	@JsonBackReference
@@ -31,6 +32,14 @@ public class Client extends BaseEntity {
 
 	public void setImage(final String image) {
 		this.image = image;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	public List<Contact> getContacts() {
