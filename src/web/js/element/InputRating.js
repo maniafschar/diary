@@ -1,10 +1,13 @@
 export { InputRating };
 
 class InputRating extends HTMLElement {
+	onchange = null;
+
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
 	}
+
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
 detailRating {
@@ -45,7 +48,7 @@ ratingSelection span {
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
 			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em;">
-	<empty><span>☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
+	<empty><span onclick="this.getRootNode().host.rate(event,1)">☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,3)">☆</span><span onclick="this.getRootNode().host.rate(event,4)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,5)">☆</span></empty>
 	<full><span onclick="this.getRootNode().host.rate(event,1)">★</span><span onclick="this.getRootNode().host.rate(event,2)">★</span><span
@@ -64,10 +67,17 @@ ratingSelection span {
 			this._root.appendChild(element);
 		}
 	}
+
+	setOnchange(exec) {
+		this.onchange = exec;
+	}
+
 	rate(event, x) {
 		var e = event.target.getRootNode().querySelectorAll('ratingSelection > full span');
 		for (var i = 0; i < 5; i++)
 			e[i].style.display = i < x ? '' : 'none';
 		event.target.getRootNode().host.setAttribute('value', x * 20);
+		if (this.onchange)
+			this.onchange(x * 20);
 	}
 }

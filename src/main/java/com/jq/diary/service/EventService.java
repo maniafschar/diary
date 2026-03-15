@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jq.diary.entity.Client;
+import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventImage;
+import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
 
 @Service
@@ -47,5 +49,21 @@ public class EventService {
 
 	public void delete(final EventImage eventImage) {
 		this.repository.delete(eventImage);
+	}
+
+	public EventRating putRating(final BigInteger eventId, final BigInteger contactId, final Double rating) {
+		final EventRating eventRating;
+		final List<EventRating> list = this.repository
+				.list("from EventRating where contact.id=" + contactId + " and event.id=" + eventId, EventRating.class);
+		if (list.size() > 0)
+			eventRating = list.get(0);
+		else {
+			eventRating = new EventRating();
+			eventRating.setContact(this.repository.one(Contact.class, contactId));
+			eventRating.setEvent(this.repository.one(Event.class, eventId));
+		}
+		eventRating.setRating(rating);
+		this.repository.save(eventRating);
+		return eventRating;
 	}
 }

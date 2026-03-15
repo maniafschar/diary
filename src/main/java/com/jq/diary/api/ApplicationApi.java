@@ -222,12 +222,19 @@ public class ApplicationApi {
 	}
 
 	@PostMapping("event/image/{eventId}/{type}")
-	public BigInteger eventImagePost(@PathVariable final BigInteger eventId,
+	public BigInteger eventImagePost(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
 			@PathVariable final String type, @RequestBody final EventImage eventImage) {
 		eventImage.setEvent(this.repository.one(Event.class, eventId));
 		eventImage.setImage(Attachment.createImage(type, Base64.getDecoder().decode(eventImage.getImage())));
+		eventImage.setContact(this.repository.one(Contact.class, contactId));
 		this.eventService.save(eventImage);
 		return eventImage.getId();
+	}
+
+	@PutMapping("event/rating/{eventId}/{rating}")
+	public BigInteger eventRatingPut(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
+			@PathVariable final Double rating) {
+		return this.eventService.putRating(eventId, contactId, rating).getId();
 	}
 
 	@DeleteMapping("event/image/{eventImageId}")

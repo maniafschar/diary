@@ -6,21 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class EventImage extends BaseEntity {
+public class EventRating extends BaseEntity {
 	@ManyToOne
 	@JsonBackReference
 	private Event event;
 	@ManyToOne
 	private Contact contact;
-	private String image;
-
-	public String getImage() {
-		return this.image;
-	}
-
-	public void setImage(final String image) {
-		this.image = image;
-	}
+	private Double rating;
 
 	public Contact getContact() {
 		return this.contact;
@@ -36,5 +28,13 @@ public class EventImage extends BaseEntity {
 
 	public void setEvent(final Event event) {
 		this.event = event;
+	}
+
+	public Double getRating() {
+		return this.rating;
+	}
+
+	public void setRating(final Double rating) {
+		this.rating = rating;
 	}
 }

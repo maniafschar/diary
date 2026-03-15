@@ -215,8 +215,13 @@ class action {
 			popup.querySelector('element.location error').innerText = '';
 			api.locationPut(location,
 				id => {
+					if (location.id)
+						popup.querySelector('element.location error').innerText = 'Location gespeichert.';
+					else
+						popup.querySelectorAll('element.location input,element.location textarea').forEach(e => e.value = '');
 					location.id = id;
 					document.dispatchEvent(new CustomEvent('location', { detail: location }));
+					popup
 				}
 			);
 		} else

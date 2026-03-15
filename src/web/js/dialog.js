@@ -89,7 +89,7 @@ tab.selected {
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('td[date]').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('date')))));
 		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location.id);
-		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
@@ -327,6 +327,20 @@ value a {
 			if (event.note) {
 				popup.appendChild(document.createElement('label')).innerText = 'Bemerkung';
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
+			}
+			if (!futureEvent) {
+				popup.appendChild(document.createElement('label')).innerText = 'Bewertung';
+				var value = popup.appendChild(document.createElement('value'));
+				value.style.textAlign = 'center';
+				var rating = value.appendChild(document.createElement('input-rating'));
+				rating.setAttribute('value', 0);
+				rating.setAttribute('type', 'edit');
+				rating.setOnchange(rating => api.eventRatingPut(id, rating));
+				if (event.ratingCount > 0) {
+					value.appendChild(document.createElement('br'));
+					rating = value.appendChild(document.createElement('input-rating'));
+					rating.setAttribute('value', event.rating / event.ratingCount);
+				}
 			}
 			popup.appendChild(document.createElement('label')).innerText = 'Teilnehmer';
 			var participants = popup.appendChild(document.createElement('value'));

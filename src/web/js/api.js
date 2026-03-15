@@ -163,11 +163,19 @@ class api {
 		});
 	}
 
-	static eventImagePost(eventId, type, data, success) {
+	static eventImagePost(id, type, data, success) {
 		api.ajax({
-			url: 'event/image/' + eventId + '/' + type,
+			url: 'event/image/' + id + '/' + type,
 			method: 'POST',
 			body: { image: data },
+			success: success
+		});
+	}
+
+	static eventRatingPut(id, rating, success) {
+		api.ajax({
+			url: 'event/rating/' + id + '/' + rating,
+			method: 'PUT',
 			success: success
 		});
 	}

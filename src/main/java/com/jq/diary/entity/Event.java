@@ -3,6 +3,8 @@ package com.jq.diary.entity;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -25,6 +27,18 @@ public class Event extends BaseEntity {
 	@JsonManagedReference
 	private List<EventImage> eventImages;
 	private Date date;
+	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null)")
+	private Double rating;
+	@Formula("(select count(1) from event_rating er where er.event_id=id and er.rating is not null)")
+	private Integer ratingCount;
+
+	public Double getRating() {
+		return this.rating;
+	}
+
+	public Integer getRatingCount() {
+		return this.ratingCount;
+	}
 
 	public String getNote() {
 		return this.note;
