@@ -24,7 +24,7 @@ ratingSelection {
 
 rating empty,
 ratingSelection empty {
-	opacity: 0.3;
+	opacity: 0.5;
 	position: relative;
 }
 
