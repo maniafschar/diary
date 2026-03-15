@@ -80,42 +80,23 @@ tab.selected {
 		var container = popup.appendChild(document.createElement('tabBody'))
 			.appendChild(document.createElement('container'));
 
-		var createField = function (element, label, name, type, value) {
-			element.appendChild(document.createElement('label')).innerText = label;
-			var field = element.appendChild(document.createElement('field'));
-			var input = field.appendChild(document.createElement(type ? type : 'input'));
-			input.setAttribute('name', name);
-			if (value)
-				type == 'textarea' ? input.innerText = value : input.setAttribute('value', value);
-			return input;
-		};
-		var createButton = function (element, action) {
-			var div = element.appendChild(document.createElement('div'));
-			div.style.textAlign = 'center';
-			var button = div.appendChild(document.createElement('button'));
-			button.innerText = 'Speichern';
-			button.setAttribute('onclick', action);
-			return div;
-		};
-
 		var element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'event');
-		var inputDate = createField(element, 'Datum', 'date', 'input-date', event?.date);
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.date);
 		var date = new Date();
-		if (event?.id)
-			date.setMonth(date.getMonth() - 1);
+		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('td[date]').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('date')))));
-		createField(element, 'Ort', 'location', 'input-selection', event?.location.id);
-		createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
+		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location.id);
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
 			inputId.setAttribute('name', 'id');
 			inputId.setAttribute('value', event.id);
 		}
-		var buttonDiv = createButton(element, 'action.eventPost()');
+		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
 		if (event?.id && !event.participants) {
 			var button = buttonDiv.appendChild(document.createElement('button'));
 			button.innerText = 'Löschen';
@@ -125,11 +106,13 @@ tab.selected {
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
-		createField(element, 'Name', 'name', 'input', event?.location.name);
-		createField(element, 'Adresse', 'address', 'textarea', event?.location.address);
-		createField(element, 'URL', 'url', 'input', event?.location.url).setAttribute('type', 'url');
-		createField(element, 'Telefon', 'phone', 'input', event?.location.phone).setAttribute('type', 'tel');
-		createField(element, 'Email', 'email', 'input', event?.location.email).setAttribute('type', 'email');
+		dialog.createField(element, 'Name', 'name', null, event?.location.name);
+		dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location.address);
+		dialog.createField(element, 'URL', 'url', null, event?.location.url).setAttribute('type', 'url');
+		dialog.createField(element, 'Telefon', 'phone', null, event?.location.phone).setAttribute('type', 'tel');
+		dialog.createField(element, 'Email', 'email', null, event?.location.email).setAttribute('type', 'email');
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.location.note);
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location.rating).setAttribute('type', 'edit');
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
@@ -137,13 +120,13 @@ tab.selected {
 			inputId.setAttribute('value', event.location.id);
 		}
 		element.appendChild(document.createElement('error'));
-		createButton(element, 'action.locationPut()');
+		dialog.createButton(element, 'action.locationPut()');
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'contact');
-		createField(element, 'Name', 'name');
-		createField(element, 'Email', 'email');
-		createButton(element, 'action.contactPatch()');
+		dialog.createField(element, 'Name', 'name');
+		dialog.createField(element, 'Email', 'email');
+		dialog.createButton(element, 'action.contactPatch()');
 
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location'));
@@ -180,37 +163,56 @@ tab.selected {
 
 	static contact(event) {
 		var id = document.querySelector('user sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id;
-		api.eventsContact(id, events => {
-			var popup = document.createElement('div');
-			popup.appendChild(document.createElement('style')).textContent = `
-`;
-			var now = new Date();
-			var table = popup.appendChild(document.createElement('sortable-table'));
-			table.list = events.sort((a, b) => new Date(b.date.replace('+00:00', '')) - new Date(a.date.replace('+00:00', '')));
-			table.style('tr.past{opacity:0.4;}');
-			table.columns.push({ label: 'Datum', width: 25, noaction: true });
-			table.columns.push({ label: 'Ort', sort: true, width: 25, noaction: true });
-			table.columns.push({ label: 'Bemerkung', sort: true, width: 35, noaction: true });
-			table.setConvert(list => {
-				var d = [];
-				for (var i = 0; i < list.length; i++) {
-					var row = [];
-					row.push(ui.formatTime(new Date(list[i].date.replace('+00:00', ''))));
-					row.push(list[i].location.name);
-					row.push(list[i].note);
-					if (new Date(list[i].date.replace('+00:00', '')) < now)
-						row.row = { class: 'past' };
-					d.push(row);
+		var popup = document.createElement('div');
+		popup.appendChild(document.createElement('style')).textContent = `
+img {
+	max-width: 30em;
+}
+
+hint {
+	color: red;
+	padding: 0.5em 3em 0.5em 0.5em;
+	display: block;
+	position: relative;
+}
+
+value.pictures {
+	width: 100%;
+	min-height: 3.2em;
+	max-height: initial;
+}`;
+		dialog.createField(popup, 'Name', 'name', null, api.user.name);
+		dialog.createField(popup, 'Email', 'email');
+		dialog.createField(popup, null, 'notification', 'input-checkbox', api.user.notification).setAttribute('label', 'Benachrichtigung');
+		if (api.user.admin && id == api.user.id) {
+			dialog.createField(popup, 'Blogname', 'clientName', null, api.user.client.name);
+			dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.user.client.note);
+			popup.appendChild(document.createElement('label')).innerText = 'Bild';
+			var pictures = popup.appendChild(document.createElement('value'));
+			pictures.classList.add('pictures');
+			pictures.appendChild(document.createElement('hint'));
+			var clientImage = pictures.appendChild(document.createElement('img'));
+			clientImage.style.display = 'none';
+			clientImage.setAttribute('name', 'clientImage');
+			var buttonImage = pictures.appendChild(document.createElement('input-image'));
+			buttonImage.style.right = '0.2em';
+			buttonImage.style.top = '0.2em';
+			buttonImage.setAttribute('max', 2500);
+			buttonImage.setSuccess(e => {
+				if (e.scaled.width > 800 && e.scaled.height > 800) {
+					pictures.querySelector('hint').innerText = '';
+					var image = pictures.querySelector('img');
+					image.src = e.data;
+					image.style.display = '';
+					image.parentElement.setAttribute('onclick', 'action.clientImageDelete(event)');
+				} else {
+					pictures.querySelector('hint').innerText = 'Bild Größe ' + e.scaled.width + ' x ' + e.scaled.height + ' ist zu klein, Mindestgröße 800 x 800.';
+					pictures.querySelector('img').style.display = 'none';
 				}
-				return d;
 			});
-			document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-			try {
-				table.renderTable();
-			} catch (e) {
-				// same popup dialog is closed, ignore exception
-			}
-		});
+		}
+		dialog.createButton(popup, 'action.contactPatch()');
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static event(event) {
@@ -243,6 +245,7 @@ value item.selected::after {
 value.pictures {
 	width: 100%;
 	min-height: 3.2em;
+	max-height: initial;
 }
 
 value.pictures div {
@@ -330,9 +333,6 @@ value a {
 			participants.setAttribute('i', id);
 			participants.classList.add('participants');
 			if (!futureEvent) {
-				participants.classList.add('history');
-				participants = participants.appendChild(document.createElement('div'));
-				participants.style.opacity = 0.5;
 				popup.appendChild(document.createElement('label')).innerText = 'Bilder';
 				var pictures = popup.appendChild(document.createElement('value'));
 				pictures.classList.add('pictures');
@@ -352,9 +352,7 @@ value a {
 				for (var i = 0; i < event.eventImages?.length; i++)
 					addImage(event.eventImages[i].id, 'med/' + event.eventImages[i].image);
 			}
-			popup.appendChild(document.createElement('label')).innerText = 'Ersteller';
-			popup.appendChild(document.createElement('value')).innerText = event.contact.name;
-			if (api.contactId == event.contact.id) {
+			if (api.user.id == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));
 				button.innerHTML = '<svg width="128" height="128" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.424 4.575a2.5 2.5 0 0 0-3.535 0l-1.06 1.061 3.535 3.536-.354.353-.353.354-3.536-3.536-8.839 8.839a.5.5 0 0 0-.136.255l-.708 3.536a.5.5 0 0 0 .589.588l3.535-.707a.5.5 0 0 0 .256-.137L19.424 8.111a2.5 2.5 0 0 0 0-3.536Z" fill="#000000"></path></svg>';
 				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, location: event.location, participants: event.contactEvents.length }) + ')');
@@ -387,5 +385,31 @@ value a {
 				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: id, participants: participantList, type: 'read' } }));
 			});
 		});
+	}
+
+	static createField(element, label, name, type, value) {
+		if (label)
+			element.appendChild(document.createElement('label')).innerText = label;
+		var field = element.appendChild(document.createElement('field'));
+		var input = field.appendChild(document.createElement(type ? type : 'input'));
+		input.setAttribute('name', name);
+		if (value) {
+			if (type == 'textarea')
+				input.innerText = value;
+			else if (type == 'input-checkbox')
+				input.setAttribute('checked', value);
+			else
+				input.setAttribute('value', value);
+		}
+		return input;
+	}
+
+	static createButton(element, action) {
+		var div = element.appendChild(document.createElement('div'));
+		div.style.textAlign = 'center';
+		var button = div.appendChild(document.createElement('button'));
+		button.innerText = 'Speichern';
+		button.setAttribute('onclick', action);
+		return div;
 	}
 }

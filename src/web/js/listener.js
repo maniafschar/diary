@@ -44,7 +44,6 @@ class listener {
 		api.events(events => {
 			document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('login input-checkbox[name="login"]').setAttribute('checked', 'false');
-			document.querySelector('button.add').style.display = 'block';
 			document.querySelector('body>button[name="logoff"]').style.display = '';
 
 			var table = document.querySelector('event sortable-table');
@@ -141,20 +140,6 @@ class listener {
 				}
 				td.innerHTML = note || '&nbsp;';
 				list[ui.parents(td, 'tr').getAttribute('i')].note = note;
-			}
-			var participants = document.querySelector('dialog-popup').content().querySelector('value.participants');
-			if (participants) {
-				participants.querySelectorAll('participant').forEach(e => e.remove());
-				if (participants.classList.contains('history')) {
-					for (var i = 0; i < e.detail.participants.length; i++) {
-						var participant = participants.insertBefore(document.createElement('participant'));
-						participant.innerText = e.detail.participants[i].pseudonym;
-						var remove = participant.appendChild(document.createElement('remove'));
-						remove.innerText = '-';
-						remove.setAttribute('onclick', 'action.participate(' + e.detail.participants[i].id + ',' + e.detail.eventId + ')');
-						participant.setAttribute('i', e.detail.participants[i].id);
-					}
-				}
 			}
 			if (e.detail.type != 'read')
 				listener.updateCotacts();

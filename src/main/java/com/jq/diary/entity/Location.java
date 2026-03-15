@@ -14,6 +14,7 @@ public class Location extends BaseEntity {
 	private String phone;
 	private String image;
 	private String url;
+	private Double rating;
 	@ManyToOne
 	private Contact contact;
 
@@ -79,5 +80,13 @@ public class Location extends BaseEntity {
 
 	public void setContact(final Contact contact) {
 		this.contact = contact;
+	}
+
+	public Double getRating() {
+		return this.rating;
+	}
+
+	public void setRating(final Double rating) {
+		this.rating = rating;
 	}
 }

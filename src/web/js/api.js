@@ -4,34 +4,30 @@ export { api };
 
 class api {
 	static url = '{placeholderServer}/rest/api/';
-	static clientId;
-	static contactId;
-	static password;
+	static user;
 	static progressbar = false;
 
 	static logoff() {
-		api.clientId = null;
-		api.contactId = null;
-		api.password = null;
+		api.user = null;
 	}
 
 	static login(email, password, refreshToken, success) {
-		api.contactId = 0;
-		api.password = password;
+		api.user = { id: 0, password: password };
 		document.querySelector('login error').innerText = '';
 		api.ajax({
 			url: 'authentication/login?email=' + encodeURIComponent(Encryption.encPUB(email)),
 			error(response) {
-				api.contactId = null;
-				api.password = null;
+				api.user = null;
 				document.querySelector('login error').innerText = response.responseText;
 			},
 			success(contact) {
 				if (contact) {
-					api.clientId = contact.client.id;
-					api.contactId = contact.id;
-					api.password = password;
-					success(contact);
+					api.user = contact;
+					api.user.password = password;
+					if (refreshToken)
+						api.loginRefreshToken(() => success(contact));
+					else
+						success(contact);
 				} else
 					document.querySelector('login error').innerText = 'Login fehlgeschlagen';
 			}
@@ -41,17 +37,14 @@ class api {
 	static loginWithToken(success) {
 		var token = window.localStorage && window.localStorage.getItem('login');
 		if (token) {
-			api.contactId = 0;
+			api.user = { id: 0 };
 			api.ajax({
 				url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)) + '&publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
 				error: success,
 				success(r) {
 					r = Encryption.jsEncrypt.decrypt(r);
 					if (r) {
-						r = JSON.parse(r);
-						api.clientId = r.clientId;
-						api.contactId = r.id;
-						api.password = r.password;
+						api.user = JSON.parse(r);
 						api.loginRefreshToken(success);
 					} else {
 						window.localStorage.removeItem('login');
@@ -80,8 +73,8 @@ class api {
 	}
 
 	static loginVerify(email, success) {
-		if (!api.contactId)
-			api.contactId = 0;
+		if (!api.user)
+			api.user = { id: 0 };
 		api.ajax({
 			url: 'authentication/verify?email=' + encodeURIComponent(Encryption.encPUB(email)),
 			success: success
@@ -89,7 +82,7 @@ class api {
 	}
 
 	static loginVerifyPost(token, password, success) {
-		api.contactId = 0;
+		api.user = { id: 0 };
 		var x = 0;
 		for (var i = 0; i < token.length; i++) {
 			x += token.charCodeAt(i);
@@ -106,7 +99,7 @@ class api {
 	}
 
 	static createClient(client, success) {
-		api.contactId = 0;
+		api.user = { id: 0 };
 		api.ajax({
 			url: 'authentication/create',
 			method: 'POST',
@@ -239,7 +232,7 @@ class api {
 	}
 
 	static ajax(param) {
-		if (!this.contactId && this.contactId != 0)
+		if (!api.user?.id && api.user?.id != 0)
 			return;
 		if (!param.method)
 			param.method = 'GET';
@@ -260,8 +253,8 @@ class api {
 						param.success(response);
 					}
 				} else {
-					if (api.contactId == 0)
-						api.contactId = null;
+					if (api.user?.id == 0)
+						api.user = null;
 					if (xhr.status < 500) {
 						var xhrError = new XMLHttpRequest();
 						xhrError.open('POST', api.url + 'ticket', true);
@@ -290,14 +283,14 @@ class api {
 	}
 
 	static addCredentials(xhr) {
-		if (api.contactId || api.contactId == 0) {
+		if (api.user?.id || api.user?.id == 0) {
 			var d = new Date();
 			var salt = ('' + (d.getTime() + d.getTimezoneOffset() * 60 * 1000) + Math.random()).replace(/[01]\./, '.');
-			xhr.setRequestHeader('contactId', api.contactId);
+			xhr.setRequestHeader('contactId', api.user.id);
 			xhr.setRequestHeader('salt', salt);
-			xhr.setRequestHeader('password', Encryption.hash(api.password + salt + api.contactId));
-			if (api.clientId)
-				xhr.setRequestHeader('clientId', api.clientId);
+			xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
+			if (api.user?.client?.id)
+				xhr.setRequestHeader('clientId', api.user.client.id);
 		}
 	}
 }

@@ -20,6 +20,7 @@ public class Contact extends BaseEntity {
 	private String image;
 	private String loginLink;
 	private Boolean admin = false;
+	private Boolean notification = true;
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
 
@@ -101,5 +102,13 @@ public class Contact extends BaseEntity {
 
 	public void setPasswordReset(final Long passwordReset) {
 		this.passwordReset = passwordReset;
+	}
+
+	public Boolean getNotification() {
+		return this.notification;
+	}
+
+	public void setNotification(final Boolean notification) {
+		this.notification = notification;
 	}
 }

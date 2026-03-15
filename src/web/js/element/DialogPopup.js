@@ -108,7 +108,7 @@ value {
 field {
 	position: relative;
 	display: block;
-	min-height: 2em;
+	min-height: 1.5em;
 	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
 	background: rgba(255, 255, 255, 0.4);

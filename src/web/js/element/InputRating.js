@@ -1,14 +1,6 @@
 export { InputRating };
 
 class InputRating extends HTMLElement {
-	rating = `<ratingSelection style="font-size:2em;margin:0.5em 0;">
-	<empty><span>☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
-			onclick="this.getRootNode().host.rate(event,3)">☆</span><span onclick="this.getRootNode().host.rate(event,4)">☆</span><span
-			onclick="this.getRootNode().host.rate(event,5)">☆</span></empty>
-	<full><span onclick="this.getRootNode().host.rate(event,1)">★</span><span onclick="this.getRootNode().host.rate(event,2)">★</span><span
-			onclick="this.getRootNode().host.rate(event,3)">★</span><span onclick="this.getRootNode().host.rate(event,4)">★</span><span
-			onclick="this.getRootNode().host.rate(event,5)" style="display:none;">★</span></full>
-	</ratingSelection>`;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -20,17 +12,11 @@ detailRating {
 	color: darkgoldenrod;
 }
 
-ratingHint {
-	margin: 0 1em 1em 1em;
-	display: block;
-}
-
 rating,
 ratingSelection {
 	position: relative;
 	line-height: 1;
 	display: inline-block;
-	height: 1.5em;
 }
 
 rating empty,
@@ -54,30 +40,34 @@ ratingSelection span {
 	position: relative;
 	cursor: pointer;
 }`;
-		var element;
-		var stars = '<empty>☆☆☆☆☆</empty><full style="width:{0}%;">★★★★★</full>';
-		if (this.getAttribute('ui') == 'dialog') {
-			element = document.createElement('div');
-			element.innerHTML = this.rating;
+		if (!this.getAttribute('value'))
+			this.setAttribute('value', 80);
+		if (this.getAttribute('type') == 'edit') {
+			var element = document.createElement('div');
+			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em;">
+	<empty><span>☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
+			onclick="this.getRootNode().host.rate(event,3)">☆</span><span onclick="this.getRootNode().host.rate(event,4)">☆</span><span
+			onclick="this.getRootNode().host.rate(event,5)">☆</span></empty>
+	<full><span onclick="this.getRootNode().host.rate(event,1)">★</span><span onclick="this.getRootNode().host.rate(event,2)">★</span><span
+			onclick="this.getRootNode().host.rate(event,3)">★</span><span onclick="this.getRootNode().host.rate(event,4)">★</span><span
+			onclick="this.getRootNode().host.rate(event,5)">★</span></full>
+	</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
-			element = document.createElement('input');
-			element.setAttribute('type', 'hidden');
-			element.setAttribute('name', 'rating');
-			element.setAttribute('value', '80');
+			var full = this._root.querySelectorAll('full span');
+			for (var i = 0; i < full.length; i++) {
+				if ((i + 1) * 20 > this.getAttribute('value'))
+					full[i].style.display = 'none';
+			}
 		} else {
-			var stars = '<empty>☆☆☆☆☆</empty><full style="width:{0}%;">★★★★★</full>';
-			element = document.createElement('detailRating');
-			element.innerHTML = '<ratingSelection>' + stars.replace('{0}', this.getAttribute('rating')) + '</ratingSelection>';
+			var element = document.createElement('detailRating');
+			element.innerHTML = '<ratingSelection>' + '<empty>☆☆☆☆☆</empty><full style="width:{0}%;">★★★★★</full>'.replace('{0}', this.getAttribute('value')) + '</ratingSelection>';
+			this._root.appendChild(element);
 		}
-		this.removeAttribute('ui');
-		this._root.appendChild(element);
-		this._root.host.setAttribute('value', 80);
 	}
 	rate(event, x) {
 		var e = event.target.getRootNode().querySelectorAll('ratingSelection > full span');
 		for (var i = 0; i < 5; i++)
 			e[i].style.display = i < x ? '' : 'none';
-		event.target.getRootNode().querySelector('[name="rating"]').value = x * 20;
 		event.target.getRootNode().host.setAttribute('value', x * 20);
 	}
 }

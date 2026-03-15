@@ -176,7 +176,7 @@ class action {
 				{
 					id: popup.querySelector('element.event input[name="id"]')?.value,
 					date: date,
-					note: popup.querySelector('element.event input').value,
+					note: popup.querySelector('element.event textarea').value,
 					location: { id: locationId }
 				},
 				() => {
@@ -208,13 +208,13 @@ class action {
 			name: popup.querySelector('element.location input[name="name"]').value,
 			url: popup.querySelector('element.location input[name="url"]').value,
 			phone: popup.querySelector('element.location input[name="phone"]').value,
-			email: popup.querySelector('element.location input[name="email"]').value
+			email: popup.querySelector('element.location input[name="email"]').value,
+			rating: popup.querySelector('element.location input-rating').getAttribute('value')
 		};
 		if (location.name) {
 			popup.querySelector('element.location error').innerText = '';
 			api.locationPut(location,
 				id => {
-					popup.querySelectorAll('element.location input,element.location textarea').forEach(e => e.value = '');
 					location.id = id;
 					document.dispatchEvent(new CustomEvent('location', { detail: location }));
 				}
