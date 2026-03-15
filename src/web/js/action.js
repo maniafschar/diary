@@ -53,7 +53,10 @@ class action {
 		else if (!input[1].value)
 			document.querySelector('login error').innerText = 'Ein Passwort wird benötigt.';
 		else
-			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', e => document.dispatchEvent(new CustomEvent('event')));
+			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', contact => {
+				document.querySelector('body>h2').innerText = contact.name;
+				document.dispatchEvent(new CustomEvent('event'));
+			});
 	}
 
 	static loginResetPassword() {
@@ -139,11 +142,7 @@ class action {
 		document.querySelector('history').textContent = '';
 		document.querySelector('element.user').style.display = 'none';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
-		var groupname = document.querySelector('body>[name="groupname"]');
-		groupname.innerText = '';
-		groupname.style.display = 'none';
-		groupname.style.cursor = 'default';
-		groupname.onclick = null;
+		document.querySelector('body>h2').innerText = '';
 	}
 
 	static imageNavigate(next) {

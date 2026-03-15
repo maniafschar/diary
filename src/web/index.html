@@ -39,7 +39,7 @@
 </head>
 
 <body onload="action.init()">
-	<h2 style="display: none;" name="groupname"></h2>
+	<h2></h2>
 	<button onclick="action.logoff()" name="logoff" class="icon" style="display: none;">
 		<svg fill="#fff" width="200px" height="200px" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
 			<g>
@@ -54,15 +54,13 @@
 			<img src="/image/start.png" />
 			<img src="/image/text.png" class="text" />
 			<description>
-				Erstelle <b>Events</b>, transformiere diese mithilfe von
-				Bildern und Text zu wertvollen <b>Erinnerungen</b>.
+				Dein Tagebuch bestehend aus <b>Events</b>, <b>Locations</b>, <b>Menschen</b> und <b>Geschichten</b>.
 			</description>
 		</element>
 		<element style="background: rgba(255, 20, 10, 0.1);">
 			<div class="title">
 				<br />
 				<b>Events</b>
-				<button class="icon participate" onclick="dialog.participate()">✓</button>
 				<button class="icon add" onclick="dialog.add()">+</button>
 			</div>
 			<event style="display: none;">
@@ -70,8 +68,13 @@
 			</event>
 			<login>
 				<div style="padding-bottom: 1em;">
-					Diese App ist vor allem für <b>Spielgruppen</b>, <b>Wandergruppen</b>, etc., geeignet, die regelmäßg
-					zusammenkommen. Log Dich ein oder <b><a onclick="action.loginDemo()">teste</a></b> sie.
+					<ul>
+						<li>Sammle wertvolle Erinnerungen an Events, Locations, Menschen und Geschichten.</li>
+						<li>Teile es nur mit denen, die Dir wichtig sind.</li>
+						<li>Erstelle ein PDF mit KI Zusammenfassung in Wort und Bild am Jahresende.</li>
+						<li>Und vielem mehr, lass Dich überraschen!.</li>
+					</ul>
+					Log Dich ein oder <b><a onclick="action.loginDemo()">teste</a></b> sie.
 				</div>
 				<label>Email</label>
 				<field><input type="email" name="email" i="login" /></field>

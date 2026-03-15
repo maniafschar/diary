@@ -59,9 +59,9 @@ public class Application {
 		final Client client = new Client();
 		this.repository.save(client);
 		final Contact contact = new Contact();
-		contact.setName("Mani");
-		contact.setEmail("mani.afschar@jq-consulting.de");
-		contact.setPassword(Encryption.encryptDB("test"));
+		contact.setName("Sepp");
+		contact.setEmail("sepp@schafkopf.studio");
+		contact.setPassword(Encryption.encryptDB("Test1234"));
 		contact.setClient(client);
 		contact.setVerified(true);
 		this.repository.save(contact);

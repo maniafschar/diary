@@ -4,7 +4,6 @@ export { api };
 
 class api {
 	static url = '{placeholderServer}/rest/api/';
-	static clients = {};
 	static clientId;
 	static contactId;
 	static password;
@@ -14,7 +13,6 @@ class api {
 		api.clientId = null;
 		api.contactId = null;
 		api.password = null;
-		api.clients = {};
 	}
 
 	static login(email, password, refreshToken, success) {
@@ -33,7 +31,7 @@ class api {
 					api.clientId = contact.client.id;
 					api.contactId = contact.id;
 					api.password = password;
-					success();
+					success(contact);
 				} else
 					document.querySelector('login error').innerText = 'Login fehlgeschlagen';
 			}

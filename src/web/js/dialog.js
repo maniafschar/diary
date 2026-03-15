@@ -149,78 +149,6 @@ tab.selected {
 		document.dispatchEvent(new CustomEvent('location'));
 	}
 
-	static participate() {
-		api.contacts(contacts => {
-			var pseudonyms = ui.pseudonyms(contacts);
-			api.events(events => {
-				var popup = document.createElement('div');
-				popup.appendChild(document.createElement('style')).textContent = `
-value {
-	text-align: center;
-	max-height: initial;
-}
-
-value item {
-	display: inline-block;
-	position: relative;
-	padding: 0.5em;
-	margin: 0.25em;
-	border-radius: 0.5em;
-	cursor: pointer;
-	padding-right: 2em;
-}
-
-value item.selected {
-	background-color: rgba(255, 255, 255, 0.6);
-}
-
-value item.selected::after {
-	content: '✓';
-	position: absolute;
-	right: 0.5em;
-	top: 0.5em;
-}
-
-label {
-	font-size: 1em;
-	font-weight: bold;
-	color: black;
-	padding: 0.5em 1em;
-}`;
-				var now = new Date();
-				for (var i = events.length - 1; i >= 0; i--) {
-					var date = new Date(events[i].date.replace('+00:00', ''));
-					if (date > now) {
-						var label = popup.appendChild(document.createElement('label'));
-						label.appendChild(document.createTextNode(ui.formatTime(date, true)));
-						label.appendChild(document.createElement('br'));
-						label.appendChild(document.createTextNode(events[i].location.name));
-						if (events[i].note) {
-							label.appendChild(document.createElement('br'));
-							label.appendChild(document.createTextNode(events[i].note));
-						}
-						var value = popup.appendChild(document.createElement('value'));
-						value.setAttribute('i', events[i].id);
-						var participantList = {};
-						for (var i2 = 0; i2 < events[i].contactEvents.length; i2++)
-							participantList[events[i].contactEvents[i2].contact.id] = events[i].contactEvents[i2].id;
-						for (var i2 = 0; i2 < contacts.length; i2++) {
-							var item = value.appendChild(document.createElement('item'));
-							item.innerText = pseudonyms[contacts[i2].id];
-							item.setAttribute('i', contacts[i2].id);
-							item.setAttribute('onclick', 'action.participate(' + contacts[i2].id + ',' + events[i].id + ')');
-							if (participantList[contacts[i2].id]) {
-								item.setAttribute('contactEventId', participantList[contacts[i2].id]);
-								item.setAttribute('class', 'selected');
-							}
-						}
-					}
-				}
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-			});
-		});
-	}
-
 	static verifyEmail(event) {
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('label')).innerText = 'Email';
@@ -426,7 +354,7 @@ value a {
 			}
 			popup.appendChild(document.createElement('label')).innerText = 'Ersteller';
 			popup.appendChild(document.createElement('value')).innerText = event.contact.name;
-			if (api.contactId == event.contact.id || api.clients[api.clientId].contactId == event.contact.id) {
+			if (api.contactId == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));
 				button.innerHTML = '<svg width="128" height="128" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.424 4.575a2.5 2.5 0 0 0-3.535 0l-1.06 1.061 3.535 3.536-.354.353-.353.354-3.536-3.536-8.839 8.839a.5.5 0 0 0-.136.255l-.708 3.536a.5.5 0 0 0 .589.588l3.535-.707a.5.5 0 0 0 .256-.137L19.424 8.111a2.5 2.5 0 0 0 0-3.536Z" fill="#000000"></path></svg>';
 				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, location: event.location, participants: event.contactEvents.length }) + ')');
@@ -458,22 +386,6 @@ value a {
 				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: id, participants: participantList, type: 'read' } }));
 			});
-		});
-	}
-
-	static client() {
-		var popup = document.createElement('div');
-		var selection = popup.appendChild(document.createElement('input-selection'));
-		selection.setAttribute('value', api.clientId);
-		var keys = Object.keys(api.clients);
-		for (var i = 0; i < keys.length; i++)
-			selection.add(keys[i], api.clients[keys[i]].name);
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		document.querySelector('dialog-popup').content().querySelector('input-selection').addEventListener('changed', () => {
-			api.clientId = document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value');
-			document.dispatchEvent(new CustomEvent('event'));
-			document.dispatchEvent(new CustomEvent('contact'));
-			document.dispatchEvent(new CustomEvent('popup'));
 		});
 	}
 }
