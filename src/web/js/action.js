@@ -55,6 +55,7 @@ class action {
 		else
 			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', contact => {
 				document.querySelector('body>h2').innerText = contact.client.name;
+				document.querySelector('body button.add').style.display = contact.admin ? 'block' : 'none';
 				document.dispatchEvent(new CustomEvent('event'));
 			});
 	}

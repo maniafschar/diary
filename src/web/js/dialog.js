@@ -108,7 +108,7 @@ tab.selected {
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('td[date]').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('date')))));
 		createField(element, 'Ort', 'location', 'input-selection', event?.location.id);
-		createField(element, 'Bemerkung', 'note', 'input', event?.note);
+		createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');

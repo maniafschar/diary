@@ -19,6 +19,7 @@ public class Contact extends BaseEntity {
 	private String password;
 	private String image;
 	private String loginLink;
+	private Boolean admin = false;
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
 
@@ -76,6 +77,14 @@ public class Contact extends BaseEntity {
 
 	public void setLoginLink(final String loginLink) {
 		this.loginLink = loginLink;
+	}
+
+	public Boolean getAdmin() {
+		return this.admin;
+	}
+
+	public void setAdmin(final Boolean admin) {
+		this.admin = admin;
 	}
 
 	public Boolean getVerified() {
