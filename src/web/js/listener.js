@@ -12,7 +12,7 @@ class listener {
 			if (!table.columns.length) {
 				table.setOpenDetail(dialog.contact);
 				table.columns.push({ label: 'Name', sort: true, width: 30, detail: true });
-				table.columns.push({ label: 'Teilnahmen', sort: true, width: 20, style: 'text-align: right;', detail: true });
+				table.columns.push({ label: 'Bemerkung', sort: true, width: 60, detail: true });
 				table.columns.push({ label: 'Verifiziert', sort: true, width: 10, style: 'text-align: center;', detail: true });
 				table.setConvert(list => {
 					var d = [];
