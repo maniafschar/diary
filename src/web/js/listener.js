@@ -60,9 +60,12 @@ class listener {
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
+						var text = list[i].note ? list[i].note.split('\n')[0] : '';
+						if (list[i].rating)
+							text = list[i].ratingCount + 'B · ' + parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1) + 'S' + (text ? ' · ' + text : '');
 						row.push({ attributes: { date: date.getTime() }, text: ui.formatTime(date) });
 						row.push(list[i].location.name);
-						row.push({ attributes: { i: 'note_' + list[i].id }, text: list[i].note ? list[i].note.split('\n')[0] : '' });
+						row.push({ attributes: { i: 'note_' + list[i].id }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
 						d.push(row);
@@ -91,7 +94,8 @@ class listener {
 							for (var i = 0; i < items.length; i++) {
 								list.push({
 									src: items[i].querySelector('img').getAttribute('src'),
-									text: items[i].querySelector('text').innerHTML
+									text: items[i].querySelector('text').innerHTML,
+									description: null
 								});
 								if (event.target.parentElement == items[i])
 									index = i;
@@ -130,13 +134,13 @@ class listener {
 			if (td) {
 				var note = '';
 				if (e.detail.participants.length)
-					note += e.detail.participants.length + ' Teilnehmer';
+					note += e.detail.participants.length + 'T';
 				if (td.innerText?.trim()) {
-					var s = td.innerText.replace(/^\d{1,4} Teilnehmer/, '').trim();
-					if (s.indexOf(',') == 0)
-						s = s.substring(1).trim();
+					var s = td.innerText.replace(/^\d{1,4}T/, '').trim();
+					if (s.indexOf(' · ') == 0)
+						s = s.substring(2).trim();
 					if (s)
-						note += (note ? ', ' : '') + s;
+						note += (note ? ' · ' : '') + s;
 				}
 				td.innerHTML = note || '&nbsp;';
 				list[ui.parents(td, 'tr').getAttribute('i')].note = note;

@@ -57,12 +57,12 @@ public class Application {
 		this.driver = createWebDriver(400, 900);
 		this.driver.get(url);
 		final Client client = new Client();
-		client.setName("Manis' Blog");
+		client.setName("Manis Tegebuch");
 		this.repository.save(client);
 		final Contact contact = new Contact();
 		contact.setAdmin(true);
-		contact.setName("Sepp");
-		contact.setEmail("sepp@schafkopf.studio");
+		contact.setName("Mani");
+		contact.setEmail("sepp@diary.cafe");
 		contact.setPassword(Encryption.encryptDB("Test1234"));
 		contact.setClient(client);
 		contact.setVerified(true);

@@ -329,13 +329,13 @@ value a {
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
 			}
 			if (!futureEvent) {
-				popup.appendChild(document.createElement('label')).innerText = 'Bewertung';
+				popup.appendChild(document.createElement('label')).innerText = 'Stimmung';
 				var value = popup.appendChild(document.createElement('value'));
 				value.style.textAlign = 'center';
 				var rating = value.appendChild(document.createElement('input-rating'));
 				rating.setAttribute('value', 0);
 				rating.setAttribute('type', 'edit');
-				rating.setOnchange(rating => api.eventRatingPut(id, rating));
+				rating.setOnchange(rating => api.eventRatingPut(id, rating, () => document.dispatchEvent(new CustomEvent('event'))));
 				if (event.ratingCount > 0) {
 					value.appendChild(document.createElement('br'));
 					rating = value.appendChild(document.createElement('input-rating'));

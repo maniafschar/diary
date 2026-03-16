@@ -78,7 +78,7 @@ public class LogFilter implements Filter {
 			this.authenticate(req);
 			chain.doFilter(req, res);
 		} catch (final AuthenticationException ex) {
-			log.setBody("unauthorized acccess:\n" + req.getRequestURI() + "\n" + req.getHeader("contactId"));
+			log.setBody("unauthorized acccess, contact: " + req.getHeader("contactId"));
 			log.setStatus(HttpStatus.UNAUTHORIZED.value());
 		} finally {
 			if (res.getStatus() != ApplicationApi.STATUS_PROCESSING_PDF) {

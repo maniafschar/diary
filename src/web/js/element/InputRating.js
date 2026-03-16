@@ -44,7 +44,7 @@ ratingSelection span {
 	cursor: pointer;
 }`;
 		if (!this.getAttribute('value'))
-			this.setAttribute('value', 80);
+			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
 			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em;">

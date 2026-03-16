@@ -98,7 +98,7 @@ class action {
 
 	static loginDemo() {
 		var input = document.querySelectorAll('login input');
-		input[0].value = 'sepp@schafkopf.studio';
+		input[0].value = 'sepp@diary.cafe';
 		input[1].value = 'Test1234';
 		document.querySelector('login input-checkbox').setAttribute('checked', 'false');
 		setTimeout(action.login, 500);

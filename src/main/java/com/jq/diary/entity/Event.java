@@ -26,6 +26,9 @@ public class Event extends BaseEntity {
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	private List<EventImage> eventImages;
+	@OneToMany(mappedBy = "event")
+	@JsonManagedReference
+	private List<EventRating> eventRatings;
 	private Date date;
 	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null)")
 	private Double rating;
@@ -86,5 +89,13 @@ public class Event extends BaseEntity {
 
 	public void setEventImages(final List<EventImage> eventImages) {
 		this.eventImages = eventImages;
+	}
+
+	public List<EventRating> getEventRatings() {
+		return this.eventRatings;
+	}
+
+	public void setEventRatings(final List<EventRating> eventRatings) {
+		this.eventRatings = eventRatings;
 	}
 }

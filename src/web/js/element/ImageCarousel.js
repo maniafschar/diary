@@ -56,6 +56,15 @@ button {
 	color: rgba(255, 255, 255, 0.6);
 	border: none;
 }
+data {
+	position: relative;
+	display: block;
+}
+data description {
+	padding: 1em;
+	position: relative;
+	display: block;
+}
 button.next {
 	right: 0;
 }
@@ -74,7 +83,9 @@ close {
 	padding: 0.25em 0;
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
-		div.appendChild(document.createElement('img'));
+		var data = div.appendChild(document.createElement('data'));
+		data.appendChild(document.createElement('img'));
+		data.appendChild(document.createElement('description'));
 		div.appendChild(document.createElement('text'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -100,6 +111,7 @@ close {
 		this.index = i;
 		this._root.querySelector('img').src = list[i].src;
 		this._root.querySelector('text').innerHTML = list[i].text;
+		this._root.querySelector('description').innerHTML = list[i].description;
 		this._root.host.style.transform = 'scale(1)';
 	}
 
