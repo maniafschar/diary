@@ -71,7 +71,7 @@ public class ApplicationApi {
 	}
 
 	@GetMapping("authentication/token")
-	public String authenticationToken(final String token, final String publicKey) {
+	public Contact authenticationToken(final String token, final String publicKey) {
 		return this.authenticationService.token2User(publicKey, Encryption.decryptBrowser(token));
 	}
 

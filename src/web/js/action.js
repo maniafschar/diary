@@ -38,9 +38,10 @@ class action {
 			api.activateProgressbar();
 		} else
 			api.loginWithToken(success => {
-				if (success)
+				if (success) {
 					document.dispatchEvent(new CustomEvent('event'));
-				else
+					document.querySelector('body>h2').innerText = api.user.client.name;
+				} else
 					api.activateProgressbar();
 			});
 		setTimeout(function () { document.querySelector('body>container').style.opacity = 1; }, 400);
@@ -53,9 +54,9 @@ class action {
 		else if (!input[1].value)
 			document.querySelector('login error').innerText = 'Ein Passwort wird benötigt.';
 		else
-			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', contact => {
-				document.querySelector('body>h2').innerText = contact.client.name;
-				document.querySelector('body button.add').style.display = contact.admin ? 'block' : 'none';
+			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', () => {
+				document.querySelector('body>h2').innerText = api.user.client.name;
+				document.querySelector('body button.add').style.display = api.user.admin ? 'block' : 'none';
 				document.dispatchEvent(new CustomEvent('event'));
 			});
 	}

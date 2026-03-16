@@ -278,6 +278,7 @@ public class AuthenticationService {
 		client.setContacts(null);
 		this.repository.save(client);
 		contact.setClient(client);
+		contact.setAdmin(true);
 		try {
 			this.emailService.send(contact.getEmail(),
 					this.createEmailLoginLink(contact, this.generateLoginParam(contact)));
@@ -304,19 +305,16 @@ public class AuthenticationService {
 		return Encryption.encrypt(contactToken.getToken(), publicKey);
 	}
 
-	public String token2User(final String publicKey, final String token) {
+	public Contact token2User(final String publicKey, final String token) {
 		try {
 			final List<ContactToken> list = this.repository
 					.list("from ContactToken where token='" + token + "'", ContactToken.class);
 			if (list.size() == 0)
 				return null;
 			final Contact c = list.get(0).getContact();
-			final Map<String, String> result = new HashMap<>();
-			result.put("id", "" + c.getId());
-			result.put("password", this.getPassword(c));
-			result.put("clientId", "" + c.getClient().getId());
-			result.put("clientImage", "" + c.getClient().getImage());
-			return Encryption.encrypt(Json.toString(result), publicKey);
+			c.setPassword(Encryption.encrypt(this.getPassword(c), publicKey));
+			c.setEmail(null);
+			return c;
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 			return null;

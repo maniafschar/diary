@@ -42,9 +42,9 @@ class api {
 				url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)) + '&publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
 				error: success,
 				success(r) {
-					r = Encryption.jsEncrypt.decrypt(r);
 					if (r) {
-						api.user = JSON.parse(r);
+						r.password = Encryption.jsEncrypt.decrypt(r.password);
+						api.user = r;
 						api.loginRefreshToken(success);
 					} else {
 						window.localStorage.removeItem('login');
