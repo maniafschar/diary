@@ -137,10 +137,11 @@ class listener {
 					note += e.detail.participants.length + 'T';
 				if (td.innerText?.trim()) {
 					var s = td.innerText.replace(/^\d{1,4}T/, '').trim();
-					if (s.indexOf(' · ') == 0)
-						s = s.substring(2).trim();
-					if (s)
+					if (s) {
 						note += (note ? ' · ' : '') + s;
+						while (note.indexOf(' ·  · ') > -1)
+							note = note.replace(' ·  · ', ' · ');
+					}
 				}
 				td.innerHTML = note || '&nbsp;';
 				list[ui.parents(td, 'tr').getAttribute('i')].note = note;
