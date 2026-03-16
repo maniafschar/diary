@@ -109,6 +109,7 @@ class listener {
 										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
 										(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
 										(events[i].rating ? listRatings(events[i]) : '') +
+										(events[i].location.rating ? 'Bewertung der Location:<br/><input-rating value="' + event.location.rating + '"></input-rating><br/>' : '') +
 										events[i].note
 								});
 								if (event.target.parentElement == items[i])
