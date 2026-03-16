@@ -109,8 +109,8 @@ class listener {
 										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
 										(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
 										(events[i].location.note ? events[i].location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
-										(events[i].location.rating ? 'Bewertung der Location:<br/><input-rating value="' + events[i].location.rating + '"></input-rating><br/><br/>' : '') +
-										(events[i].rating ? 'Bewertung des Events:<br/>' + listRatings(events[i]) : '') +
+										(events[i].location.rating ? '<rating>Bewertung der Location:</rating><br/><input-rating value="' + events[i].location.rating + '"></input-rating><br/><br/>' : '') +
+										(events[i].rating ? '<rating>Bewertung des Events:</rating><br/>' + listRatings(events[i]) : '') +
 										(events[i].note ? events[i].note.replace(/\n/g, '<br/>') : '')
 								});
 								if (event.target.parentElement == items[i])
