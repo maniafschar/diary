@@ -114,7 +114,7 @@ class listener {
 								if (event.target.parentElement == items[i])
 									index = i;
 							}
-							document.querySelector('image-carousel').open(list, index);
+							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;}');
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);

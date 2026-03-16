@@ -113,7 +113,9 @@ close {
 		this._root.host.style.transform = '';
 	}
 
-	open(list, i) {
+	open(list, i, style) {
+		if (style)
+			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
 		this.index = i;
 		this._root.querySelector('img').src = list[i].src;
