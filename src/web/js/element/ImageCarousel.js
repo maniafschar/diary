@@ -61,9 +61,16 @@ data {
 	display: block;
 }
 data description {
-	padding: 1em;
+	border: solid 2em transparent;
 	position: relative;
 	display: block;
+}
+imageContainer {
+	overflow: auto;
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 button.next {
 	right: 0;
@@ -84,7 +91,7 @@ close {
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
-		data.appendChild(document.createElement('img'));
+		data.appendChild('imageContainer').appendChild(document.createElement('img'));
 		data.appendChild(document.createElement('description'));
 		div.appendChild(document.createElement('text'));
 		var next = div.appendChild(document.createElement('button'));

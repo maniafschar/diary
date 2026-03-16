@@ -96,12 +96,13 @@ class listener {
 									src: items[i].querySelector('img').getAttribute('src'),
 									text: items[i].querySelector('text').innerHTML,
 									description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
-										events[i].location.name + '<br/>' +
-										(events[i].location.address ? events[i].location.address.replace(/\n/g, '<br/>') + '<br/>' : '') +
+										events[i].location.name + '<br/><br/>' +
+										(events[i].location.address ? events[i].location.address.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
 										(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
 										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
-										(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating> (' + events[i].ratingCount + ' Bewertungen)<br/>' : '') +
+										(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
+										(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating> (' + events[i].ratingCount + ' Bewertungen)<br/><br/>' : '') +
 										events[i].note
 								});
 								if (event.target.parentElement == items[i])
