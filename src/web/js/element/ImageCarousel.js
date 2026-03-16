@@ -88,6 +88,13 @@ close {
 	color: rgba(255, 255, 255, 0.6);
 	font-size: 2em;
 	padding: 0.25em 0;
+}
+a {
+	text-decoration: none;
+	color: darkblue;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
