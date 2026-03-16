@@ -92,7 +92,7 @@ class listener {
 							var items = document.querySelectorAll('history item');
 							var list = [], index = 0;
 							var listRatings = function (event) {
-								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating> (' + event.ratingCount + ' Bewertungen)<br/>';
+								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
 								for (var i = 0; i < event.eventRatings.length; i++)
 									s += '<rating>' + (event.eventRatings[i].rating / 20) + ' · ' + event.eventRatings[i].contact.name + '</rating>';
 								return s + '<br/><br/>';
@@ -103,7 +103,7 @@ class listener {
 									text: items[i].querySelector('text').innerHTML,
 									description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
 										events[i].location.name + '<br/><br/>' +
-										(events[i].location.address ? events[i].location.address.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
+										(events[i].location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.address.replace(/\n/g, '<br/>') + '</a><br/><br/>' : '') +
 										(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
 										(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
 										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
