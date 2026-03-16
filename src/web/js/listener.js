@@ -139,8 +139,8 @@ class listener {
 					var s = td.innerText.replace(/^\d{1,4}T/, '').trim();
 					if (s) {
 						note += (note ? ' · ' : '') + s;
-						while (note.indexOf(' ·  · ') > -1)
-							note = note.replace(' ·  · ', ' · ');
+						while (note.indexOf(' · · ') > -1)
+							note = note.replace(' · · ', ' · ');
 					}
 				}
 				td.innerHTML = note || '&nbsp;';
