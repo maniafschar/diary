@@ -47,7 +47,7 @@ class listener {
 			document.querySelector('body>button[name="logoff"]').style.display = '';
 
 			var table = document.querySelector('event sortable-table');
-			table.list = [...events];
+			table.list = events;
 			table.style('tr.past{opacity:0.4;}tbody{max-height:18em;}');
 			if (!table.columns.length) {
 				var now = new Date();
@@ -149,7 +149,6 @@ class listener {
 					}
 				}
 				td.innerHTML = note || '&nbsp;';
-				list[ui.parents(td, 'tr').getAttribute('i')].note = note;
 			}
 			if (e.detail.type != 'read')
 				listener.updateCotacts();
