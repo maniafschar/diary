@@ -111,7 +111,12 @@ class listener {
 						text.appendChild(document.createTextNode(events[i].location.name));
 						if (events[i].note) {
 							text.appendChild(document.createElement('br'));
-							text.appendChild(document.createTextNode(events[i].note));
+							var note = events[i].note;
+							while (note.length > 200)
+								note = note.substring(0, note.lastIndexOf(' '));
+							if (note.length < events[i].note.length)
+								note += '...';
+							text.appendChild(document.createTextNode(note));
 						}
 						text.onclick = click;
 					}
