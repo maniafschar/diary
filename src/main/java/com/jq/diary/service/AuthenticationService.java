@@ -198,8 +198,8 @@ public class AuthenticationService {
 	}
 
 	private String createEmailLoginLink(final Contact contact, final String link) {
-		return "Hallo " + contact.getName() + ",\n\nklick auf den Link\n\nhttps://schafkopf.studio?" + link
-				+ "\n\nDu kannst dann Dein Passwort setzen.\n\nViele Grüße\nhttps://schafkopf.studio";
+		return "Hallo " + contact.getName() + ",\n\nklick auf den Link\n\nhttps://diary.cafe?" + link
+				+ "\n\nDu kannst dann Dein Passwort setzen.\n\nViele Grüße\nhttps://diary.cafe";
 	}
 
 	public Unique unique(final BigInteger clientId, String email) {

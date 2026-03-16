@@ -34,9 +34,9 @@ class EmailService {
 		email.setCharset(StandardCharsets.UTF_8.name());
 		email.setAuthenticator(new DefaultAuthenticator(this.emailAddress, this.emailPassword));
 		email.setSSLOnConnect(true);
-		email.setFrom(this.emailAddress, "Schafkopf Studio");
+		email.setFrom(this.emailAddress, "Diary Cafe");
 		email.addTo(address);
-		email.setSubject("Schafkopf Studio: Deine Registrierung");
+		email.setSubject("Diary Cafe: Deine Registrierung");
 		email.setMsg(text);
 		email.send();
 	}
