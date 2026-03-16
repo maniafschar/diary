@@ -85,6 +85,11 @@ public class ApplicationApi {
 		return this.authenticationService.tokenRefresh(this.repository.one(Contact.class, contactId), publicKey);
 	}
 
+	@PostMapping("authentication/create")
+	public void authenticationCreatePost(@RequestBody final Client client) {
+		this.authenticationService.createClient(client);
+	}
+
 	@PostMapping("authentication/verify")
 	public void authenticationVerifyPost(final String token, final String password) {
 		this.authenticationService.recoverVerifyEmail(Encryption.decryptBrowser(token),
