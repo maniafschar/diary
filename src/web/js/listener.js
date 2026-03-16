@@ -112,10 +112,10 @@ class listener {
 						if (events[i].note) {
 							text.appendChild(document.createElement('br'));
 							var note = events[i].note.replace(/\n/g, ' ');
-							while (note.length > 80)
-								note = note.substring(0, note.lastIndexOf(' '));
+							while (note.length > 70)
+								note = note.substring(0, note.lastIndexOf(' ')).trim();
 							if (note.length < events[i].note.length)
-								note += '...';
+								note += ' ...';
 							text.appendChild(document.createTextNode(note));
 						}
 						text.onclick = click;
