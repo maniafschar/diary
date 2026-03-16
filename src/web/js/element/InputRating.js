@@ -20,6 +20,7 @@ ratingSelection {
 	position: relative;
 	line-height: 1;
 	display: inline-block;
+	white-space: nowrap;
 }
 
 rating empty,
@@ -38,7 +39,7 @@ ratingSelection full {
 }
 
 ratingSelection span {
-	width: 2em;
+	width: 1.6em;
 	display: inline-block;
 	position: relative;
 	cursor: pointer;
@@ -47,7 +48,7 @@ ratingSelection span {
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em;">
+			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em 0;">
 	<empty><span onclick="this.getRootNode().host.rate(event,1)">☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,3)">☆</span><span onclick="this.getRootNode().host.rate(event,4)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,5)">☆</span></empty>
