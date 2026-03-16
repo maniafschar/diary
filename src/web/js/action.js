@@ -209,6 +209,7 @@ class action {
 			url: popup.querySelector('element.location input[name="url"]').value,
 			phone: popup.querySelector('element.location input[name="phone"]').value,
 			email: popup.querySelector('element.location input[name="email"]').value,
+			note: popup.querySelector('element.location textarea[name="note"]').value,
 			rating: popup.querySelector('element.location input-rating').getAttribute('value')
 		};
 		if (location.name) {
