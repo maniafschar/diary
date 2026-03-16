@@ -91,7 +91,7 @@ close {
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
-		data.appendChild('imageContainer').appendChild(document.createElement('img'));
+		data.appendChild(document.createElement('imageContainer')).appendChild(document.createElement('img'));
 		data.appendChild(document.createElement('description'));
 		div.appendChild(document.createElement('text'));
 		var next = div.appendChild(document.createElement('button'));
