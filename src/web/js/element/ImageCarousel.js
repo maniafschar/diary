@@ -130,5 +130,6 @@ close {
 			this.index = this.list.length - 1;
 		this._root.querySelector('img').src = this.list[this.index].src;
 		this._root.querySelector('text').innerHTML = this.list[this.index].text;
+		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}
 }
