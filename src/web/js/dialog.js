@@ -409,7 +409,7 @@ value a {
 		input.setAttribute('name', name);
 		if (value) {
 			if (type == 'textarea')
-				input.innerText = value.replace(/\n/g, '&#10;');
+				input.innerHTML = value.replace(/\n/g, '&#10;');
 			else if (type == 'input-checkbox')
 				input.setAttribute('checked', value);
 			else
