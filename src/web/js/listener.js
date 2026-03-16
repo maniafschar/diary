@@ -91,6 +91,12 @@ class listener {
 						var click = event => {
 							var items = document.querySelectorAll('history item');
 							var list = [], index = 0;
+							var listRatings = function (event) {
+								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating> (' + event.ratingCount + ' Bewertungen)<br/>';
+								for (var i = 0; i < event.eventRatings.length; i++)
+									s += '<rating>' + (event.eventRatings[i].rating / 20) + ' · ' + event.eventRatings[i].contact.name + '</rating>';
+								return s + '<br/><br/>';
+							};
 							for (var i = 0; i < items.length; i++) {
 								list.push({
 									src: items[i].querySelector('img').getAttribute('src'),
@@ -102,7 +108,7 @@ class listener {
 										(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
 										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
 										(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
-										(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating> (' + events[i].ratingCount + ' Bewertungen)<br/><br/>' : '') +
+										(events[i].rating ? listRatings(events[i]) : '') +
 										events[i].note
 								});
 								if (event.target.parentElement == items[i])
