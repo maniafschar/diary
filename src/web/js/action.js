@@ -108,8 +108,7 @@ class action {
 		var legalCheck = document.querySelector('login input-checkbox[name="legal"]');
 		legalCheck.style.color = '';
 		var client = {
-			name: document.querySelector('login textarea[name="clientName"]').value,
-			note: document.querySelector('login textarea[name="clientNote"]')?.value,
+			name: document.querySelector('login input[name="clientName"]').value,
 			contacts: [
 				{
 					name: document.querySelector('login input[name="contactName"]').value,
