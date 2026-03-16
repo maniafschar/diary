@@ -111,8 +111,8 @@ class listener {
 						text.appendChild(document.createTextNode(events[i].location.name));
 						if (events[i].note) {
 							text.appendChild(document.createElement('br'));
-							var note = events[i].note;
-							while (note.length > 200)
+							var note = events[i].note.replace(/\n/g, ' ');
+							while (note.length > 100)
 								note = note.substring(0, note.lastIndexOf(' '));
 							if (note.length < events[i].note.length)
 								note += '...';
