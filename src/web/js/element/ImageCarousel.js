@@ -126,7 +126,7 @@ close {
 		this.index = this.index + (next ? 1 : -1);
 		if (this.index >= this.list.length)
 			this.index = next ? 0 : this.list.length - 1;
-		else if (this.index <= 0)
+		else if (this.index < 0)
 			this.index = next ? this.list.length - 1 : 0;
 		this._root.querySelector('img').src = this.list[this.index].src;
 		this._root.querySelector('text').innerHTML = this.list[this.index].text;
