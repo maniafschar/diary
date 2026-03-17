@@ -66,6 +66,7 @@ data description {
 	border: solid 2em transparent;
 	position: relative;
 	display: block;
+	overflow-x: hidden;
 }
 imageContainer {
 	overflow: auto;
