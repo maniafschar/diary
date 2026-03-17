@@ -188,11 +188,12 @@ public class ApplicationApi {
 	}
 
 	@PostMapping("feedback/{eventId}")
-	public void feedbackPost(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
+	public BigInteger feedbackPost(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
 			@RequestBody final EventFeedback feedback) throws EmailException {
 		feedback.setContact(this.repository.one(Contact.class, contactId));
 		feedback.setEvent(this.repository.one(Event.class, eventId));
 		this.feedbackService.save(feedback);
+		return feedback.getId();
 	}
 
 	@GetMapping("feedback")

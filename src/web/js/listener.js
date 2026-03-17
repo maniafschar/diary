@@ -98,14 +98,6 @@ class listener {
 									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 								return s + '<br/><br/>';
 							};
-							var listFeedbacks = function (event) {
-								var s = '';
-								if (event.eventFeedbacks) {
-									for (var i = 0; i < event.eventFeedbacks.length; i++)
-										s += '<feedback><span>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
-								}
-								return s + '<br/><br/>';
-							};
 							for (var i = 0; i < items.length; i++) {
 								var e = events[items[i].getAttribute('i')];
 								list.push({
@@ -120,7 +112,7 @@ class listener {
 										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
 										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listFeedbacks(e) + '<separator></separator>' +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) + '<separator></separator>' +
 										'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
 										'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 										'<input-rating type="edit" onclick="action.addRating(' + e.id + ')"></input-rating><br/><br/>'
@@ -137,7 +129,7 @@ rating {
 separator {
 	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
 	display: block;
-	margin: 3em 1em;
+	margin: 3em 0;
 }
 feedback {
 	display: block;
@@ -182,6 +174,14 @@ feedback>span {
 			listener.updateCotacts();
 		else
 			api.activateProgressbar();
+	}
+	static listFeedbacks(event) {
+		var s = '';
+		if (event.eventFeedbacks) {
+			for (var i = 0; i < event.eventFeedbacks.length; i++)
+				s += '<feedback><span>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+		}
+		return s;
 	}
 	static init() {
 		document.addEventListener('eventParticipation', e => {
