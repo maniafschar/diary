@@ -30,15 +30,6 @@ div {
 	width: 100%;
 	height: 100%;
 }
-div text {
-	position: fixed;
-	left: 1em;
-	top: 1em;
-	color: white;
-	background: transparent;
-	text-align: left;
-	text-shadow: 0 0 0.1em rgba(0, 0, 0, 0.9);
-}
 div img {
 	min-width: 100%;
 	min-height: 100%;
@@ -99,7 +90,6 @@ a {
 		var data = div.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('imageContainer')).appendChild(document.createElement('img'));
 		data.appendChild(document.createElement('description'));
-		div.appendChild(document.createElement('text'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('icon');
@@ -125,7 +115,6 @@ a {
 		this.list = list;
 		this.index = i;
 		this._root.querySelector('img').src = list[i].src;
-		this._root.querySelector('text').innerHTML = list[i].text;
 		this._root.querySelector('description').innerHTML = list[i].description;
 		this._root.host.style.transform = 'scale(1)';
 	}
@@ -137,7 +126,6 @@ a {
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
 		this._root.querySelector('img').src = this.list[this.index].src;
-		this._root.querySelector('text').innerHTML = this.list[this.index].text;
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}
 }

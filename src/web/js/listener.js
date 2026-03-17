@@ -100,7 +100,6 @@ class listener {
 							for (var i = 0; i < items.length; i++) {
 								list.push({
 									src: items[i].querySelector('img').getAttribute('src'),
-									text: items[i].querySelector('text').innerHTML,
 									description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
 										events[i].location.name + '<br/><br/>' +
 										(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.address.replace(/\n/g, '<br/>') + '</a><br/><br/>' : '') +
