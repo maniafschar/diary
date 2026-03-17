@@ -176,7 +176,7 @@ feedback>span {
 			document.querySelector('login').style.display = 'none';
 			document.querySelector('element.user').style.display = '';
 			if (document.querySelector("image-carousel").style.transform?.indexOf('1') > 0)
-				listener.updateImageCarousel();
+				setTimeout(listener.updateImageCarousel, 100);
 		});
 		if (!document.querySelector('user sortable-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();
