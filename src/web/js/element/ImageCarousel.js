@@ -36,7 +36,6 @@ div img {
 }
 button {
 	background: rgba(255, 255, 255, 0.6);
-	border: solid 1px rgba(0, 0, 0, 0.05);
 	padding: 0.5em 1em;
 	border-radius: 1em;
 	outline: none;
@@ -44,8 +43,6 @@ button {
 	margin: 0 0.5em 0.5em 0.5em;
 	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
-	z-index: 2;
-	color: black;
 	border: none;
 }
 button.icon {
@@ -57,6 +54,8 @@ button.icon {
 	bottom: 0;
 	margin: 0;
 	padding: 0;
+	outline: none;
+	color: rgba(255, 255, 255, 0.6);
 }
 data {
 	position: relative;
