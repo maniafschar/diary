@@ -373,6 +373,10 @@ toggle::before {
 	margin-left: -1em;
 }
 
+toggle.open {
+	font-weight: bold;
+}
+
 toggle.open::before {
 	content: 'v';
 }
