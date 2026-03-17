@@ -10,6 +10,12 @@ class InputRating extends HTMLElement {
 
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
+:host(*) {
+	overflow: auto;
+	max-width: 100%;
+	position: relative;
+	display: block;
+}
 detailRating {
 	position: relative;
 	color: darkgoldenrod;
@@ -49,7 +55,7 @@ ratingSelection span {
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection style="font-size:2em;margin:0.5em 0;">
+			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">
 	<empty><span onclick="this.getRootNode().host.rate(event,1)">☆</span><span onclick="this.getRootNode().host.rate(event,2)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,3)">☆</span><span onclick="this.getRootNode().host.rate(event,4)">☆</span><span
 			onclick="this.getRootNode().host.rate(event,5)">☆</span></empty>
