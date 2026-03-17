@@ -47,6 +47,18 @@ class action {
 		setTimeout(function () { document.querySelector('body>container').style.opacity = 1; }, 400);
 	}
 
+	static addFeedback(eventId) {
+
+	}
+
+	static addImage(eventId) {
+
+	}
+
+	static addRating(eventId) {
+
+	}
+
 	static login() {
 		var input = document.querySelectorAll('login input');
 		if (input[0].value?.indexOf('@') < 1)

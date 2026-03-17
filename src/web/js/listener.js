@@ -93,7 +93,7 @@ class listener {
 							var items = document.querySelectorAll('history item');
 							var list = [], index = 0;
 							var listRatings = function (event) {
-								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
+								var s = '<input-rating onclick="action.addRating(' + e.id + ')" value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
 								for (var i = 0; i < event.eventRatings.length; i++)
 									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 								return s + '<br/><br/>';
@@ -111,8 +111,11 @@ class listener {
 										(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
 										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
-										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '')
+										(e.rating ? '<rating onclick="action.addRating(' + e.id + ')">Bewertung des Events</rating><br/>' + listRatings(e) : '') +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<br/><br/>Ich freue mich auf Deine Interaktion, füge einfach etwas hinzu:<br/>' +
+										'<button onclick="action.addRating(' + e.id + ')">Bewertung</button>' +
+										'<button onclick="action.addFeedback(' + e.id + ')">Kommentar</button>' +
+										'<button onclick="action.addImage(' + e.id + ')">Bild</button>'
 								});
 								if (event.target.parentElement == items[i])
 									index = i;

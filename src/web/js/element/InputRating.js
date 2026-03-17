@@ -13,6 +13,7 @@ class InputRating extends HTMLElement {
 detailRating {
 	position: relative;
 	color: darkgoldenrod;
+	font-size: 1.6em;
 }
 
 rating,
