@@ -51,7 +51,7 @@ class listener {
 			return s + '<br/><br/>';
 		};
 		for (var i = 0; i < items.length; i++) {
-			var e = events[items[i].getAttribute('i')];
+			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i')];
 			list.push({
 				src: items[i].querySelector('img').getAttribute('src'),
 				description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
