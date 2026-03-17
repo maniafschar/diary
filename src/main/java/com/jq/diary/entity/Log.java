@@ -17,7 +17,7 @@ public class Log extends BaseEntity {
 	private String query;
 	private String ip;
 	private String uri;
-	private String clientId;
+	private BigInteger clientId;
 	private BigInteger contactId;
 	private int status;
 	private int port;
@@ -109,11 +109,11 @@ public class Log extends BaseEntity {
 		this.referer = Utilities.trim(referer, 255);
 	}
 
-	public String getClientId() {
+	public BigInteger getClientId() {
 		return this.clientId;
 	}
 
-	public void setClientId(final String clientId) {
+	public void setClientId(final BigInteger clientId) {
 		this.clientId = clientId;
 	}
 

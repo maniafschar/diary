@@ -330,7 +330,7 @@ value a {
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
 			}
 			if (!futureEvent && (event.contact.id == api.user.id || event.ratingCount > 0)) {
-				popup.appendChild(document.createElement('label')).innerText = 'Stimmung';
+				popup.appendChild(document.createElement('label')).innerText = 'Bewertung';
 				var value = popup.appendChild(document.createElement('value'));
 				value.style.textAlign = 'center';
 				if (event.contact.id == api.user.id) {
