@@ -93,7 +93,7 @@ class listener {
 							var items = document.querySelectorAll('history item');
 							var list = [], index = 0;
 							var listRatings = function (event) {
-								var s = '<input-rating onclick="action.addRating(' + e.id + ')" value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
+								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
 								for (var i = 0; i < event.eventRatings.length; i++)
 									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 								return s + '<br/><br/>';
@@ -111,11 +111,11 @@ class listener {
 										(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
 										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
-										(e.rating ? '<rating onclick="action.addRating(' + e.id + ')">Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<separator></separator><span style="font-size: 0.8em;">Ich freue mich auf Deine Interaktion, füge einfach etwas hinzu:</span><br/><br/>' +
-										'<button onclick="action.addRating(' + e.id + ')">Bewertung</button>' +
-										'<button onclick="action.addFeedback(' + e.id + ')">Kommentar</button>' +
-										'<button onclick="action.addImage(' + e.id + ')">Bild</button>'
+										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<separator></separator>' +
+										'<input-rating type="edit" onclick="action.addRating(' + e.id + ')"></input-rating><br/><br/>' +
+										'<label>Kommentar</label><field><textarea name="feedback"/><button onclick="action.saveFeedback(' + e.id + ')">Absenden</button></field>' +
+										'<label>Bilder zum Event</label><field><textarea name="feedback"/><button onclick="action.saveFeedback(' + e.id + ')">Hinzufügen</button></field>'
 								});
 								if (event.target.parentElement == items[i])
 									index = i;
