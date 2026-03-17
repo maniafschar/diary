@@ -58,6 +58,7 @@ class listener {
 			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i')];
 			list.push({
 				src: items[i].querySelector('img').getAttribute('src'),
+				index: items[i].getAttribute('i'),
 				description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
 					(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.name + '<br/>' + e.location.address.replace(/\n/g, '<br/>') + '</a>' : e.location.name) + '<br/><br/>' +
 					(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
