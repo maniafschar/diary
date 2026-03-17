@@ -35,17 +35,27 @@ div img {
 	min-height: 100%;
 }
 button {
-	font-size: 2em;
+	background: rgba(255, 255, 255, 0.6);
+	border: solid 1px rgba(0, 0, 0, 0.05);
+	padding: 0.5em 1em;
+	border-radius: 1em;
+	outline: none;
+	cursor: pointer;
+	margin: 0 0.5em 0.5em 0.5em;
+	font-size: 1em;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	z-index: 2;
+	color: black;
+	border: none;
+}
+button.icon {
+	font-size: 1.3em;
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	background: transparent;
-	bottom: 0;
-	outline: none;
-	cursor: pointer;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: rgba(255, 255, 255, 0.6);
-	border: none;
+	background: rgba(255, 0, 0, 0.2);
+	margin: 0;
+	padding: 0;
 }
 data {
 	position: relative;
