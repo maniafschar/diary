@@ -95,6 +95,91 @@ a {
 	cursor: pointer;
 	position: relative;
 	display: inline-block;
+}
+
+label {
+	position: relative;
+	color: darkmagenta;
+	font-size: 0.8em;
+	background: rgba(255, 255, 255, 0.4);
+	padding: 0.5em;
+	border-radius: 0.5em 0.5em 0 0;
+	clear: left;
+	float: left;
+}
+
+value {
+	position: relative;
+	min-width: 7em;
+	max-height: 20em;
+	max-width: 100%;
+	margin-bottom: 1em;
+	line-height: 1.5;
+	overflow: auto;
+	padding: 0.5em;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	background: rgba(255, 255, 255, 0.4);
+	float: left;
+	clear: left;
+	user-select: text;
+	box-sizing: border-box;
+}
+
+field {
+	position: relative;
+	display: block;
+	min-height: 1.5em;
+	padding: 0.5em;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	background: rgba(255, 255, 255, 0.4);
+	margin-bottom: 1em;
+	clear: left;
+}
+
+textarea,
+input {
+	appearance: none;
+	position: relative;
+	font-size: 1em;
+	font-weight: normal;
+	outline: none !important;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	height: 2em;
+	padding: 0em 0.75em;
+	border-radius: 0.5em;
+	background: rgba(255, 255, 255, 0.85);
+	vertical-align: top;
+	border: none;
+	width: 100%;
+	color: black;
+	user-select: text;
+}
+
+input[type="file"] {
+	opacity: 0;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	display: block;
+	height: 100%;
+}
+
+textarea {
+	height: 5em;
+	padding-top: 0.5em;
+	overflow-y: auto;
+	resize: none;
+}
+
+a {
+	text-decoration: none;
+	color: darkblue;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
