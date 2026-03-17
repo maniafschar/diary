@@ -36,9 +36,9 @@ public class Event extends BaseEntity {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventFeedback> eventFeedbacks;
 	private Date date;
-	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null)")
+	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Double rating;
-	@Formula("(select count(1) from event_rating er where er.event_id=id and er.rating is not null)")
+	@Formula("(select count(1) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Integer ratingCount;
 
 	public Double getRating() {

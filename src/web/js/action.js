@@ -62,8 +62,31 @@ class action {
 
 	}
 
-	static addRating(eventId) {
-
+	static addRating(event, e) {
+		var exec = () => api.eventRatingPut(event.id, e.getAttribute('value'), () => {
+			document.dispatchEvent(new CustomEvent('event'));
+			document.dispatchEvent(new CustomEvent('popup'));
+		});
+		if (event.contactEvents) {
+			for (var i = 0; i < event.contactEvents.length; i++) {
+				if (event.contactEvents[i].contact.id == api.user.id) {
+					exec();
+					return;
+				}
+			}
+		}
+		var popup = document.createElement('div');
+		popup.style.textAlign = 'center';
+		popup.appendChild(document.createTextNode('Du kannst nur Events bewerten, an denen Du teilgenommen hast. Hast Du an dem Event teilgenommen?'));
+		popup.appendChild(document.createElement('br'));
+		popup.appendChild(document.createElement('br'));
+		var button = popup.appendChild(document.createElement('button'));
+		button.innerText = 'Ja';
+		button.onclick = () => api.contactEventPost(api.user.id, event.id, exec);
+		button = popup.appendChild(document.createElement('button'));
+		button.innerText = 'Nein';
+		button.onclick = () => document.dispatchEvent(new CustomEvent('popup'));
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static login() {
@@ -255,7 +278,7 @@ class action {
 			var selected = popup.querySelectorAll('value[i="' + eventId + '"] item.selected');
 			for (var i = 0; i < selected.length; i++)
 				participants.push({ id: selected[i].getAttribute('i'), pseudonym: selected[i].innerText });
-			document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: eventId, participants: participants, type: type } }));
+			document.dispatchEvent(new CustomEvent('event'));
 		};
 		var e = popup.querySelector('value[i="' + eventId + '"] item[i="' + contactId + '"]');
 		if (e.getAttribute('contactEventId')) {
