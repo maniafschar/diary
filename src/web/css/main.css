@@ -371,6 +371,7 @@ toggle::before {
 	color: rgba(0, 0, 0, 0.3);
 	position: absolute;
 	margin-left: -1em;
+	transition: all 0.4s ease-out;
 }
 
 toggle.open {
@@ -378,20 +379,19 @@ toggle.open {
 }
 
 toggle.open::before {
-	content: 'v';
+	transform: rotate(90deg);
 	color: black;
 }
 
 div.toggle {
 	text-align: left;
 	margin: 0.5em;
-	max-height: 0;
-	overflow: hidden;
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.4s ease-out;
 }
 
-div.toggle::after {
-	content: ' ';
-	padding: 1em;
+div.toggle>div {
 	position: relative;
-	display: block;
+	overflow: hidden;
 }

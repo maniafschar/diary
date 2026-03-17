@@ -79,10 +79,10 @@ class ui {
 		var toggle = ui.parents(event.target, 'toggle');
 		var element = toggle.nextElementSibling;
 		if (toggle.classList.contains('open')) {
-			element.style.maxHeight = '';
+			element.style.gridTemplateRows = '';
 			toggle.classList.remove('open');
 		} else {
-			element.style.maxHeight = '2000em';
+			element.style.gridTemplateRows = '1fr';
 			toggle.classList.add('open');
 		}
 	}
