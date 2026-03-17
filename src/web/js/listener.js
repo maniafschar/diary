@@ -120,7 +120,7 @@ class listener {
 								if (event.target.parentElement == items[i])
 									index = i;
 							}
-							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0,0,0,0.1); display: block; margin: 3em;}');
+							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0, 0, 0, 0.2); display: block; margin: 3em 1em;}');
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
