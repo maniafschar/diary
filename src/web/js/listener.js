@@ -117,11 +117,8 @@ feedback>span {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var text = list[i].note ? list[i].note.split('\n')[0] : '';
-						if (list[i].rating) {
-							var rate = parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1);
-							text = list[i].ratingCount + 'B · ' + rate + 'S' + (text ? ' · ' + text : '');
-							document.querySelector('image-carousel').data().querySelectorAll('input-rating.event[i="' + list[i].id + '"]').forEach(e => e.setAttribute('value', rate));
-						}
+						if (list[i].rating)
+							text = list[i].ratingCount + 'B · ' + parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1) + 'S' + (text ? ' · ' + text : '');
 						row.push({ attributes: { date: date.getTime() }, text: ui.formatTime(date) });
 						row.push(list[i].location.name);
 						row.push({ attributes: { i: 'note_' + list[i].id }, text: text });
