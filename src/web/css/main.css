@@ -379,6 +379,7 @@ toggle.open {
 
 toggle.open::before {
 	content: 'v';
+	color: black;
 }
 
 div.toggle {
