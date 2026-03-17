@@ -112,7 +112,7 @@ class listener {
 										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
 										(e.rating ? '<rating onclick="action.addRating(' + e.id + ')">Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<br/><br/>Ich freue mich auf Deine Interaktion, füge einfach etwas hinzu:<br/>' +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<separator></separator><span style="font-size: 0.8em;">Ich freue mich auf Deine Interaktion, füge einfach etwas hinzu:</span><br/><br/>' +
 										'<button onclick="action.addRating(' + e.id + ')">Bewertung</button>' +
 										'<button onclick="action.addFeedback(' + e.id + ')">Kommentar</button>' +
 										'<button onclick="action.addImage(' + e.id + ')">Bild</button>'
@@ -120,7 +120,7 @@ class listener {
 								if (event.target.parentElement == items[i])
 									index = i;
 							}
-							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;}');
+							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0,0,0,0.1); display: block; margin: 2em;}');
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
