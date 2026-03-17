@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +29,12 @@ public class Event extends BaseEntity {
 	private List<EventImage> eventImages;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventRating> eventRatings;
+	@OneToMany(mappedBy = "event")
+	@JsonManagedReference
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private List<EventFeedback> eventFeedbacks;
 	private Date date;
 	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null)")
 	private Double rating;
@@ -97,5 +103,13 @@ public class Event extends BaseEntity {
 
 	public void setEventRatings(final List<EventRating> eventRatings) {
 		this.eventRatings = eventRatings;
+	}
+
+	public List<EventFeedback> getEventFeedbacks() {
+		return this.eventFeedbacks;
+	}
+
+	public void setEventFeedbacks(final List<EventFeedback> eventFeedbacks) {
+		this.eventFeedbacks = eventFeedbacks;
 	}
 }

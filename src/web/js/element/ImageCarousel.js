@@ -206,6 +206,10 @@ a {
 		this._root.host.style.transform = '';
 	}
 
+	data() {
+		return this._root.querySelector('data');
+	}
+
 	open(list, i, style) {
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;

@@ -23,8 +23,8 @@ import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
+import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
-import com.jq.diary.entity.Feedback;
 import com.jq.diary.entity.Location;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
@@ -183,17 +183,20 @@ public class ApplicationApi {
 	}
 
 	@GetMapping("feedback/{id}")
-	public Feedback feedback(@PathVariable final BigInteger id) {
+	public EventFeedback feedback(@PathVariable final BigInteger id) {
 		return filter(this.feedbackService.one(id));
 	}
 
-	@PostMapping("feedback")
-	public void feedbackPost(@RequestBody final Feedback feedback) throws EmailException {
+	@PostMapping("feedback/{eventId}")
+	public void feedbackPost(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
+			@RequestBody final EventFeedback feedback) throws EmailException {
+		feedback.setContact(this.repository.one(Contact.class, contactId));
+		feedback.setEvent(this.repository.one(Event.class, eventId));
 		this.feedbackService.save(feedback);
 	}
 
 	@GetMapping("feedback")
-	public List<Feedback> feedbacks(@RequestHeader final BigInteger contactId) {
+	public List<EventFeedback> feedbacks(@RequestHeader final BigInteger contactId) {
 		return filter(
 				this.feedbackService.list(this.repository.one(Contact.class, contactId).getClient()));
 	}

@@ -155,6 +155,15 @@ class api {
 		});
 	}
 
+	static eventFeedbackPost(eventId, feedback, success) {
+		api.ajax({
+			url: 'feedback/' + eventId,
+			method: 'POST',
+			body: feedback,
+			success: success
+		});
+	}
+
 	static eventImageDelete(eventImageId, success) {
 		api.ajax({
 			url: 'event/image/' + eventImageId,

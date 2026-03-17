@@ -93,9 +93,17 @@ class listener {
 							var items = document.querySelectorAll('history item');
 							var list = [], index = 0;
 							var listRatings = function (event) {
-								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
+								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 								for (var i = 0; i < event.eventRatings.length; i++)
 									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
+								return s + '<br/><br/>';
+							};
+							var listFeedbacks = function (event) {
+								var s = '';
+								if (event.eventFeedbacks) {
+									for (var i = 0; i < event.eventFeedbacks.length; i++)
+										s += '<feedback>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '<br/>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+								}
 								return s + '<br/><br/>';
 							};
 							for (var i = 0; i < items.length; i++) {
@@ -112,9 +120,9 @@ class listener {
 										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
 										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<separator></separator>' +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listFeedbacks(e) + '<separator></separator>' +
 										'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
-										'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0.2em; top: 0.2em;"></input-image></field>' +
+										'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 										'<input-rating type="edit" onclick="action.addRating(' + e.id + ')"></input-rating><br/><br/>'
 								});
 								if (event.target.parentElement == items[i])
