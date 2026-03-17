@@ -364,11 +364,13 @@ toggle {
 	position: relative;
 	display: block;
 	cursor: pointer;
-	font-weight: bold;
 }
 
 toggle::before {
 	content: '>';
+	color: rgba(0, 0, 0, 0.3);
+	position: absolute;
+	margin-left: -1em;
 }
 
 toggle.open::before {
