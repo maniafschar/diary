@@ -49,11 +49,12 @@ button {
 	border: none;
 }
 button.icon {
-	font-size: 1.3em;
+	font-size: 2em;
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	background: rgba(255, 0, 0, 0.2);
+	background: transparent;
+	bottom: 0;
 	margin: 0;
 	padding: 0;
 }
