@@ -81,6 +81,8 @@ ratingSelection span {
 	}
 
 	rate(event, x) {
+		if (x == 1 && event.target.getRootNode().host.getAttribute('value') == 20)
+			x = 0;
 		var e = event.target.getRootNode().querySelectorAll('ratingSelection > full span');
 		for (var i = 0; i < 5; i++)
 			e[i].style.display = i < x ? '' : 'none';

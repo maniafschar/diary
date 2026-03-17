@@ -123,7 +123,7 @@ class listener {
 							document.querySelector('image-carousel').open(list, index, `
 rating {
 	font-size: 0.8em;
-	padding: 0.5em;
+	padding: 0.5em 1em;
 	display: inline-block;
 }
 separator {
