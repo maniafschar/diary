@@ -329,19 +329,11 @@ value a {
 				popup.appendChild(document.createElement('label')).innerText = 'Bemerkung';
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
 			}
-			if (!futureEvent) {
+			if (!futureEvent && event.ratingCount > 0) {
 				popup.appendChild(document.createElement('label')).innerText = 'Stimmung';
 				var value = popup.appendChild(document.createElement('value'));
 				value.style.textAlign = 'center';
-				var rating = value.appendChild(document.createElement('input-rating'));
-				rating.setAttribute('value', 0);
-				rating.setAttribute('type', 'edit');
-				rating.setOnchange(rating => api.eventRatingPut(id, rating, () => document.dispatchEvent(new CustomEvent('event'))));
-				if (event.ratingCount > 0) {
-					value.appendChild(document.createElement('br'));
-					rating = value.appendChild(document.createElement('input-rating'));
-					rating.setAttribute('value', event.rating / event.ratingCount);
-				}
+				value.appendChild(document.createElement('input-rating')).setAttribute('value', event.rating / event.ratingCount);
 			}
 			popup.appendChild(document.createElement('label')).innerText = 'Teilnehmer';
 			var participants = popup.appendChild(document.createElement('value'));
@@ -351,20 +343,22 @@ value a {
 				popup.appendChild(document.createElement('label')).innerText = 'Bilder';
 				var pictures = popup.appendChild(document.createElement('value'));
 				pictures.classList.add('pictures');
-				var buttonImage = pictures.appendChild(document.createElement('input-image'));
-				buttonImage.style.right = 0;
-				buttonImage.style.top = 0;
-				buttonImage.style.borderRadius = '0 0.5em';
-				buttonImage.setAttribute('max', 1000);
-				var addImage = (id, data) => {
-					var image = pictures.appendChild(document.createElement('div')).appendChild(document.createElement('img'));
-					image.src = data;
-					image.parentElement.setAttribute('i', id);
-					image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
-					if (data.indexOf('med/') != 0)
-						document.dispatchEvent(new CustomEvent('event'));
+				if (event.contact.id == api.user.id) {
+					var buttonImage = pictures.appendChild(document.createElement('input-image'));
+					buttonImage.style.right = 0;
+					buttonImage.style.top = 0;
+					buttonImage.style.borderRadius = '0 0.5em';
+					buttonImage.setAttribute('max', 1000);
+					var addImage = (id, data) => {
+						var image = pictures.appendChild(document.createElement('div')).appendChild(document.createElement('img'));
+						image.src = data;
+						image.parentElement.setAttribute('i', id);
+						image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
+						if (data.indexOf('med/') != 0)
+							document.dispatchEvent(new CustomEvent('event'));
+					}
+					buttonImage.setSuccess(e => api.eventImagePost(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
 				}
-				buttonImage.setSuccess(e => api.eventImagePost(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
 				for (var i = 0; i < event.eventImages?.length; i++)
 					addImage(event.eventImages[i].id, 'med/' + event.eventImages[i].image);
 			}

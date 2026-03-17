@@ -49,13 +49,14 @@ class action {
 
 	static addFeedback(eventId) {
 		var note = document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value;
-		api.eventFeedbackPost(eventId, { note: note }, e => {
-			document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
-			document.dispatchEvent(new CustomEvent('event'));
-			var div = document.createElement('div');
-			div.innerHTML = listener.listFeedbacks({ eventFeedbacks: [{ createdAt: new Date().toISOString(), note: note, contact: { id: api.user.id } }] });
-			document.querySelector('image-carousel').data().querySelector('description').insertBefore(div.firstChild, document.querySelector('image-carousel').data().querySelector('separator'));
-		});
+		if (note)
+			api.eventFeedbackPost(eventId, { note: note }, () => {
+				document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
+				document.dispatchEvent(new CustomEvent('event'));
+				var div = document.createElement('div');
+				div.innerHTML = listener.listFeedbacks({ eventFeedbacks: [{ createdAt: new Date().toISOString(), note: note, contact: { id: api.user.id } }] });
+				document.querySelector('image-carousel').data().querySelector('description').insertBefore(div.firstChild, document.querySelector('image-carousel').data().querySelector('separator'));
+			});
 	}
 
 	static addImage(eventId) {
