@@ -21,6 +21,7 @@ class ImageCarousel extends HTMLElement {
 	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 	display: flex;
 	align-items: center;
+	font-size: 1em;
 }
 *::-webkit-scrollbar {
 	display: none;
