@@ -103,9 +103,8 @@ class listener {
 								var e = events[items[i].getAttribute('i')];
 								list.push({
 									src: items[i].querySelector('img').getAttribute('src'),
-									description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/>' +
-										e.location.name + '<br/><br/>' +
-										(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.address.replace(/\n/g, '<br/>') + '</a><br/><br/>' : '') +
+									description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
+										(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.name + '<br/>' + e.location.address.replace(/\n/g, '<br/>') + '</a>' : e.location.name) + '<br/><br/>' +
 										(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
 										(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
 										(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
