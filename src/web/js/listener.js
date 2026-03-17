@@ -81,7 +81,7 @@ class listener {
 			var history = document.querySelector('history');
 			history.textContent = '';
 			var margin = 0;
-			for (var i = events.length; i > 0; --i) {
+			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].eventImages) {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
