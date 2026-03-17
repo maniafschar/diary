@@ -113,14 +113,14 @@ class listener {
 										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
 										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
 										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + '<separator></separator>' +
-										'<input-rating type="edit" onclick="action.addRating(' + e.id + ')"></input-rating><br/><br/>' +
 										'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.saveFeedback(' + e.id + ')">Absenden</button></field>' +
-										'<label>Bilder zum Event</label><field><button onclick="action.saveFeedback(' + e.id + ')">Hinzufügen</button></field>'
+										'<label>Bilder zum Event</label><field></field>' +
+										'<input-rating type="edit" onclick="action.addRating(' + e.id + ')"></input-rating><br/><br/>'
 								});
 								if (event.target.parentElement == items[i])
 									index = i;
 							}
-							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0,0,0,0.1); display: block; margin: 2em;}');
+							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0,0,0,0.1); display: block; margin: 3em;}');
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
