@@ -139,6 +139,7 @@ class listener {
 					}
 				}
 			}
+			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
 			document.querySelector('event').style.display = '';
 			document.querySelector('event').previousElementSibling.style.display = 'block';
 			document.querySelector('login').style.display = 'none';
