@@ -7,6 +7,7 @@ export { listener };
 class listener {
 	static updateCotacts() {
 		api.contacts(contacts => {
+			ui.extractPseudonyms(contacts);
 			var table = document.querySelector('user sortable-table');
 			table.list = contacts;
 			if (!table.columns.length) {
