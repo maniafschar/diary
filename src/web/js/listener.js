@@ -86,6 +86,7 @@ class listener {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 						var item = history.appendChild(document.createElement('item'));
+						item.setAttribute('i', i);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => {
@@ -98,19 +99,20 @@ class listener {
 								return s + '<br/><br/>';
 							};
 							for (var i = 0; i < items.length; i++) {
+								var e = events[items[i].getAttribute('i')];
 								list.push({
 									src: items[i].querySelector('img').getAttribute('src'),
-									description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
-										events[i].location.name + '<br/><br/>' +
-										(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.address.replace(/\n/g, '<br/>') + '</a><br/><br/>' : '') +
-										(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
-										(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
-										(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
-										(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
-										(events[i].location.note ? events[i].location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
-										(events[i].location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + events[i].location.rating + '"></input-rating><br/><br/>' : '') +
-										(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
-										(events[i].note ? events[i].note.replace(/\n/g, '<br/>') : '')
+									description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/>' +
+										e.location.name + '<br/><br/>' +
+										(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.address.replace(/\n/g, '<br/>') + '</a><br/><br/>' : '') +
+										(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
+										(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
+										(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
+										(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
+										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
+										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
+										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
+										(e.note ? e.note.replace(/\n/g, '<br/>') : '')
 								});
 								if (event.target.parentElement == items[i])
 									index = i;
