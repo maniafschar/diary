@@ -102,7 +102,7 @@ class listener {
 								var s = '';
 								if (event.eventFeedbacks) {
 									for (var i = 0; i < event.eventFeedbacks.length; i++)
-										s += '<feedback>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '<br/>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+										s += '<feedback><span>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
 								}
 								return s + '<br/><br/>';
 							};
@@ -128,7 +128,29 @@ class listener {
 								if (event.target.parentElement == items[i])
 									index = i;
 							}
-							document.querySelector('image-carousel').open(list, index, 'rating{font-size: 0.8em;padding: 0.5em;display: inline-block;} separator{border-bottom: solid 1px rgba(0, 0, 0, 0.2); display: block; margin: 3em 1em;} feedback{display: block; position: relative; padding-top: 1em; border-top: solid 1px rgba(0, 0, 0, 0.3); margin-top: 1em;}');
+							document.querySelector('image-carousel').open(list, index, `
+rating {
+	font-size: 0.8em;
+	padding: 0.5em;
+	display: inline-block;
+}
+separator {
+	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+	display: block;
+	margin: 3em 1em;
+}
+feedback {
+	display: block;
+	position: relative;
+	padding-top: 1em;
+	border-top: solid 1px rgba(0, 0, 0, 0.2);
+	margin-top: 1em;
+}
+feedback>span {
+	display: block;
+	position: relative;
+	font-size: 0.8em;
+}`);
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
