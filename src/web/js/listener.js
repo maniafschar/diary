@@ -95,7 +95,7 @@ class listener {
 							var listRatings = function (event) {
 								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
 								for (var i = 0; i < event.eventRatings.length; i++)
-									s += '<rating>' + (event.eventRatings[i].rating / 20) + ' · ' + event.eventRatings[i].contact.name + '</rating>';
+									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 								return s + '<br/><br/>';
 							};
 							for (var i = 0; i < items.length; i++) {
