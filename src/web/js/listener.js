@@ -41,6 +41,61 @@ class listener {
 		});
 	}
 
+	static updateImageCarousel() {
+		var items = document.querySelectorAll('history item');
+		var list = [], index = 0;
+		var listRatings = function (event) {
+			var s = '<input-rating class="event" i="' + e.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
+			for (var i = 0; i < event.eventRatings.length; i++)
+				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
+			return s + '<br/><br/>';
+		};
+		for (var i = 0; i < items.length; i++) {
+			var e = events[items[i].getAttribute('i')];
+			list.push({
+				src: items[i].querySelector('img').getAttribute('src'),
+				description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
+					(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.name + '<br/>' + e.location.address.replace(/\n/g, '<br/>') + '</a>' : e.location.name) + '<br/><br/>' +
+					(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
+					(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
+					(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
+					(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
+					(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
+					(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
+					(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
+					(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) + '<separator></separator>' +
+					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
+					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
+					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
+			});
+			if (items[i].getAttribute('selected') == 'true')
+				index = i;
+		}
+		document.querySelector('image-carousel').open(list, index, `
+rating {
+	font-size: 0.8em;
+	padding: 0.5em 1em;
+	display: inline-block;
+}
+separator {
+	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+	display: block;
+	margin: 1em 0;
+}
+feedback {
+	display: block;
+	position: relative;
+	padding-top: 1em;
+	border-top: solid 1px rgba(0, 0, 0, 0.2);
+	margin-top: 1em;
+}
+feedback>span {
+	display: block;
+	position: relative;
+	font-size: 0.8em;
+}`);
+	}
+
 	static updateEvents() {
 		api.events(events => {
 			document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
@@ -94,58 +149,9 @@ class listener {
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => {
-							var items = document.querySelectorAll('history item');
-							var list = [], index = 0;
-							var listRatings = function (event) {
-								var s = '<input-rating class="event" i="' + e.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
-								for (var i = 0; i < event.eventRatings.length; i++)
-									s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
-								return s + '<br/><br/>';
-							};
-							for (var i = 0; i < items.length; i++) {
-								var e = events[items[i].getAttribute('i')];
-								list.push({
-									src: items[i].querySelector('img').getAttribute('src'),
-									description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
-										(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.name + '<br/>' + e.location.address.replace(/\n/g, '<br/>') + '</a>' : e.location.name) + '<br/><br/>' +
-										(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
-										(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
-										(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
-										(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
-										(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
-										(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
-										(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-										(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) + '<separator></separator>' +
-										'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
-										'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
-										'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
-								});
-								if (event.target.parentElement == items[i])
-									index = i;
-							}
-							document.querySelector('image-carousel').open(list, index, `
-rating {
-	font-size: 0.8em;
-	padding: 0.5em 1em;
-	display: inline-block;
-}
-separator {
-	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
-	display: block;
-	margin: 1em 0;
-}
-feedback {
-	display: block;
-	position: relative;
-	padding-top: 1em;
-	border-top: solid 1px rgba(0, 0, 0, 0.2);
-	margin-top: 1em;
-}
-feedback>span {
-	display: block;
-	position: relative;
-	font-size: 0.8em;
-}`);
+							document.querySelectorAll('history item[selected]').forEach(e => e.removeAttribute('selected'));
+							event.target.parentElement.setAttribute('selected', 'true');
+							listener.updateImageCarousel();
 						};
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
@@ -172,6 +178,8 @@ feedback>span {
 			document.querySelector('event').previousElementSibling.style.display = 'block';
 			document.querySelector('login').style.display = 'none';
 			document.querySelector('element.user').style.display = '';
+			if (document.querySelector("image-carousel").style.transform?.indexOf('1') > 0)
+				listener.updateImageCarousel();
 		});
 		if (!document.querySelector('user sortable-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();
