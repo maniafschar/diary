@@ -361,17 +361,24 @@ history item text {
 	margin-right: 1em;
 }
 
-rating,
-rating top,
-rating note {
-	display: block;
+toggle {
 	position: relative;
+	display: block;
+	cursor: pointer;
+	font-weight: bold;
 }
 
-rating top {
-	font-size: 0.8em;
+toggle::before {
+	content: '>';
 }
 
-rating note {
+toggle.open::before {
+	content: 'v';
+}
+
+div.toggle {
+	text-align: left;
 	margin: 0.5em 0 2em 0;
+	max-height: 0;
+	overflow: hidden;
 }

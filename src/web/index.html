@@ -115,23 +115,30 @@
 			</user>
 		</element>
 		<element style="background: rgba(20, 255, 10, 0.1); display: block;">
-			<b>Impressum</b><br />
-			JNet Quality Consulting GmbH<br />
-			Whistlerweg 27b<br />
-			81479 Munich<br />
-			Germany<br />
-			E-Mail: support@diary.cafe<br />
-			Internet: https://diary.cafe<br /><br />
-			Managing Director: Mani Afschar Yazdi<br />
-			Registration court: District Court Munich<br />
-			Registration number: HRB 135182<br /><br />
-			©
-			<script type="text/javascript">document.write(new Date().getFullYear())</script> JNet Quality
-			Consulting GmbH<br />
-			All rights reserved<br /><br /><br />
-			<b>General Terms and Conditions</b><br />
-			Last updated: 1.1.2026
-			<div style="text-align: left; padding-top: 1em;">
+			<toggle onclick="ui.toggle(event)">
+				Impressum
+			</toggle>
+			<div class="toggle" style="text-align: center;">
+				JNet Quality Consulting GmbH<br />
+				Whistlerweg 27b<br />
+				81479 Munich<br />
+				Germany<br />
+				E-Mail: support@diary.cafe<br />
+				Internet: https://diary.cafe<br /><br />
+				Managing Director: Mani Afschar Yazdi<br />
+				Registration court: District Court Munich<br />
+				Registration number: HRB 135182<br /><br />
+				©
+				<script type="text/javascript">document.write(new Date().getFullYear())</script> JNet Quality
+				Consulting GmbH<br />
+				All rights reserved<br />
+			</div>
+			<toggle onclick="ui.toggle(event)">
+				General Terms and Conditions
+			</toggle>
+			<div class="toggle">
+				Last updated: 1.1.2026
+				<br /><br />
 				Welcome to diary.cafe, an online service that enables users to organize events and
 				add points and pictures to participants. By accessing or using our website and services, you agree to be
 				bound by the following Terms and Conditions. If you do not agree, please do not use the
@@ -211,10 +218,12 @@
 					</li>
 				</ol>
 			</div>
-			<br /><br />
-			<b id="privacy">Privacy Policy</b><br />
-			Last updated: 1.1.2026
-			<div style="text-align: left; padding-top: 1em;">
+			<toggle onclick="ui.toggle(event)">
+				<span id="privacy">Privacy Policy</span>
+			</toggle>
+			<div class="toggle">
+				Last updated: 1.1.2026
+				<br /><br />
 				At diary.cafe, we are committed to protecting your privacy.
 				This Privacy Policy explains how we collect, use, and protect your personal data when you
 				use our service that organizes events and memories of it.

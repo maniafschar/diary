@@ -72,4 +72,15 @@ class ui {
 		}
 		return e;
 	}
+	static toggle(event) {
+		var toggle = ui.parents(event.target, 'toggle');
+		var element = toggle.nextElementSibling;
+		if (toggle.classList.contains('open')) {
+			element.style.maxHeight = '';
+			toggle.classList.remove('open');
+		} else {
+			element.style.maxHeight = '2000em';
+			toggle.classList.add('open');
+		}
+	}
 }
