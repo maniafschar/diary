@@ -41,9 +41,13 @@ class listener {
 		});
 	}
 
-	static updateImageCarousel() {
+	static updateImageCarousel(index) {
+		if (index || index == 0)
+			document.querySelector('image-carousel').setAttribute('i', index);
+		else
+			index = document.querySelector('image-carousel').getAttribute('i');
 		var items = document.querySelectorAll('history item');
-		var list = [], index = 0;
+		var list = [];
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + e.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
@@ -68,7 +72,7 @@ class listener {
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
-			if (items[i].getAttribute('selected') == 'true')
+			if (items[i].getAttribute('i') == index)
 				index = i;
 		}
 		document.querySelector('image-carousel').open(list, index, `
@@ -145,11 +149,7 @@ feedback>span {
 						item.setAttribute('i', i);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
-						var click = event => {
-							document.querySelectorAll('history item[selected]').forEach(e => e.removeAttribute('selected'));
-							event.target.parentElement.setAttribute('selected', 'true');
-							listener.updateImageCarousel();
-						};
+						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
 						var img = item.appendChild(document.createElement('img'));
 						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
 						img.onclick = click;
