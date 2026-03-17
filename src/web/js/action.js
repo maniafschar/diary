@@ -59,15 +59,21 @@ class action {
 			});
 	}
 
-	static addImage(eventId) {
-
+	static addImage(event) {
+		action.addWithParticipation(event, () => api.eventImagePost(event.id, e.getAttribute('value'), () => {
+			document.dispatchEvent(new CustomEvent('event'));
+			document.dispatchEvent(new CustomEvent('popup'));
+		}), 'Du kannst nur Bilder zu Events hochladen, an denen Du teilgenommen hast.');
 	}
 
 	static addRating(event, e) {
-		var exec = () => api.eventRatingPut(event.id, e.getAttribute('value'), () => {
+		action.addWithParticipation(event, () => api.eventRatingPut(event.id, e.getAttribute('value'), () => {
 			document.dispatchEvent(new CustomEvent('event'));
 			document.dispatchEvent(new CustomEvent('popup'));
-		});
+		}), 'Du kannst nur Events bewerten, an denen Du teilgenommen hast.');
+	}
+
+	static addWithParticipation(event, exec, text) {
 		if (event.contactEvents) {
 			for (var i = 0; i < event.contactEvents.length; i++) {
 				if (event.contactEvents[i].contact.id == api.user.id) {
@@ -78,7 +84,7 @@ class action {
 		}
 		var popup = document.createElement('div');
 		popup.style.textAlign = 'center';
-		popup.appendChild(document.createTextNode('Du kannst nur Events bewerten, an denen Du teilgenommen hast. Hast Du an dem Event teilgenommen?'));
+		popup.appendChild(document.createTextNode(text + ' Hast Du an dem Event teilgenommen?'));
 		popup.appendChild(document.createElement('br'));
 		popup.appendChild(document.createElement('br'));
 		var button = popup.appendChild(document.createElement('button'));
