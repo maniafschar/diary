@@ -50,6 +50,7 @@ class action {
 	static addFeedback(eventId) {
 		api.eventFeedbackPost(eventId, { note: document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value }, e => {
 			document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
+			document.dispatchEvent(new CustomEvent('event'));
 		});
 	}
 
