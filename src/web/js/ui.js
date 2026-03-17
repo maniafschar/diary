@@ -4,8 +4,11 @@ export { ui };
 
 class ui {
 	static day = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+	static pseudonyms;
 
-	static pseudonyms(contacts) {
+	static extractPseudonyms(contacts) {
+		if (!contacts)
+			return ui.pseudonyms;
 		var firstnames = {};
 		for (var i = 0; i < contacts.length; i++) {
 			var name = contacts[i].name;
@@ -13,7 +16,7 @@ class ui {
 				firstnames[name.split(' ')[0]] = [];
 			firstnames[name.split(' ')[0]].push(name.substring(name.indexOf(' ') + 1).trim());
 		}
-		var pseudonyms = {};
+		ui.pseudonyms = {};
 		for (var i = 0; i < contacts.length; i++) {
 			contacts[i].pseudonym = contacts[i].name.split(' ')[0];
 			var lastnames = firstnames[contacts[i].pseudonym];
@@ -36,9 +39,9 @@ class ui {
 				}
 				contacts[i].pseudonym += ' ' + suffix;
 			}
-			pseudonyms['' + contacts[i].id] = contacts[i].pseudonym;
+			ui.pseudonyms['' + contacts[i].id] = contacts[i].pseudonym;
 		}
-		return pseudonyms;
+		return ui.pseudonyms;
 	}
 
 	static formatTime(date, hint) {

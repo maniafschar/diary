@@ -377,7 +377,7 @@ value a {
 				button.style.top = 0;
 			}
 			api.contacts(contacts => {
-				var pseudonyms = ui.pseudonyms(contacts);
+				var pseudonyms = ui.extractPseudonyms(contacts);
 				var p = {}, participantList = [];
 				for (var i = 0; i < event.contactEvents.length; i++) {
 					p[event.contactEvents[i].contact.id] = event.contactEvents[i];

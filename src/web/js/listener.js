@@ -95,7 +95,7 @@ class listener {
 							var listRatings = function (event) {
 								var s = '<input-rating value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 								for (var i = 0; i < event.eventRatings.length; i++)
-									s += '<rating>' + event.eventRatings[i].contact.name + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
+									s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 								return s + '<br/><br/>';
 							};
 							for (var i = 0; i < items.length; i++) {
@@ -129,7 +129,7 @@ rating {
 separator {
 	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
 	display: block;
-	margin: 3em 0;
+	margin: 1em 0;
 }
 feedback {
 	display: block;
@@ -179,7 +179,7 @@ feedback>span {
 		var s = '';
 		if (event.eventFeedbacks) {
 			for (var i = 0; i < event.eventFeedbacks.length; i++)
-				s += '<feedback><span>' + event.eventFeedbacks[i].contact.name + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+				s += '<feedback><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
 		}
 		return s;
 	}

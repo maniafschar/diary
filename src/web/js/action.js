@@ -52,10 +52,9 @@ class action {
 		api.eventFeedbackPost(eventId, { note: note }, e => {
 			document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
 			document.dispatchEvent(new CustomEvent('event'));
-			var feedback = document.createElement('feedback');
-			feedback.appendChild(document.createElement('span')).innerText = api.contact.name + ' · ' + ui.formatTime(new Date());
-			feedback.appendChild(document.createTextNode(note));
-			document.querySelector('image-carousel').data().querySelector('description').insertBefore(feedback, document.querySelector('image-carousel').data().querySelector('separator'));
+			var div = document.createElement('div');
+			div.innerHTML = listener.listFeedbacks({ eventFeedbacks: [{ createdAt: new Date().toISOString(), note: note, contact: { id: api.user.id } }] });
+			document.querySelector('image-carousel').data().querySelector('description').insertBefore(div.firstChild, document.querySelector('image-carousel').data().querySelector('separator'));
 		});
 	}
 
