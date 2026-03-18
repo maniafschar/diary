@@ -216,7 +216,7 @@ button.icon {
 		this.render();
 	}
 
-	addEvent(dateKey, name, cat = '') {
+	addEvent(dateKey, name, rating) {
 		if (!this.events[dateKey]) this.events[dateKey] = [];
 		this.events[dateKey].push({ name, cat });
 	}
@@ -285,7 +285,9 @@ button.icon {
 			list.className = 'event-list';
 			dayEvents.slice(0, 3).forEach(ev => {
 				const pill = document.createElement('div');
-				pill.className = 'event-pill ' + (ev.cat || '');
+				pill.className = 'event-pill'
+				if (ev.rating)
+					pill.style.background = 'rgba(' + parseInt(ev.rating / 100 * 255) + ', 255, 255, 0.6)';
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
 					e.stopPropagation();
