@@ -39,6 +39,7 @@ body {
 	justify-content: center;
 	padding: 40px 16px;
 	color: var(--primary);
+	text-align: left;
 }
 
 .calendar-wrapper {
@@ -146,20 +147,7 @@ button.icon {
 }
 
 .cal-day.other-month .day-num {
-	color: #ccc !important;
-}
-
-.day-num {
-	width: 30px;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	font-size: .88em;
-	font-weight: 500;
-	flex-shrink: 0;
-	transition: background .12s;
+	color: #aaa !important;
 }
 
 .cal-day.today .day-num {
