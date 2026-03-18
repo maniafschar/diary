@@ -194,6 +194,7 @@ a {
 		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
 		close.classList.add('icon');
+		close.classList.add('close');
 		close.innerText = 'x';
 	}
 
