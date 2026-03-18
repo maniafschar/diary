@@ -145,7 +145,8 @@ feedback>span {
 			history.textContent = '';
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
-				calendar.addEvent(events[i].date.substring(0, 10), events[i].note, events[i].rating);
+				if (events[i].note)
+					calendar.addEvent(events[i].date.substring(0, 10), events[i].note, events[i].rating);
 				if (events[i].eventImages) {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
