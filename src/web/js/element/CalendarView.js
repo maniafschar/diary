@@ -153,7 +153,6 @@ button.icon {
 }
 
 .event-pill {
-	font-size: 0.8em;
 	padding: 0.1em 0.2em;
 	border-radius: 0.2em;
 	background: #ddeeff;
