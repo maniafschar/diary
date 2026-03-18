@@ -53,11 +53,10 @@ button.icon {
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	bottom: 0;
+	bottom: 0.5em;
 	margin: 0;
 	padding: 0;
 	outline: none;
-	background: transparent;
 }
 data {
 	position: relative;
@@ -76,21 +75,10 @@ imageContainer {
 	width: 100%;
 }
 button.next {
-	right: 0;
+	right: 0.5em;
 }
 button.prev {
-	left: 0;
-}
-close {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 2em;
-	cursor: pointer;
-	display: block;
-	color: rgba(255, 255, 255, 0.6);
-	font-size: 2em;
-	padding: 0.25em 0;
+	left: 0.5em;
 }
 a {
 	text-decoration: none;
@@ -198,8 +186,9 @@ a {
 		prev.classList.add('icon');
 		prev.classList.add('prev');
 		prev.onclick = () => this.navigate(false);
-		var close = this._root.appendChild(document.createElement('close'));
+		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
+		close.classList.add('icon');
 		close.innerText = 'x';
 	}
 
