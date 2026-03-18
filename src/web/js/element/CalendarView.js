@@ -104,6 +104,7 @@ button.icon {
 .cal-days {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
+	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
 .cal-day {
@@ -117,7 +118,6 @@ button.icon {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
 .cal-day:nth-child(7n) { border-right: none; }
