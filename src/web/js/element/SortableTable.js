@@ -83,7 +83,7 @@ th {
 
 th {
 	font-weight: bold;
-	background: rgba(170, 170, 255, 0.15);
+	background: rgba(100, 150, 200, 0.2);
 }
 
 tbody tr:last-child {
