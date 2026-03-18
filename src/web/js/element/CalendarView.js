@@ -16,20 +16,6 @@ class CalendarView extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-	--bg:        #f5f2ec;
-	--surface:   #ffffff;
-	--primary:   #1a1a2e;
-	--accent:    #c84b31;
-	--muted:     #a09080;
-	--border:    #e0d8cc;
-	--today-bg:  #c84b31;
-	--today-fg:  #ffffff;
-	--hover-bg:  #f0ebe2;
-	--weekend:   #8b4513;
-	--radius:    12px;
-}
-
 :host(*) {
 	font-family: Comfortaa;
 	text-align: left;
@@ -50,14 +36,11 @@ class CalendarView extends HTMLElement {
 	font-size: 2em;
 }
 
-.cal-title span {
-	color: var(--accent);
-}
-
 .nav-group {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 0.5em;
+	margin-right: -0.5em;
 }
 
 button {
@@ -88,7 +71,6 @@ button.icon {
 .cal-weekdays {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
-	border-bottom: 1px solid var(--border);
 }
 
 .cal-weekday {
@@ -96,10 +78,9 @@ button.icon {
 	font-weight: 600;
 	letter-spacing: .1em;
 	text-transform: uppercase;
-	color: var(--muted);
 }
 
-.cal-weekday.weekend { color: var(--weekend); }
+.cal-weekday.weekend { color: #8b4513; }
 
 .cal-days {
 	display: grid;
@@ -124,7 +105,7 @@ button.icon {
 
 .cal-day:nth-last-child(-n+7) { border-bottom: none; }
 
-.cal-day:hover:not(.empty) { background: var(--hover-bg); }
+.cal-day:hover:not(.empty) { background: #f0ebe2; }
 
 .cal-day.empty {
 	background: #faf8f4;
@@ -136,17 +117,17 @@ button.icon {
 }
 
 .cal-day.today .day-num {
-	background: var(--today-bg);
-	color: var(--today-fg);
+	background: #c84b31;
+	color: #ffffff;
 	font-weight: 700;
 }
 
 .cal-day.weekend .day-num {
-	color: var(--weekend);
+	color: #8b4513;
 }
 
 .cal-day.today.weekend .day-num {
-	color: var(--today-fg);
+	color: #ffffff;
 }
 
 .event-list {
