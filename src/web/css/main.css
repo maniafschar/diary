@@ -122,7 +122,7 @@ button {
 	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	z-index: 2;
-	color: black;
+	color: white;
 	border: none;
 }
 
@@ -131,7 +131,6 @@ button.icon {
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	background: rgba(255, 0, 0, 0.2);
 	margin: 0;
 	padding: 0;
 }
