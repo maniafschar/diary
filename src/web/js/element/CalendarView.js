@@ -76,13 +76,14 @@ button {
 	cursor: pointer;
 	font: inherit;
 	margin: 0 0.5em;
-	font-size: 1.3em;
+	font-size: 1em;
 	height: 2em;
 	color: white;
 	line-height: 1;
 }
-
+	
 button.icon {
+	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
 }
@@ -220,13 +221,13 @@ button.icon {
 			this.render();
 		};
 		button.setAttribute('title', 'Vorheriger Monat');
-		button.innerHTML = '&#8592';
+		button.innerText = '<';
 		button = navigation.appendChild(document.createElement('button'));
 		button.onclick = () => {
 			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 			this.render();
 		};
-		button.innerHTML = 'Heute';
+		button.innerText = 'Heute';
 		button = navigation.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
@@ -238,7 +239,7 @@ button.icon {
 			this.render();
 		};
 		button.setAttribute('title', 'Nächster Monat');
-		button.innerHTML = '&#8594';
+		button.innerText = '>';
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));

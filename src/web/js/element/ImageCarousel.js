@@ -57,6 +57,7 @@ button.icon {
 	margin: 0;
 	padding: 0;
 	outline: none;
+	background: transparent;
 }
 data {
 	position: relative;
