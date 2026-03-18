@@ -127,13 +127,11 @@ button.icon {
 	position: relative;
 }
 
-.cal-day.other-month .day-num {
-	color: #aaa !important;
+.cal-day.other-month div {
+	opacity: 0.3;
 }
 
 .cal-day.today .day-num {
-	background: #c84b31;
-	color: #ffffff;
 	font-weight: 700;
 }
 
