@@ -161,12 +161,7 @@ button.icon {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: pointer;
-}
-
-.event-pill.cat-work    { background: #d4edda; color: #155724; }
-.event-pill.cat-private { background: #fff3cd; color: #856404; }
-.event-pill.cat-holiday { background: #f8d7da; color: #721c24; }
-`;
+}`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
 
@@ -218,7 +213,7 @@ button.icon {
 
 	addEvent(dateKey, name, rating) {
 		if (!this.events[dateKey]) this.events[dateKey] = [];
-		this.events[dateKey].push({ name, cat });
+		this.events[dateKey].push({ name, rating });
 	}
 
 	render() {
@@ -321,7 +316,6 @@ button.icon {
 		document.getElementById('modal-date-label').textContent =
 			`Termin – ${day}. ${CalendarView.MONTHS_DE[month]} ${year}`;
 		document.getElementById('event-name').value = '';
-		document.getElementById('event-cat').value = '';
 		document.getElementById('modal-overlay').classList.add('open');
 		setTimeout(() => document.getElementById('event-name').focus(), 150);
 	}
