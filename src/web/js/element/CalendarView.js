@@ -79,6 +79,7 @@ button {
 	font-size: 1.3em;
 	height: 2em;
 	color: white;
+	line-height: 1;
 }
 
 button.icon {
