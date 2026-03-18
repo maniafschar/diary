@@ -10,13 +10,15 @@ class InputImage extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	position: absolute;
-	background-color: rgba(255, 0, 0, 0.4);
+	background-color: rgba(100, 150, 200, 0.2);
 	border-radius: 1.3em;
+	color: white;
 	width: 2.6em;
 	height: 2.6em;
 	text-align: center;
 	display: inline-block;
 	line-height: 2.6;
+	font-size: 1.3em;
 	z-index: 3;
 }
 input {

@@ -54,7 +54,7 @@ body {
 }
 
 .cal-title {
-	font-size: clamp(1.6em, 4vw, 2.6em);
+	font-size: 2em;
 }
 
 .cal-title span {
@@ -146,7 +146,7 @@ button.icon {
 }
 
 .cal-day.other-month .day-num {
-	color: #ccc;
+	color: #ccc !important;
 }
 
 .day-num {
