@@ -174,6 +174,7 @@ feedback>span {
 					}
 				}
 			}
+			calendar.render();
 			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
 			document.querySelector('event').style.display = '';
 			document.querySelector('event').previousElementSibling.style.display = 'block';
