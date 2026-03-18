@@ -43,7 +43,7 @@ class CalendarView extends HTMLElement {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 0.5em;
+	padding: 0.5em;
 }
 
 .cal-title {
