@@ -54,7 +54,7 @@ body {
 }
 
 .cal-title {
-	font-size: clamp(1.8rem, 4vw, 2.6rem);
+	font-size: clamp(1.6em, 4vw, 2.6em);
 }
 
 .cal-title span {
@@ -67,46 +67,23 @@ body {
 	gap: 8px;
 }
 
-.nav-btn {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: 1.5px solid var(--border);
-	background: var(--surface);
+button {
+	background: rgba(100, 150, 200, 0.2);
+	border: none;
+	padding: 0.5em 1em;
+	border-radius: 1em;
+	outline: none;
 	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 1rem;
-	color: var(--primary);
-	transition: background .15s, border-color .15s, transform .1s;
+	font: inherit;
+	margin: 0 0.5em;
+	font-size: 1.3em;
+	height: 2em;
+	color: white;
 }
 
-.nav-btn:hover {
-	background: var(--primary);
-	border-color: var(--primary);
-	color: #fff;
-	transform: scale(1.08);
-}
-
-.today-btn {
-	padding: 8px 18px;
-	border-radius: 20px;
-	border: 1.5px solid var(--border);
-	background: var(--surface);
-	cursor: pointer;
-	font-size: .82rem;
-	font-weight: 500;
-	letter-spacing: .04em;
-	text-transform: uppercase;
-	color: var(--primary);
-	transition: background .15s, border-color .15s;
-}
-
-.today-btn:hover {
-	background: var(--primary);
-	border-color: var(--primary);
-	color: #fff;
+button.icon {
+	width: 2em;
+	padding: 0;
 }
 
 /* ── Grid ───────────────────────────────────────────── */
@@ -127,7 +104,6 @@ body {
 .cal-weekday {
 	padding: 14px 0;
 	text-align: center;
-	font-size: .72rem;
 	font-weight: 600;
 	letter-spacing: .1em;
 	text-transform: uppercase;
@@ -177,7 +153,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
-	font-size: .88rem;
+	font-size: .88em;
 	font-weight: 500;
 	flex-shrink: 0;
 	transition: background .12s;
@@ -206,7 +182,7 @@ body {
 }
 
 .event-pill {
-	font-size: .7rem;
+	font-size: .7em;
 	font-weight: 500;
 	padding: 2px 7px;
 	border-radius: 4px;
@@ -221,21 +197,6 @@ body {
 .event-pill.cat-work    { background: #d4edda; color: #155724; }
 .event-pill.cat-private { background: #fff3cd; color: #856404; }
 .event-pill.cat-holiday { background: #f8d7da; color: #721c24; }
-
-.btn {
-	padding: 9px 20px;
-	border-radius: 8px;
-	border: none;
-	cursor: pointer;
-	font-weight: 600;
-	font-size: .85rem;
-	transition: opacity .15s, transform .1s;
-}
-
-.btn:hover { opacity: .85; transform: scale(1.02); }
-
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-ghost   { background: var(--bg); color: var(--primary); border: 1.5px solid var(--border); }
 `;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
@@ -247,7 +208,7 @@ body {
 		var navigation = header.appendChild(document.createElement('div'));
 		navigation.classList.add('nav-group');
 		var button = navigation.appendChild(document.createElement('button'));
-		button.classList.add('nav-btn');
+		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month--;
 			if (this.current.month < 0) {
@@ -259,14 +220,13 @@ body {
 		button.setAttribute('title', 'Vorheriger Monat');
 		button.innerHTML = '&#8592';
 		button = navigation.appendChild(document.createElement('button'));
-		button.classList.add('today-btn');
 		button.onclick = () => {
 			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 			this.render();
 		};
 		button.innerHTML = 'Heute';
 		button = navigation.appendChild(document.createElement('button'));
-		button.classList.add('nav-btn');
+		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month++;
 			if (this.current.month > 11) {

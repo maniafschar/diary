@@ -163,8 +163,8 @@ a {
 }
 
 button {
-	background: rgba(255, 255, 255, 0.4);
-	border: solid 1px rgba(0, 0, 0, 0.05);
+	background: rgba(100, 150, 200, 0.2);
+	border: none;
 	padding: 0.5em 1em;
 	border-radius: 1em;
 	outline: none;

@@ -36,7 +36,8 @@ div img {
 	min-height: 100%;
 }
 button {
-	background: rgba(255, 255, 255, 0.6);
+	background: rgba(100, 150, 200, 0.2);
+	border: none;
 	padding: 0.5em 1em;
 	border-radius: 1em;
 	outline: none;
