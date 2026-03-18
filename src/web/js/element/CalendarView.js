@@ -32,13 +32,6 @@ class CalendarView extends HTMLElement {
 
 :host(*) {
 	font-family: Comfortaa;
-	background: var(--bg);
-	min-height: 100vh;
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	padding: 40px 16px;
-	color: var(--primary);
 	text-align: left;
 }
 
@@ -46,7 +39,6 @@ class CalendarView extends HTMLElement {
 	width: 100%;
 }
 
-/* ── Header ─────────────────────────────────────────── */
 .cal-header {
 	display: flex;
 	align-items: center;
@@ -89,7 +81,6 @@ button.icon {
 	padding: 0;
 }
 
-/* ── Grid ───────────────────────────────────────────── */
 .cal-grid-outer {
 	background: var(--surface);
 	border-radius: var(--radius);
@@ -107,11 +98,12 @@ button.icon {
 
 .cal-weekday {
 	padding: 0.5em 0;
-	text-align: center;
 	font-weight: 600;
 	letter-spacing: .1em;
 	text-transform: uppercase;
 	color: var(--muted);
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .cal-weekday.weekend { color: var(--weekend); }
@@ -124,8 +116,8 @@ button.icon {
 .cal-day {
 	min-height: 90px;
 	padding: 10px;
-	border-right: 1px solid var(--border);
-	border-bottom: 1px solid var(--border);
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	cursor: pointer;
 	transition: background .12s;
 	position: relative;
@@ -136,7 +128,6 @@ button.icon {
 
 .cal-day:nth-child(7n) { border-right: none; }
 
-/* Letzte Zeile: kein unterer Rand */
 .cal-day:nth-last-child(-n+7) { border-bottom: none; }
 
 .cal-day:hover:not(.empty) { background: var(--hover-bg); }
@@ -164,7 +155,6 @@ button.icon {
 	color: var(--today-fg);
 }
 
-/* ── Events ─────────────────────────────────────────── */
 .event-list {
 	display: flex;
 	flex-direction: column;
