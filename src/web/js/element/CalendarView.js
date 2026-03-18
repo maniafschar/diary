@@ -30,7 +30,7 @@ class CalendarView extends HTMLElement {
 	--radius:    12px;
 }
 
-body {
+:host(*) {
 	font-family: Comfortaa;
 	background: var(--bg);
 	min-height: 100vh;
