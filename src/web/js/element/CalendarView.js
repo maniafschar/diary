@@ -43,7 +43,7 @@ class CalendarView extends HTMLElement {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 28px;
+	margin-bottom: 0.5em;
 }
 
 .cal-title {
@@ -82,11 +82,7 @@ button.icon {
 }
 
 .cal-grid-outer {
-	background: var(--surface);
-	border-radius: var(--radius);
-	border: 1.5px solid var(--border);
 	overflow: hidden;
-	border-radius: 1em;
 	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
@@ -97,7 +93,7 @@ button.icon {
 }
 
 .cal-weekday {
-	padding: 0.5em 0;
+	padding: 0.5em;
 	font-weight: 600;
 	letter-spacing: .1em;
 	text-transform: uppercase;
@@ -114,8 +110,8 @@ button.icon {
 }
 
 .cal-day {
-	min-height: 90px;
-	padding: 10px;
+	min-height: 6em;
+	padding: 0.5em;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	cursor: pointer;
