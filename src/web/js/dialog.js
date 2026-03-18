@@ -199,15 +199,15 @@ value.pictures {
 			buttonImage.style.top = 0;
 			buttonImage.style.borderRadius = '0 0.5em';
 			buttonImage.setAttribute('max', 2500);
-			buttonImage.setSuccess(e => {
-				if (e.scaled.width > 800 && e.scaled.height > 800) {
+			buttonImage.setSuccess(file => {
+				if (file.scaled.width > 800 && file.scaled.height > 800) {
 					pictures.querySelector('hint').innerText = '';
 					var image = pictures.querySelector('img');
-					image.src = e.data;
+					image.src = file.data;
 					image.style.display = '';
 					image.parentElement.setAttribute('onclick', 'action.clientImageDelete(event)');
 				} else {
-					pictures.querySelector('hint').innerText = 'Bild Größe ' + e.scaled.width + ' x ' + e.scaled.height + ' ist zu klein, Mindestgröße 800 x 800.';
+					pictures.querySelector('hint').innerText = 'Bild Größe ' + file.scaled.width + ' x ' + file.scaled.height + ' ist zu klein, Mindestgröße 800 x 800.';
 					pictures.querySelector('img').style.display = 'none';
 				}
 			});
@@ -366,7 +366,7 @@ value a {
 						image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
 						if (data.indexOf('med/') != 0)
 							document.dispatchEvent(new CustomEvent('event'));
-					}
+					};
 					buttonImage.setSuccess(e => api.eventImagePost(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
 				}
 				for (var i = 0; i < event.eventImages?.length; i++)

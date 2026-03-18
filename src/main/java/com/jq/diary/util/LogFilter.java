@@ -49,7 +49,8 @@ public class LogFilter implements Filter {
 		final ContentCachingRequestWrapper req = new ContentCachingRequestWrapper((HttpServletRequest) request);
 		final ContentCachingResponseWrapper res = new ContentCachingResponseWrapper((HttpServletResponse) response);
 		final Log log = new Log();
-		log.setClientId(req.getHeader("clientId"));
+		if (req.getHeader("clientId") != null)
+			log.setClientId(new BigInteger(req.getHeader("clientId")));
 		if (req.getHeader("contactId") != null && !req.getServletPath().contains("/sc/")) {
 			try {
 				log.setContactId(new BigInteger(req.getHeader("contactId")));

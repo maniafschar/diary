@@ -38,6 +38,9 @@ input {
 	setSuccess(success) {
 		this.success = success;
 	}
+	click() {
+		this._root.querySelector('input').click();
+	}
 	dataURItoBlob(dataURI) {
 		var arr = dataURI.split(','), mime = arr[0].match(/:(.*?);/)[1];
 		arr[1] = atob(arr[1]);

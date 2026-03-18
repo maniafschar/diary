@@ -1,5 +1,6 @@
 import { api } from "./api";
 import { dialog } from "./dialog";
+import { CalendarView } from "./element/CalendarView";
 import { DialogPopup } from "./element/DialogPopup";
 import { ImageCarousel } from "./element/ImageCarousel";
 import { InputCheckbox } from "./element/InputCheckbox";
@@ -60,10 +61,17 @@ class action {
 	}
 
 	static addImage(event) {
-		action.addWithParticipation(event, () => api.eventImagePost(event.id, e.getAttribute('value'), () => {
-			document.dispatchEvent(new CustomEvent('event'));
-			document.dispatchEvent(new CustomEvent('popup'));
-		}), 'Du kannst nur Bilder zu Events hochladen, an denen Du teilgenommen hast.');
+		var chooseFile = () => {
+			var image = document.querySelector('image-carousel').data().querySelector('input-image');
+			var addImage = (id, data) => {
+				image.parentElement.appendChild(document.createElement('div')).appendChild(document.createElement('img')).src = data;
+				document.dispatchEvent(new CustomEvent('event'));
+				document.dispatchEvent(new CustomEvent('popup'));
+			};
+			image.setSuccess(file => api.eventImagePost(id, file.type, file.data.substring(file.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, file.data)));
+			image.click();
+		};
+		action.addWithParticipation(event, chooseFile, 'Du kannst nur Bilder zu Events hochladen, an denen Du teilgenommen hast.');
 	}
 
 	static addRating(event, e) {
@@ -191,6 +199,7 @@ class action {
 		document.querySelector('history').scrollLeft = 0;
 		document.querySelector('element.history').style.display = 'none';
 		document.querySelector('history').textContent = '';
+		document.querySelector('element.calendar').style.display = 'none';
 		document.querySelector('element.user').style.display = 'none';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>h2').innerText = '';
@@ -324,6 +333,7 @@ window.onresize = function () {
 	}
 }
 
+customElements.define('calendar-view', CalendarView);
 customElements.define('dialog-popup', DialogPopup);
 customElements.define('image-carousel', ImageCarousel);
 customElements.define('input-date', InputDate);
