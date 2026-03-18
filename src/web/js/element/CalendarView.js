@@ -83,7 +83,6 @@ button.icon {
 
 .cal-grid-outer {
 	overflow: hidden;
-	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
 .cal-weekdays {
@@ -98,8 +97,6 @@ button.icon {
 	letter-spacing: .1em;
 	text-transform: uppercase;
 	color: var(--muted);
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .cal-weekday.weekend { color: var(--weekend); }
@@ -120,6 +117,7 @@ button.icon {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
 .cal-day:nth-child(7n) { border-right: none; }
