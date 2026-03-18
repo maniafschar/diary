@@ -93,17 +93,18 @@ button.icon {
 	border-radius: var(--radius);
 	border: 1.5px solid var(--border);
 	overflow: hidden;
-	box-shadow: 0 4px 32px rgba(0,0,0,.06);
+	border-radius: 1em;
+	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 }
 
 .cal-weekdays {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
-	border-bottom: 1.5px solid var(--border);
+	border-bottom: 1px solid var(--border);
 }
 
 .cal-weekday {
-	padding: 14px 0;
+	padding: 0.5em 0;
 	text-align: center;
 	font-weight: 600;
 	letter-spacing: .1em;
