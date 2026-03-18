@@ -1,3 +1,5 @@
+import { InputDate } from "./InputDate";
+
 export { CalendarView };
 
 class CalendarView extends HTMLElement {
@@ -93,7 +95,7 @@ button.icon {
 
 .cal-day {
 	min-height: 12vh;
-	padding: 0.5em;
+	padding: 0.2em;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	cursor: pointer;
@@ -101,7 +103,9 @@ button.icon {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	width: 14.25vw;
+	font-size: 0.8em;
+	min-height: 5em;
 }
 
 .cal-day:nth-child(7n) { border-right: none; }
@@ -113,6 +117,14 @@ button.icon {
 .cal-day.empty {
 	background: #faf8f4;
 	cursor: default;
+}
+
+.day-num {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	position: relative;
 }
 
 .cal-day.other-month .day-num {
@@ -203,13 +215,6 @@ button.icon {
 		div = body.appendChild(document.createElement('div'));
 		div.classList.add('cal-days');
 		this._root.appendChild(wrapper);
-
-		// Beispiel-Termine
-		this.addEvent('2025-03-10', 'Teammeeting', 'cat-work');
-		this.addEvent('2025-03-17', 'Geburtstag Mama', 'cat-private');
-		this.addEvent('2025-03-20', 'Frühlingsanfang', 'cat-holiday');
-
-		// ── Init ───────────────────────────────────────────────────────────────────
 		this.render();
 	}
 
@@ -220,12 +225,9 @@ button.icon {
 
 	render() {
 		const { year, month } = this.current;
-
-		// Titel
 		this._root.querySelector('.cal-title').innerHTML =
 			`${CalendarView.MONTHS_DE[month]} <span>${year}</span>`;
-
-		// Wochentag-Kopfzeile (einmalig beim ersten Render)
+		var bankholidays = InputDate.bankholidays(year);
 		const wdEl = this._root.querySelector('.cal-weekdays');
 		if (!wdEl.children.length) {
 			CalendarView.WEEKDAYS.forEach((d, i) => {
@@ -236,40 +238,28 @@ button.icon {
 			});
 		}
 
-		// Tage berechnen
 		const firstDay = new Date(year, month, 1);
 		const lastDay = new Date(year, month + 1, 0);
 		const totalDays = lastDay.getDate();
-
-		// Montag = 0 … Sonntag = 6 (JS: So=0, daher Umrechnung)
 		let startOffset = (firstDay.getDay() + 6) % 7;
-
-		// Vorgänger-Monat-Tage (grau)
 		const prevLast = new Date(year, month, 0).getDate();
 
 		const daysEl = this._root.querySelector('.cal-days');
 		daysEl.innerHTML = '';
 
-		// Vorgänger-Tage
-		for (let i = startOffset - 1; i >= 0; i--) {
-			daysEl.appendChild(this.createDayCell(year, month - 1, prevLast - i, true));
-		}
+		for (let i = startOffset - 1; i >= 0; i--)
+			daysEl.appendChild(this.createDayCell(year, month - 1, prevLast - i, true, bankholidays));
 
-		// Aktueller Monat
-		for (let d = 1; d <= totalDays; d++) {
-			daysEl.appendChild(this.createDayCell(year, month, d, false));
-		}
+		for (let d = 1; d <= totalDays; d++)
+			daysEl.appendChild(this.createDayCell(year, month, d, false, bankholidays));
 
-		// Nachfolger-Tage auffüllen bis Zeile voll (7er-Raster)
 		const filled = startOffset + totalDays;
 		const remaining = filled % 7 === 0 ? 0 : 7 - (filled % 7);
-		for (let d = 1; d <= remaining; d++) {
-			daysEl.appendChild(this.createDayCell(year, month + 1, d, true));
-		}
+		for (let d = 1; d <= remaining; d++)
+			daysEl.appendChild(this.createDayCell(year, month + 1, d, true, bankholidays));
 	}
 
-	createDayCell(year, month, day, otherMonth) {
-		// Normalisiertes Datum
+	createDayCell(year, month, day, otherMonth, bankholidays) {
 		const date = new Date(year, month, day);
 		const y = date.getFullYear();
 		const m = date.getMonth();
@@ -286,13 +276,11 @@ button.icon {
 			isWeekend ? 'weekend' : ''
 		].filter(Boolean).join(' ');
 
-		// Tages-Nummer
 		const numEl = document.createElement('div');
 		numEl.className = 'day-num';
-		numEl.textContent = d;
+		numEl.textContent = d + (bankholidays[d + '.' + (m + 1)] ? ' ' + bankholidays[d + '.' + (m + 1)] : '');
 		cell.appendChild(numEl);
 
-		// Termine
 		const dayEvents = this.events[dateKey] || [];
 		if (dayEvents.length) {
 			const list = document.createElement('div');
@@ -318,15 +306,14 @@ button.icon {
 			}
 			cell.appendChild(list);
 		}
-
-		// Klick: Modal öffnen (nur aktueller Monat)
-		if (!otherMonth) {
+		if (!otherMonth)
 			cell.addEventListener('click', () => this.openModal(dateKey, d, m, y));
-		}
-
 		return cell;
 	}
 
+	reset() {
+		this.events = {};
+	}
 
 	// ── Modal ──────────────────────────────────────────────────────────────────
 	openModal(dateKey, day, month, year) {
