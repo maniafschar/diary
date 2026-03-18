@@ -153,10 +153,9 @@ button.icon {
 }
 
 .event-pill {
-	font-size: .7em;
-	font-weight: 500;
-	padding: 2px 7px;
-	border-radius: 4px;
+	font-size: 0.8em;
+	padding: 0.1em 0.2em;
+	border-radius: 0.2em;
 	background: #ddeeff;
 	color: #1a4a8a;
 	white-space: nowrap;
