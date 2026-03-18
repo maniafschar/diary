@@ -26,21 +26,25 @@ class CalendarView extends HTMLElement {
 }
 
 .cal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0.5em;
+	display: block;
+	padding-top: 0.5em;
+	position: relative;
 }
 
 .cal-title {
-	font-size: 2em;
+	font-size: 1.3em;
+	position: relative;
+	display: block;
+	text-align: center;
+	padding-top: 0.5em;
 }
 
 .nav-group {
-	display: flex;
-	align-items: center;
-	gap: 0.5em;
-	margin-right: -0.5em;
+	display: block;
+	position: relative;
+	right: 0;
+	text-align: center;
+	width: 100%;
 }
 
 button {
@@ -160,7 +164,6 @@ button.icon {
 		//Header
 		var header = wrapper.appendChild(document.createElement('div'));
 		header.classList.add('cal-header');
-		header.appendChild(document.createElement('div')).classList.add('cal-title');
 		var navigation = header.appendChild(document.createElement('div'));
 		navigation.classList.add('nav-group');
 		var button = navigation.appendChild(document.createElement('button'));
@@ -173,7 +176,6 @@ button.icon {
 			}
 			this.render();
 		};
-		button.setAttribute('title', 'Vorheriger Monat');
 		button.innerText = '<';
 		button = navigation.appendChild(document.createElement('button'));
 		button.onclick = () => {
@@ -191,8 +193,8 @@ button.icon {
 			}
 			this.render();
 		};
-		button.setAttribute('title', 'Nächster Monat');
 		button.innerText = '>';
+		header.appendChild(document.createElement('div')).classList.add('cal-title');
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
