@@ -53,7 +53,6 @@ button.icon {
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	background: transparent;
 	bottom: 0;
 	margin: 0;
 	padding: 0;
