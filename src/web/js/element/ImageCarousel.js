@@ -46,9 +46,10 @@ button {
 	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	border: none;
-	color: white;
+	color: rgba(255, 255, 255, 0.4);
 }
 button.icon {
+	background: transparent;
 	font-size: 2em;
 	width: 2em;
 	height: 2em;
@@ -76,9 +77,13 @@ imageContainer {
 }
 button.next {
 	right: 0.5em;
-}
-button.prev {
-	left: 0.5em;
+	}
+	button.prev {
+		left: 0.5em;
+		}
+button.close {
+	right: 0.5em;
+	top: 0.5em;
 }
 a {
 	text-decoration: none;
