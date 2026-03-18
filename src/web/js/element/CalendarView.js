@@ -36,7 +36,6 @@ class CalendarView extends HTMLElement {
 	position: relative;
 	display: block;
 	text-align: center;
-	padding-top: 0.5em;
 }
 
 .nav-group {
@@ -164,6 +163,7 @@ button.icon {
 		//Header
 		var header = wrapper.appendChild(document.createElement('div'));
 		header.classList.add('cal-header');
+		header.appendChild(document.createElement('div')).classList.add('cal-title');
 		var navigation = header.appendChild(document.createElement('div'));
 		navigation.classList.add('nav-group');
 		var button = navigation.appendChild(document.createElement('button'));
@@ -194,7 +194,6 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
-		header.appendChild(document.createElement('div')).classList.add('cal-title');
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
