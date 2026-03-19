@@ -155,6 +155,7 @@ button.icon {
 	text-overflow: ellipsis;
 	cursor: pointer;
 	border-bottom: solid 1px rgba(0, 0, 0, 0.05);
+	background: rgba(255, 240, 240, 0.4);
 }
 
 .event-pill:last-child {
