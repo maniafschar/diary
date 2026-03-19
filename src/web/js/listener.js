@@ -151,7 +151,7 @@ feedback>span {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 						var item = history.appendChild(document.createElement('item'));
-						item.setAttribute('i', i);
+						item.setAttribute('i', i2);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
