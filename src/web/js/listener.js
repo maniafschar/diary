@@ -42,7 +42,7 @@ class listener {
 	}
 
 	static updateImageCarousel(index) {
-		if (index || index == 0)
+		if (index)
 			document.querySelector('image-carousel').setAttribute('i', index);
 		else
 			index = document.querySelector('image-carousel').getAttribute('i');
@@ -54,8 +54,11 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/><br/>';
 		};
+		var id2event = {}, list = document.querySelector('event sortable-table').list;
+		for (var i = 0; i < list.length; i++)
+			id2event[list[i].id] = list[i];
 		for (var i = 0; i < items.length; i++) {
-			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i').split('\.')[0]];
+			var e = list[items[i].getAttribute('i')];
 			list.push({
 				src: items[i].querySelector('img').getAttribute('src'),
 				index: items[i].getAttribute('i'),
