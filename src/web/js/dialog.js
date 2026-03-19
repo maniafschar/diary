@@ -202,6 +202,7 @@ value.pictures {
 	max-height: initial;
 }`;
 		if (api.user.admin || contact.id == api.user.id) {
+			popup.style.minWidth = '20em';
 			dialog.createField(popup, 'Name', 'name', null, contact.name);
 			dialog.createField(popup, 'Email', 'email');
 			dialog.createField(popup, null, 'notification', 'input-checkbox', contact.notification).setAttribute('label', 'Benachrichtigung');
@@ -449,6 +450,7 @@ value a {
 	static createButton(element, action) {
 		var div = element.appendChild(document.createElement('div'));
 		div.style.textAlign = 'center';
+		div.style.clear = 'left';
 		var button = div.appendChild(document.createElement('button'));
 		button.innerText = 'Speichern';
 		button.setAttribute('onclick', action);
