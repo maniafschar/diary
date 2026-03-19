@@ -143,7 +143,7 @@ feedback>span {
 			calendar.reset();
 			var history = document.querySelector('history');
 			history.textContent = '';
-			var margin = 0;
+			var margin = 0, count = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
 					calendar.addEvent(events[i].date.substring(0, 10), events[i].note, events[i].rating);
@@ -151,7 +151,7 @@ feedback>span {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 						var item = history.appendChild(document.createElement('item'));
-						item.setAttribute('i', i2);
+						item.setAttribute('i', count++);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
