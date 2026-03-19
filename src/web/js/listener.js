@@ -54,9 +54,9 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/><br/>';
 		};
-		var id2event = {}, list = document.querySelector('event sortable-table').list;
-		for (var i = 0; i < list.length; i++)
-			id2event[list[i].id] = list[i];
+		var id2event = {}, events = document.querySelector('event sortable-table').list;
+		for (var i = 0; i < events.length; i++)
+			id2event[events[i].id] = events[i];
 		for (var i = 0; i < items.length; i++) {
 			var e = id2event[items[i].getAttribute('i')];
 			list.push({
