@@ -2,6 +2,8 @@ package com.jq.diary.api;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
@@ -272,9 +274,13 @@ public class ApplicationApi {
 
 	@GetMapping("nearby")
 	public String nearby(final String name, final double longitude, final double latitude) {
-		final String value = WebClient.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input=" + name
-				+ "&locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude + ",\"longitude\":"
-				+ longitude + "},\"radius\":500.0\"}}&key=" + this.googleKey).get().retrieve().toEntity(String.class)
+		final String value = WebClient
+				.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input="
+						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&"
+						+ URLEncoder.encode("locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude
+								+ ",\"longitude\":" + longitude + "},\"radius\":500.0\"}}", StandardCharsets.UTF_8)
+						+ "&key=" + this.googleKey)
+				.get().retrieve().toEntity(String.class)
 				.block().getBody();
 		if (value != null && value.startsWith("{") && value.endsWith("}")) {
 			Json.toNode(value);
