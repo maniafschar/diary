@@ -110,22 +110,28 @@ tab.selected {
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
-		dialog.createField(element, 'Name', 'name', null, event?.location?.name).onkeyup = () => {
-			var name = document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value;
-			if (name.length > 2) {
-				if (dialog.latitude) {
-					clearTimeout(dialog.nearbySearch);
-					dialog.nearbySearch = setTimeout(() => api.nearby(dialog.latitude, dialog.longitude, name, places => {
-						console.log(places);
-					}), 2000);
-				} else
-					navigator.geolocation.getCurrentPosition(result => {
-						if (result.coords && result.coords.latitude) {
-							dialog.latitude = result.coords.latitude;
-							dialog.longitude = result.coords.longitude
-						}
-					}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
-			}
+		var name = dialog.createField(element, 'Name', 'name', null, event?.location?.name);
+		var locationButton = name.parentElement.appendChild(document.createElement('img'));
+		locationButton.src = 'image/location.svg';
+		locationButton.style.position = 'absolut';
+		locationButton.style.borderRadius = '1 0.5em';
+		locationButton.style.right = '0';
+		locationButton.style.top = '0';
+		locationButton.onclick = () => {
+			var call = () => api.nearby(dialog.latitude, dialog.longitude, name, places => {
+				document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value = JSON.stringify(places);
+				console.log(places);
+			});
+			if (dialog.latitude)
+				call();
+			else
+				navigator.geolocation.getCurrentPosition(result => {
+					if (result.coords && result.coords.latitude) {
+						dialog.latitude = result.coords.latitude;
+						dialog.longitude = result.coords.longitude;
+						call();
+					}
+				}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 		};
 		dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
 		dialog.createField(element, 'URL', 'url', null, event?.location?.url).setAttribute('type', 'url');
