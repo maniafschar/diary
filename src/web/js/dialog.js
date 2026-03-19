@@ -182,7 +182,7 @@ tab.selected {
 	}
 
 	static contact(event) {
-		var id = document.querySelector('user sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id;
+		var contact = document.querySelector('user sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')];
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
 img {
@@ -201,38 +201,41 @@ value.pictures {
 	min-height: 3.2em;
 	max-height: initial;
 }`;
-		dialog.createField(popup, 'Name', 'name', null, api.user.name);
-		dialog.createField(popup, 'Email', 'email');
-		dialog.createField(popup, null, 'notification', 'input-checkbox', api.user.notification).setAttribute('label', 'Benachrichtigung');
-		if (api.user.admin && id == api.user.id) {
-			dialog.createField(popup, 'Blogname', 'clientName', null, api.user.client.name);
-			dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.user.client.note);
-			popup.appendChild(document.createElement('label')).innerText = 'Bild';
-			var pictures = popup.appendChild(document.createElement('value'));
-			pictures.classList.add('pictures');
-			pictures.appendChild(document.createElement('hint'));
-			var clientImage = pictures.appendChild(document.createElement('img'));
-			clientImage.style.display = 'none';
-			clientImage.setAttribute('name', 'clientImage');
-			var buttonImage = pictures.appendChild(document.createElement('input-image'));
-			buttonImage.style.right = 0;
-			buttonImage.style.top = 0;
-			buttonImage.style.borderRadius = '0 0.5em';
-			buttonImage.setAttribute('max', 2500);
-			buttonImage.setSuccess(file => {
-				if (file.scaled.width > 800 && file.scaled.height > 800) {
-					pictures.querySelector('hint').innerText = '';
-					var image = pictures.querySelector('img');
-					image.src = file.data;
-					image.style.display = '';
-					image.parentElement.setAttribute('onclick', 'action.clientImageDelete(event)');
-				} else {
-					pictures.querySelector('hint').innerText = 'Bild Größe ' + file.scaled.width + ' x ' + file.scaled.height + ' ist zu klein, Mindestgröße 800 x 800.';
-					pictures.querySelector('img').style.display = 'none';
-				}
-			});
-		}
-		dialog.createButton(popup, 'action.contactPatch()');
+		if (api.user.admin || contact.id == api.user.id) {
+			dialog.createField(popup, 'Name', 'name', null, contact.name);
+			dialog.createField(popup, 'Email', 'email');
+			dialog.createField(popup, null, 'notification', 'input-checkbox', contact.notification).setAttribute('label', 'Benachrichtigung');
+			if (api.user.admin && contact.id == api.user.id) {
+				dialog.createField(popup, 'Blogname', 'clientName', null, api.user.client.name);
+				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.user.client.note);
+				popup.appendChild(document.createElement('label')).innerText = 'Bild';
+				var pictures = popup.appendChild(document.createElement('value'));
+				pictures.classList.add('pictures');
+				pictures.appendChild(document.createElement('hint'));
+				var clientImage = pictures.appendChild(document.createElement('img'));
+				clientImage.style.display = 'none';
+				clientImage.setAttribute('name', 'clientImage');
+				var buttonImage = pictures.appendChild(document.createElement('input-image'));
+				buttonImage.style.right = 0;
+				buttonImage.style.top = 0;
+				buttonImage.style.borderRadius = '0 0.5em';
+				buttonImage.setAttribute('max', 2500);
+				buttonImage.setSuccess(file => {
+					if (file.scaled.width > 800 && file.scaled.height > 800) {
+						pictures.querySelector('hint').innerText = '';
+						var image = pictures.querySelector('img');
+						image.src = file.data;
+						image.style.display = '';
+						image.parentElement.setAttribute('onclick', 'action.clientImageDelete(event)');
+					} else {
+						pictures.querySelector('hint').innerText = 'Bild Größe ' + file.scaled.width + ' x ' + file.scaled.height + ' ist zu klein, Mindestgröße 800 x 800.';
+						pictures.querySelector('img').style.display = 'none';
+					}
+				});
+			}
+			dialog.createButton(popup, 'action.contactPatch()');
+		} else
+			popup.appendChild(document.createTextNode(contact.name));
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
