@@ -122,6 +122,7 @@ button.icon {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	position: relative;
+	padding: 0.2em;
 }
 
 .cal-day.other-month>div {
