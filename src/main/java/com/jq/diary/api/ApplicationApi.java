@@ -272,7 +272,7 @@ public class ApplicationApi {
 
 	@GetMapping("nearby")
 	public String nearby(final String name, final double longitude, final double latitude) {
-		final String value = WebClient.create("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + name
+		final String value = WebClient.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input=" + name
 				+ "&locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude + ",\"longitude\":"
 				+ longitude + "},\"radius\":500.0\"}}&key=" + this.googleKey).get().retrieve().toEntity(String.class)
 				.block().getBody();
