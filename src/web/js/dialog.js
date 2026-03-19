@@ -236,8 +236,7 @@ value.pictures {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
-	static event(event) {
-		var id = document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id;
+	static event(id) {
 		api.event(id, event => {
 			var futureEvent = new Date(event.date.replace('+00:00', '')) > new Date();
 			var popup = document.createElement('div');

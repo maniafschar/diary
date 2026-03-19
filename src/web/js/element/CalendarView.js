@@ -9,6 +9,7 @@ class CalendarView extends HTMLElement {
 	today = new Date();
 	current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 	_activeDate = null;
+	open = null;
 
 	constructor() {
 		super();
@@ -208,10 +209,16 @@ button.icon {
 		this._root.appendChild(wrapper);
 		this.render();
 	}
+	setOpen(open) {
+		this.open = open;
+	}
 
-	addEvent(dateKey, name, rating) {
-		if (!this.events[dateKey]) this.events[dateKey] = [];
-		this.events[dateKey].push({ name, rating });
+	addEvent(dateKey, event) {
+		if (!event.name)
+			throw 'No name in event!';
+		if (!this.events[dateKey])
+			this.events[dateKey] = [];
+		this.events[dateKey].push(event);
 	}
 
 	render() {
@@ -284,8 +291,10 @@ button.icon {
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
 					e.stopPropagation();
-					// TODO: Termin-Detail / Bearbeitung hier einbauen
-					alert(`Termin: ${ev.name}`);
+					if (this.open)
+						this.open(ev);
+					else
+						alert(JSON.stringify(ev));
 				});
 				list.appendChild(pill);
 			});

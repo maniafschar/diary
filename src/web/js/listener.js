@@ -112,7 +112,7 @@ feedback>span {
 			table.style('tr.past{opacity:0.4;}tbody{max-height:18em;}');
 			if (!table.columns.length) {
 				var now = new Date();
-				table.setOpenDetail(dialog.event);
+				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
 				table.columns.push({ label: 'Datum', width: 30, detail: true });
 				table.columns.push({ label: 'Ort', sort: true, width: 30, detail: true });
 				table.columns.push({ label: 'Bemerkung', width: 40, detail: true });
@@ -141,11 +141,12 @@ feedback>span {
 
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
+			calendar.setOpen(event => dialog.event(event.id));
 			var history = document.querySelector('history');
 			history.textContent = '';
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
-				calendar.addEvent(events[i].date.substring(0, 10), events[i].note || '[[Kein Text]]', events[i].rating);
+				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
 				if (events[i].eventImages) {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
