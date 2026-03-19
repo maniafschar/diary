@@ -81,9 +81,6 @@ button.icon {
 
 .cal-weekday {
 	padding: 0.5em;
-	font-weight: 600;
-	letter-spacing: .1em;
-	text-transform: uppercase;
 }
 
 .cal-weekday.weekend { color: #8b4513; }
