@@ -6,6 +6,8 @@ export { dialog };
 class dialog {
 	static longitude;
 	static latitude;
+	static nearbySearch;
+
 	static add(event) {
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
@@ -111,11 +113,12 @@ tab.selected {
 		dialog.createField(element, 'Name', 'name', null, event?.location.name).onkeyup = () => {
 			var name = document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value;
 			if (name.length > 2) {
-				if (dialog.latitude)
-					api.nearby(dialog.latitude, dialog.longitude, name, places => {
+				if (dialog.latitude) {
+					clearTimeout(dialog.nearbySearch);
+					dialog.nearbySearch = setTimeout(() => api.nearby(dialog.latitude, dialog.longitude, name, places => {
 						console.log(places);
-					});
-				else
+					}), 2000);
+				} else
 					navigator.geolocation.getCurrentPosition(result => {
 						if (result.coords && result.coords.latitude) {
 							dialog.latitude = result.coords.latitude;

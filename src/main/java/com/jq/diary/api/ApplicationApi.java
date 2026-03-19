@@ -278,7 +278,7 @@ public class ApplicationApi {
 				.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input="
 						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&"
 						+ URLEncoder.encode("locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude
-								+ ",\"longitude\":" + longitude + "},\"radius\":500.0\"}}", StandardCharsets.UTF_8)
+								+ ",\"longitude\":" + longitude + "},\"radius\":0.5\"}}", StandardCharsets.UTF_8)
 						+ "&key=" + this.googleKey)
 				.get().retrieve().toEntity(String.class)
 				.block().getBody();
