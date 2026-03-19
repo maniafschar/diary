@@ -205,9 +205,9 @@ class api {
 		});
 	}
 
-	static nearby(latitude, longitude, name, success) {
+	static nearby(latitude, longitude, success) {
 		api.ajax({
-			url: 'nearby?latitude=' + latitude + '&longitude=' + longitude + '&name=' + encodeURIComponent(name),
+			url: 'nearby?latitude=' + latitude + '&longitude=' + longitude,
 			success: success
 		});
 	}
