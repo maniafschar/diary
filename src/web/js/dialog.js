@@ -86,7 +86,7 @@ tab.selected {
 
 		var element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'event');
-		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.date);
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.year ? new Date(event.year, event.month, event.day) : event?.date);
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
