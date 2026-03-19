@@ -205,6 +205,13 @@ class api {
 		});
 	}
 
+	static nearby(latitude, longitude, name, success) {
+		api.ajax({
+			url: 'nearby?latitude=' + latitude + '&longitude=' + longitude + '&name=' + encodeURIComponent(name),
+			success: success
+		});
+	}
+
 	static contact(id, success) {
 		api.ajax({
 			url: 'contact/' + id,

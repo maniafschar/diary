@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Client;
@@ -36,6 +38,7 @@ import com.jq.diary.service.EventService;
 import com.jq.diary.service.FeedbackService;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Encryption;
+import com.jq.diary.util.Json;
 
 @RestController
 @RequestMapping("api")
@@ -62,6 +65,9 @@ public class ApplicationApi {
 
 	@Autowired
 	private AdminService adminService;
+
+	@Value("${app.google.key}")
+	private String googleKey;
 
 	@GetMapping("authentication/login")
 	public Contact authentication(final String email, @RequestHeader final String password,
@@ -262,6 +268,18 @@ public class ApplicationApi {
 			}
 		}
 		return event.getId();
+	}
+
+	@GetMapping("nearby")
+	public String nearby(final String name, final double longitude, final double latitude) {
+		final String value = WebClient.create("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + name
+				+ "&locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude + ",\"longitude\":"
+				+ longitude + "},\"radius\":500.0\"}}&key=" + this.googleKey).get().retrieve().toEntity(String.class)
+				.block().getBody();
+		if (value != null && value.startsWith("{") && value.endsWith("}")) {
+			Json.toNode(value);
+		}
+		return value;
 	}
 
 	@PostMapping("ticket")

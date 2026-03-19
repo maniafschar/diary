@@ -4,6 +4,8 @@ import { ui } from "./ui";
 export { dialog };
 
 class dialog {
+	static longitude;
+	static latitude;
 	static add(event) {
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
@@ -106,7 +108,22 @@ tab.selected {
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
-		dialog.createField(element, 'Name', 'name', null, event?.location.name);
+		dialog.createField(element, 'Name', 'name', null, event?.location.name).onkeyup = () => {
+			var name = document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value;
+			if (name.length > 2) {
+				if (dialog.latitude)
+					api.nearby(dialog.latitude, dialog.longitude, name, places => {
+						console.log(places);
+					});
+				else
+					navigator.geolocation.getCurrentPosition(result => {
+						if (result.coords && result.coords.latitude) {
+							dialog.latitude = result.coords.latitude;
+							dialog.longitude = result.coords.longitude
+						}
+					}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
+			}
+		};
 		dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location.address);
 		dialog.createField(element, 'URL', 'url', null, event?.location.url).setAttribute('type', 'url');
 		dialog.createField(element, 'Telefon', 'phone', null, event?.location.phone).setAttribute('type', 'tel');
