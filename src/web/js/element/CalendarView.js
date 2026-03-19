@@ -128,12 +128,12 @@ button.icon {
 	position: relative;
 }
 
-.cal-day.other-month div {
+.cal-day.other-month>div {
 	opacity: 0.3;
 }
 
 .cal-day.today .day-num {
-	font-weight: 700;
+	font-weight: bold;
 }
 
 .cal-day.weekend .day-num {
