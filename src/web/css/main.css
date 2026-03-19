@@ -86,7 +86,15 @@ body>container>element div.title {
 }
 
 body>container>element.history button {
-	bottom: 0;
+	bottom: 1em;
+}
+
+body>container>element.history button.prev {
+	left: 1em;
+}
+
+body>container>element.history button.next {
+	right: 1em;
 }
 
 body>button {
@@ -350,7 +358,7 @@ history item text {
 	position: absolute;
 	top: 0;
 	text-align: left;
-	border-radius: 1em;
+	border-radius: 0 0 1em 0;
 	background: rgba(100, 150, 200, 0.6);
 	left: 0;
 	color: white;
