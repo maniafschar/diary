@@ -80,6 +80,7 @@ button.location {
 	background-repeat: no-repeat;
 	background-position-x: 0.3em;
 	background-position-y: 0.3em;
+	background-color: rgba(100, 150, 200, 0.2);
 }`;
 		var tabHeader = popup.appendChild(document.createElement('tabHeader'));
 		var tab = tabHeader.appendChild(document.createElement('tab'));
@@ -123,14 +124,22 @@ button.location {
 		element.setAttribute('class', 'location');
 		dialog.createField(element, 'Name', 'name', null, event?.location?.name);
 		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
+		var input = address.appendChild(document.createElement('input'));
+		input.setAttribute('type', 'hidden');
+		input.setAttribute('name', 'longitude');
+		input = address.appendChild(document.createElement('input'));
+		input.setAttribute('type', 'hidden');
+		input.setAttribute('name', 'latitude');
 		var locationButton = address.parentElement.appendChild(document.createElement('button'));
 		locationButton.src = 'image/location.svg';
 		locationButton.classList.add('icon');
 		locationButton.classList.add('location');
 		locationButton.onclick = () => {
 			var call = () => api.nearby(dialog.latitude, dialog.longitude, address => {
-				document.querySelector('dialog-popup').content().querySelector('element.location textarea[name="address"]').value = address.address;
-				console.log(address);
+				var popup = document.querySelector('dialog-popup').content();
+				popup.querySelector('element.location textarea[name="address"]').value = address.address;
+				popup.querySelector('element.location input[name="longitude"]').value = address.longitude;
+				popup.querySelector('element.location input[name="latitude"]').value = address.latitude;
 			});
 			if (dialog.latitude)
 				call();

@@ -268,6 +268,8 @@ class action {
 			phone: popup.querySelector('element.location input[name="phone"]').value,
 			email: popup.querySelector('element.location input[name="email"]').value,
 			note: popup.querySelector('element.location textarea[name="note"]').value,
+			latitude: popup.querySelector('element.location input[name="latitude"]').value,
+			longitude: popup.querySelector('element.location input[name="longitude"]').value,
 			rating: popup.querySelector('element.location input-rating').getAttribute('value')
 		};
 		if (location.name) {
@@ -280,7 +282,6 @@ class action {
 						popup.querySelectorAll('element.location input,element.location textarea').forEach(e => e.value = '');
 					location.id = id;
 					document.dispatchEvent(new CustomEvent('location', { detail: location }));
-					popup
 				}
 			);
 		} else

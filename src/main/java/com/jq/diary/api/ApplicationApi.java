@@ -3,13 +3,11 @@ package com.jq.diary.api;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
@@ -38,10 +34,10 @@ import com.jq.diary.service.AdminService;
 import com.jq.diary.service.AuthenticationService;
 import com.jq.diary.service.ContactService;
 import com.jq.diary.service.EventService;
+import com.jq.diary.service.ExternalService;
 import com.jq.diary.service.FeedbackService;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Encryption;
-import com.jq.diary.util.Json;
 
 @RestController
 @RequestMapping("api")
@@ -67,10 +63,10 @@ public class ApplicationApi {
 	private Repository repository;
 
 	@Autowired
-	private AdminService adminService;
+	private ExternalService externalService;
 
-	@Value("${app.google.key}")
-	private String googleKey;
+	@Autowired
+	private AdminService adminService;
 
 	@GetMapping("authentication/login")
 	public Contact authentication(final String email, @RequestHeader final String password,
@@ -275,59 +271,7 @@ public class ApplicationApi {
 
 	@GetMapping("nearby")
 	public Map<String, Object> nearby(final double latitude, final double longitude) {
-		final String value = WebClient
-				.create("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude
-						+ "&key=" + this.googleKey)
-				.get().retrieve().toEntity(String.class)
-				.block().getBody();
-		if (value != null && value.startsWith("{") && value.endsWith("}")) {
-			final JsonNode address = Json.toNode(value);
-			if ("OK".equals(address.get("status").asText()) && address.get("results") != null) {
-				String street = null;
-				String number = null;
-				String town = null;
-				String zipCode = null;
-				String country = null;
-				final Map<String, Object> result = new HashMap<>();
-				for (int i = 0; i < address.get("results").size(); i++) {
-					JsonNode data = address.get("results").get(i).get("address_components");
-					if (data != null) {
-						for (int i2 = 0; i2 < data.size(); i2++) {
-							if (data.get(i2) != null) {
-								final String type = data.get(i2).has("types")
-										? data.get(i2).get("types").get(0).asText()
-										: "";
-								if (street == null && "route".equals(type))
-									street = data.get(i2).get("long_name").asText();
-								else if (number == null && "street_number".equals(type))
-									number = data.get(i2).get("long_name").asText();
-								else if (town == null
-										&& ("locality".equals(type) || type.startsWith("administrative_area_level_")))
-									town = data.get(i2).get("long_name").asText();
-								else if (zipCode == null && "postal_code".equals(type))
-									zipCode = data.get(i2).get("long_name").asText();
-								else if (country == null && "country".equals(type))
-									country = data.get(i2).get("short_name").asText();
-							}
-						}
-						result.put("address",
-								((street == null ? "" : street) + (number == null ? "" : " " + number)).trim() + "\n" +
-										((zipCode == null ? "" : zipCode) + (town == null ? "" : " " + town)).trim()
-										+ "\n" + (country == null ? "" : country));
-						data = address.get("results").get(0).get("geometry");
-						if (data != null) {
-							data = data.get("location");
-							if (data != null) {
-								result.put("latitude", data.get("lat").asDouble());
-								result.put("longitude", data.get("lng").asDouble());
-							}
-						}
-					}
-				}
-				return result;
-			}
-		}
-		return null;
+		return this.externalService.nearby(latitude, longitude);
 	}
 
 	@PostMapping("ticket")
