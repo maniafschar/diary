@@ -274,7 +274,7 @@ public class ApplicationApi {
 	public String nearby(final double latitude, final double longitude) {
 		final String value = WebClient
 				.create("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude
-						+ ",\"longitude\":" + longitude + "&key=" + this.googleKey)
+						+ "&key=" + this.googleKey)
 				.get().retrieve().toEntity(String.class)
 				.block().getBody();
 		if (value != null && value.startsWith("{") && value.endsWith("}")) {
