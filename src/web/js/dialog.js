@@ -73,13 +73,13 @@ tab.selected {
 
 button.location {
 	background-image: url(image/location.svg);
-	background-size: 1.6em;
+	background-size: 1.4em;
 	top: 0.4em;
 	right: 0.4em;
 	border-radius: 0 0.4em;
 	background-repeat: no-repeat;
-	background-position-x: 0.2em;
-	background-position-y: 0.2em;
+	background-position-x: 0.3em;
+	background-position-y: 0.3em;
 }`;
 		var tabHeader = popup.appendChild(document.createElement('tabHeader'));
 		var tab = tabHeader.appendChild(document.createElement('tab'));
