@@ -275,7 +275,7 @@ public class ApplicationApi {
 	@GetMapping("nearby")
 	public String nearby(final String name, final double longitude, final double latitude) {
 		final String value = WebClient
-				.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input="
+				.create("https://places.googleapis.com/v1/places:autocomplete?input="
 						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&locationRestriction="
 						+ URLEncoder.encode("{\"circle\":{\"center\":{\"latitude\":" + latitude
 								+ ",\"longitude\":" + longitude + "},\"radius\":0.5\"}}", StandardCharsets.UTF_8)
