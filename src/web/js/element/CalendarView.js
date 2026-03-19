@@ -309,26 +309,11 @@ button.icon {
 			cell.appendChild(list);
 		}
 		if (!otherMonth)
-			cell.addEventListener('click', () => this.openModal(dateKey, d, m, y));
+			cell.addEventListener('click', () => this.open({ day: d, month: m, year: y }));
 		return cell;
 	}
 
 	reset() {
 		this.events = {};
-	}
-
-	// ── Modal ──────────────────────────────────────────────────────────────────
-	openModal(dateKey, day, month, year) {
-		this._activeDate = dateKey;
-		document.getElementById('modal-date-label').textContent =
-			`Termin – ${day}. ${CalendarView.MONTHS_DE[month]} ${year}`;
-		document.getElementById('event-name').value = '';
-		document.getElementById('modal-overlay').classList.add('open');
-		setTimeout(() => document.getElementById('event-name').focus(), 150);
-	}
-
-	closeModal() {
-		document.getElementById('modal-overlay').classList.remove('open');
-		this._activeDate = null;
 	}
 }
