@@ -46,7 +46,6 @@ button {
 	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	border: none;
-	color: rgba(255, 255, 255, 0.4);
 }
 button.icon {
 	background: transparent;
@@ -58,6 +57,7 @@ button.icon {
 	margin: 0;
 	padding: 0;
 	outline: none;
+	color: rgba(255, 255, 255, 0.6);
 }
 data {
 	position: relative;
