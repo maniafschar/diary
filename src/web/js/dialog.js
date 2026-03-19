@@ -69,6 +69,15 @@ tab {
 
 tab.selected {
 	background: rgba(170, 170, 255, 0.2);
+}
+
+button.location {
+	background-image: url(image/location.svg);
+	background-size: cover;
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+	border-radius: 0 0.5em;
 }`;
 		var tabHeader = popup.appendChild(document.createElement('tabHeader'));
 		var tab = tabHeader.appendChild(document.createElement('tab'));
@@ -111,12 +120,10 @@ tab.selected {
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
 		var name = dialog.createField(element, 'Name', 'name', null, event?.location?.name);
-		var locationButton = name.parentElement.appendChild(document.createElement('img'));
+		var locationButton = name.parentElement.appendChild(document.createElement('button'));
 		locationButton.src = 'image/location.svg';
-		locationButton.style.position = 'absolut';
-		locationButton.style.borderRadius = '1 0.5em';
-		locationButton.style.right = '0';
-		locationButton.style.top = '0';
+		locationButton.classList.add('icon');
+		locationButton.classList.add('location');
 		locationButton.onclick = () => {
 			var call = () => api.nearby(dialog.latitude, dialog.longitude, name, places => {
 				document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value = JSON.stringify(places);
