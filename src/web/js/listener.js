@@ -54,11 +54,8 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/><br/>';
 		};
-		var id2event = {}, events = document.querySelector('event sortable-table').list;
-		for (var i = 0; i < events.length; i++)
-			id2event[events[i].id] = events[i];
 		for (var i = 0; i < items.length; i++) {
-			var e = id2event[items[i].getAttribute('i')];
+			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i').split('\.')[0]];
 			list.push({
 				src: items[i].querySelector('img').getAttribute('src'),
 				index: items[i].getAttribute('i'),
@@ -76,7 +73,7 @@ class listener {
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
-			if (index == e.id)
+			if (index == items[i].getAttribute('i'))
 				index2 = i;
 		}
 		document.querySelector('image-carousel').open(list, index2, `
@@ -153,7 +150,7 @@ feedback>span {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 						var item = history.appendChild(document.createElement('item'));
-						item.setAttribute('i', events[i].id);
+						item.setAttribute('i', i + '.' + i2);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
