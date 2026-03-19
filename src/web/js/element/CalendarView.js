@@ -145,7 +145,6 @@ button.icon {
 .event-list {
 	display: flex;
 	flex-direction: column;
-	gap: 0.2em;
 	overflow: hidden;
 }
 
@@ -155,6 +154,11 @@ button.icon {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: pointer;
+	border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+.event-pill:last-child {
+	border-bottom: none;
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
