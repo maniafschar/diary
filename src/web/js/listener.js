@@ -58,7 +58,7 @@ class listener {
 		for (var i = 0; i < list.length; i++)
 			id2event[list[i].id] = list[i];
 		for (var i = 0; i < items.length; i++) {
-			var e = list[items[i].getAttribute('i')];
+			var e = id2event[items[i].getAttribute('i')];
 			list.push({
 				src: items[i].querySelector('img').getAttribute('src'),
 				index: items[i].getAttribute('i'),
