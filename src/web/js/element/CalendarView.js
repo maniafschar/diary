@@ -308,8 +308,7 @@ button.icon {
 			}
 			cell.appendChild(list);
 		}
-		if (!otherMonth)
-			cell.addEventListener('click', () => this.open({ day: d, month: m, year: y }));
+		cell.addEventListener('click', () => this.open({ day: d, month: m, year: y }));
 		return cell;
 	}
 

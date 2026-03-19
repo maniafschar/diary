@@ -141,7 +141,7 @@ feedback>span {
 
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
-			calendar.setOpen(event => event.id ? dialog.event(event.id) : dialog.add());
+			calendar.setOpen(event => event.id ? dialog.event(event.id) : dialog.add(event));
 			var history = document.querySelector('history');
 			history.textContent = '';
 			var margin = 0;
