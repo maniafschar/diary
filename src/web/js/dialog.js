@@ -124,10 +124,10 @@ button.location {
 		element.setAttribute('class', 'location');
 		dialog.createField(element, 'Name', 'name', null, event?.location?.name);
 		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
-		var input = address.appendChild(document.createElement('input'));
+		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'longitude');
-		input = address.appendChild(document.createElement('input'));
+		input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'latitude');
 		var locationButton = address.parentElement.appendChild(document.createElement('button'));
