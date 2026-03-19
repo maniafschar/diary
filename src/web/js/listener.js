@@ -73,7 +73,7 @@ class listener {
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
-			if (items[i].getAttribute('i') == index)
+			if (items[i].getAttribute('i') == e.id)
 				index2 = i;
 		}
 		document.querySelector('image-carousel').open(list, index2, `
@@ -145,13 +145,12 @@ feedback>span {
 			history.textContent = '';
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
-				if (events[i].note)
-					calendar.addEvent(events[i].date.substring(0, 10), events[i].note, events[i].rating);
+				calendar.addEvent(events[i].date.substring(0, 10), events[i].note || '[[Kein Text]]', events[i].rating);
 				if (events[i].eventImages) {
 					document.querySelector('element.history').style.display = '';
 					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 						var item = history.appendChild(document.createElement('item'));
-						item.setAttribute('i', i + '.' + i2);
+						item.setAttribute('i', events[i].id);
 						item.style.marginLeft = margin + '%';
 						margin += 100;
 						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
