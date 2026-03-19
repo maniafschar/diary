@@ -2,8 +2,6 @@ package com.jq.diary.api;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
@@ -273,13 +271,10 @@ public class ApplicationApi {
 	}
 
 	@GetMapping("nearby")
-	public String nearby(final String name, final double longitude, final double latitude) {
+	public String nearby(final double latitude, final double longitude) {
 		final String value = WebClient
-				.create("https://places.googleapis.com/v1/places:autocomplete?input="
-						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&locationRestriction="
-						+ URLEncoder.encode("{\"circle\":{\"center\":{\"latitude\":" + latitude
-								+ ",\"longitude\":" + longitude + "},\"radius\":0.5\"}}", StandardCharsets.UTF_8)
-						+ "&key=" + this.googleKey)
+				.create("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude
+						+ ",\"longitude\":" + longitude + "&key=" + this.googleKey)
 				.get().retrieve().toEntity(String.class)
 				.block().getBody();
 		if (value != null && value.startsWith("{") && value.endsWith("}")) {
