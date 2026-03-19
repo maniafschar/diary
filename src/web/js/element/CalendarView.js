@@ -80,7 +80,7 @@ button.icon {
 }
 
 .cal-weekday {
-	padding: 0.5em;
+	padding: 0.2em;
 }
 
 .cal-weekday.weekend { color: #8b4513; }
