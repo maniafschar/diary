@@ -165,7 +165,7 @@ feedback>span {
 						if (events[i].note) {
 							text.appendChild(document.createElement('br'));
 							var note = events[i].note.replace(/\n/g, ' ');
-							while (note.length > 50)
+							while (note.length > 40)
 								note = note.substring(0, note.lastIndexOf(' ')).trim();
 							if (note.length < events[i].note.length)
 								note += ' ...';
