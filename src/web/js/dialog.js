@@ -140,6 +140,7 @@ button.location {
 				popup.querySelector('element.location textarea[name="address"]').value = address.address;
 				popup.querySelector('element.location input[name="longitude"]').value = address.longitude;
 				popup.querySelector('element.location input[name="latitude"]').value = address.latitude;
+				popup.querySelector('button.location').remove();
 			});
 			if (dialog.latitude)
 				call();
