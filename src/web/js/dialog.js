@@ -110,7 +110,7 @@ tab.selected {
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
-		dialog.createField(element, 'Name', 'name', null, event?.location.name).onkeyup = () => {
+		dialog.createField(element, 'Name', 'name', null, event?.location?.name).onkeyup = () => {
 			var name = document.querySelector('dialog-popup').content().querySelector('element.location input[name="name"]').value;
 			if (name.length > 2) {
 				if (dialog.latitude) {
@@ -127,12 +127,12 @@ tab.selected {
 					}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 			}
 		};
-		dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location.address);
-		dialog.createField(element, 'URL', 'url', null, event?.location.url).setAttribute('type', 'url');
-		dialog.createField(element, 'Telefon', 'phone', null, event?.location.phone).setAttribute('type', 'tel');
-		dialog.createField(element, 'Email', 'email', null, event?.location.email).setAttribute('type', 'email');
-		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.location.note);
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location.rating).setAttribute('type', 'edit');
+		dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
+		dialog.createField(element, 'URL', 'url', null, event?.location?.url).setAttribute('type', 'url');
+		dialog.createField(element, 'Telefon', 'phone', null, event?.location?.phone).setAttribute('type', 'tel');
+		dialog.createField(element, 'Email', 'email', null, event?.location?.email).setAttribute('type', 'email');
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.location?.note);
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location?.rating).setAttribute('type', 'edit');
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
