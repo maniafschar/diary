@@ -93,7 +93,6 @@ button.icon {
 
 .cal-day {
 	min-height: 12vh;
-	padding: 0.2em;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	cursor: pointer;
@@ -131,6 +130,7 @@ button.icon {
 
 .cal-day.today .day-num {
 	font-weight: bold;
+	background: rgba(255, 200, 50, 0.1);
 }
 
 .cal-day.weekend .day-num {
@@ -144,15 +144,12 @@ button.icon {
 .event-list {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 0.2em;
 	overflow: hidden;
 }
 
 .event-pill {
-	padding: 0.1em 0.2em;
-	border-radius: 0.2em;
-	background: #ddeeff;
-	color: #1a4a8a;
+	padding: 0.3em;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
