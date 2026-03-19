@@ -283,7 +283,7 @@ button.icon {
 		if (dayEvents.length) {
 			const list = document.createElement('div');
 			list.className = 'event-list';
-			dayEvents.slice(0, 3).forEach(ev => {
+			dayEvents.forEach(ev => {
 				const pill = document.createElement('div');
 				pill.className = 'event-pill'
 				if (ev.rating)
@@ -298,14 +298,6 @@ button.icon {
 				});
 				list.appendChild(pill);
 			});
-			if (dayEvents.length > 3) {
-				const more = document.createElement('div');
-				more.className = 'event-pill';
-				more.style.background = '#eee';
-				more.style.color = '#666';
-				more.textContent = `+${dayEvents.length - 3} weitere`;
-				list.appendChild(more);
-			}
 			cell.appendChild(list);
 		}
 		cell.addEventListener('click', () => this.open({ day: d, month: m, year: y }));
