@@ -276,8 +276,8 @@ public class ApplicationApi {
 	public String nearby(final String name, final double longitude, final double latitude) {
 		final String value = WebClient
 				.create("https://maps.googleapis.com/maps/api/place/textsearch/json?input="
-						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&"
-						+ URLEncoder.encode("locationRestriction={\"circle\":{\"center\":{\"latitude\":" + latitude
+						+ URLEncoder.encode(name, StandardCharsets.UTF_8) + "&locationRestriction="
+						+ URLEncoder.encode("{\"circle\":{\"center\":{\"latitude\":" + latitude
 								+ ",\"longitude\":" + longitude + "},\"radius\":0.5\"}}", StandardCharsets.UTF_8)
 						+ "&key=" + this.googleKey)
 				.get().retrieve().toEntity(String.class)
