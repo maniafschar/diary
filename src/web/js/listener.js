@@ -76,7 +76,7 @@ class listener {
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
-			if (items[i].getAttribute('i') == e.id)
+			if (index == e.id)
 				index2 = i;
 		}
 		document.querySelector('image-carousel').open(list, index2, `
