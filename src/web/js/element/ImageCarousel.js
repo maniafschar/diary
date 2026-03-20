@@ -51,7 +51,7 @@ button {
 	border-radius: 1em;
 	outline: none;
 	cursor: pointer;
-	margin: 0 0.5em 0.5em 0.5em;
+	margin: 1em 0.5em 0.5em 0.5em;
 	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	z-index: 2;
