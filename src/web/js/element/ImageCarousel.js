@@ -78,14 +78,14 @@ imageContainer {
 	display: block;
 	width: 100%;
 }
-imageContainer nav {
+data>nav {
 	position: absolute;
 	left: 0;
 	top: 0;
 	right: 0;
 	text-align: center;
 }
-imageContainer nav dot {
+data>nav dot {
 	position: relative;
 	display: inline-block;
 	background: rgba(100, 150, 200, 0.2);
@@ -197,9 +197,8 @@ a {
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
-		var imageContainer = data.appendChild(document.createElement('imageContainer'));
-		imageContainer.appendChild(document.createElement('img'));
-		imageContainer.appendChild(document.createElement('nav'));
+		data.appendChild(document.createElement('nav'));
+		data.appendChild(document.createElement('imageContainer')).appendChild(document.createElement('img'));
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -252,8 +251,8 @@ a {
 		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 		if (this.list[this.index].src.length > 1) {
-			this._root.querySelector('imageContainer nav').innerHTML = 'this.list[this.index].src.length';
+			this._root.querySelector('nav').innerHTML = 'this.list[this.index].src.length';
 		} else
-			this._root.querySelector('imageContainer nav').textContent = '';
+			this._root.querySelector('nav').textContent = '';
 	}
 }
