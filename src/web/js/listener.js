@@ -156,35 +156,34 @@ input-rating {
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
-				if (events[i].eventImages) {
-					document.querySelector('element.history').style.display = '';
-					for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
-						var item = history.appendChild(document.createElement('item'));
-						item.setAttribute('i', i + '.' + i2);
-						item.style.marginLeft = margin + '%';
-						margin += 100;
-						var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
-						var img = item.appendChild(document.createElement('img'));
-						img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
-						img.onclick = click;
-						var text = item.appendChild(document.createElement('text'));
-						text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));
+				for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
+					var item = history.appendChild(document.createElement('item'));
+					item.setAttribute('i', i + '.' + i2);
+					item.style.marginLeft = margin + '%';
+					margin += 100;
+					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
+					var img = item.appendChild(document.createElement('img'));
+					img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
+					img.onclick = click;
+					var text = item.appendChild(document.createElement('text'));
+					text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));
+					text.appendChild(document.createElement('br'));
+					text.appendChild(document.createTextNode(events[i].location.name));
+					if (events[i].note) {
 						text.appendChild(document.createElement('br'));
-						text.appendChild(document.createTextNode(events[i].location.name));
-						if (events[i].note) {
-							text.appendChild(document.createElement('br'));
-							var note = events[i].note.replace(/\n/g, ' ');
-							while (note.length > 40)
-								note = note.substring(0, note.lastIndexOf(' ')).trim();
-							if (note.length < events[i].note.length)
-								note += ' ...';
-							text.appendChild(document.createTextNode(note));
-						}
-						text.onclick = click;
+						var note = events[i].note.replace(/\n/g, ' ');
+						while (note.length > 40)
+							note = note.substring(0, note.lastIndexOf(' ')).trim();
+						if (note.length < events[i].note.length)
+							note += ' ...';
+						text.appendChild(document.createTextNode(note));
 					}
+					text.onclick = click;
 				}
 			}
 			calendar.render();
+			if (document.querySelector('element.history item'))
+				document.querySelector('element.history').style.display = '';
 			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
 			document.querySelector('event').style.display = '';
 			document.querySelector('event').previousElementSibling.style.display = 'block';
