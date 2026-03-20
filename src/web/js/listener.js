@@ -76,8 +76,9 @@ class listener {
 						(events[i].location.note ? '<br/>' + events[i].location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
 						'<separator></separator>' +
 						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
-						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(events[i]) +
+						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
 						addEditButton() +
+						listener.listFeedbacks(events[i]) +
 						'<separator></separator>' +
 						'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 						'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
