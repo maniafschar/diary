@@ -56,6 +56,11 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/>';
 		};
+		var addEditButton = function () {
+			if (api.user.id == events[i].contact.id)
+				return '<button class="icon" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: events[i].location, participants: events[i].contactEvents.length }) + ')"><img src="/image/edit.svg" /></button>';
+			return '';
+		}
 		for (var i = events.length - 1; i >= 0; i--) {
 			if (events[i].eventImages?.length)
 				list.push({
@@ -72,6 +77,7 @@ class listener {
 						'<separator></separator>' +
 						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
 						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(events[i]) +
+						addEditButton() +
 						'<separator></separator>' +
 						'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 						'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
