@@ -212,7 +212,7 @@ a {
 		this._root.querySelector('img').src = list[i].src;
 		this._root.querySelector('description').innerHTML = list[i].description;
 		this._root.host.style.transform = 'scale(1)';
-		this._root.querySelector('hint').innerText = i + '/' + this.list.length;
+		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 	}
 
 	navigate(next) {
@@ -225,6 +225,6 @@ a {
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' })
-		this._root.querySelector('hint').innerText = i + '/' + this.list.length;
+		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 	}
 }
