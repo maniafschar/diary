@@ -232,7 +232,7 @@ input-rating {
 				}
 				td.innerHTML = note || '&nbsp;';
 			}
-			if (event.detail.type != 'read')
+			if (event.detail?.type != 'read')
 				listener.updateCotacts();
 		});
 		document.addEventListener('location', event => {
@@ -243,7 +243,7 @@ input-rating {
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));
 				})
-			if (event.detail.type != 'read')
+			if (event.detail?.type != 'read')
 				listener.updateEvents();
 		});
 		document.addEventListener('contact', listener.updateCotacts);
