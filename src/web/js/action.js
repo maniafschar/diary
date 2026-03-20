@@ -210,7 +210,8 @@ class action {
 		var left = history.scrollLeft, width = document.querySelector('history').offsetWidth, x;
 		if (left == 0 && !next)
 			x = width;
-		x = (parseInt(left / width) + (next ? 1 : -1)) * width;
+		else
+			x = (parseInt(left / width) + (next ? 1 : -1)) * width;
 		if (next && left == x)
 			x = 0;
 		history.scrollTo({ left: x, behavior: 'smooth' });
