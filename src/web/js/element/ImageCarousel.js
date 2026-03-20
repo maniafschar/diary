@@ -110,6 +110,7 @@ data>nav dot {
 	color: rgba(255, 255, 255, 0.5);
 	font-size: 0.8em;
 	margin: 0.5em;
+	cursor: pointer;
 }
 button.next {
 	right: 0.5em;
@@ -255,17 +256,18 @@ a {
 				break;
 			}
 		}
-		this.navigate(true);
+		this.navigate(true, true);
 		this._root.host.style.transform = 'scale(1)';
 	}
 
-	navigate(next) {
+	navigate(next, resetImageIndex) {
 		this.index = this.index + (next ? 1 : -1);
 		if (this.index >= this.list.length)
 			this.index = next ? 0 : this.list.length - 1;
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
-		this.indexImage = 0;
+		if (resetImageIndex)
+			this.indexImage = 0;
 		this.navigateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
