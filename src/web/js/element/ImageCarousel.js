@@ -46,10 +46,20 @@ hint {
 	margin-left: -4em;
 }
 button {
+	background: rgba(100, 150, 200, 0.2);
+	padding: 0.5em 1em;
 	border-radius: 1em;
+	outline: none;
 	cursor: pointer;
+	margin: 0 0.5em 0.5em 0.5em;
+	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	z-index: 2;
+	color: white;
 	border: none;
+	z-index: 6;
+}
+button.icon {
 	background: transparent;
 	font-size: 2em;
 	width: 2em;
@@ -58,8 +68,6 @@ button {
 	bottom: 0.5em;
 	margin: 0;
 	padding: 0;
-	outline: none;
-	z-index: 6;
 	color: rgba(255, 255, 255, 0.9);
 }
 button.edit {
@@ -226,14 +234,17 @@ a {
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('next');
+		next.classList.add('icon');
 		next.onclick = () => this.navigate(true);
 		var prev = div.appendChild(document.createElement('button'));
 		prev.innerText = '<';
 		prev.classList.add('prev');
+		prev.classList.add('icon');
 		prev.onclick = () => this.navigate(false);
 		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
 		close.classList.add('close');
+		close.classList.add('icon');
 		close.innerText = 'x';
 		this._root.appendChild(document.createElement('hint'));
 	}
