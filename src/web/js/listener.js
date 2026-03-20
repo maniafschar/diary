@@ -78,7 +78,7 @@ class listener {
 						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(events[i]) +
 						'<separator></separator>' +
 						'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
-						'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
+						'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
 						'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 				});
 		}
@@ -107,6 +107,13 @@ feedback>span {
 }
 input-rating {
 	padding-top: 0.5em;
+}
+.addImage{
+	right: 0;
+	top: 0;
+	border-radius: 0 0.5em;
+	background: rgba(100, 150, 200, 0.2);
+	font-size: 1.3em;
 }`);
 	}
 

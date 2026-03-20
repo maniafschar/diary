@@ -63,12 +63,12 @@ class action {
 	static addImage(event) {
 		var chooseFile = () => {
 			var image = document.querySelector('image-carousel').data().querySelector('input-image');
-			var addImage = (id, data) => {
-				image.parentElement.appendChild(document.createElement('div')).appendChild(document.createElement('img')).src = data;
-				document.dispatchEvent(new CustomEvent('event'));
-				document.dispatchEvent(new CustomEvent('popup'));
-			};
-			image.setSuccess(file => api.eventImagePost(id, file.type, file.data.substring(file.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, file.data)));
+			image.setSuccess(file => api.eventImagePost(event.id, file.type, file.data.substring(file.data.indexOf(',') + 1),
+				() => {
+					document.querySelector('image-carousel').indexImage++;
+					document.dispatchEvent(new CustomEvent('event'));
+					document.dispatchEvent(new CustomEvent('popup'));
+				}));
 			image.click();
 		};
 		action.addWithParticipation(event, chooseFile, 'Du kannst nur Bilder zu Events hochladen, an denen Du teilgenommen hast.');

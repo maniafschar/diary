@@ -11,13 +11,13 @@ class InputImage extends HTMLElement {
 :host(*) {
 	position: absolute;
 	background-color: rgba(100, 150, 200, 0.2);
-	border-radius: 1.3em;
+	border-radius: 1em;
 	color: white;
-	width: 2.6em;
-	height: 2.6em;
+	width: 2em;
+	height: 2em;
 	text-align: center;
 	display: inline-block;
-	line-height: 2.6;
+	line-height: 2;
 	font-size: 1.3em;
 	z-index: 3;
 }

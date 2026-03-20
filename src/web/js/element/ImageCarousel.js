@@ -258,15 +258,15 @@ a {
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
+		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
 			var nav = this._root.querySelector('nav');
 			for (var i = 0; i < this.list[this.index].src.length; i++) {
 				var dot = nav.appendChild(document.createElement('dot'));
 				dot.innerText = i + 1;
-				dot.onclick = () => this.navigateImage(i);
+				dot.setAttribute('onclick', 'this.getRootNode().host.navigateImage(' + i + ')');
 			}
-		} else
-			this._root.querySelector('nav').textContent = '';
+		}
 	}
 
 	navigateImage(index) {
