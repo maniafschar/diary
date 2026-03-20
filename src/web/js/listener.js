@@ -93,7 +93,7 @@ feedback {
 	display: block;
 	position: relative;
 	padding-top: 1em;
-	border-top: solid 1px rgba(0, 0, 0, 0.2);
+	border-top: solid 1px rgba(0, 0, 0, 0.1);
 	margin-top: 1em;
 }
 feedback>span {
