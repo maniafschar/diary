@@ -228,8 +228,8 @@ a {
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
-		this.index = index.split('\.')[0] - 1;
-		this.indexImage = index.split('\.')[1];
+		this.index = parseInt(index.split('\.')[0]) - 1;
+		this.indexImage = parseInt(index.split('\.')[1]);
 		this._root.host.style.transform = 'scale(1)';
 		this.navigate(true);
 	}
