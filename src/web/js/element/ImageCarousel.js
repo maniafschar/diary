@@ -41,8 +41,8 @@ hint {
 	left: 50%;
 	bottom: 1.6em;
 	color: rgba(255, 255, 255, 0.4);
-	width: 10em;
-	margin-left: -5em;
+	width: 8em;
+	margin-left: -4em;
 }
 button {
 	border-radius: 1em;
