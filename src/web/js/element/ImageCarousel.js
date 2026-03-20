@@ -226,7 +226,8 @@ a {
 		this._root.querySelector('img').src = this.list[this.index].src;
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' })
+		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
+		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 	}
 }
