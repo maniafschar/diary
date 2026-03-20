@@ -42,10 +42,6 @@ class listener {
 	}
 
 	static updateImageCarousel(index) {
-		if (index)
-			document.querySelector('image-carousel').setAttribute('i', index);
-		else
-			index = document.querySelector('image-carousel').getAttribute('i');
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
 		var listImages = function (event) {

@@ -232,18 +232,21 @@ a {
 	}
 
 	open(list, index, style) {
+		if (index) {
+			this.index = parseInt(index.split('.')[0]);
+			this.indexImage = parseInt(index.split('.')[1]);
+		}
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
 		for (var i = 0; i < list.length; i++) {
-			if (index.indexOf(list[i].index + '.') == 0) {
+			if (this.index == list[i].index) {
 				this.index = i - 1;
 				break;
 			}
 		}
-		this.indexImage = parseInt(index.split('\.')[1]);
-		this._root.host.style.transform = 'scale(1)';
 		this.navigate(true);
+		this._root.host.style.transform = 'scale(1)';
 	}
 
 	navigate(next) {
@@ -252,9 +255,9 @@ a {
 			this.index = next ? 0 : this.list.length - 1;
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
+		this.indexImage = 0;
 		this.navigateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
-		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
