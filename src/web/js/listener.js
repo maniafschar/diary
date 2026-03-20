@@ -100,6 +100,9 @@ feedback>span {
 	display: block;
 	position: relative;
 	font-size: 0.8em;
+}
+input-rating {
+	padding-top: 0.5em;
 }`);
 	}
 
