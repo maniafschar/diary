@@ -36,18 +36,10 @@ div img {
 	min-height: 100%;
 }
 button {
-	background: rgba(100, 150, 200, 0.2);
-	border: none;
-	padding: 0.5em 1em;
 	border-radius: 1em;
-	outline: none;
 	cursor: pointer;
-	margin: 1em 0.5em 0.5em 0.5em;
-	font-size: 1em;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	border: none;
-}
-button.icon {
 	background: transparent;
 	font-size: 2em;
 	width: 2em;
@@ -57,6 +49,7 @@ button.icon {
 	margin: 0;
 	padding: 0;
 	outline: none;
+	z-index: 6;
 	color: rgba(255, 255, 255, 0.9);
 }
 data {
@@ -183,17 +176,14 @@ a {
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
-		next.classList.add('icon');
 		next.classList.add('next');
 		next.onclick = () => this.navigate(true);
 		var prev = div.appendChild(document.createElement('button'));
 		prev.innerText = '<';
-		prev.classList.add('icon');
 		prev.classList.add('prev');
 		prev.onclick = () => this.navigate(false);
 		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
-		close.classList.add('icon');
 		close.classList.add('close');
 		close.innerText = 'x';
 	}
