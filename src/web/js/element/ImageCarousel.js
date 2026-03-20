@@ -259,7 +259,6 @@ a {
 		this.navigateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
-		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
@@ -270,6 +269,7 @@ a {
 				dot.setAttribute('onclick', 'this.getRootNode().host.navigateImage(' + i + ')');
 			}
 		}
+		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
 
 	navigateImage(index) {
