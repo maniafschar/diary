@@ -216,13 +216,12 @@ input-rating {
 		return s;
 	}
 	static init() {
-		document.addEventListener('eventParticipation', e => {
-			var td = document.querySelector('event sortable-table').table().querySelector('td[i="note_' + e.detail.eventId + '"]');
-			var list = document.querySelector('event sortable-table').list;
+		document.addEventListener('eventParticipation', event => {
+			var td = document.querySelector('event sortable-table').table().querySelector('td[i="note_' + event.detail.eventId + '"]');
 			if (td) {
 				var note = '';
-				if (e.detail.participants.length)
-					note += e.detail.participants.length + 'T';
+				if (event.detail.participants.length)
+					note += event.detail.participants.length + 'T';
 				if (td.innerText?.trim()) {
 					var s = td.innerText.replace(/^\d{1,4}T/, '').trim();
 					if (s) {
@@ -233,10 +232,10 @@ input-rating {
 				}
 				td.innerHTML = note || '&nbsp;';
 			}
-			if (e.detail.type != 'read')
+			if (event.detail.type != 'read')
 				listener.updateCotacts();
 		});
-		document.addEventListener('location', () => {
+		document.addEventListener('location', event => {
 			var selection = document.querySelector('dialog-popup').content().querySelector('.event input-selection');
 			if (selection)
 				api.locations(locations => {
@@ -244,7 +243,8 @@ input-rating {
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));
 				})
-			listener.updateEvents();
+			if (event.detail.type != 'read')
+				listener.updateEvents();
 		});
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);

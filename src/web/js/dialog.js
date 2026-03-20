@@ -174,7 +174,7 @@ button.location {
 		dialog.createButton(element, 'action.contactPatch()');
 
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		document.dispatchEvent(new CustomEvent('location'));
+		document.dispatchEvent(new CustomEvent('location', { detail: { type: 'read' } }));
 	}
 
 	static verifyEmail(event) {
