@@ -215,5 +215,6 @@ a {
 		this._root.querySelector('img').src = this.list[this.index].src;
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
+		this._root.querySelector('div').parentElement.scrollTo({ top: 0, behavior: 'smooth' })
 	}
 }
