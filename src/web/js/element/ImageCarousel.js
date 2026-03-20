@@ -3,6 +3,7 @@ export { ImageCarousel };
 class ImageCarousel extends HTMLElement {
 	list = null;
 	index = 0;
+	indexImage = 0;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -76,6 +77,12 @@ imageContainer {
 	position: relative;
 	display: block;
 	width: 100%;
+}
+imageContainer nav {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
 }
 button.next {
 	right: 0.5em;
@@ -181,7 +188,9 @@ a {
 }`;
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
-		data.appendChild(document.createElement('imageContainer')).appendChild(document.createElement('img'));
+		var imageContainer = data.appendChild(document.createElement('imageContainer'));
+		imageContainer.appendChild(document.createElement('img'));
+		imageContainer.appendChild(document.createElement('nav'));
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -206,11 +215,12 @@ a {
 		return this._root.querySelector('data');
 	}
 
-	open(list, i, style) {
+	open(list, index, style) {
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
-		this.index = i - 1;
+		this.index = index.split('\.')[0] - 1;
+		this.indexImage = index.split('\.')[1];
 		this._root.host.style.transform = 'scale(1)';
 		this.navigate(true);
 	}
@@ -221,11 +231,15 @@ a {
 			this.index = next ? 0 : this.list.length - 1;
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
-		this._root.querySelector('img').src = this.list[this.index].src;
+		this._root.querySelector('img').src = this.list[this.index].src[this.indexImage];
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
+		if (this.list[this.index].src.length > 1) {
+			this._root.querySelector('imageContainer nav').innerHTML = 'this.list[this.index].src.length';
+		} else
+			this._root.querySelector('imageContainer nav').textContent = '';
 	}
 }

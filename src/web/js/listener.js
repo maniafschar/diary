@@ -46,39 +46,42 @@ class listener {
 			document.querySelector('image-carousel').setAttribute('i', index);
 		else
 			index = document.querySelector('image-carousel').getAttribute('i');
-		var items = document.querySelectorAll('history item');
-		var list = [], index2 = 0;
+		var events = document.querySelector('event sortable-table').list;
+		var list = [];
+		var listImages = function (event) {
+			var list = [];
+			for (var i = 0; i < event.eventImages.length; i++)
+				list.push(event.eventImages[i].image);
+			return list;
+		};
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + e.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/>';
 		};
-		for (var i = 0; i < items.length; i++) {
-			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i').split('\.')[0]];
+		for (var i = 0; i < events.length; i++) {
 			list.push({
-				src: items[i].querySelector('img').getAttribute('src'),
-				index: items[i].getAttribute('i'),
-				description: ui.formatTime(new Date(e.date.replace('+00:00', ''))) + '<br/><br/>' +
-					(e.location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(e.location.address.replace(/\n/g, ', ')) + '" target="_blank">' + e.location.name + '<br/>' + e.location.address.replace(/\n/g, '<br/>') + '</a>' : e.location.name) + '<br/><br/>' +
-					(e.location.phone ? '<a href="tel:' + e.location.phone.replace(/\D/g, '') + '">' + e.location.phone + '</a><br/>' : '') +
-					(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
-					(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
-					(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
-					(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating>' : '') +
-					(e.location.note ? '<br/>' + e.location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
+				src: listImages(events[i]),
+				index: i,
+				description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
+					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
+					(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
+					(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
+					(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
+					(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
+					(events[i].location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + events[i].location.rating + '"></input-rating>' : '') +
+					(events[i].location.note ? '<br/>' + events[i].location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
 					'<separator></separator>' +
-					(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-					(e.note ? '<br/>' + e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
+					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
+					(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
 					'<separator></separator>' +
-					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
+					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
-			if (index == items[i].getAttribute('i'))
-				index2 = i;
 		}
-		document.querySelector('image-carousel').open(list, index2, `
+		document.querySelector('image-carousel').open(list, index, `
 rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;
