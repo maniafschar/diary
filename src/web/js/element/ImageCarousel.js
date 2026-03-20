@@ -62,6 +62,16 @@ button {
 	z-index: 6;
 	color: rgba(255, 255, 255, 0.9);
 }
+button.edit {
+	width: 1em;
+	height: 1em;
+	bottom: inherit;
+	right: 0;
+}
+button img {
+	width: 50%;
+	height: 50%;
+}
 data {
 	position: relative;
 	display: block;
