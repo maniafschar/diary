@@ -231,7 +231,7 @@ a {
 			this.index = next ? 0 : this.list.length - 1;
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
-		this._root.querySelector('img').src = this.list[this.index].src[this.indexImage];
+		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
