@@ -84,14 +84,22 @@ data>nav {
 	top: 0;
 	right: 0;
 	text-align: center;
+	z-index: 1;
+	padding: 0.5em;
+	white-space: nowrap;
+	overflow-x: auto;
 }
 data>nav dot {
 	position: relative;
 	display: inline-block;
-	background: rgba(100, 150, 200, 0.2);
-	border-radius: 1em;
-	width: 2em;
-	height: 2em;
+	background: rgba(100, 150, 200, 0.4);
+	border-radius: 1.5em;
+	width: 3em;
+	height: 3em;
+	line-height: 3;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 0.8em;
+	margin: 0.5em;
 }
 button.next {
 	right: 0.5em;
@@ -244,15 +252,25 @@ a {
 			this.index = next ? 0 : this.list.length - 1;
 		else if (this.index < 0)
 			this.index = next ? 0 : this.list.length - 1;
-		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
+		this.navigateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' })
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
 		if (this.list[this.index].src.length > 1) {
-			this._root.querySelector('nav').innerHTML = 'this.list[this.index].src.length';
+			var nav = this._root.querySelector('nav');
+			for (var i = 0; i < this.list[this.index].src.length; i++) {
+				var dot = nav.appendChild(document.createElement('dot'));
+				dot.innerText = i + 1;
+				dot.onclick = () => this.navigateImage(i);
+			}
 		} else
 			this._root.querySelector('nav').textContent = '';
+	}
+
+	navigateImage(index) {
+		this.indexImage = index;
+		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
 	}
 }
