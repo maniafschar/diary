@@ -78,7 +78,7 @@ class listener {
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
-					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
+					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 			});
 		}
 		document.querySelector('image-carousel').open(list, index, `
