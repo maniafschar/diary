@@ -222,11 +222,11 @@ a {
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('next');
-		next.onclick = () => this.navigate(true);
+		next.onclick = () => this.navigate(true, true);
 		var prev = div.appendChild(document.createElement('button'));
 		prev.innerText = '<';
 		prev.classList.add('prev');
-		prev.onclick = () => this.navigate(false);
+		prev.onclick = () => this.navigate(false, true);
 		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
 		close.classList.add('close');
@@ -256,7 +256,7 @@ a {
 				break;
 			}
 		}
-		this.navigate(true, true);
+		this.navigate(true);
 		this._root.host.style.transform = 'scale(1)';
 	}
 
