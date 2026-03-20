@@ -112,6 +112,9 @@ data>nav dot {
 	margin: 0.5em;
 	cursor: pointer;
 }
+data>nav dot:selected {
+	color: gold;
+}
 button.next {
 	right: 0.5em;
 }
@@ -288,6 +291,8 @@ a {
 				var dot = nav.appendChild(document.createElement('dot'));
 				dot.innerText = i + 1;
 				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+				if (i == this.indexImage)
+					dot.classList.add('selected');
 			}
 		}
 	}
