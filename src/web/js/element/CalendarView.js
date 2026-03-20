@@ -126,7 +126,8 @@ button.icon {
 }
 	
 .day-num span {
-	font-size: 0.8em;
+	font-size: 0.7em;
+	margin-left: 0.2em;
 }
 
 .cal-day.other-month>div {
@@ -282,7 +283,7 @@ button.icon {
 		numEl.className = 'day-num';
 		numEl.textContent = d;
 		if (bankholidays[d + '.' + (m + 1)])
-			numEl.appendChild(document.createElement('span')).innerText = ' ' + bankholidays[d + '.' + (m + 1)];
+			numEl.appendChild(document.createElement('span')).innerText = bankholidays[d + '.' + (m + 1)];
 		cell.appendChild(numEl);
 
 		const dayEvents = this.events[dateKey] || [];
