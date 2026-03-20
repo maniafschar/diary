@@ -112,7 +112,7 @@ data>nav dot {
 	margin: 0.5em;
 	cursor: pointer;
 }
-data>nav dot:selected {
+data>nav dot.selected {
 	color: gold;
 }
 button.next {
@@ -283,18 +283,7 @@ a {
 	update() {
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
-		this._root.querySelector('nav').textContent = '';
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
-		if (this.list[this.index].src.length > 1) {
-			var nav = this._root.querySelector('nav');
-			for (var i = 0; i < this.list[this.index].src.length; i++) {
-				var dot = nav.appendChild(document.createElement('dot'));
-				dot.innerText = i + 1;
-				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				if (i == this.indexImage)
-					dot.classList.add('selected');
-			}
-		}
 	}
 
 	updateImage(index) {
@@ -308,6 +297,17 @@ a {
 		position += this.indexImage + 1;
 		this._root.querySelector('hint').innerText = position + '/' + total;
 		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
+		this._root.querySelector('nav').textContent = '';
+		if (this.list[this.index].src.length > 1) {
+			var nav = this._root.querySelector('nav');
+			for (var i = 0; i < this.list[this.index].src.length; i++) {
+				var dot = nav.appendChild(document.createElement('dot'));
+				dot.innerText = i + 1;
+				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+				if (i == this.indexImage)
+					dot.classList.add('selected');
+			}
+		}
 		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
 }
