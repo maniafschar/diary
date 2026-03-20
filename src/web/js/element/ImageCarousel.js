@@ -222,11 +222,11 @@ a {
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('next');
-		next.onclick = () => this.navigate(true, true);
+		next.onclick = () => this.navigate(true);
 		var prev = div.appendChild(document.createElement('button'));
 		prev.innerText = '<';
 		prev.classList.add('prev');
-		prev.onclick = () => this.navigate(false, true);
+		prev.onclick = () => this.navigate(false);
 		var close = this._root.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
 		close.classList.add('close');
@@ -256,18 +256,27 @@ a {
 				break;
 			}
 		}
-		this.navigate(true);
+		this.update();
 		this._root.host.style.transform = 'scale(1)';
 	}
 
-	navigate(next, resetImageIndex) {
-		this.index = this.index + (next ? 1 : -1);
-		if (this.index >= this.list.length)
-			this.index = next ? 0 : this.list.length - 1;
-		else if (this.index < 0)
-			this.index = next ? 0 : this.list.length - 1;
-		if (resetImageIndex)
+	navigate(next) {
+		this.indexImage = this.indexImage + (next ? 1 : -1);
+		if (this.indexImage >= this.list[this.index].src.length) {
 			this.indexImage = 0;
+			this.index++;
+			if (this.index >= this.list.length)
+				this.index = 0;
+		} else if (this.indexImage < 0) {
+			this.index--;
+			if (this.index < 0)
+				this.index = this.list.length - 1;
+			this.indexImage = this.list[this.index].src.length - 1;
+		}
+		this.update();
+	}
+
+	update() {
 		this.navigateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
@@ -278,13 +287,13 @@ a {
 			for (var i = 0; i < this.list[this.index].src.length; i++) {
 				var dot = nav.appendChild(document.createElement('dot'));
 				dot.innerText = i + 1;
-				dot.setAttribute('onclick', 'this.getRootNode().host.navigateImage(' + i + ')');
+				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
 			}
 		}
 		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
 
-	navigateImage(index) {
+	updateImage(index) {
 		this.indexImage = index;
 		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
 	}
