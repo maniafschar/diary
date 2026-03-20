@@ -83,6 +83,15 @@ imageContainer nav {
 	left: 0;
 	top: 0;
 	right: 0;
+	text-align: center;
+}
+imageContainer nav dot {
+	position: relative;
+	display: inline-block;
+	background: rgba(100, 150, 200, 0.2);
+	border-radius: 1em;
+	width: 2em;
+	height: 2em;
 }
 button.next {
 	right: 0.5em;
