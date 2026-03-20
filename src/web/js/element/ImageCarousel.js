@@ -277,7 +277,7 @@ a {
 	}
 
 	update() {
-		this.navigateImage(this.indexImage);
+		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
