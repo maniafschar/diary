@@ -210,11 +210,9 @@ a {
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
-		this.index = i;
-		this._root.querySelector('img').src = list[i].src;
-		this._root.querySelector('description').innerHTML = list[i].description;
+		this.index = i - 1;
 		this._root.host.style.transform = 'scale(1)';
-		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
+		this.navigate(true);
 	}
 
 	navigate(next) {
