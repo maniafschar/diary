@@ -37,10 +37,11 @@ div img {
 }
 hint {
 	background: transparent;
-	font-size: 2em;
+	font-size: 1.5em;
 	position: absolute;
-	left: 1em;
-	top: 1em;
+	left: 1.4em;
+	top: 1.4em;
+	color: rgba(255, 255, 255, 0.9);
 }
 button {
 	border-radius: 1em;
