@@ -118,7 +118,6 @@ button.location {
 			button.innerText = 'Löschen';
 			button.setAttribute('onclick', 'api.eventDelete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
 		}
-		document.dispatchEvent(new CustomEvent('location'));
 
 		element = container.appendChild(document.createElement('element'));
 		element.setAttribute('class', 'location');
