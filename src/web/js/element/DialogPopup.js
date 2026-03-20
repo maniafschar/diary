@@ -184,7 +184,7 @@ button.icon {
 	padding: 0;
 }
 
-button.icon svg {
+button.icon img {
 	width: 50%;
 	height: 50%;
 }

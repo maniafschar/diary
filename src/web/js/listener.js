@@ -58,7 +58,7 @@ class listener {
 		};
 		var addEditButton = function () {
 			if (api.user.id == events[i].contact.id)
-				return '<button class="icon" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: events[i].location, participants: events[i].contactEvents.length }) + ')"><img src="/image/edit.svg" /></button>';
+				return '<button class="icon" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: events[i].location, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
