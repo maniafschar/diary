@@ -280,7 +280,7 @@ a {
 	update() {
 		var position = 0, total = 0;
 		for (var i = 0; i < this.list.length; i++) {
-			if (this.index < i)
+			if (this.index > i)
 				position += this.list[i].src.length;
 			total += this.list[i].src.length;
 		}
