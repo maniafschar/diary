@@ -65,7 +65,7 @@ class listener {
 			if (events[i].eventImages?.length)
 				list.push({
 					src: listImages(events[i]),
-					index: i,
+					index: events[i].id,
 					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
 						(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 						(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
@@ -168,7 +168,7 @@ input-rating {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
 				for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 					var item = history.appendChild(document.createElement('item'));
-					item.setAttribute('i', i + '.' + i2);
+					item.setAttribute('i', events[i].id + '.' + i2);
 					item.style.marginLeft = margin + '%';
 					margin += 100;
 					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));

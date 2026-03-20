@@ -245,7 +245,13 @@ a {
 
 	open(list, index, style) {
 		if (index) {
-			this.index = parseInt(index.split('.')[0]);
+			var id = parseInt(index.split('.')[0]);
+			for (var i = 0; i < list.length; i++) {
+				if (id == list[i].index) {
+					this.index = i;
+					break;
+				}
+			}
 			this.indexImage = parseInt(index.split('.')[1]);
 		}
 		if (style)
