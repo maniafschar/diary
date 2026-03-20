@@ -36,12 +36,13 @@ div img {
 	min-height: 100%;
 }
 hint {
-	background: transparent;
-	font-size: 1.5em;
+	font-size: 1.3em;
 	position: absolute;
-	left: 1.4em;
-	top: 1.4em;
-	color: rgba(255, 255, 255, 0.9);
+	left: 50%;
+	bottom: 1.6em;
+	color: rgba(255, 255, 255, 0.4);
+	width: 10em;
+	margin-left: -5em;
 }
 button {
 	border-radius: 1em;
