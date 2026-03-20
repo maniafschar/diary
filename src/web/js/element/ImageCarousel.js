@@ -278,10 +278,17 @@ a {
 	}
 
 	update() {
+		var position = 0, total = 0;
+		for (var i = 0; i < this.list.length; i++) {
+			if (this.index < i)
+				position += this.list[i].src.length;
+			total += this.list[i].src.length;
+		}
+		position += this.indexImage + 1;
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
-		this._root.querySelector('hint').innerText = (this.index + 1) + '/' + this.list.length;
+		this._root.querySelector('hint').innerText = position + '/' + total;
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
 			var nav = this._root.querySelector('nav');
