@@ -280,7 +280,6 @@ a {
 	update() {
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
 			var nav = this._root.querySelector('nav');
@@ -304,5 +303,6 @@ a {
 		position += this.indexImage + 1;
 		this._root.querySelector('hint').innerText = position + '/' + total;
 		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
+		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
 }
