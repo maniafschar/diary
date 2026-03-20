@@ -207,8 +207,13 @@ class action {
 
 	static imageNavigate(next) {
 		var history = document.querySelector('history');
-		var x = history.scrollLeft, width = document.querySelector('history').offsetWidth;
-		history.scrollTo({ left: (parseInt(x / width) + (next ? 1 : -1)) * width, behavior: 'smooth' });
+		var left = history.scrollLeft, width = document.querySelector('history').offsetWidth, x;
+		if (left == 0 && !next)
+			x = width;
+		x = (parseInt(left / width) + (next ? 1 : -1)) * width;
+		if (next && left == x)
+			x = 0;
+		history.scrollTo({ left: x, behavior: 'smooth' });
 	}
 
 	static eventImageDelete(event, id) {
