@@ -60,7 +60,7 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/>';
 		};
-		for (var i = 0; i < events.length; i++) {
+		for (var i = events.length - 1; i >= 0; i--) {
 			if (events[i].eventImages?.length)
 				list.push({
 					src: listImages(events[i]),
