@@ -209,7 +209,7 @@ class action {
 		var history = document.querySelector('history');
 		var left = history.scrollLeft, width = document.querySelector('history').offsetWidth, x;
 		if (left == 0 && !next)
-			x = width;
+			x = history.scrollWidth;
 		else
 			x = (parseInt(left / width) + (next ? 1 : -1)) * width;
 		if (next && left == x)
