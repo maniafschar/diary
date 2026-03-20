@@ -65,8 +65,8 @@ class listener {
 					(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
 					(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
 					(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
-					(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/>' : '') +
-					(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
+					(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating>' : '') +
+					(e.location.note ? '<br/>' + e.location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
 					'<separator></separator>' +
 					(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
 					(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
