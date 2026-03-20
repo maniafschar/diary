@@ -69,7 +69,7 @@ class listener {
 					(e.location.note ? '<br/>' + e.location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
 					'<separator></separator>' +
 					(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-					(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
+					(e.note ? '<br/>' + e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
