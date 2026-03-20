@@ -52,7 +52,7 @@ class listener {
 			var s = '<input-rating class="event" i="' + e.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
-			return s + '<br/><br/>';
+			return s + '<br/>';
 		};
 		for (var i = 0; i < items.length; i++) {
 			var e = document.querySelector('event sortable-table').list[items[i].getAttribute('i').split('\.')[0]];
