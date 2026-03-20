@@ -212,7 +212,7 @@ class action {
 			x = history.scrollWidth;
 		else
 			x = (parseInt(left / width) + (next ? 1 : -1)) * width;
-		if (next && left == x)
+		if (next && x >= history.scrollWidth)
 			x = 0;
 		history.scrollTo({ left: x, behavior: 'smooth' });
 	}
