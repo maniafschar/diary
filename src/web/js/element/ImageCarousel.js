@@ -35,6 +35,13 @@ div img {
 	min-width: 100%;
 	min-height: 100%;
 }
+hint {
+	background: transparent;
+	font-size: 2em;
+	position: absolute;
+	left: 1em;
+	top: 1em;
+}
 button {
 	border-radius: 1em;
 	cursor: pointer;
@@ -70,10 +77,10 @@ imageContainer {
 }
 button.next {
 	right: 0.5em;
+}
+button.prev {
+	left: 0.5em;
 	}
-	button.prev {
-		left: 0.5em;
-		}
 button.close {
 	right: 0.5em;
 	top: 0.5em;
@@ -186,6 +193,7 @@ a {
 		close.onclick = () => this.close();
 		close.classList.add('close');
 		close.innerText = 'x';
+		this._root.appendChild(document.createElement('hint'));
 	}
 
 	close() {
@@ -204,6 +212,7 @@ a {
 		this._root.querySelector('img').src = list[i].src;
 		this._root.querySelector('description').innerHTML = list[i].description;
 		this._root.host.style.transform = 'scale(1)';
+		this._root.querySelector('hint').innerText = i + '/' + this.list.length;
 	}
 
 	navigate(next) {
@@ -216,5 +225,6 @@ a {
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this.setAttribute('i', this.list[this.index].index);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' })
+		this._root.querySelector('hint').innerText = i + '/' + this.list.length;
 	}
 }
