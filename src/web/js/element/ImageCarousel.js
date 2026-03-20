@@ -228,7 +228,12 @@ a {
 		if (style)
 			this._root.appendChild(document.createElement('style')).textContent = style;
 		this.list = list;
-		this.index = parseInt(index.split('\.')[0]) - 1;
+		for (var i = 0; i < list.length; i++) {
+			if (index.indexOf(list[i].index + '.') == 0) {
+				this.index = i - 1;
+				break;
+			}
+		}
 		this.indexImage = parseInt(index.split('\.')[1]);
 		this._root.host.style.transform = 'scale(1)';
 		this.navigate(true);
