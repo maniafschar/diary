@@ -73,8 +73,8 @@ class listener {
 					(events[i].location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + events[i].location.rating + '"></input-rating>' : '') +
 					(events[i].location.note ? '<br/>' + events[i].location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
 					'<separator></separator>' +
-					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-					(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
+					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
+					(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
