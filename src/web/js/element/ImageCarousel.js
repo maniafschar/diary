@@ -214,6 +214,7 @@ a {
 	position: relative;
 	display: inline-block;
 }`;
+		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('nav'));
@@ -248,14 +249,8 @@ a {
 			this.indexImage = parseInt(index.split('.')[1]);
 		}
 		if (style)
-			this._root.appendChild(document.createElement('style')).textContent = style;
+			this._root.querySelector('style.custom').textContent = style;
 		this.list = list;
-		for (var i = 0; i < list.length; i++) {
-			if (this.index == list[i].index) {
-				this.index = i - 1;
-				break;
-			}
-		}
 		this.update();
 		this._root.host.style.transform = 'scale(1)';
 	}
