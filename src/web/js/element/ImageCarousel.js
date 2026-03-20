@@ -281,6 +281,7 @@ a {
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		this._root.querySelector('nav').textContent = '';
+		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 		if (this.list[this.index].src.length > 1) {
 			var nav = this._root.querySelector('nav');
 			for (var i = 0; i < this.list[this.index].src.length; i++) {
@@ -289,7 +290,6 @@ a {
 				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
 			}
 		}
-		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
 
 	updateImage(index) {
@@ -303,6 +303,6 @@ a {
 		position += this.indexImage + 1;
 		this._root.querySelector('hint').innerText = position + '/' + total;
 		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
+		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
 }
