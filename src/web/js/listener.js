@@ -65,10 +65,12 @@ class listener {
 					(e.location.url ? '<a href="' + e.location.url + '" target="_blank">' + e.location.url + '</a><br/>' : '') +
 					(e.location.email ? '<a href="mailto:' + e.location.email + '">' + e.location.email + '</a><br/>' : '') +
 					(e.location.phone || e.location.url || e.location.email ? '<br/>' : '') +
-					(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
 					(e.location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + e.location.rating + '"></input-rating><br/><br/>' : '') +
+					(e.location.note ? e.location.note.replace(/\n/g, '<br/>') + '<br/><br/>' : '') +
+					'<separator></separator>' +
 					(e.rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(e) : '') +
-					(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) + '<separator></separator>' +
+					(e.note ? e.note.replace(/\n/g, '<br/>') : '') + listener.listFeedbacks(e) +
+					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + e.id + ')">Absenden</button></field>' +
 					'<label>Bilder zum Event</label><field style="min-height: 3.2em; max-height: initial;"><input-image style="right: 0; top: 0; border-radius: 0 0.5em;"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(e).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
