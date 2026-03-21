@@ -93,11 +93,6 @@ ratingSelection span {
 		} else {
 			var rate = parseFloat(this.getAttribute('value'));
 			var element = document.createElement('detailRating');
-			if (this.classList.contains('minimal'))
-				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate * 10 / 6 : 100) + '%;">★★★</full><br />' +
-					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;margin-left:0.5em;">★★</full></ratingSelection>';
-			else
-				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
 			this._root.appendChild(element);
 		}
 	}
@@ -116,15 +111,24 @@ ratingSelection span {
 		this.ignoreCallback = true;
 		if (this._root.host.getAttribute('type') == 'edit' && x == this._root.host.getAttribute('value') / (100 / this.stars))
 			x = 0;
-		var e = this._root.querySelectorAll('ratingSelection > full span');
-		for (var i = 0; i < e.length; i++)
-			e[i].style.display = i < x ? '' : 'none';
-		this._root.host.setAttribute('value', x * (100 / this.stars));
-		e = this._root.querySelector('ratingSelection > full');
-		if (e)
-			e.style.width = (x * (100 / this.stars)) + '%';
-		if (this.onchange)
-			this.onchange(x * (100 / this.stars));
+		if (this.getAttribute('type') == 'edit') {
+			var e = this._root.querySelectorAll('ratingSelection > full span');
+			for (var i = 0; i < e.length; i++)
+				e[i].style.display = i < x ? '' : 'none';
+			this._root.host.setAttribute('value', x * (100 / this.stars));
+			e = this._root.querySelector('ratingSelection > full');
+			if (e)
+				e.style.width = (x * (100 / this.stars)) + '%';
+			if (this.onchange)
+				this.onchange(x * (100 / this.stars));
+		} else {
+			var element = this._root.querySelector('detailRating');
+			if (this.classList.contains('minimal'))
+				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate * 10 / 6 : 100) + '%;">★★★</full><br />' +
+					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;margin-left:0.5em;">★★</full></ratingSelection>';
+			else
+				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
+		}
 		this.ignoreCallback = false;
 	}
 }
