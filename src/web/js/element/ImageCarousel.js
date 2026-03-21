@@ -103,7 +103,7 @@ data>nav {
 	right: 0;
 	text-align: center;
 	z-index: 1;
-	padding: 0.5em;
+	padding-top: 0.5em;
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -111,10 +111,10 @@ data>nav dot {
 	position: relative;
 	display: inline-block;
 	background: rgba(100, 150, 200, 0.4);
-	border-radius: 1.5em;
-	width: 3em;
-	height: 3em;
-	line-height: 3;
+	border-radius: 1em;
+	width: 2em;
+	height: 2em;
+	line-height: 2.1;
 	color: rgba(255, 255, 255, 0.5);
 	font-size: 0.8em;
 	margin: 0.5em;

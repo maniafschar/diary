@@ -115,8 +115,8 @@ input-rating {
 	right: 0;
 	top: 0;
 	border-radius: 0 0.5em;
-	background: rgba(100, 150, 200, 0.2);
-	font-size: 1.3em;
+	background: rgba(100, 150, 200, 0.2) !important;
+	font-size: 1.3em !important;
 }`);
 	}
 
