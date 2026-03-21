@@ -119,13 +119,15 @@ ratingSelection span {
 			if (this.onchange)
 				this.onchange(x * (100 / this.stars));
 		} else {
-			var rate = parseFloat(this.getAttribute('value'));
 			var element = this._root.querySelector('detailRating');
-			if (this.classList.contains('minimal'))
-				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate * 10 / 6 : 100) + '%;">★★★</full><br />' +
-					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;margin-left:0.5em;">★★</full></ratingSelection>';
-			else
-				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
+			if (element) {
+				var rate = parseFloat(this.getAttribute('value'));
+				if (this.classList.contains('minimal'))
+					element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate * 10 / 6 : 100) + '%;">★★★</full><br />' +
+						'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;margin-left:0.5em;">★★</full></ratingSelection>';
+				else
+					element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
+			}
 		}
 		this.ignoreCallback = false;
 	}
