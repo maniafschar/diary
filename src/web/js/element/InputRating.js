@@ -91,7 +91,7 @@ ratingSelection span {
 			var element = document.createElement('detailRating');
 			if (this.classList.contains('minimal'))
 				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate : 100) + '%;">★★★</full><br />' +
-					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (100 - rate) * 2.5 : 0) + '%;">★★</full></ratingSelection>';
+					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) * 2.5 : 0) + '%;">★★</full></ratingSelection>';
 			else
 				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
 			this._root.appendChild(element);
