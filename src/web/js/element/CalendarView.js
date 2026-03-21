@@ -127,7 +127,7 @@ button.icon {
 	
 .day-num span {
 	font-size: 0.7em;
-	margin-left: 0.2em;
+	margin-left: 0.4em;
 }
 
 .cal-day.other-month>div {
