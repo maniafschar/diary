@@ -223,11 +223,17 @@ filter count {
 				var compare;
 				if (typeof a[column] == 'string')
 					compare = a[column].localeCompare(b[column]);
-				else if (a[column].attributes?.value)
-					compare = parseFloat(a[column].attributes.value) - (b[column].attributes?.value ? parseFloat(b[column].attributes.value) : -1.7976931348623156e+308);
-				else if (b[column].attributes?.value)
-					compare = -1.7976931348623156e+308 - parseFloat(b[column].attributes.value);
-				else if (a[column].text)
+				else if (a[column].attributes?.value) {
+					if (isNaN(a[column].attributes?.value))
+						compare = a[column].attributes?.value.localeCompare(b[column].attributes?.value);
+					else
+						compare = parseFloat(a[column].attributes.value) - (b[column].attributes?.value ? parseFloat(b[column].attributes.value) : -1.7976931348623156e+308);
+				} else if (b[column].attributes?.value) {
+					if (isNaN(b[column].attributes?.value))
+						compare = b[column].attributes?.value.localeCompare(a[column].attributes?.value);
+					else
+						compare = -1.7976931348623156e+308 - parseFloat(b[column].attributes.value);
+				} else if (a[column].text)
 					compare = a[column].text.localeCompare(b[column].text);
 				else
 					compare = a[column] - b[column];

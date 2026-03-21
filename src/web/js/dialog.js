@@ -103,7 +103,7 @@ button.location {
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
-		document.querySelector('event sortable-table').table().querySelectorAll('td[date]').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('date')))));
+		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location?.id);
 		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
 		if (event?.id) {
