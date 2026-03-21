@@ -135,7 +135,7 @@ input-rating {
 
 			var table = document.querySelector('event sortable-table');
 			table.list = events;
-			table.style('tr.past{opacity:0.4;}tbody{max-height:18em;}');
+			table.style('tr.past td:first-child{opacity:0.5;}tbody{max-height:18em;}');
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));

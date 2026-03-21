@@ -18,10 +18,19 @@ class InputRating extends HTMLElement {
 	position: relative;
 	display: block;
 }
+
+:host(.inline) {
+	display: inline;
+}
+
 detailRating {
 	position: relative;
 	color: darkgoldenrod;
 	font-size: 1.6em;
+}
+
+:host(.inline) detailRating {
+	font-size: 1em;
 }
 
 rating,
