@@ -143,10 +143,6 @@ button.icon {
 	color: #8b4513;
 }
 
-.cal-day.today.weekend .day-num {
-	color: #ffffff;
-}
-
 .event-list {
 	display: flex;
 	flex-direction: column;

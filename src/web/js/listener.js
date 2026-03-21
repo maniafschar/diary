@@ -125,6 +125,13 @@ input-rating {
 			document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			document.querySelector('body>button[name="logoff"]').style.display = '';
+			var groupname = document.querySelector('body>[name="groupname"]');
+			groupname.innerText = api.clients[api.clientId].name;
+			groupname.style.display = '';
+			if (Object.keys(api.clients).length > 1) {
+				groupname.style.cursor = 'pointer';
+				groupname.onclick = dialog.client;
+			}
 
 			var table = document.querySelector('event sortable-table');
 			table.list = events;

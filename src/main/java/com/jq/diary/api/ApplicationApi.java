@@ -143,6 +143,11 @@ public class ApplicationApi {
 		return filter(this.contactService.listEvent(eventId));
 	}
 
+	@GetMapping("contact/client")
+	public List<Map<String, Object>> contactClients(@RequestHeader final BigInteger contactId) {
+		return this.contactService.listClient(contactId);
+	}
+
 	@PostMapping("contact/event/{contactId}/{eventId}")
 	public BigInteger contactEventPost(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @PathVariable(name = "contactId") final BigInteger contactIdEvent,

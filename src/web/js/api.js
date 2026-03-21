@@ -4,11 +4,14 @@ export { api };
 
 class api {
 	static url = '{placeholderServer}/rest/api/';
+	static clients = {};
+	static clientId;
 	static user;
 	static progressbar = false;
 
 	static logoff() {
 		api.user = null;
+		api.clients = {};
 	}
 
 	static login(email, password, refreshToken, success) {
@@ -24,10 +27,12 @@ class api {
 				if (contact) {
 					api.user = contact;
 					api.user.password = password;
-					if (refreshToken)
-						api.loginRefreshToken(() => success(contact));
-					else
-						success(contact);
+					api.contactClients(() => {
+						if (refreshToken)
+							api.loginRefreshToken(() => success(true));
+						else
+							success(true);
+					});
 				} else
 					document.querySelector('login error').innerText = 'Login fehlgeschlagen';
 			}
@@ -45,7 +50,7 @@ class api {
 					if (r) {
 						r.password = Encryption.jsEncrypt.decrypt(r.password);
 						api.user = r;
-						api.loginRefreshToken(success);
+						api.contactClients(() => api.loginRefreshToken(success));
 					} else {
 						window.localStorage.removeItem('login');
 						success();
@@ -223,6 +228,17 @@ class api {
 		api.ajax({
 			url: 'contact',
 			success: success
+		});
+	}
+
+	static contactClients(success) {
+		api.ajax({
+			url: 'contact/client',
+			success: clients => {
+				for (var i = 0; i < clients.length; i++)
+					api.clients[clients[i].id] = clients[i];
+				success();
+			}
 		});
 	}
 
