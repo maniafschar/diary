@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Base64;
 import java.util.List;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
+import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
@@ -89,5 +91,28 @@ public class EventApi extends ApplicationApi {
 			}
 		}
 		return event.getId();
+	}
+
+	@PostMapping("feedback/{eventId}")
+	public BigInteger post(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
+			@RequestBody final EventFeedback feedback) throws EmailException {
+		feedback.setContact(this.repository.one(Contact.class, contactId));
+		feedback.setEvent(this.repository.one(Event.class, eventId));
+		this.eventService.saveFeedback(feedback);
+		return feedback.getId();
+	}
+
+	@PutMapping("feedback/{eventFeedbackId}")
+	public void put(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventFeedbackId,
+			@RequestBody final EventFeedback feedback) throws EmailException {
+		final EventFeedback f = this.repository.one(EventFeedback.class, eventFeedbackId);
+		f.setNote(feedback.getNote());
+		this.eventService.saveFeedback(f);
+	}
+
+	@DeleteMapping("feedback/{eventFeedbackId}")
+	public void delete(@RequestHeader final BigInteger contactId,
+			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
+		this.eventService.delete(eventFeedbackId);
 	}
 }

@@ -160,32 +160,6 @@ class api {
 			});
 		},
 
-		postFeedback(eventId, feedback, success) {
-			api.ajax({
-				url: 'feedback/' + eventId,
-				method: 'POST',
-				body: feedback,
-				success: success
-			});
-		},
-
-		putFeedback(eventFeedbackId, feedback, success) {
-			api.ajax({
-				url: 'feedback/' + eventFeedbackId,
-				method: 'PUT',
-				body: feedback,
-				success: success
-			});
-		},
-
-		deleteFeedback(eventFeedbackId, success) {
-			api.ajax({
-				url: 'feedback/' + eventFeedbackId,
-				method: 'DELETE',
-				success: success
-			});
-		},
-
 		deleteImage(eventImageId, success) {
 			api.ajax({
 				url: 'event/image/' + eventImageId,
@@ -207,6 +181,32 @@ class api {
 			api.ajax({
 				url: 'event/rating/' + id + '/' + rating,
 				method: 'PUT',
+				success: success
+			});
+		},
+
+		postFeedback(eventId, feedback, success) {
+			api.ajax({
+				url: 'event/feedback/' + eventId,
+				method: 'POST',
+				body: feedback,
+				success: success
+			});
+		},
+
+		putFeedback(eventFeedbackId, feedback, success) {
+			api.ajax({
+				url: 'event/feedback/' + eventFeedbackId,
+				method: 'PUT',
+				body: feedback,
+				success: success
+			});
+		},
+
+		deleteFeedback(eventFeedbackId, success) {
+			api.ajax({
+				url: 'event/feedback/' + eventFeedbackId,
+				method: 'DELETE',
 				success: success
 			});
 		}
