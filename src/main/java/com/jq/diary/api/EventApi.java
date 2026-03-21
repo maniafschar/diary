@@ -94,7 +94,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@PostMapping("feedback/{eventId}")
-	public BigInteger post(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
+	public BigInteger postFeedback(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
 			@RequestBody final EventFeedback feedback) throws EmailException {
 		feedback.setContact(this.repository.one(Contact.class, contactId));
 		feedback.setEvent(this.repository.one(Event.class, eventId));
@@ -103,7 +103,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@PutMapping("feedback/{eventFeedbackId}")
-	public void put(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventFeedbackId,
+	public void putFeedback(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventFeedbackId,
 			@RequestBody final EventFeedback feedback) throws EmailException {
 		final EventFeedback f = this.repository.one(EventFeedback.class, eventFeedbackId);
 		f.setNote(feedback.getNote());
@@ -111,7 +111,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@DeleteMapping("feedback/{eventFeedbackId}")
-	public void delete(@RequestHeader final BigInteger contactId,
+	public void deleteFeedback(@RequestHeader final BigInteger contactId,
 			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
 		this.eventService.delete(eventFeedbackId);
 	}

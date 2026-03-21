@@ -249,6 +249,7 @@ a {
 	}
 
 	close() {
+		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 	}
 
@@ -288,12 +289,12 @@ a {
 			this.indexImage = this.list[this.index].src.length - 1;
 		}
 		this.update();
+		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
 	update() {
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
 	updateImage(index) {

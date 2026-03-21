@@ -490,10 +490,13 @@ value a {
 		id.setAttribute('name', 'id');
 		id.setAttribute('type', 'hidden');
 		id.value = feedback.id;
-		var button = popup.appendChild(document.createElement('button'));
+		var div = popup.appendChild(document.createElement('div'));
+		div.style.textAlign = 'center';
+		div.style.marginTop = '0.75em';
+		var button = div.appendChild(document.createElement('button'));
 		button.innerText = 'Speichern';
 		button.setAttribute('onclick', 'action.feedbackPut()');
-		var button = popup.appendChild(document.createElement('button'));
+		var button = div.appendChild(document.createElement('button'));
 		button.innerText = 'Löschen';
 		button.setAttribute('onclick', 'action.feedbackDelete()');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));

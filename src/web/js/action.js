@@ -64,14 +64,14 @@ class action {
 		if (note)
 			api.event.putFeedback(document.querySelector('dialog-popup').content().querySelector('input[name="id"]').value, { note: note }, () => {
 				document.dispatchEvent(new CustomEvent('popup'));
-				listener.updateImageCarousel();
+				document.dispatchEvent(new CustomEvent('event'));
 			});
 	}
 
 	static feedbackDelete() {
 		api.event.deleteFeedback(document.querySelector('dialog-popup').content().querySelector('input[name="id"]').value, () => {
 			document.dispatchEvent(new CustomEvent('popup'));
-			listener.updateImageCarousel();
+			document.dispatchEvent(new CustomEvent('event'));
 		});
 	}
 

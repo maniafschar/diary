@@ -75,6 +75,7 @@ public class Repository {
 		try {
 			this.em.remove(this.em.contains(entity) ? entity : this.em.merge(entity));
 			Attachment.delete(entity);
+			this.em.flush();
 		} catch (final PersistenceException ex) {
 			throw new RuntimeException(ex);
 		}

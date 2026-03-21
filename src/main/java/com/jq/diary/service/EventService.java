@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
+import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
@@ -44,6 +45,10 @@ public class EventService {
 
 	public void save(final Event event) {
 		this.repository.save(event);
+		final ContactEvent contactEvent = new ContactEvent();
+		contactEvent.setContact(event.getContact());
+		contactEvent.setEvent(event);
+		this.repository.save(contactEvent);
 	}
 
 	public void save(final EventImage eventImage) {
