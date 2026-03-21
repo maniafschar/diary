@@ -149,7 +149,7 @@ input-rating {
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var text = list[i].note ? list[i].note.split('\n')[0] : '';
 						if (list[i].rating)
-							text = '<input-rating value="' + parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1) + '"></input-rating>' + (text || '');
+							text = '<input-rating value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
 						row.push({ attributes: { date: date.getTime() }, text: ui.formatTime(date) });
 						row.push(list[i].location.name);
 						row.push({ attributes: { i: 'note_' + list[i].id }, text: text });
@@ -225,21 +225,6 @@ input-rating {
 	}
 	static init() {
 		document.addEventListener('eventParticipation', event => {
-			var td = document.querySelector('event sortable-table').table().querySelector('td[i="note_' + event.detail.eventId + '"]');
-			if (td) {
-				var note = '';
-				if (event.detail.participants.length)
-					note += event.detail.participants.length + 'T';
-				if (td.innerText?.trim()) {
-					var s = td.innerText.replace(/^\d{1,4}T/, '').trim();
-					if (s) {
-						note += (note ? ' · ' : '') + s;
-						while (note.indexOf(' · · ') > -1)
-							note = note.replace(' · · ', ' · ');
-					}
-				}
-				td.innerHTML = note || '&nbsp;';
-			}
 			if (event.detail?.type != 'read')
 				listener.updateCotacts();
 		});
