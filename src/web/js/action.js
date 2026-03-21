@@ -38,7 +38,7 @@ class action {
 			history.pushState(null, null, window.location.origin);
 			api.activateProgressbar();
 		} else
-			api.loginWithToken(success => {
+			api.authentication.getToken(success => {
 				if (success)
 					document.dispatchEvent(new CustomEvent('event'));
 				else
@@ -50,7 +50,7 @@ class action {
 	static addFeedback(eventId) {
 		var note = document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value;
 		if (note)
-			api.eventFeedbackPost(eventId, { note: note }, () => {
+			api.event.postFeedback(eventId, { note: note }, () => {
 				document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
 				document.dispatchEvent(new CustomEvent('event'));
 				var div = document.createElement('div');
@@ -59,10 +59,26 @@ class action {
 			});
 	}
 
+	static feedbackPut() {
+		var note = document.querySelector('dialog-popup').content().querySelector('textarea[name="note"]').value;
+		if (note)
+			api.event.putFeedback(document.querySelector('dialog-popup').content().querySelector('input[name="id"]').value, { note: note }, () => {
+				document.dispatchEvent(new CustomEvent('popup'));
+				listener.updateImageCarousel();
+			});
+	}
+
+	static feedbackDelete() {
+		api.event.deleteFeedback(document.querySelector('dialog-popup').content().querySelector('input[name="id"]').value, () => {
+			document.dispatchEvent(new CustomEvent('popup'));
+			listener.updateImageCarousel();
+		});
+	}
+
 	static addImage(event) {
 		var chooseFile = () => {
 			var image = document.querySelector('image-carousel').data().querySelector('input-image');
-			image.setSuccess(file => api.eventImagePost(event.id, file.type, file.data.substring(file.data.indexOf(',') + 1),
+			image.setSuccess(file => api.event.postImage(event.id, file.type, file.data.substring(file.data.indexOf(',') + 1),
 				() => {
 					document.querySelector('image-carousel').indexImage++;
 					document.dispatchEvent(new CustomEvent('event'));
@@ -74,7 +90,7 @@ class action {
 	}
 
 	static addRating(event, e) {
-		action.addWithParticipation(event, () => api.eventRatingPut(event.id, e.getAttribute('value'), () => {
+		action.addWithParticipation(event, () => api.event.putRating(event.id, e.getAttribute('value'), () => {
 			document.dispatchEvent(new CustomEvent('event'));
 			document.dispatchEvent(new CustomEvent('popup'));
 		}), 'Du kannst nur Events bewerten, an denen Du teilgenommen hast.');
@@ -96,7 +112,7 @@ class action {
 		popup.appendChild(document.createElement('br'));
 		var button = popup.appendChild(document.createElement('button'));
 		button.innerText = 'Ja';
-		button.onclick = () => api.contactEventPost(api.user.id, event.id, exec);
+		button.onclick = () => api.contact.postEvent(api.user.id, event.id, exec);
 		button = popup.appendChild(document.createElement('button'));
 		button.innerText = 'Nein';
 		button.onclick = () => document.dispatchEvent(new CustomEvent('popup'));
@@ -110,7 +126,7 @@ class action {
 		else if (!input[1].value)
 			document.querySelector('login error').innerText = 'Ein Passwort wird benötigt.';
 		else
-			api.login(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
+			api.authentication.getLogin(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
 				if (success) {
 					document.querySelector('body button.add').style.display = api.user.admin ? 'block' : 'none';
 					document.dispatchEvent(new CustomEvent('event'));
@@ -123,7 +139,7 @@ class action {
 		if (email.indexOf('@') < 1)
 			document.querySelector('login error').innerText = 'Gib bitte Deine Email ein.';
 		else
-			api.loginVerify(email, e => {
+			api.authentication.getVerify(email, e => {
 				if (e == 'ok') {
 					document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde Dir zugesendet. Klicke auf den Link in der Email, um Dein Passwort neu zu setzen.' } }));
@@ -135,15 +151,15 @@ class action {
 	static loginResetPasswordPost() {
 		var popup = document.querySelector('dialog-popup').content();
 		if (popup.querySelector('input[type="password"]').value.length > 5)
-			api.loginVerifyPost(popup.querySelector('input[type="hidden"]').value,
+			api.authentication.postVerify(popup.querySelector('input[type="hidden"]').value,
 				popup.querySelector('input[type="password"]').value, () => document.dispatchEvent(new CustomEvent('popup')));
 		else
 			popup.querySelector('error').innerText = 'Gib Bitte ein Passwort ein.';
 	}
 
 	static loginVerify(contact) {
-		api.contactPatch(contact, () => {
-			api.loginVerify(contact.email, e => {
+		api.contact.patch(contact, () => {
+			api.authentication.getVerify(contact.email, e => {
 				if (e == 'ok') {
 					document.querySelector('user sortable-table').table().querySelector('td[contact*="\\"id\\":' + contact.id + ',"]').innerText = '...';
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde gesendet. Nach dem Klick auf den Link in der Email ist der Benutzer verifiziert.' } }));
@@ -182,7 +198,7 @@ class action {
 			document.querySelector('login error.createClient').innerText = 'Akzeptiere unsere ABGs.';
 			legalCheck.style.color = 'red';
 		} else
-			api.createClient(client, () => {
+			api.authentication.postCreate(client, () => {
 				document.querySelectorAll('login [i="create"]').forEach(e => e.value = '');
 				document.querySelector('login input-checkbox[name="legal"]').setAttribute('checked', 'false');
 				document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Lieben Dank für Deine Registrierung, eine Email wurde Dir zugesendet. Bestätige diese, um in Deine neue Gruppe zu gelangen.' } }));
@@ -190,7 +206,7 @@ class action {
 	}
 
 	static logoff() {
-		api.loginDeleteToken();
+		api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event sortable-table, user sortable-table').forEach(e => e.table().querySelector('tbody').textContent = '');
 		document.querySelector('event').style.display = 'none';
@@ -221,7 +237,7 @@ class action {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		if (e.querySelector('delete')) {
 			if (event.target.nodeName == 'DELETE')
-				api.eventImageDelete(id, () => {
+				api.event.deleteImage(id, () => {
 					e.remove();
 					document.dispatchEvent(new CustomEvent('event'));
 				});
@@ -236,7 +252,7 @@ class action {
 		var date = popup.querySelector('element.event input-date').getAttribute('value');
 		var locationId = popup.querySelector('element.event input-selection').getAttribute('value');
 		if (date && locationId)
-			api.eventPost(
+			api.event.post(
 				{
 					id: popup.querySelector('element.event input[name="id"]')?.value,
 					date: date,
@@ -252,7 +268,7 @@ class action {
 
 	static contactPatch() {
 		var popup = document.querySelector('dialog-popup').content();
-		api.contactPatch(
+		api.contact.patch(
 			{
 				name: popup.querySelector('element.contact input[name="name"]').value,
 				email: popup.querySelector('element.contact input[name="email"]').value
@@ -280,7 +296,7 @@ class action {
 		};
 		if (location.name) {
 			popup.querySelector('element.location error').innerText = '';
-			api.locationPut(location,
+			api.location.put(location,
 				id => {
 					if (location.id)
 						popup.querySelector('element.location error').innerText = 'Location gespeichert.';
@@ -305,13 +321,13 @@ class action {
 		};
 		var e = popup.querySelector('value[i="' + eventId + '"] item[i="' + contactId + '"]');
 		if (e.getAttribute('contactEventId')) {
-			api.contactEventDelete(e.getAttribute('contactEventId'), () => {
+			api.contact.deleteEvent(e.getAttribute('contactEventId'), () => {
 				e.classList.remove('selected');
 				e.removeAttribute('contactEventId');
 				fireEvent('remove');
 			});
 		} else {
-			api.contactEventPost(contactId, eventId, id => {
+			api.contact.postEvent(contactId, eventId, id => {
 				e.classList.add('selected');
 				e.setAttribute('contactEventId', id);
 				fireEvent('add');

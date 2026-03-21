@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jq.diary.entity.Log;
 import com.jq.diary.service.AdminService;
 import com.jq.diary.service.AdminService.AdminData;
+import com.jq.diary.util.Utilities;
 
 @RestController
 @RequestMapping("sc")
@@ -24,22 +25,22 @@ public class AdminApi {
 	private AdminService adminService;
 
 	@GetMapping("init")
-	public AdminData init() {
+	public AdminData getInit() {
 		return this.adminService.init();
 	}
 
 	@GetMapping("log")
-	public List<Log> log(@RequestParam final String search) {
+	public List<Log> getLog(@RequestParam final String search) {
 		return this.adminService.log(search);
 	}
 
 	@GetMapping("sql")
-	public List<?> sql(@RequestParam final String search) {
-		return ApplicationApi.filter(this.adminService.sql(search));
+	public List<?> getSql(@RequestParam final String search) {
+		return Utilities.filter(this.adminService.sql(search));
 	}
 
 	@PostMapping("build/{type}")
-	public String build(@PathVariable final String type) throws IOException {
+	public String postBuild(@PathVariable final String type) throws IOException {
 		return this.adminService.build(type);
 	}
 

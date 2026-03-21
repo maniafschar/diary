@@ -30,6 +30,10 @@ public class FeedbackService {
 		return this.repository.one(EventFeedback.class, id);
 	}
 
+	public void delete(final BigInteger id) {
+		this.repository.delete(this.repository.one(EventFeedback.class, id));
+	}
+
 	public List<EventFeedback> list(final Client client) {
 		return this.repository.list(
 				"from Feedback feedback, Contact contact where feedback.contactId=contact.id and contact.clientId="

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import com.jq.diary.api.ApplicationApi;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Log;
 import com.jq.diary.repository.Repository;
@@ -82,23 +81,21 @@ public class LogFilter implements Filter {
 			log.setBody("unauthorized acccess, contact: " + req.getHeader("contactId"));
 			log.setStatus(HttpStatus.UNAUTHORIZED.value());
 		} finally {
-			if (res.getStatus() != ApplicationApi.STATUS_PROCESSING_PDF) {
-				log.setTime((int) (System.currentTimeMillis() - time));
-				if (log.getStatus() == 0)
-					log.setStatus(res.getStatus());
-				log.setCreatedAt(new Timestamp(Instant.now().toEpochMilli() - log.getTime()));
-				byte[] b = req.getContentAsByteArray();
-				if (b != null && b.length > 0)
-					log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
-				b = res.getContentAsByteArray();
-				if (b != null && b.length > 0)
-					log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
-				res.copyBodyToResponse();
-				try {
-					this.repository.save(log);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
+			log.setTime((int) (System.currentTimeMillis() - time));
+			if (log.getStatus() == 0)
+				log.setStatus(res.getStatus());
+			log.setCreatedAt(new Timestamp(Instant.now().toEpochMilli() - log.getTime()));
+			byte[] b = req.getContentAsByteArray();
+			if (b != null && b.length > 0)
+				log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
+			b = res.getContentAsByteArray();
+			if (b != null && b.length > 0)
+				log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
+			res.copyBodyToResponse();
+			try {
+				this.repository.save(log);
+			} catch (final Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

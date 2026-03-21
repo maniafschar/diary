@@ -6,7 +6,7 @@ export { listener };
 
 class listener {
 	static updateCotacts() {
-		api.contacts(contacts => {
+		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
 			var table = document.querySelector('user sortable-table');
 			table.list = contacts;
@@ -121,7 +121,7 @@ input-rating {
 	}
 
 	static updateEvents() {
-		api.events(events => {
+		api.event.getList(events => {
 			document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			document.querySelector('body>button[name="logoff"]').style.display = '';
@@ -222,8 +222,13 @@ input-rating {
 	static listFeedbacks(event) {
 		var s = '';
 		if (event.eventFeedbacks) {
+			var addEditButton = function (feedback) {
+				if (api.user.id == feedback.contact.id)
+					return '<button class="icon edit" onclick="dialog.feedback(' + JSON.stringify({ id: feedback.id, note: event.eventFeedbacks[i].note }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
+				return '';
+			}
 			for (var i = 0; i < event.eventFeedbacks.length; i++)
-				s += '<feedback><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+				s += '<feedback><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + addEditButton(event.eventFeedbacks[i]) + '</feedback>';
 		}
 		return s;
 	}
@@ -235,7 +240,7 @@ input-rating {
 		document.addEventListener('location', event => {
 			var selection = document.querySelector('dialog-popup').content().querySelector('.event input-selection');
 			if (selection)
-				api.locations(locations => {
+				api.location.getList(locations => {
 					selection.clear();
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));

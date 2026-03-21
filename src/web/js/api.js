@@ -9,269 +9,293 @@ class api {
 	static user;
 	static progressbar = false;
 
-	static logoff() {
+	static authentication = {
+		getLogin(email, password, refreshToken, success) {
+			api.user = { id: 0, password: password };
+			document.querySelector('login error').innerText = '';
+			api.ajax({
+				url: 'authentication/login?email=' + encodeURIComponent(Encryption.encPUB(email)),
+				error(response) {
+					api.user = null;
+					document.querySelector('login error').innerText = response.responseText;
+				},
+				success(contact) {
+					if (contact) {
+						api.user = contact;
+						api.user.password = password;
+						api.clientId = api.user.client.id;
+						api.contact.getClient(() => {
+							if (refreshToken)
+								api.authentication.putToken(() => success(true));
+							else
+								success(true);
+						});
+					} else
+						document.querySelector('login error').innerText = 'Login fehlgeschlagen';
+				}
+			});
+		},
+
+		getToken(success) {
+			var token = window.localStorage && window.localStorage.getItem('login');
+			if (token) {
+				api.user = { id: 0 };
+				api.ajax({
+					url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)) + '&publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
+					error: success,
+					success(r) {
+						if (r) {
+							r.password = Encryption.jsEncrypt.decrypt(r.password);
+							api.user = r;
+							api.clientId = api.user.client.id;
+							api.contact.getClient(() => api.authentication.putToken(success));
+						} else {
+							window.localStorage.removeItem('login');
+							success();
+						}
+					}
+				});
+			} else
+				success();
+		},
+
+		putToken(success) {
+			api.ajax({
+				url: 'authentication/token?publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
+				method: 'PUT',
+				error: success,
+				success: response => {
+					if (response) {
+						api.authentication.deleteToken();
+						window.localStorage.setItem('login', Encryption.jsEncrypt.decrypt(response));
+						success(true);
+					} else
+						success();
+				}
+			});
+		},
+
+		getVerify(email, success) {
+			if (!api.user)
+				api.user = { id: 0 };
+			api.ajax({
+				url: 'authentication/verify?email=' + encodeURIComponent(Encryption.encPUB(email)),
+				success: success
+			});
+		},
+
+		postVerify(token, password, success) {
+			api.user = { id: 0 };
+			var x = 0;
+			for (var i = 0; i < token.length; i++) {
+				x += token.charCodeAt(i);
+				if (x > 99999999)
+					break;
+			}
+			var s2 = '' + x;
+			s2 += token.substring(1, 11 - s2.length);
+			api.ajax({
+				url: 'authentication/verify?token=' + encodeURIComponent(Encryption.encPUB(token.substring(0, 10) + s2 + token.substring(10))) + '&password=' + encodeURIComponent(Encryption.encPUB(password)),
+				method: 'POST',
+				success: success
+			});
+		},
+
+		postCreate(client, success) {
+			api.user = { id: 0 };
+			api.ajax({
+				url: 'authentication/create',
+				method: 'POST',
+				body: client,
+				success: success
+			});
+		},
+
+		deleteToken() {
+			var token = window.localStorage && window.localStorage.getItem('login');
+			if (token)
+				api.ajax({
+					url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)),
+					method: 'DELETE'
+				});
+		}
+	}
+
+	static event = {
+		get(id, success) {
+			api.ajax({
+				url: 'event/' + id,
+				success: success
+			});
+		},
+
+		delete(id, success) {
+			api.ajax({
+				url: 'event/' + id,
+				method: 'DELETE',
+				success: success
+			});
+		},
+
+		getContact(contactId, success) {
+			api.ajax({
+				url: 'event/contact/' + contactId,
+				success: success
+			});
+		},
+
+		getList(success) {
+			api.ajax({
+				url: 'event/list',
+				success: success
+			});
+		},
+
+		post(event, success) {
+			api.ajax({
+				url: 'event',
+				method: event.id ? 'PUT' : 'POST',
+				body: event,
+				success: success
+			});
+		},
+
+		postFeedback(eventId, feedback, success) {
+			api.ajax({
+				url: 'feedback/' + eventId,
+				method: 'POST',
+				body: feedback,
+				success: success
+			});
+		},
+
+		putFeedback(eventFeedbackId, feedback, success) {
+			api.ajax({
+				url: 'feedback/' + eventFeedbackId,
+				method: 'PUT',
+				body: feedback,
+				success: success
+			});
+		},
+
+		deleteFeedback(eventFeedbackId, success) {
+			api.ajax({
+				url: 'feedback/' + eventFeedbackId,
+				method: 'DELETE',
+				success: success
+			});
+		},
+
+		deleteImage(eventImageId, success) {
+			api.ajax({
+				url: 'event/image/' + eventImageId,
+				method: 'DELETE',
+				success: success
+			});
+		},
+
+		postImage(id, type, data, success) {
+			api.ajax({
+				url: 'event/image/' + id + '/' + type,
+				method: 'POST',
+				body: { image: data },
+				success: success
+			});
+		},
+
+		putRating(id, rating, success) {
+			api.ajax({
+				url: 'event/rating/' + id + '/' + rating,
+				method: 'PUT',
+				success: success
+			});
+		}
+	}
+
+	static location = {
+		getList(success) {
+			api.ajax({
+				url: 'location/list',
+				success: success
+			});
+		},
+
+		put(location, success) {
+			api.ajax({
+				url: 'location',
+				method: 'PUT',
+				body: location,
+				success: success
+			});
+		},
+
+		getNearby(latitude, longitude, success) {
+			api.ajax({
+				url: 'location/nearby?latitude=' + latitude + '&longitude=' + longitude,
+				success: success
+			});
+		}
+	}
+
+	static contact = {
+		get(id, success) {
+			api.ajax({
+				url: 'contact/' + id,
+				success: success
+			});
+		},
+
+		getList(success) {
+			api.ajax({
+				url: 'contact/list',
+				success: success
+			});
+		},
+
+		getClient(success) {
+			api.ajax({
+				url: 'contact/client',
+				success: clients => {
+					for (var i = 0; i < clients.length; i++)
+						api.clients[clients[i].id] = clients[i];
+					success();
+				}
+			});
+		},
+
+		patch(contact, success) {
+			api.ajax({
+				url: 'contact',
+				method: 'PATCH',
+				body: contact,
+				success: success
+			});
+		},
+
+		postEvent(contactId, eventId, success) {
+			api.ajax({
+				url: 'contact/event/' + contactId + '/' + eventId,
+				method: 'POST',
+				success: success
+			});
+		},
+
+		deleteEvent(id, success) {
+			api.ajax({
+				url: 'contact/event/' + id,
+				method: 'DELETE',
+				success: success
+			});
+		}
+	}
+	static activateProgressbar() {
+		setTimeout(() => api.progressbar = true, 200);
+	}
+
+	logoff() {
 		api.user = null;
 		api.clients = {};
 		api.clientId = null;
-	}
-
-	static login(email, password, refreshToken, success) {
-		api.user = { id: 0, password: password };
-		document.querySelector('login error').innerText = '';
-		api.ajax({
-			url: 'authentication/login?email=' + encodeURIComponent(Encryption.encPUB(email)),
-			error(response) {
-				api.user = null;
-				document.querySelector('login error').innerText = response.responseText;
-			},
-			success(contact) {
-				if (contact) {
-					api.user = contact;
-					api.user.password = password;
-					api.clientId = api.user.client.id;
-					api.contactClients(() => {
-						if (refreshToken)
-							api.loginRefreshToken(() => success(true));
-						else
-							success(true);
-					});
-				} else
-					document.querySelector('login error').innerText = 'Login fehlgeschlagen';
-			}
-		});
-	}
-
-	static loginWithToken(success) {
-		var token = window.localStorage && window.localStorage.getItem('login');
-		if (token) {
-			api.user = { id: 0 };
-			api.ajax({
-				url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)) + '&publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
-				error: success,
-				success(r) {
-					if (r) {
-						r.password = Encryption.jsEncrypt.decrypt(r.password);
-						api.user = r;
-						api.clientId = api.user.client.id;
-						api.contactClients(() => api.loginRefreshToken(success));
-					} else {
-						window.localStorage.removeItem('login');
-						success();
-					}
-				}
-			});
-		} else
-			success();
-	}
-
-	static loginRefreshToken(success) {
-		api.ajax({
-			url: 'authentication/token?publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
-			method: 'PUT',
-			error: success,
-			success: response => {
-				if (response) {
-					api.loginDeleteToken();
-					window.localStorage.setItem('login', Encryption.jsEncrypt.decrypt(response));
-					success(true);
-				} else
-					success();
-			}
-		});
-	}
-
-	static loginVerify(email, success) {
-		if (!api.user)
-			api.user = { id: 0 };
-		api.ajax({
-			url: 'authentication/verify?email=' + encodeURIComponent(Encryption.encPUB(email)),
-			success: success
-		});
-	}
-
-	static loginVerifyPost(token, password, success) {
-		api.user = { id: 0 };
-		var x = 0;
-		for (var i = 0; i < token.length; i++) {
-			x += token.charCodeAt(i);
-			if (x > 99999999)
-				break;
-		}
-		var s2 = '' + x;
-		s2 += token.substring(1, 11 - s2.length);
-		api.ajax({
-			url: 'authentication/verify?token=' + encodeURIComponent(Encryption.encPUB(token.substring(0, 10) + s2 + token.substring(10))) + '&password=' + encodeURIComponent(Encryption.encPUB(password)),
-			method: 'POST',
-			success: success
-		});
-	}
-
-	static createClient(client, success) {
-		api.user = { id: 0 };
-		api.ajax({
-			url: 'authentication/create',
-			method: 'POST',
-			body: client,
-			success: success
-		});
-	}
-
-	static loginDeleteToken() {
-		var token = window.localStorage && window.localStorage.getItem('login');
-		if (token)
-			api.ajax({
-				url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)),
-				method: 'DELETE'
-			});
-	}
-
-	static event(id, success) {
-		api.ajax({
-			url: 'event/' + id,
-			success: success
-		});
-	}
-
-	static eventDelete(id, success) {
-		api.ajax({
-			url: 'event/' + id,
-			method: 'DELETE',
-			success: success
-		});
-	}
-
-	static eventsContact(contactId, success) {
-		api.ajax({
-			url: 'event/contact/' + contactId,
-			success: success
-		});
-	}
-
-	static events(success) {
-		api.ajax({
-			url: 'event',
-			success: success
-		});
-	}
-
-	static eventPost(event, success) {
-		api.ajax({
-			url: 'event',
-			method: event.id ? 'PUT' : 'POST',
-			body: event,
-			success: success
-		});
-	}
-
-	static eventFeedbackPost(eventId, feedback, success) {
-		api.ajax({
-			url: 'feedback/' + eventId,
-			method: 'POST',
-			body: feedback,
-			success: success
-		});
-	}
-
-	static eventImageDelete(eventImageId, success) {
-		api.ajax({
-			url: 'event/image/' + eventImageId,
-			method: 'DELETE',
-			success: success
-		});
-	}
-
-	static eventImagePost(id, type, data, success) {
-		api.ajax({
-			url: 'event/image/' + id + '/' + type,
-			method: 'POST',
-			body: { image: data },
-			success: success
-		});
-	}
-
-	static eventRatingPut(id, rating, success) {
-		api.ajax({
-			url: 'event/rating/' + id + '/' + rating,
-			method: 'PUT',
-			success: success
-		});
-	}
-
-	static locations(success) {
-		api.ajax({
-			url: 'location',
-			success: success
-		});
-	}
-
-	static locationPut(location, success) {
-		api.ajax({
-			url: 'location',
-			method: 'PUT',
-			body: location,
-			success: success
-		});
-	}
-
-	static nearby(latitude, longitude, success) {
-		api.ajax({
-			url: 'nearby?latitude=' + latitude + '&longitude=' + longitude,
-			success: success
-		});
-	}
-
-	static contact(id, success) {
-		api.ajax({
-			url: 'contact/' + id,
-			success: success
-		});
-	}
-
-	static contacts(success) {
-		api.ajax({
-			url: 'contact',
-			success: success
-		});
-	}
-
-	static contactClients(success) {
-		api.ajax({
-			url: 'contact/client',
-			success: clients => {
-				for (var i = 0; i < clients.length; i++)
-					api.clients[clients[i].id] = clients[i];
-				success();
-			}
-		});
-	}
-
-	static contactPatch(contact, success) {
-		api.ajax({
-			url: 'contact',
-			method: 'PATCH',
-			body: contact,
-			success: success
-		});
-	}
-
-	static contactEventPost(contactId, eventId, success) {
-		api.ajax({
-			url: 'contact/event/' + contactId + '/' + eventId,
-			method: 'POST',
-			success: success
-		});
-	}
-
-	static contactEventDelete(id, success) {
-		api.ajax({
-			url: 'contact/event/' + id,
-			method: 'DELETE',
-			success: success
-		});
-	}
-
-	static activateProgressbar() {
-		setTimeout(() => api.progressbar = true, 200);
 	}
 
 	static ajax(param) {

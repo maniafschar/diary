@@ -2,16 +2,21 @@ package com.jq.diary.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509ExtendedTrustManager;
+
+import com.jq.diary.entity.BaseEntity;
+import com.jq.diary.entity.Contact;
 
 public class Utilities {
 	public static final Pattern EMAIL = Pattern.compile("([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})",
@@ -91,5 +96,29 @@ public class Utilities {
 		if (s.indexOf(ex.getClass().getName()) < 0)
 			s = ex.getClass().getName() + ": " + s;
 		return s.replaceAll("\r", "").replaceAll("\n\n", "\n");
+	}
+
+	public static <T> T filter(final T data) {
+		if (data instanceof Contact) {
+			((Contact) data).setEmail(null);
+			((Contact) data).setLoginLink(null);
+			((Contact) data).setPassword(null);
+			((Contact) data).setPasswordReset(null);
+		} else if (data instanceof List) {
+			for (final Object element : (List<?>) data)
+				Utilities.filter(element);
+		} else if (data != null) {
+			for (final Field field : data.getClass().getDeclaredFields()) {
+				if (BaseEntity.class.equals(field.getType().getGenericSuperclass())) {
+					field.setAccessible(true);
+					try {
+						Utilities.filter(field.get(data));
+					} catch (final Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		}
+		return data;
 	}
 }

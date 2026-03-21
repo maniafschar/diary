@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 import org.springframework.http.HttpStatus;
 
-import com.jq.diary.api.ApplicationApi;
 import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Entity;
@@ -27,7 +26,7 @@ public class Log extends BaseEntity {
 		ErrorAuthentication, ErrorClient, ErrorRedirection, ErrorServer, Ok;
 
 		private static LogStatus map(final int status) {
-			return status < 300 || status == ApplicationApi.STATUS_PROCESSING_PDF ? Ok
+			return status < 300 ? Ok
 					: status == HttpStatus.UNAUTHORIZED.value() ? ErrorAuthentication
 							: status < 400 ? ErrorRedirection : status < 500 ? ErrorClient : ErrorServer;
 		}

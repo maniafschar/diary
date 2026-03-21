@@ -116,7 +116,7 @@ button.location {
 		if (event?.id && !event.participants) {
 			var button = buttonDiv.appendChild(document.createElement('button'));
 			button.innerText = 'Löschen';
-			button.setAttribute('onclick', 'api.eventDelete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
+			button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
 		}
 
 		element = container.appendChild(document.createElement('element'));
@@ -134,7 +134,7 @@ button.location {
 		locationButton.classList.add('icon');
 		locationButton.classList.add('location');
 		locationButton.onclick = () => {
-			var call = () => api.nearby(dialog.latitude, dialog.longitude, address => {
+			var call = () => api.location.getNearby(dialog.latitude, dialog.longitude, address => {
 				var popup = document.querySelector('dialog-popup').content();
 				popup.querySelector('element.location textarea[name="address"]').value = address.address;
 				popup.querySelector('element.location input[name="longitude"]').value = address.longitude;
@@ -198,7 +198,7 @@ button.location {
 			var contact = JSON.parse(popup.querySelector('input[type="hidden"]').value);
 			contact.email = popup.querySelector('input[type="email"]').value;
 			if (contact.email.indexOf('@') > 0)
-				action.loginVerify(contact);
+				action.getVerify(contact);
 			else
 				document.querySelector('dialog-popup').content().querySelector('error').innerText = 'Gib bitte die Email ein.';
 		};
@@ -265,7 +265,7 @@ value.pictures {
 	}
 
 	static event(id) {
-		api.event(id, event => {
+		api.event.get(id, event => {
 			var futureEvent = new Date(event.date.replace('+00:00', '')) > new Date();
 			var popup = document.createElement('div');
 			popup.appendChild(document.createElement('style')).textContent = `
@@ -384,7 +384,7 @@ value a {
 					var rating = value.appendChild(document.createElement('input-rating'));
 					rating.setAttribute('value', 0);
 					rating.setAttribute('type', 'edit');
-					rating.setOnchange(rating => api.eventRatingPut(id, rating, () => document.dispatchEvent(new CustomEvent('event'))));
+					rating.setOnchange(rating => api.event.putRating(id, rating, () => document.dispatchEvent(new CustomEvent('event'))));
 				}
 				if (event.ratingCount > 0) {
 					value.appendChild(document.createElement('br'));
@@ -414,7 +414,7 @@ value a {
 						if (data.indexOf('med/') != 0)
 							document.dispatchEvent(new CustomEvent('event'));
 					};
-					buttonImage.setSuccess(e => api.eventImagePost(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
+					buttonImage.setSuccess(e => api.event.postImage(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
 				}
 				for (var i = 0; i < event.eventImages?.length; i++)
 					addImage(event.eventImages[i].id, 'med/' + event.eventImages[i].image);
@@ -427,7 +427,7 @@ value a {
 				button.style.right = 0;
 				button.style.top = 0;
 			}
-			api.contacts(contacts => {
+			api.contact.getList(contacts => {
 				var pseudonyms = ui.extractPseudonyms(contacts);
 				var p = {}, participantList = [];
 				for (var i = 0; i < event.contactEvents.length; i++) {
@@ -479,6 +479,24 @@ value a {
 		button.innerText = 'Speichern';
 		button.setAttribute('onclick', action);
 		return div;
+	}
+
+	static feedback(feedback) {
+		var popup = document.createElement('div');
+		var textarea = popup.appendChild(document.createElement('textarea'));
+		textarea.value = feedback.note;
+		textarea.setAttribute('name', 'note');
+		var id = popup.appendChild(document.createElement('input'));
+		id.setAttribute('name', 'id');
+		id.setAttribute('type', 'hidden');
+		id.value = feedback.id;
+		var button = popup.appendChild(document.createElement('button'));
+		button.innerText = 'Speichern';
+		button.setAttribute('onclick', 'action.feedbackPut()');
+		var button = popup.appendChild(document.createElement('button'));
+		button.innerText = 'Löschen';
+		button.setAttribute('onclick', 'action.feedbackDelete()');
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static client() {
