@@ -103,7 +103,6 @@ data>nav {
 	right: 0;
 	text-align: center;
 	z-index: 1;
-	padding-top: 0.5em;
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -117,7 +116,7 @@ data>nav dot {
 	line-height: 2.1;
 	color: rgba(255, 255, 255, 0.5);
 	font-size: 0.8em;
-	margin: 0.5em;
+	margin: 0.75em 0.5em 0 0.5em;
 	cursor: pointer;
 }
 data>nav dot.selected {
