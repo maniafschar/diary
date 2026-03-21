@@ -135,7 +135,7 @@ input-rating {
 
 			var table = document.querySelector('event sortable-table');
 			table.list = events;
-			table.style('tr.past td:first-child{opacity:0.5;}tbody{max-height:18em;}');
+			table.style('tr.past td:first-child{opacity:0.5;}tbody{max-height:18em;}input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
@@ -149,7 +149,7 @@ input-rating {
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var text = list[i].note ? list[i].note.split('\n')[0] : '';
 						if (list[i].rating)
-							text = '<input-rating value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
+							text = '<input-rating class="inline" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
 						row.push({ attributes: { date: date.getTime() }, text: ui.formatTime(date) });
 						row.push(list[i].location.name);
 						row.push({ attributes: { i: 'note_' + list[i].id }, text: text });
