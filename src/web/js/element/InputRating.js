@@ -91,7 +91,7 @@ ratingSelection span {
 					full[i].style.display = 'none';
 			}
 		} else {
-			var rate = this.getAttribute('value');
+			var rate = parseFloat(this.getAttribute('value'));
 			var element = document.createElement('detailRating');
 			if (this.classList.contains('minimal'))
 				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate : 100) + '%;">★★★</full><br />' +
