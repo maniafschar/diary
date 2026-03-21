@@ -12,6 +12,7 @@ class api {
 	static logoff() {
 		api.user = null;
 		api.clients = {};
+		api.clientId = null;
 	}
 
 	static login(email, password, refreshToken, success) {
@@ -27,6 +28,7 @@ class api {
 				if (contact) {
 					api.user = contact;
 					api.user.password = password;
+					api.clientId = api.user.client.id;
 					api.contactClients(() => {
 						if (refreshToken)
 							api.loginRefreshToken(() => success(true));
@@ -50,6 +52,7 @@ class api {
 					if (r) {
 						r.password = Encryption.jsEncrypt.decrypt(r.password);
 						api.user = r;
+						api.clientId = api.user.client.id;
 						api.contactClients(() => api.loginRefreshToken(success));
 					} else {
 						window.localStorage.removeItem('login');
@@ -329,8 +332,8 @@ class api {
 			xhr.setRequestHeader('contactId', api.user.id);
 			xhr.setRequestHeader('salt', salt);
 			xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
-			if (api.user?.client?.id)
-				xhr.setRequestHeader('clientId', api.user.client.id);
+			if (api.clientId)
+				xhr.setRequestHeader('clientId', api.clientId);
 		}
 	}
 }
