@@ -19,7 +19,8 @@ class InputRating extends HTMLElement {
 	display: block;
 }
 
-:host(.inline) {
+:host(.inline),
+:host(.minimal) {
 	display: inline;
 }
 
@@ -27,10 +28,15 @@ detailRating {
 	position: relative;
 	color: darkgoldenrod;
 	font-size: 1.6em;
+	text-align: center;
 }
 
 :host(.inline) detailRating {
 	font-size: 1em;
+}
+
+:host(.minimal) detailRating {
+	font-size: 0.5em;
 }
 
 rating,
@@ -81,8 +87,13 @@ ratingSelection span {
 					full[i].style.display = 'none';
 			}
 		} else {
+			var rate = this.getAttribute('value');
 			var element = document.createElement('detailRating');
-			element.innerHTML = '<ratingSelection>' + '<empty>☆☆☆☆☆</empty><full style="width:{0}%;">★★★★★</full>'.replace('{0}', this.getAttribute('value')) + '</ratingSelection>';
+			if (this.classList.contains('minimal'))
+				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate : 100) + '%;">★★★</full><br />' +
+					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (100 - rate) * 2.5 : 0) + '%;">★★</full></ratingSelection>';
+			else
+				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
 			this._root.appendChild(element);
 		}
 	}
