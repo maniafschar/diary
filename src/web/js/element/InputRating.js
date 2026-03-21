@@ -90,11 +90,8 @@ ratingSelection span {
 				if ((i + 1) * (100 / this.stars) > this.getAttribute('value'))
 					full[i].style.display = 'none';
 			}
-		} else {
-			var rate = parseFloat(this.getAttribute('value'));
-			var element = document.createElement('detailRating');
-			this._root.appendChild(element);
-		}
+		} else
+			this._root.appendChild(document.createElement('detailRating'));
 	}
 	static get observedAttributes() { return ['value']; }
 
@@ -122,6 +119,7 @@ ratingSelection span {
 			if (this.onchange)
 				this.onchange(x * (100 / this.stars));
 		} else {
+			var rate = parseFloat(this.getAttribute('value'));
 			var element = this._root.querySelector('detailRating');
 			if (this.classList.contains('minimal'))
 				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate * 10 / 6 : 100) + '%;">★★★</full><br />' +
