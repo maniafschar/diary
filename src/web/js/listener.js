@@ -149,7 +149,7 @@ input-rating {
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var text = list[i].note ? list[i].note.split('\n')[0] : '';
 						if (list[i].rating)
-							text = list[i].ratingCount + 'B · ' + parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1) + 'S' + (text ? ' · ' + text : '');
+							text = '<input-rating value="' + parseFloat(list[i].rating / list[i].ratingCount / 20).toFixed(1) + '"></input-rating>' + (text || '');
 						row.push({ attributes: { date: date.getTime() }, text: ui.formatTime(date) });
 						row.push(list[i].location.name);
 						row.push({ attributes: { i: 'note_' + list[i].id }, text: text });
