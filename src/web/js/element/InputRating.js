@@ -40,7 +40,7 @@ detailRating {
 }
 		
 :host(.minimal) ratingSelection full {
-	color: black;
+	color: darkblue;
 }
 
 rating,
