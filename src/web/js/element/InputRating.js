@@ -34,9 +34,12 @@ detailRating {
 :host(.inline) detailRating {
 	font-size: 1em;
 }
-
+	
 :host(.minimal) detailRating {
 	font-size: 0.5em;
+}
+		
+:host(.minimal) ratingSelection full {
 	color: black;
 }
 
@@ -92,7 +95,7 @@ ratingSelection span {
 			var element = document.createElement('detailRating');
 			if (this.classList.contains('minimal'))
 				element.innerHTML = '<ratingSelection><empty>☆☆☆</empty><full style="width:' + (rate < 60 ? rate : 100) + '%;">★★★</full><br />' +
-					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;">★★</full></ratingSelection>';
+					'<empty>☆☆</empty><full style="width:' + (rate > 60 ? (rate - 60) / 20 : 0) + 'em;top:1em;margin-left:0.5em;">★★</full></ratingSelection>';
 			else
 				element.innerHTML = '<ratingSelection><empty>☆☆☆☆☆</empty><full style="width:' + rate + '%;">★★★★★</full></ratingSelection>';
 			this._root.appendChild(element);
