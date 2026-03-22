@@ -21,7 +21,6 @@ items {
 	position: relative;
 	display: block;
 	overflow: auto;
-	margin-top: 0.5em;
 }
 
 item {
@@ -42,6 +41,7 @@ item.selected::before {
 	top: 0.5em;
 }
 input {
+	margin-bottom: 0.5em;
 	display: none;
 	appearance: none;
 	position: relative;
@@ -92,8 +92,9 @@ input {
 		this._root.querySelector('items').textContent = '';
 	}
 	filter() {
-		var text = this.getRootNode().host.querySelector('input').value;
-		var items = this.getRootNode().host.querySelectorAll('item');
+		var root = this.getRootNode().host._root;
+		var text = root.querySelector('input').value;
+		var items = root.querySelectorAll('item');
 		for (var i = 0; i < list.length; i++)
 			items[i].style.display = items[i].innerText.indexOf(text) > -1 ? '' : 'none';
 	}
