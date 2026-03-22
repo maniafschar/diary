@@ -16,7 +16,8 @@ public class LocationService {
 	private Repository repository;
 
 	public List<Location> list(final Client client) {
-		return this.repository.list("from Location where contact.client.id=" + client.getId(), Location.class);
+		return this.repository.list("from Location where contact.client.id=" + client.getId() + " order by name",
+				Location.class);
 	}
 
 	public Location one(final BigInteger id) {
