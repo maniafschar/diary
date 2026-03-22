@@ -35,8 +35,8 @@ public class EventService {
 				Event.class);
 	}
 
-	public void delete(final BigInteger id) {
-		this.repository.delete(this.repository.one(Event.class, id));
+	public void delete(final Event event) {
+		this.repository.delete(event);
 	}
 
 	public Event one(final BigInteger id) {
@@ -58,7 +58,7 @@ public class EventService {
 		this.repository.save(eventImage);
 	}
 
-	public void delete(final EventImage eventImage) {
+	public void deleteImage(final EventImage eventImage) {
 		this.repository.delete(eventImage);
 	}
 

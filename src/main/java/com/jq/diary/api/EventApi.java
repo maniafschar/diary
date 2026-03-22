@@ -43,7 +43,7 @@ public class EventApi extends ApplicationApi {
 
 	@DeleteMapping("{id}")
 	public void delete(@PathVariable final BigInteger id) {
-		this.eventService.delete(id);
+		this.eventService.delete(this.repository.one(Event.class, id));
 	}
 
 	@GetMapping("contact/{contactId}")
@@ -77,7 +77,7 @@ public class EventApi extends ApplicationApi {
 
 	@DeleteMapping("image/{eventImageId}")
 	public void deleteImage(@PathVariable final BigInteger eventImageId) {
-		this.eventService.delete(this.repository.one(EventImage.class, eventImageId));
+		this.eventService.deleteImage(this.repository.one(EventImage.class, eventImageId));
 	}
 
 	@PutMapping
@@ -115,6 +115,6 @@ public class EventApi extends ApplicationApi {
 	@DeleteMapping("feedback/{eventFeedbackId}")
 	public void deleteFeedback(@RequestHeader final BigInteger contactId,
 			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
-		this.eventService.delete(eventFeedbackId);
+		this.eventService.deleteFeedback(eventFeedbackId);
 	}
 }
