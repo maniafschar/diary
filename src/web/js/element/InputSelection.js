@@ -59,7 +59,7 @@ input {
 	color: black;
 	user-select: text;
 }`;
-		this._root.appendChild(document.createElement('input')).onclick = this.filter;
+		this._root.appendChild(document.createElement('input')).onkeyup = this.filter;
 		this._root.appendChild(document.createElement('items'));
 	}
 	add(id, label) {
@@ -92,7 +92,9 @@ input {
 		this._root.querySelector('items').textContent = '';
 	}
 	filter() {
-		var text = this._root.querySelector('input').value;
-		console.log(text);
+		var text = this.getRootNode().host.querySelector('input').value;
+		var items = this.getRootNode().host.querySelectorAll('item');
+		for (var i = 0; i < list.length; i++)
+			items[i].style.display = items[i].innerText.indexOf(text) > -1 ? '' : 'none';
 	}
 }
