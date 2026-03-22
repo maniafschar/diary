@@ -290,7 +290,12 @@ button.icon {
 				const pill = document.createElement('div');
 				pill.className = 'event-pill'
 				if (ev.rating)
-					pill.style.background = 'rgba(' + parseInt(ev.rating / 100 * 255) + ', 255, 255, 0.6)';
+					pill.style.background = 'rgba(' + (
+						ev.rating > 80 ? '255, 223, 0' :
+							ev.rating > 60 ? '192, 192, 192' :
+								ev.rating > 40 ? '205, 127, 50' :
+									ev.rating > 20 ? '194, 30, 86' :
+										'191, 64, 191') + ', 0.6)';
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
 					e.stopPropagation();

@@ -106,8 +106,10 @@ public class EventApi extends ApplicationApi {
 	public void putFeedback(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventFeedbackId,
 			@RequestBody final EventFeedback feedback) throws EmailException {
 		final EventFeedback f = this.repository.one(EventFeedback.class, eventFeedbackId);
-		f.setNote(feedback.getNote());
-		this.eventService.saveFeedback(f);
+		if (contactId.equals(f.getContact().getId())) {
+			f.setNote(feedback.getNote());
+			this.eventService.saveFeedback(f);
+		}
 	}
 
 	@DeleteMapping("feedback/{eventFeedbackId}")
