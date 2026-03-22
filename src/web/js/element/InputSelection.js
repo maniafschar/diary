@@ -93,9 +93,9 @@ input {
 	}
 	filter() {
 		var root = this.getRootNode().host._root;
-		var text = root.querySelector('input').value;
+		var text = root.querySelector('input').value.toLowerCase();
 		var items = root.querySelectorAll('item');
 		for (var i = 0; i < items.length; i++)
-			items[i].style.display = items[i].innerText.indexOf(text) > -1 ? '' : 'none';
+			items[i].style.display = items[i].innerText.toLowerCase().indexOf(text) > -1 ? '' : 'none';
 	}
 }
