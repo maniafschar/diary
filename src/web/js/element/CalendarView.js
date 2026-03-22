@@ -291,15 +291,15 @@ button.icon {
 				pill.className = 'event-pill'
 				if (ev.rating) {
 					if (ev.rating > 80)
-						pill.style.background = 'rgba(255, 223, 0, 0.4)';
+						pill.style.background = 'rgba(255, 223, 0, 0.8)';
 					else if (ev.rating > 60)
-						pill.style.background = 'rgba(192, 192, 192, 0.4)';
+						pill.style.background = 'rgba(192, 192, 192, 0.6)';
 					else if (ev.rating > 40)
-						pill.style.background = 'rgba(205, 127, 50, 0.4)'
+						pill.style.background = 'rgba(235, 147, 80, 50, 0.4)'
 					else if (ev.rating > 20)
-						pill.style.background = 'rgba(205, 127, 50, 0.25)'
+						pill.style.background = 'rgba(235, 147, 80, 0.25)'
 					else
-						pill.style.background = 'rgba(205, 127, 50, 0.1)'
+						pill.style.background = 'rgba(235, 147, 80, 0.1)'
 				}
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
