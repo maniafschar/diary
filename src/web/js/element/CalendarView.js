@@ -289,13 +289,18 @@ button.icon {
 			dayEvents.forEach(ev => {
 				const pill = document.createElement('div');
 				pill.className = 'event-pill'
-				if (ev.rating)
-					pill.style.background = 'rgba(' + (
-						ev.rating > 80 ? '255, 223, 0' :
-							ev.rating > 60 ? '192, 192, 192' :
-								ev.rating > 40 ? '205, 127, 50' :
-									ev.rating > 20 ? '194, 30, 86' :
-										'191, 64, 191') + ', 0.1)';
+				if (ev.rating) {
+					if (ev.rating > 80)
+						pill.style.background = 'rgba(255, 223, 0, 0.4)';
+					else if (ev.rating > 60)
+						pill.style.background = 'rgba(192, 192, 192, 0.4)';
+					else if (ev.rating > 40)
+						pill.style.background = 'rgba(205, 127, 50, 0.4)'
+					else if (ev.rating > 20)
+						pill.style.background = 'rgba(205, 127, 50, 0.25)'
+					else
+						pill.style.background = 'rgba(205, 127, 50, 0.1)'
+				}
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
 					e.stopPropagation();
