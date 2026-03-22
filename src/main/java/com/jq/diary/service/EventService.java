@@ -44,11 +44,14 @@ public class EventService {
 	}
 
 	public void save(final Event event) {
+		final BigInteger id = event.getId();
 		this.repository.save(event);
-		final ContactEvent contactEvent = new ContactEvent();
-		contactEvent.setContact(event.getContact());
-		contactEvent.setEvent(event);
-		this.repository.save(contactEvent);
+		if (id == null) {
+			final ContactEvent contactEvent = new ContactEvent();
+			contactEvent.setContact(event.getContact());
+			contactEvent.setEvent(event);
+			this.repository.save(contactEvent);
+		}
 	}
 
 	public void save(final EventImage eventImage) {
