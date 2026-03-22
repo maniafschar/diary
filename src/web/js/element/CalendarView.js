@@ -312,7 +312,7 @@ button.icon {
 			});
 			cell.appendChild(list);
 		}
-		cell.addEventListener('click', () => this.open({ day: d, month: m, year: y }));
+		cell.addEventListener('click', () => this.open({ day: d, month: m + 1, year: y }));
 		return cell;
 	}
 
