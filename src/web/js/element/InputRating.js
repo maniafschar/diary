@@ -17,6 +17,7 @@ class InputRating extends HTMLElement {
 	max-width: 100%;
 	position: relative;
 	display: block;
+	overflow: hidden;
 }
 
 :host(.inline),

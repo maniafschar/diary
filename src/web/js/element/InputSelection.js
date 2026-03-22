@@ -10,6 +10,8 @@ class InputSelection extends HTMLElement {
 :host(*) {
 	display: block;
 	position: relative;
+	overflow: auto;
+	max-height: 14em;
 }
 
 item {
@@ -28,10 +30,30 @@ item.selected::before {
 	position: absolute;
 	left: 0.1em;
 	top: 0.5em;
+}
+input {
+	display: none;
+	appearance: none;
+	position: relative;
+	font-size: 1em;
+	font-weight: normal;
+	outline: none !important;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	height: 2em;
+	padding: 0em 0.75em;
+	border-radius: 0.5em;
+	background: rgba(255, 255, 255, 0.85);
+	vertical-align: top;
+	border: none;
+	width: 100%;
+	color: black;
+	user-select: text;
 }`;
+		this._root.appendChild(document.createElement('input')).onclick = this.filter;
+		this._root.appendChild(document.createElement('items'));
 	}
 	add(id, label) {
-		var item = this._root.appendChild(document.createElement('item'));
+		var item = this._root.querySelector('items').appendChild(document.createElement('item'));
 		item.innerText = label;
 		item.setAttribute('i', id);
 		item.setAttribute('onclick', 'this.getRootNode().host.onclick(event)');
@@ -39,6 +61,7 @@ item.selected::before {
 			item.classList.add('selected');
 			this.setAttribute('value', id);
 		}
+		this._root.querySelector('input').style.display = this._root.querySelectorAll('item').length > 3 ? 'block' : '';
 	}
 	onclick(event) {
 		var e = event.target;
@@ -56,6 +79,10 @@ item.selected::before {
 		this.dispatchEvent(new CustomEvent('changed'));
 	}
 	clear() {
-		this._root.querySelectorAll('item').forEach(e => e.remove());
+		this._root.querySelector('items').textContent = '';
+	}
+	filter() {
+		var text = this._root.querySelector('input').value;
+		console.log(text);
 	}
 }
