@@ -10,8 +10,18 @@ class InputSelection extends HTMLElement {
 :host(*) {
 	display: block;
 	position: relative;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
+items {
+	max-height: 12em;
+	position: relative;
+	display: block;
 	overflow: auto;
-	max-height: 14em;
+	margin-top: 0.5em;
 }
 
 item {
@@ -61,7 +71,7 @@ input {
 			item.classList.add('selected');
 			this.setAttribute('value', id);
 		}
-		this._root.querySelector('input').style.display = this._root.querySelectorAll('item').length > 3 ? 'block' : '';
+		this._root.querySelector('input').style.display = this._root.querySelectorAll('item').length > 10 ? 'block' : '';
 	}
 	onclick(event) {
 		var e = event.target;
