@@ -294,7 +294,7 @@ button.icon {
 					else if (ev.rating > 60)
 						pill.style.background = 'rgba(192, 192, 192, 0.6)';
 					else if (ev.rating > 40)
-						pill.style.background = 'rgba(235, 147, 80, 50, 0.4)'
+						pill.style.background = 'rgba(235, 147, 80, 0.4)'
 					else if (ev.rating > 20)
 						pill.style.background = 'rgba(235, 147, 80, 0.25)'
 					else
