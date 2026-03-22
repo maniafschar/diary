@@ -203,6 +203,11 @@ input-rating {
 				}
 			}
 			calendar.render();
+			if (events.length) {
+				var pastEvents = document.querySelector('sortable-table')._root.querySelectorAll('tr.past').length;
+				document.querySelector('div.title count').innerText = (pastEvents ? pastEvents + ' vergangen' : '') + (events.length ? (pastEvents ? ', ' : '') + (events.length - pastEvents) + ' zukünftig' : '');
+			} else
+				document.querySelector('div.title count').innerText = '';
 			if (document.querySelector('element.history item'))
 				document.querySelector('element.history').style.display = '';
 			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
