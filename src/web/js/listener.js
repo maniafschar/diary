@@ -205,7 +205,7 @@ input-rating {
 			calendar.render();
 			if (events.length) {
 				var pastEvents = document.querySelector('sortable-table')._root.querySelectorAll('tr.past').length;
-				document.querySelector('div.title count').innerText = (pastEvents ? pastEvents + ' vergangen' : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) + ' zukünftig' : '');
+				document.querySelector('div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
 			} else
 				document.querySelector('div.title count').innerText = '';
 			if (document.querySelector('element.history item'))
