@@ -98,9 +98,8 @@ imageContainer {
 }
 data>nav {
 	position: absolute;
-	left: 0;
+	left: 50%;
 	top: 0;
-	right: 0;
 	text-align: center;
 	z-index: 1;
 	white-space: nowrap;
@@ -338,6 +337,8 @@ a {
 				if (i == this.indexImage)
 					dot.classList.add('selected');
 			}
+			nav.style.width = (3 * this.list[this.index].src.length) + 'em';
+			nav.style.marginLeft = (1.5 * this.list[this.index].src.length) + 'em';
 		}
 		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
