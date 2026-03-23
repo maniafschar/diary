@@ -338,7 +338,7 @@ a {
 					dot.classList.add('selected');
 			}
 			nav.style.width = (3 * this.list[this.index].src.length) + 'em';
-			nav.style.marginLeft = (1.5 * this.list[this.index].src.length) + 'em';
+			nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 		}
 		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 	}
