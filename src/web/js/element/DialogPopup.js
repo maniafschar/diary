@@ -91,7 +91,6 @@ label {
 value {
 	position: relative;
 	min-width: 7em;
-	max-height: 20em;
 	max-width: 100%;
 	margin-bottom: 1em;
 	line-height: 1.5;

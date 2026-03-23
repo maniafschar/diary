@@ -223,7 +223,6 @@ hint {
 value.pictures {
 	width: 100%;
 	min-height: 3.2em;
-	max-height: initial;
 }`;
 		if (api.user.admin || contact.id == api.user.id) {
 			popup.style.minWidth = '20em';
@@ -293,7 +292,6 @@ value item.selected::after {
 value.pictures {
 	width: 100%;
 	min-height: 3.2em;
-	max-height: initial;
 }
 
 value.pictures div {
