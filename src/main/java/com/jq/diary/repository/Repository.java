@@ -186,6 +186,10 @@ public class Repository {
 			return (((int) (id / MAX_PER_DIRECTORY) + 1) * MAX_PER_DIRECTORY) + "/" + id;
 		}
 
+		public static final String fullPath(final String id) {
+			return PATH + (id.contains(".") ? PUBLIC : "") + id;
+		}
+
 		private static synchronized String save(final boolean publicDir, final String value, final String old)
 				throws IOException {
 			if (value == null) {
@@ -212,7 +216,10 @@ public class Repository {
 						}
 					}
 					// new image, we need a new id because of browser caching
-					id = id2dir(nextId(PATH + PUBLIC)) + '.' + s[0].toLowerCase();
+					if (s[0].contains("."))
+						id = s[0];
+					else
+						id = id2dir(nextId(PATH + PUBLIC)) + '.' + s[0].toLowerCase();
 					final Path path = Paths.get(PATH + PUBLIC + id);
 					if (!Files.exists(path.getParent()))
 						Files.createDirectory(path.getParent());

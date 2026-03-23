@@ -184,7 +184,10 @@ input-rating {
 					margin += 100;
 					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
 					var img = item.appendChild(document.createElement('img'));
-					img.setAttribute('src', 'med/' + events[i].eventImages[i2].image);
+					var path = events[i].eventImages[i2].image;
+					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0)
+						path = path.substring(0, path.lastIndexOf('.') + 1) + 'png'
+					img.setAttribute('src', 'med/' + path);
 					img.onclick = click;
 					var text = item.appendChild(document.createElement('text'));
 					text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));

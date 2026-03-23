@@ -228,7 +228,11 @@ a {
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('nav'));
-		data.appendChild(document.createElement('imageContainer')).appendChild(document.createElement('img'));
+		var imageContainer = data.appendChild(document.createElement('imageContainer'));
+		imageContainer.appendChild(document.createElement('img'));
+		var video = imageContainer.appendChild(document.createElement('video'));
+		video.setAttribute('autoplay', 'true');
+		video.appendChild(document.createElement('source'));
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -307,7 +311,23 @@ a {
 		}
 		position += this.indexImage + 1;
 		this._root.querySelector('hint').innerText = position + '/' + total;
-		this._root.querySelector('img').src = '/med/' + this.list[this.index].src[this.indexImage];
+		var img = this._root.querySelector('img');
+		var video = this._root.querySelector('video');
+		var src = this.list[this.index].src[this.indexImage];
+		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+			var image = document.querySelector('img[src="/med/' + src.substring(0, src.lastIndexOf('.')) + '.png"]');
+			video.setAttribute('width', image ? document.clientWidth : '');
+			video.setAttribute('height', image ? image.naturalHeight * document.clientWidth / image.naturalWidth : '');
+			img.src = '';
+			img.style.display = 'none';
+			video.querySelector('source').src = '/med/' + src;
+			video.style.display = '';
+		} else {
+			img.src = '/med/' + src;
+			img.style.display = '';
+			video.querySelector('source').src = '';
+			video.style.display = 'none';
+		}
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
 			var nav = this._root.querySelector('nav');

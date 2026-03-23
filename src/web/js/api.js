@@ -337,19 +337,6 @@ class api {
 			}
 		};
 		xhr.open(param.method, api.url + param.url, true);
-		api.addCredentials(xhr);
-		if (typeof param.body == 'string')
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		else if (param.body && !(param.body instanceof FormData)) {
-			xhr.setRequestHeader('Content-Type', 'application/json');
-			param.body = JSON.stringify(param.body);
-		}
-		if (!param.noProgressBar && api.progressbar)
-			setTimeout(function () { if (xhr.readyState != 4) document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })) }, 100);
-		xhr.send(param.body);
-	}
-
-	static addCredentials(xhr) {
 		if (api.user?.id || api.user?.id == 0) {
 			var d = new Date();
 			var salt = ('' + (d.getTime() + d.getTimezoneOffset() * 60 * 1000) + Math.random()).replace(/[01]\./, '.');
@@ -359,6 +346,15 @@ class api {
 			if (api.clientId)
 				xhr.setRequestHeader('clientId', api.clientId);
 		}
+		if (typeof param.body == 'string')
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		else if (param.body && !(param.body instanceof FormData)) {
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			param.body = JSON.stringify(param.body);
+		}
+		if (!param.noProgressBar && api.progressbar)
+			setTimeout(function () { if (xhr.readyState != 4) document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })) }, 100);
+		xhr.send(param.body);
 	}
 }
 

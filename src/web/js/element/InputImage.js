@@ -33,7 +33,7 @@ input {
 		var element = document.createElement('input');
 		element.setAttribute('type', 'file');
 		element.setAttribute('onchange', 'this.getRootNode().host.load(this)');
-		element.setAttribute('accept', '.gif, .png, .jpg');
+		element.setAttribute('accept', '.gif, .png, .jpg, .mov, .mp4');
 		this._root.appendChild(element);
 		this._root.appendChild(document.createTextNode('+'));
 	}
@@ -58,28 +58,39 @@ input {
 			var reader = new FileReader();
 			var t = this;
 			reader.onload = function (r) {
-				var image = new Image();
-				image.onload = function () {
-					var scaled = t.scale(image);
-					scaled.size = t.dataURItoBlob(scaled.data).size;
+				if (file.type?.indexOf('video') == 0)
 					t.success({
 						original: {
-							size: file.size,
-							width: image.naturalWidth,
-							height: image.naturalHeight
-						},
-						scaled: {
-							size: scaled.size,
-							width: scaled.width,
-							height: scaled.height
+							size: file.size
 						},
 						name: file.name,
-						type: 'jpg',
-						data: scaled.data,
-						sizeRatio: (100 - scaled.size / file.size * 100).toFixed(0)
+						type: file.type?.split('/')[1],
+						data: r.target.result
 					});
-				};
-				image.src = r.target.result;
+				else {
+					var image = new Image();
+					image.onload = function () {
+						var scaled = t.scale(image);
+						scaled.size = t.dataURItoBlob(scaled.data).size;
+						t.success({
+							original: {
+								size: file.size,
+								width: image.naturalWidth,
+								height: image.naturalHeight
+							},
+							scaled: {
+								size: scaled.size,
+								width: scaled.width,
+								height: scaled.height
+							},
+							name: file.name,
+							type: 'jpg',
+							data: scaled.data,
+							sizeRatio: (100 - scaled.size / file.size * 100).toFixed(0)
+						});
+					};
+					image.src = r.target.result;
+				}
 			};
 			reader.readAsDataURL(file);
 		}
