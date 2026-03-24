@@ -124,7 +124,7 @@ body>container>element.imprint {
 }
 
 body>container>element.history button {
-	bottom: 0;
+	top: 0;
 	margin: 0.5em;
 }
 
@@ -387,9 +387,9 @@ history item img {
 
 history item text {
 	position: absolute;
-	top: 0;
+	bottom: 0;
 	text-align: left;
-	border-radius: 0 0 1em 0;
+	border-radius: 0 1em 0 0;
 	background: rgba(100, 150, 200, 0.6);
 	left: 0;
 	color: white;
