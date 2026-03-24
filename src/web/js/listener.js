@@ -188,6 +188,7 @@ input-rating {
 					var img = item.appendChild(document.createElement('img'));
 					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
 						img = item.appendChild(document.createElement('video'));
+						img.autoplay = true;
 						img.appendChild(document.createElement('source')).src = '/med/' + path;
 					} else {
 						img = item.appendChild(document.createElement('img'));
