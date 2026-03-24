@@ -8,13 +8,13 @@ class api {
 	static url = '{placeholderServer}/rest/sc/';
 
 	static init() {
-		if (document.querySelector('element.login input').value) {
-			window.localStorage.setItem('credentials', document.querySelector('element.login input').value);
-			document.querySelector('element.login').style.display = 'none';
-			document.querySelector('element.login input').value = '';
+		if (document.querySelector('login input').value) {
+			window.localStorage.setItem('credentials', document.querySelector('login input').value);
+			document.querySelector('login').style.display = 'none';
+			document.querySelector('login input').value = '';
 		}
 		if (!window.localStorage.getItem('credentials')) {
-			document.querySelector('element.login').style.display = 'block';
+			document.querySelector('login').style.display = 'block';
 			return;
 		}
 		api.ajax({
