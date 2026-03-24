@@ -189,7 +189,10 @@ input-rating {
 					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
 						img = item.appendChild(document.createElement('video'));
 						img.autoplay = true;
-						img.appendChild(document.createElement('source')).src = '/med/' + path;
+						img.setAttribute('playsinline', true);
+						var source = img.appendChild(document.createElement('source'));
+						source.src = '/med/' + path;
+						source.type = 'video/mp4';
 					} else {
 						img = item.appendChild(document.createElement('img'));
 						img.src = '/med/' + path;
