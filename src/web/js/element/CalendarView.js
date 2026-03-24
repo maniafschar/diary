@@ -185,7 +185,9 @@ button.icon {
 		};
 		button.innerText = '>';
 		button.style.right = 0;
-		header.appendChild(document.createElement('div')).classList.add('cal-title').onclick = () => {
+		var title = header.appendChild(document.createElement('div'));
+		title.classList.add('cal-title');
+		title.onclick = () => {
 			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 			this.render();
 		};
