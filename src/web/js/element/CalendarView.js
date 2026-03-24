@@ -65,6 +65,8 @@ button {
 }
 	
 button.icon {
+	position: absolute;
+	margin-top: -0.25em;
 	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
@@ -181,6 +183,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '<';
+		button.style.left = '0.5em';
 		button = navigation.appendChild(document.createElement('button'));
 		button.onclick = () => {
 			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
@@ -198,6 +201,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
+		button.style.right = '0.5em';
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
