@@ -156,7 +156,7 @@ button.icon {
 
 .event-pill:last-child {
 	border-bottom: none;
-	}`;
+}`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
 
@@ -175,7 +175,7 @@ button.icon {
 		};
 		button.innerText = '<';
 		button.style.left = '-0.5em';
-		button.style.borderRadius = '0 0 1em 0';
+		button.style.borderRadius = '0 0 0.5em 0';
 		button = header.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
@@ -188,7 +188,7 @@ button.icon {
 		};
 		button.innerText = '>';
 		button.style.right = '-0.5em';
-		button.style.borderRadius = '0 0 0 1em';
+		button.style.borderRadius = '0 0 0 0.5em';
 		var title = header.appendChild(document.createElement('div'));
 		title.classList.add('cal-title');
 		title.onclick = () => {
@@ -206,6 +206,7 @@ button.icon {
 		this._root.appendChild(wrapper);
 		this.render();
 	}
+
 	setOpen(open) {
 		this.open = open;
 	}

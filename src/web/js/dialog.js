@@ -32,7 +32,7 @@ tabBody {
 }
 
 tabBody>container {
-	width: 300%;
+	width: 200%;
 	max-height: 70vh;
 	transition: all ease-out .4s;
 	overflow: hidden;
@@ -42,7 +42,7 @@ tabBody>container {
 
 tabBody element {
 	position: relative;
-	width: 33.34%;
+	width: 50%;
 	min-height: 10em;
 	box-sizing: border-box;
 	overflow-y: auto;
