@@ -86,10 +86,6 @@ th {
 	background: rgba(100, 150, 200, 0.2);
 }
 
-tbody tr:last-child {
-	margin-bottom: 0.5em;
-}
-
 tbody tr:hover {
 	background-color: rgba(255, 170, 120, 0.1);
 }
