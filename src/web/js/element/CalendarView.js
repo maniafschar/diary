@@ -55,6 +55,7 @@ button {
 	height: 2em;
 	color: white;
 	line-height: 1;
+	z-index: 2;
 }
 	
 button.icon {
