@@ -1,5 +1,7 @@
 package com.jq.diary.service;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,6 +13,8 @@ import javax.imageio.ImageIO;
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.util.Strings;
 import org.jcodec.api.FrameGrab;
+import org.jcodec.common.DemuxerTrackMeta.Orientation;
+import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +32,7 @@ import com.jq.diary.repository.Repository.Attachment;
 
 @Service
 public class EventService {
-	private static String THUMBNAIL_TYPE = "png";
+	private static String THUMBNAIL_TYPE = "jpg";
 	@Autowired
 	private Repository repository;
 
@@ -116,9 +120,26 @@ public class EventService {
 	private byte[] createVideoThumbnail(final String uri) {
 		try {
 			final Picture picture = FrameGrab.getFrameFromFile(new File(uri), 0);
-			final BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
+			final Orientation orientation = FrameGrab
+					.createFrameGrab(NIOUtils.readableChannel(new File(uri))).getVideoTrack().getMeta()
+					.getOrientation();
+			BufferedImage img = AWTUtil.toBufferedImage(picture);
+			if (orientation != Orientation.D_0) {
+				final BufferedImage rotated = new BufferedImage(img.getHeight(), img.getWidth(), img.getType());
+				final Graphics2D g2d = rotated.createGraphics();
+				final AffineTransform at = new AffineTransform();
+				at.translate((img.getHeight() - img.getWidth()) / 2, (img.getWidth() - img.getHeight()) / 2);
+				at.rotate(
+						Math.toRadians(orientation == Orientation.D_90 ? 90.0
+								: orientation == Orientation.D_180 ? 180.0 : 270.0),
+						img.getWidth() / 2, img.getHeight() / 2);
+				g2d.setTransform(at);
+				g2d.drawImage(img, 0, 0, null);
+				g2d.dispose();
+				img = rotated;
+			}
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, THUMBNAIL_TYPE, out);
+			ImageIO.write(img, THUMBNAIL_TYPE, out);
 			return out.toByteArray();
 		} catch (final Exception ex) {
 			throw new RuntimeException(ex);

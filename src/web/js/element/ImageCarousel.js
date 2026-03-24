@@ -315,7 +315,7 @@ a {
 		var video = this._root.querySelector('video');
 		var src = this.list[this.index].src[this.indexImage];
 		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-			var image = document.querySelector('img[src="/med/' + src.substring(0, src.lastIndexOf('.')) + '.png"]');
+			var image = document.querySelector('img[src="/med/' + src.substring(0, src.lastIndexOf('.')) + '.jpg"]');
 			video.setAttribute('width', image ? document.body.clientWidth : '');
 			video.setAttribute('height', image ? image.naturalHeight * document.body.clientWidth / image.naturalWidth : '');
 			img.src = '';
