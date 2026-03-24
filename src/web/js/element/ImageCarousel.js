@@ -322,9 +322,11 @@ a {
 			video.setAttribute('height', image ? image.naturalHeight * document.body.clientWidth / image.naturalWidth : '');
 			img.src = '';
 			img.style.display = 'none';
-			video.querySelector('source').src = '/med/' + src;
 			video.style.display = '';
-			video.play();
+			setTimeout(() => {
+				video.querySelector('source').src = '/med/' + src;
+				video.play();
+			}, 100);
 		} else {
 			img.src = '/med/' + src;
 			img.style.display = '';
