@@ -98,7 +98,6 @@ body>container>element.login {
 
 body>container>element.event {
 	background: rgba(255, 20, 10, 0.1);
-	border-top: solid 0.5em transparent;
 	display: none;
 }
 
@@ -115,7 +114,6 @@ body>container>element.history {
 body>container>element.user {
 	background: rgba(20, 100, 250, 0.1);
 	display: none;
-	border-top: solid 0.5em transparent;
 }
 
 body>container>element.imprint {
@@ -125,7 +123,6 @@ body>container>element.imprint {
 
 body>container>element.history button {
 	top: 0;
-	margin: 0.5em;
 }
 
 body>button {
@@ -180,8 +177,9 @@ button.icon svg {
 }
 
 button.add {
-	right: 0.5em;
+	right: 0em;
 	top: 0;
+	border-radius: 0 0 0 1em;
 }
 
 button.participate {
