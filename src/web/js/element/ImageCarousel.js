@@ -232,7 +232,7 @@ a {
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.controls = true;
 		video.autoplay = false;
-		video.playsinline = true;
+		video.setAttribute('playsinline', true);
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
