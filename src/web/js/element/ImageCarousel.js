@@ -230,11 +230,11 @@ a {
 		var imageContainer = data.appendChild(document.createElement('imageContainer'));
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
-		video.setAttribute('controls', 'true');
-		video.setAttribute('autoplay', 'true');
-		video.setAttribute('playsinline', 'true');
-		video.setAttribute('preload', 'auto');
-		video.appendChild(document.createElement('source')).setAttribute('type', 'video/mp4');
+		video.controls = true;
+		video.autoplay = true;
+		video.playsinline = true;
+		video.preload = 'auto';
+		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -322,12 +322,12 @@ a {
 			video.setAttribute('height', image ? image.naturalHeight * document.body.clientWidth / image.naturalWidth : '');
 			img.src = '';
 			img.style.display = 'none';
-			video.querySelector('source').setAttribute('src', '/med/' + src);
+			video.querySelector('source').src = '/med/' + src;
 			video.style.display = '';
 		} else {
 			img.src = '/med/' + src;
 			img.style.display = '';
-			video.querySelector('source').setAttribute('src', '');
+			video.querySelector('source').src = '';
 			video.style.display = 'none';
 		}
 		this._root.querySelector('nav').textContent = '';
