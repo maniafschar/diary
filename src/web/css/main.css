@@ -377,7 +377,8 @@ history item {
 	align-items: anchor-center;
 }
 
-history item img {
+history item img,
+history item video {
 	border-radius: 1em;
 	max-width: 100%;
 	max-height: 16em;
