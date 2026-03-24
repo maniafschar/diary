@@ -183,7 +183,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '<';
-		button.style.left = '0.5em';
+		button.style.left = 0;
 		button = navigation.appendChild(document.createElement('button'));
 		button.onclick = () => {
 			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
@@ -201,7 +201,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
-		button.style.right = '0.5em';
+		button.style.right = 0;
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
