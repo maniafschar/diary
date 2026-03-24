@@ -164,11 +164,13 @@ button.icon {
 
 .event-pill:last-child {
 	border-bottom: none;
-}`;
+	}`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
 
 		//Header
+		var header = wrapper.appendChild(document.createElement('div'));
+		header.classList.add('cal-header');
 		var navigation = header.appendChild(document.createElement('div'));
 		navigation.classList.add('nav-group');
 		var button = navigation.appendChild(document.createElement('button'));
@@ -201,8 +203,6 @@ button.icon {
 		};
 		button.innerText = '>';
 		button.style.right = 0;
-		var header = wrapper.appendChild(document.createElement('div'));
-		header.classList.add('cal-header');
 		header.appendChild(document.createElement('div')).classList.add('cal-title');
 
 		//body
