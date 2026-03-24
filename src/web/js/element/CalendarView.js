@@ -40,6 +40,7 @@ class CalendarView extends HTMLElement {
 	position: relative;
 	display: inline-block;
 	padding-top: 1em;
+	cursor: pointer;
 	
 }
 
