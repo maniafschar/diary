@@ -90,9 +90,6 @@ button.location {
 		tab = tabHeader.appendChild(document.createElement('tab'));
 		tab.setAttribute('onclick', 'ui.showTab(event)');
 		tab.innerText = 'Location';
-		tab = tabHeader.appendChild(document.createElement('tab'));
-		tab.setAttribute('onclick', 'ui.showTab(event)');
-		tab.innerText = 'User';
 		var container = popup.appendChild(document.createElement('tabBody'))
 			.appendChild(document.createElement('container'));
 
@@ -166,14 +163,17 @@ button.location {
 		element.appendChild(document.createElement('error'));
 		dialog.createButton(element, 'action.locationPut()');
 
-		element = container.appendChild(document.createElement('element'));
-		element.setAttribute('class', 'contact');
-		dialog.createField(element, 'Name', 'name');
-		dialog.createField(element, 'Email', 'email');
-		dialog.createButton(element, 'action.contactPatch()');
-
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location', { detail: { type: 'read' } }));
+	}
+
+
+	static addUser() {
+		var popup = document.createElement('div');
+		dialog.createField(popup, 'Name', 'name');
+		dialog.createField(popup, 'Email', 'email');
+		dialog.createButton(popup, 'action.contactPatch()');
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static verifyEmail(event) {
@@ -226,6 +226,10 @@ value.pictures {
 }`;
 		if (api.user.admin || contact.id == api.user.id) {
 			popup.style.minWidth = '20em';
+			var id = popup.appendChild(document.createElement('input'));
+			id.setAttribute('type', 'hidden');
+			id.setAttribute('name', 'id');
+			id.value = contact.id;
 			dialog.createField(popup, 'Name', 'name', null, contact.name);
 			dialog.createField(popup, 'Email', 'email');
 			dialog.createField(popup, null, 'notification', 'input-checkbox', contact.notification).setAttribute('label', 'Benachrichtigung');

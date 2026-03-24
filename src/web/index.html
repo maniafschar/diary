@@ -54,70 +54,73 @@
 			<img src="/image/start.png" />
 			<img src="/image/text.png" class="text" />
 		</element>
-		<element style="background: rgba(255, 20, 10, 0.1);">
+		<element class="login">
+			<div style="padding-bottom: 1em; margin-top: -0.5em;">
+				<ul style="margin-left: -0.5em;">
+					<li>Sammle wertvolle Erinnerungen an Events, Locations, Menschen und Geschichten.</li>
+					<li>Bewerte Deine Events/Locations und Deine Stimmung.</li>
+					<li>Teile sie nur mit denen, die Dir wichtig sind.</li>
+					<li>Sammle Likes und Kommentare für Deine Einträge.</li>
+					<li>Erstelle ein PDF mit KI Zusammenfassung in Wort und Bild am Jahresende mit nur einem Klick!
+					</li>
+					<li>Und vielem mehr, lass Dich überraschen!</li>
+				</ul>
+				Log Dich ein oder <b><a onclick="action.loginDemo()">teste</a></b> sie.
+			</div>
+			<label>Email</label>
+			<field><input type="email" name="email" i="login" /></field>
+			<label>Password</label>
+			<field><input type="password" i="login" /></field>
+			<field><input-checkbox label="Angemeldet bleiben" name="login"></input-checkbox></field>
+			<error></error>
+			<div style="text-align: center;">
+				<button onclick=" action.login()">Anmelden</button>
+				<button onclick="action.loginResetPassword()">Passwort vergessen</button>
+			</div>
+			<div style="padding: 4em 0 1em 0;">
+				<b>Möchtest Du einen eigenen Blog erstellen?</b>
+			</div>
+			<label>Der Blogname</label>
+			<field><input name="clientName" i="create" /></field>
+			<label>Dein Name</label>
+			<field><input name="contactName" i="create" /></field>
+			<label>Email</label>
+			<field><input name="contactEmail" i="create" /></field>
+			<field>
+				<input-checkbox label="Ich habe die AGBs gelesen und verstanden" name="legal"></input-checkbox>
+			</field>
+			<error class="createClient"></error>
+			<div style="text-align: center;">
+				<button onclick=" action.createClient()">Erstellen</button>
+			</div>
+		</element>
+		<element class="event">
 			<div class="title">
-				<br />
 				<b>Events<count></count></b>
 				<button class="icon add" onclick="dialog.add()">+</button>
 			</div>
-			<event style="display: none;">
+			<event>
 				<sortable-table style="height: fit-content;"></sortable-table>
 			</event>
-			<login>
-				<div style="padding-bottom: 1em;">
-					<ul>
-						<li>Sammle wertvolle Erinnerungen an Events, Locations, Menschen und Geschichten.</li>
-						<li>Bewerte Deine Events/Locations und Deine Stimmung.</li>
-						<li>Teile sie nur mit denen, die Dir wichtig sind.</li>
-						<li>Sammle Likes und Kommentare für Deine Einträge.</li>
-						<li>Erstelle ein PDF mit KI Zusammenfassung in Wort und Bild am Jahresende mit nur einem Klick!
-						</li>
-						<li>Und vielem mehr, lass Dich überraschen!</li>
-					</ul>
-					Log Dich ein oder <b><a onclick="action.loginDemo()">teste</a></b> sie.
-				</div>
-				<label>Email</label>
-				<field><input type="email" name="email" i="login" /></field>
-				<label>Password</label>
-				<field><input type="password" i="login" /></field>
-				<field><input-checkbox label="Angemeldet bleiben" name="login"></input-checkbox></field>
-				<error></error>
-				<div style="text-align: center;">
-					<button onclick=" action.login()">Anmelden</button>
-					<button onclick="action.loginResetPassword()">Passwort vergessen</button>
-				</div>
-				<div style="padding: 4em 0 1em 0;">
-					<b>Möchtest Du einen eigenen Blog erstellen?</b>
-				</div>
-				<label>Der Blogname</label>
-				<field><input name="clientName" i="create" /></field>
-				<label>Dein Name</label>
-				<field><input name="contactName" i="create" /></field>
-				<label>Email</label>
-				<field><input name="contactEmail" i="create" /></field>
-				<field>
-					<input-checkbox label="Ich habe die AGBs gelesen und verstanden" name="legal"></input-checkbox>
-				</field>
-				<error class="createClient"></error>
-				<div style="text-align: center;">
-					<button onclick=" action.createClient()">Erstellen</button>
-				</div>
-			</login>
 		</element>
-		<element style="background: rgba(255, 210, 50, 0.1); display: none; border: none;" class="history">
+		<element class="history">
 			<button class="icon prev" onclick="action.imageNavigate(false)" style="left: 0;">&lt;</button>
 			<history></history>
 			<button class="icon next" onclick="action.imageNavigate(true)" style="right: 0;">&gt;</button>
 		</element>
-		<element style="background: rgba(80, 94, 120, 0.1); display: none; border: none;" class="calendar">
+		<element class="calendar">
 			<calendar-view></calendar-view>
 		</element>
-		<element style="background: rgba(20, 100, 250, 0.1); display: none;" class="user">
+		<element class="user">
+			<div class="title">
+				<b>Kontakte<count></count></b>
+				<button class="icon add" onclick="dialog.addUser()">+</button>
+			</div>
 			<user>
 				<sortable-table style="height: fit-content;"></sortable-table>
 			</user>
 		</element>
-		<element style="background: rgba(20, 255, 10, 0.1); display: block;">
+		<element class="imprint">
 			<toggle onclick="ui.toggle(event)">
 				Impressum
 			</toggle>

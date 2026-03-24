@@ -120,13 +120,13 @@ class action {
 	}
 
 	static login() {
-		var input = document.querySelectorAll('login input');
+		var input = document.querySelectorAll('element.login input');
 		if (input[0].value?.indexOf('@') < 1)
-			document.querySelector('login error').innerText = 'Gib bitte Deine Email ein.';
+			document.querySelector('element.login error').innerText = 'Gib bitte Deine Email ein.';
 		else if (!input[1].value)
-			document.querySelector('login error').innerText = 'Ein Passwort wird benötigt.';
+			document.querySelector('element.login error').innerText = 'Ein Passwort wird benötigt.';
 		else
-			api.authentication.getLogin(input[0].value, input[1].value, document.querySelector('login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
+			api.authentication.getLogin(input[0].value, input[1].value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
 				if (success) {
 					document.querySelector('body button.add').style.display = api.user.admin ? 'block' : 'none';
 					document.dispatchEvent(new CustomEvent('event'));
@@ -135,16 +135,16 @@ class action {
 	}
 
 	static loginResetPassword() {
-		var email = document.querySelector('login input[name="email"]').value;
+		var email = document.querySelector('element.login input[name="email"]').value;
 		if (email.indexOf('@') < 1)
-			document.querySelector('login error').innerText = 'Gib bitte Deine Email ein.';
+			document.querySelector('element.login error').innerText = 'Gib bitte Deine Email ein.';
 		else
 			api.authentication.getVerify(email, e => {
 				if (e == 'ok') {
-					document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
+					document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde Dir zugesendet. Klicke auf den Link in der Email, um Dein Passwort neu zu setzen.' } }));
 				} else
-					document.querySelector('login error').innerText = e;
+					document.querySelector('element.login error').innerText = e;
 			});
 	}
 
@@ -164,43 +164,43 @@ class action {
 					document.querySelector('user sortable-table').table().querySelector('td[contact*="\\"id\\":' + contact.id + ',"]').innerText = '...';
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde gesendet. Nach dem Klick auf den Link in der Email ist der Benutzer verifiziert.' } }));
 				} else
-					document.querySelector('login error').innerText = e;
+					document.querySelector('element.login error').innerText = e;
 			});
 		});
 
 	}
 
 	static loginDemo() {
-		var input = document.querySelectorAll('login input');
+		var input = document.querySelectorAll('element.login input');
 		input[0].value = 'sepp@diary.cafe';
 		input[1].value = 'Test1234';
-		document.querySelector('login input-checkbox').setAttribute('checked', 'false');
+		document.querySelector('element.login input-checkbox').setAttribute('checked', 'false');
 		setTimeout(action.login, 500);
 	}
 
 	static createClient() {
-		var legalCheck = document.querySelector('login input-checkbox[name="legal"]');
+		var legalCheck = document.querySelector('element.login input-checkbox[name="legal"]');
 		legalCheck.style.color = '';
 		var client = {
-			name: document.querySelector('login input[name="clientName"]').value,
+			name: document.querySelector('element.login input[name="clientName"]').value,
 			contacts: [
 				{
-					name: document.querySelector('login input[name="contactName"]').value,
-					email: document.querySelector('login input[name="contactEmail"]').value
+					name: document.querySelector('element.login input[name="contactName"]').value,
+					email: document.querySelector('element.login input[name="contactEmail"]').value
 				}
 			]
 		};
 		if (client.contacts[0].email?.indexOf('@') < 1)
-			document.querySelector('login error.createClient').innerText = 'Gib bitte Deine Email ein.';
+			document.querySelector('element.login error.createClient').innerText = 'Gib bitte Deine Email ein.';
 		else if (!client.name || !client.contacts[0].name)
-			document.querySelector('login error.createClient').innerText = 'Vervollständige bitte die Daten.';
+			document.querySelector('element.login error.createClient').innerText = 'Vervollständige bitte die Daten.';
 		else if (legalCheck.getAttribute('checked') != 'true') {
-			document.querySelector('login error.createClient').innerText = 'Akzeptiere unsere ABGs.';
+			document.querySelector('element.login error.createClient').innerText = 'Akzeptiere unsere ABGs.';
 			legalCheck.style.color = 'red';
 		} else
 			api.authentication.postCreate(client, () => {
-				document.querySelectorAll('login [i="create"]').forEach(e => e.value = '');
-				document.querySelector('login input-checkbox[name="legal"]').setAttribute('checked', 'false');
+				document.querySelectorAll('element.login [i="create"]').forEach(e => e.value = '');
+				document.querySelector('element.login input-checkbox[name="legal"]').setAttribute('checked', 'false');
 				document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Lieben Dank für Deine Registrierung, eine Email wurde Dir zugesendet. Bestätige diese, um in Deine neue Gruppe zu gelangen.' } }));
 			});
 	}
@@ -209,14 +209,13 @@ class action {
 		api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event sortable-table, user sortable-table').forEach(e => e.table().querySelector('tbody').textContent = '');
-		document.querySelector('event').style.display = 'none';
-		document.querySelector('event').previousElementSibling.style.display = '';
-		document.querySelector('login').style.display = '';
+		document.querySelector('element.event').style.display = '';
+		document.querySelector('element.login').style.display = '';
 		document.querySelector('history').scrollLeft = 0;
-		document.querySelector('element.history').style.display = 'none';
+		document.querySelector('element.history').style.display = '';
 		document.querySelector('history').textContent = '';
-		document.querySelector('element.calendar').style.display = 'none';
-		document.querySelector('element.user').style.display = 'none';
+		document.querySelector('element.calendar').style.display = '';
+		document.querySelector('element.user').style.display = '';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="groupname"]').innerText = '';
 	}
@@ -268,14 +267,21 @@ class action {
 
 	static contactPatch() {
 		var popup = document.querySelector('dialog-popup').content();
+		var contact = {
+			id: popup.querySelector('input[name="id"]')?.value || null,
+			name: popup.querySelector('input[name="name"]').value,
+			email: popup.querySelector('input[name="email"]').value,
+			client: {
+				name: popup.querySelector('input[name="clientName"]')?.value || null,
+				none: popup.querySelector('input[name="clientNote"]')?.value || null,
+				image: popup.querySelector('input[name="clientImage"]')?.value || null
+			}
+		};
 		api.contact.patch(
-			{
-				name: popup.querySelector('element.contact input[name="name"]').value,
-				email: popup.querySelector('element.contact input[name="email"]').value
-			},
+			contact,
 			id => {
-				popup.querySelectorAll('element.contact input').forEach(e => e.value = '');
 				document.dispatchEvent(new CustomEvent('contact', { detail: { id: id } }));
+				document.dispatchEvent(new CustomEvent('popup'));
 			}
 		);
 	}

@@ -38,6 +38,7 @@ class listener {
 			}
 			table.renderTable();
 			api.activateProgressbar();
+			document.querySelector('element.user div.title count').innerText = contacts.length;
 		});
 	}
 
@@ -122,8 +123,8 @@ input-rating {
 
 	static updateEvents() {
 		api.event.getList(events => {
-			document.querySelectorAll('login [i="login"]').forEach(e => e.value = '');
-			document.querySelector('login input-checkbox[name="login"]').setAttribute('checked', 'false');
+			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
+			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			document.querySelector('body>button[name="logoff"]').style.display = '';
 			var groupname = document.querySelector('body>[name="groupname"]');
 			groupname.innerText = api.clients[api.clientId].name;
@@ -208,17 +209,17 @@ input-rating {
 			calendar.render();
 			if (events.length) {
 				var pastEvents = document.querySelector('sortable-table')._root.querySelectorAll('tr.past').length;
-				document.querySelector('div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
+				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
 			} else
-				document.querySelector('div.title count').innerText = '';
+				document.querySelector('element.event div.title count').innerText = '';
 			if (document.querySelector('element.history item'))
-				document.querySelector('element.history').style.display = '';
+				document.querySelector('element.history').style.display = 'block';
 			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
-			document.querySelector('event').style.display = '';
+			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('event').previousElementSibling.style.display = 'block';
-			document.querySelector('login').style.display = 'none';
-			document.querySelector('element.calendar').style.display = '';
-			document.querySelector('element.user').style.display = '';
+			document.querySelector('element.login').style.display = 'none';
+			document.querySelector('element.calendar').style.display = 'block';
+			document.querySelector('element.user').style.display = 'block';
 			if (document.querySelector("image-carousel").style.transform?.indexOf('1') > 0)
 				setTimeout(listener.updateImageCarousel, 100);
 		});

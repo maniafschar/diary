@@ -12,12 +12,12 @@ class api {
 	static authentication = {
 		getLogin(email, password, refreshToken, success) {
 			api.user = { id: 0, password: password };
-			document.querySelector('login error').innerText = '';
+			document.querySelector('element.login error').innerText = '';
 			api.ajax({
 				url: 'authentication/login?email=' + encodeURIComponent(Encryption.encPUB(email)),
 				error(response) {
 					api.user = null;
-					document.querySelector('login error').innerText = response.responseText;
+					document.querySelector('element.login error').innerText = response.responseText;
 				},
 				success(contact) {
 					if (contact) {
@@ -31,7 +31,7 @@ class api {
 								success(true);
 						});
 					} else
-						document.querySelector('login error').innerText = 'Login fehlgeschlagen';
+						document.querySelector('element.login error').innerText = 'Login fehlgeschlagen';
 				}
 			});
 		},
@@ -292,7 +292,7 @@ class api {
 		setTimeout(() => api.progressbar = true, 200);
 	}
 
-	logoff() {
+	static logoff() {
 		api.user = null;
 		api.clients = {};
 		api.clientId = null;

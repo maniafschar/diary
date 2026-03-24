@@ -48,14 +48,12 @@ body>container {
 body>container>element {
 	display: block;
 	position: relative;
-	border: solid 1em transparent;
 }
 
 body>container>element.intro {
 	display: flex;
 	justify-content: center;
 	padding: 0;
-	border: none;
 }
 
 body>container>element.intro img.text {
@@ -79,10 +77,10 @@ body>container>element.intro description {
 }
 
 body>container>element div.title {
-	display: none;
 	text-align: left;
 	padding-left: 0.8em;
-	padding-bottom: 0.25em;
+	height: 3em;
+	padding-top: 1.25em;
 }
 
 body>container>element div.title count {
@@ -91,6 +89,38 @@ body>container>element div.title count {
 	display: inline-block;
 	position: relative;
 	font-weight: normal;
+}
+
+body>container>element.login {
+	background: rgba(255, 20, 10, 0.1);
+	border: solid 1em transparent;
+}
+
+body>container>element.event {
+	background: rgba(255, 20, 10, 0.1);
+	border-top: solid 0.5em transparent;
+	display: none;
+}
+
+body>container>element.calendar {
+	background: rgba(80, 94, 120, 0.1);
+	display: none;
+}
+
+body>container>element.history {
+	background: rgba(255, 210, 50, 0.1);
+	display: none;
+}
+
+body>container>element.user {
+	background: rgba(20, 100, 250, 0.1);
+	display: none;
+	border-top: solid 0.5em transparent;
+}
+
+body>container>element.imprint {
+	background: rgba(20, 255, 10, 0.1);
+	border: solid 1em transparent;
 }
 
 body>container>element.history button {
@@ -150,7 +180,7 @@ button.icon svg {
 }
 
 button.add {
-	right: 0;
+	right: 0.5em;
 	top: 0;
 }
 
