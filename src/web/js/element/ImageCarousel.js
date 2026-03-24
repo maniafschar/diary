@@ -36,6 +36,9 @@ div img {
 	min-width: 100%;
 	min-height: 100%;
 }
+div video {
+	width: 100%;
+}
 hint {
 	font-size: 1.3em;
 	position: absolute;
