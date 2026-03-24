@@ -230,11 +230,11 @@ a {
 		var imageContainer = data.appendChild(document.createElement('imageContainer'));
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
-		video.setAttribute('controls', null);
-		video.setAttribute('autoplay', null);
-		video.setAttribute('playsinline', null);
+		video.setAttribute('controls', 'true');
+		video.setAttribute('autoplay', 'true');
+		video.setAttribute('playsinline', 'true');
 		video.setAttribute('preload', 'auto');
-		video.appendChild(document.createElement('source'));
+		video.appendChild(document.createElement('source')).setAttribute('type', 'video/mp4');
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
