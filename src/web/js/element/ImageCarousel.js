@@ -324,6 +324,7 @@ a {
 			img.style.display = 'none';
 			video.querySelector('source').src = '/med/' + src;
 			video.style.display = '';
+			video.play();
 		} else {
 			img.src = '/med/' + src;
 			img.style.display = '';
