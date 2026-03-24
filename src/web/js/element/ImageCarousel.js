@@ -231,7 +231,7 @@ a {
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.controls = true;
-		video.autoplay = false;
+		video.autoplay = true;
 		video.setAttribute('playsinline', true);
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
