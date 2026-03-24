@@ -319,12 +319,12 @@ a {
 			video.setAttribute('height', image ? image.naturalHeight * document.body.clientWidth / image.naturalWidth : '');
 			img.src = '';
 			img.style.display = 'none';
-			video.querySelector('source').src = '/med/' + src;
+			video.querySelector('source').setAttribute('src', '/med/' + src);
 			video.style.display = '';
 		} else {
 			img.src = '/med/' + src;
 			img.style.display = '';
-			video.querySelector('source').src = '';
+			video.querySelector('source').setAttribute('src', '');
 			video.style.display = 'none';
 		}
 		this._root.querySelector('nav').textContent = '';
