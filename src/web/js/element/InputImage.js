@@ -64,7 +64,7 @@ input {
 							size: file.size
 						},
 						name: file.name,
-						type: file.type?.split('/')[1],
+						type: file.name.indexOf('.') > 0 ? file.name.substring(file.name.lastIndexOf('.') + 1).trim() : file.type?.split('/')[1],
 						data: r.target.result
 					});
 				else {
