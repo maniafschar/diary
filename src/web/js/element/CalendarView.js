@@ -39,16 +39,7 @@ class CalendarView extends HTMLElement {
 	position: relative;
 	display: block;
 	text-align: center;
-}
-
-.nav-group {
-	display: block;
-	position: relative;
-	right: 0;
-	text-align: center;
-	width: 100%;
-	height: 3em;
-	margin-top: 0.5em;
+	padding-top: 1em;
 }
 
 button {
@@ -68,7 +59,6 @@ button {
 	
 button.icon {
 	position: absolute;
-	margin-top: -0.25em;
 	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
@@ -171,9 +161,7 @@ button.icon {
 		//Header
 		var header = wrapper.appendChild(document.createElement('div'));
 		header.classList.add('cal-header');
-		var navigation = header.appendChild(document.createElement('div'));
-		navigation.classList.add('nav-group');
-		var button = navigation.appendChild(document.createElement('button'));
+		var button = header.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month--;
@@ -185,13 +173,7 @@ button.icon {
 		};
 		button.innerText = '<';
 		button.style.left = 0;
-		button = navigation.appendChild(document.createElement('button'));
-		button.onclick = () => {
-			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
-			this.render();
-		};
-		button.innerText = 'Heute';
-		button = navigation.appendChild(document.createElement('button'));
+		button = header.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month++;
@@ -203,7 +185,10 @@ button.icon {
 		};
 		button.innerText = '>';
 		button.style.right = 0;
-		header.appendChild(document.createElement('div')).classList.add('cal-title');
+		header.appendChild(document.createElement('div')).classList.add('cal-title').onclick = () => {
+			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
+			this.render();
+		};
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
