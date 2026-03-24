@@ -323,10 +323,9 @@ a {
 			img.src = '';
 			img.style.display = 'none';
 			video.style.display = '';
-			setTimeout(() => {
-				video.querySelector('source').src = '/med/' + src;
-				video.play();
-			}, 100);
+			video.querySelector('source').src = '/med/' + src;
+			video.load();
+			video.play();
 		} else {
 			img.src = '/med/' + src;
 			img.style.display = '';
