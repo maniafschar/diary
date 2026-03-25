@@ -190,6 +190,7 @@ input-rating {
 						img = item.appendChild(document.createElement('video'));
 						img.autoplay = true;
 						img.muted = true;
+						img.loop = true;
 						img.setAttribute('playsinline', true);
 						var source = img.appendChild(document.createElement('source'));
 						source.src = '/med/' + path;
