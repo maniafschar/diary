@@ -101,9 +101,10 @@ public class LogFilter implements Filter {
 	}
 
 	private void authenticate(final ContentCachingRequestWrapper req) {
-		if ("OPTIONS".equals(req.getMethod())
-				|| req.getServletPath().contains("/authentication")
-						&& ("GET".equals(req.getMethod()) || "POST".equals(req.getMethod())))
+		if ("OPTIONS".equals(req.getMethod()) ||
+				"POST".equals(req.getMethod()) && req.getServletPath().contains("/ticket") ||
+				req.getServletPath().contains("/authentication") &&
+						("GET".equals(req.getMethod()) || "POST".equals(req.getMethod())))
 			return;
 		if (req.getServletPath().contains("/sc/")) {
 			if (this.supportCenterSecret.equals(req.getHeader("contactId")))
