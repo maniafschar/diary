@@ -198,7 +198,7 @@ button.location {
 			var contact = JSON.parse(popup.querySelector('input[type="hidden"]').value);
 			contact.email = popup.querySelector('input[type="email"]').value;
 			if (contact.email.indexOf('@') > 0)
-				action.getVerify(contact);
+				action.loginVerify(contact);
 			else
 				document.querySelector('dialog-popup').content().querySelector('error').innerText = 'Gib bitte die Email ein.';
 		};
@@ -451,7 +451,7 @@ value a {
 					}
 				}
 				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: id, participants: participantList, type: 'read' } }));
+				document.dispatchEvent(new CustomEvent('event', { detail: { eventId: id, participants: participantList, type: 'read' } }));
 			});
 		});
 	}

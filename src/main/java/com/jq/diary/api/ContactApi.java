@@ -39,7 +39,6 @@ public class ContactApi extends ApplicationApi {
 			@RequestBody final Contact contact) throws EmailException {
 		if (contact.getId() == null) {
 			contact.setClient(this.verifyContactClient(contactId, clientId).getClient());
-			contact.setAdmin(true);
 			this.contactService.save(contact);
 			return contact.getId();
 		}
