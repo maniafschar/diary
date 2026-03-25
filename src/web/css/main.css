@@ -384,6 +384,15 @@ history item video {
 	max-height: 16em;
 }
 
+element.history count {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding-right: 0.3em;
+	font-size: 0.8em;
+	color: rgba(0, 0, 0, 0.4);
+}
+
 history item text {
 	position: absolute;
 	bottom: 0;
@@ -398,6 +407,7 @@ history item text {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	max-width: 90%;
 }
 
 toggle {
