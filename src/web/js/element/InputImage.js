@@ -65,28 +65,31 @@ input {
 						},
 						name: file.name,
 						type: file.name.indexOf('.') > 0 ? file.name.substring(file.name.lastIndexOf('.') + 1).trim() : file.type?.split('/')[1],
-						data: r.target.result
+						data: r.target.result,
+						file: file
 					});
 				else {
 					var image = new Image();
 					image.onload = function () {
-						var scaled = t.scale(image);
-						scaled.size = t.dataURItoBlob(scaled.data).size;
-						t.success({
-							original: {
-								size: file.size,
-								width: image.naturalWidth,
-								height: image.naturalHeight
-							},
-							scaled: {
-								size: scaled.size,
-								width: scaled.width,
-								height: scaled.height
-							},
-							name: file.name,
-							type: 'jpg',
-							data: scaled.data,
-							sizeRatio: (100 - scaled.size / file.size * 100).toFixed(0)
+						t.scale(image, scaled => {
+							scaled.size = t.dataURItoBlob(scaled.data).size;
+							t.success({
+								original: {
+									size: file.size,
+									width: image.naturalWidth,
+									height: image.naturalHeight
+								},
+								scaled: {
+									size: scaled.size,
+									width: scaled.width,
+									height: scaled.height
+								},
+								name: file.name,
+								type: 'jpg',
+								data: scaled.data,
+								file: scaled.file,
+								sizeRatio: (100 - scaled.size / file.size * 100).toFixed(0)
+							});
 						});
 					};
 					image.src = r.target.result;
@@ -95,7 +98,7 @@ input {
 			reader.readAsDataURL(file);
 		}
 	}
-	scale(image) {
+	scale(image, exec) {
 		var canvas = document.createElement('canvas'), scale = 1;
 		var ctx = canvas.getContext('2d'), max = parseInt(this.getAttribute('max'));
 		if (image.naturalWidth > image.naturalHeight)
@@ -109,6 +112,9 @@ input {
 		ctx.fillStyle = 'white';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, canvas.width, canvas.height);
-		return { data: canvas.toDataURL('image/jpeg', 0.9), width: parseInt(canvas.width + 0.5), height: parseInt(canvas.height + 0.5) };
+		var result = { data: canvas.toDataURL('image/jpeg', 0.9), width: parseInt(canvas.width + 0.5), height: parseInt(canvas.height + 0.5) };
+		new Promise(resolve =>
+			canvas.toBlob(blob => resolve(blob)
+			)).then(blob => { result.file = blob; exec(result); }, err => { result.err = err; exec(result); });
 	}
 }

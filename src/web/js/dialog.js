@@ -417,7 +417,11 @@ value a {
 						if (data.indexOf('med/') != 0)
 							document.dispatchEvent(new CustomEvent('event'));
 					};
-					buttonImage.setSuccess(e => api.event.postImage(id, e.type, e.data.substring(e.data.indexOf(',') + 1), eventImageId => addImage(eventImageId, e.data)));
+					buttonImage.setSuccess(e => {
+						var formData = new FormData();
+						formData.append('file', e.file);
+						api.event.postImage(id, e.type, formData, eventImageId => addImage(eventImageId, e.data));
+					});
 				}
 				for (var i = 0; i < event.eventImages?.length; i++)
 					addImage(event.eventImages[i].id, 'med/' + event.eventImages[i].image);

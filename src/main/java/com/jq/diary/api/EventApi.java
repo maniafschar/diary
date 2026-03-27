@@ -1,7 +1,7 @@
 package com.jq.diary.api;
 
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Base64;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
@@ -61,9 +63,10 @@ public class EventApi extends ApplicationApi {
 
 	@PostMapping("image/{eventId}/{type}")
 	public BigInteger postImage(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
-			@PathVariable final String type, @RequestBody final EventImage eventImage) {
+			@PathVariable final String type, @RequestParam("file") final MultipartFile file) throws IOException {
+		final EventImage eventImage = new EventImage();
 		eventImage.setEvent(this.repository.one(Event.class, eventId));
-		eventImage.setImage(Attachment.createImage(type, Base64.getDecoder().decode(eventImage.getImage())));
+		eventImage.setImage(Attachment.createImage(type, file.getBytes()));
 		eventImage.setContact(this.repository.one(Contact.class, contactId));
 		this.eventService.save(eventImage);
 		return eventImage.getId();

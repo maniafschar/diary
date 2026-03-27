@@ -172,7 +172,7 @@ class api {
 			api.ajax({
 				url: 'event/image/' + id + '/' + type,
 				method: 'POST',
-				body: { image: data },
+				body: data,
 				success: success
 			});
 		},
