@@ -319,7 +319,8 @@ value.pictures div delete {
 	font-size: 0.8em;
 }
 
-value.pictures div img {
+value.pictures div img,
+value.pictures div video {
 	border-radius: 0.5em;
 	width: 100%;
 }
