@@ -410,10 +410,22 @@ value a {
 					buttonImage.style.borderRadius = '0 0.5em';
 					buttonImage.setAttribute('max', 1000);
 					var addImage = (id, data) => {
-						var image = pictures.appendChild(document.createElement('div')).appendChild(document.createElement('img'));
-						image.src = data;
-						image.parentElement.setAttribute('i', id);
-						image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
+						var div = pictures.appendChild(document.createElement('div'));
+						if (data.indexOf('.mov') > 0 || data.indexOf('.mp4') > 0) {
+							var video = div.appendChild(document.createElement('video'));
+							video.autoplay = true;
+							video.muted = true;
+							video.loop = true;
+							video.setAttribute('playsinline', true);
+							var source = video.appendChild(document.createElement('source'));
+							source.src = data;
+							source.type = 'video/mp4';
+						} else {
+							var image = div.appendChild(document.createElement('img'));
+							image.src = data;
+							image.parentElement.setAttribute('i', id);
+							image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
+						}
 						if (data.indexOf('med/') != 0)
 							document.dispatchEvent(new CustomEvent('event'));
 					};
