@@ -318,7 +318,7 @@ a {
 		var img = this._root.querySelector('img');
 		var video = this._root.querySelector('video');
 		var src = this.list[this.index].src[this.indexImage];
-		video.stop();
+		video.pause();
 		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
 			img.src = '';
 			img.style.display = 'none';
