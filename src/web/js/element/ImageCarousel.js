@@ -306,15 +306,6 @@ a {
 	}
 
 	updateImage(index) {
-		var image = document.querySelector('img[src="/med/' + src.substring(0, src.lastIndexOf('.')) + '.jpg"]');
-		video.setAttribute('width', image ? document.body.clientWidth : '');
-		video.setAttribute('height', image ? image.naturalHeight * document.body.clientWidth / image.naturalWidth : '');
-		img.src = '';
-		img.style.display = 'none';
-		video.style.display = '';
-		video.querySelector('source').src = '/med/' + src;
-		video.load();
-		video.play();
 		this.indexImage = index;
 		var position = 0, total = 0;
 		for (var i = 0; i < this.list.length; i++) {
