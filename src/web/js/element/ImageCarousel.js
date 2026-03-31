@@ -229,6 +229,15 @@ a {
 }
 autoplay {
 	display: none;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: auto;
+}
+autoplay img {
+	width: 100%;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
@@ -257,10 +266,10 @@ autoplay {
 		close.classList.add('close');
 		close.classList.add('icon');
 		close.innerText = 'x';
-		this._root.appendChild(document.createElement('hint'));
 		var autoplay = this._root.appendChild(document.createElement('autoplay'));
 		autoplay.appendChild(document.createElement('img'));
 		autoplay.appendChild(document.createElement('text'));
+		this._root.appendChild(document.createElement('hint'));
 	}
 
 	autoplay() {
