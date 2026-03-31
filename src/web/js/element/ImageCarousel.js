@@ -310,7 +310,7 @@ autoplay {
 		if (style)
 			this._root.querySelector('style.custom').textContent = style;
 		this.list = list;
-		time = 0;
+		this.time = 0;
 		if (autoplay)
 			this.autoplay();
 		else
