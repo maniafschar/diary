@@ -4,6 +4,7 @@ class ImageCarousel extends HTMLElement {
 	list = null;
 	index = 0;
 	indexImage = 0;
+	time = 0;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -225,6 +226,9 @@ a {
 	cursor: pointer;
 	position: relative;
 	display: inline-block;
+}
+autoplay {
+	display: none;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
@@ -254,6 +258,33 @@ a {
 		close.classList.add('icon');
 		close.innerText = 'x';
 		this._root.appendChild(document.createElement('hint'));
+		var autoplay = this._root.appendChild(document.createElement('autoplay'));
+		autoplay.appendChild(document.createElement('img'));
+		autoplay.appendChild(document.createElement('text'));
+	}
+
+	autoplay() {
+		this.querySelector('autoplay').style.display = 'block';
+		this.querySelector('div').style.display = 'none';
+		var utter = () => {
+			if (new Date().getTime() - this.time < 5000) {
+				setTimeout(utter, new Date().getTime() - this.time);
+				return;
+			}
+			this.querySelector('autoplay img').src = this.list[this.index].src[this.indexImage];
+			var utterance = new SpeechSynthesisUtterance(this.list[this.index].description);
+			utterance.lang = 'de-DE';
+			this.time = new Date().getTime();
+			window.speechSynthesis.addEventListener('end', utter);
+			window.speechSynthesis.speak(utterance);
+			this.indexImage--;
+			if (this.indexImage < 0) {
+				this.index--;
+				if (this.index < 0)
+					this.index = this.list.length - 1;
+				this.indexImage = this.list[this.index].src.length - 1;
+			}
+		}
 	}
 
 	close() {
@@ -265,7 +296,7 @@ a {
 		return this._root.querySelector('data');
 	}
 
-	open(list, index, style) {
+	open(list, index, autoplay, style) {
 		if (index) {
 			var id = parseInt(index.split('.')[0]);
 			for (var i = 0; i < list.length; i++) {
@@ -279,7 +310,11 @@ a {
 		if (style)
 			this._root.querySelector('style.custom').textContent = style;
 		this.list = list;
-		this.update();
+		time = 0;
+		if (autoplay)
+			this.autoplay();
+		else
+			this.update();
 		this._root.host.style.transform = 'scale(1)';
 	}
 
@@ -301,6 +336,8 @@ a {
 	}
 
 	update() {
+		this.querySelector('autoplay').style.display = '';
+		this.querySelector('div').style.display = '';
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}

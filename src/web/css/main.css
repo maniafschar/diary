@@ -387,7 +387,7 @@ history item video {
 element.history count {
 	position: absolute;
 	right: 0;
-	bottom: 0;
+	bottom: 2.5em;
 	padding-right: 0.3em;
 	font-size: 0.8em;
 	color: rgba(100, 150, 200, 0.4);

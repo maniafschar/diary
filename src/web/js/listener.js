@@ -43,6 +43,9 @@ class listener {
 	}
 
 	static updateImageCarousel(index) {
+		var autoplay = !index;
+		if (!index)
+			index = parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 0.5);
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
 		var listImages = function (event) {
@@ -86,7 +89,7 @@ class listener {
 						'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this)"></input-rating><br/><br/>'
 				});
 		}
-		document.querySelector('image-carousel').open(list, index, `
+		document.querySelector('image-carousel').open(list, index, autoplay, `
 rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;
