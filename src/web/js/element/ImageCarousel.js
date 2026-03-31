@@ -37,7 +37,8 @@ div img {
 	min-width: 100%;
 	min-height: 100%;
 }
-div video {
+div video,
+autoplay video {
 	width: 100%;
 }
 hint {
@@ -269,6 +270,11 @@ autoplay img {
 		var autoplay = this._root.appendChild(document.createElement('autoplay'));
 		autoplay.appendChild(document.createElement('img'));
 		autoplay.appendChild(document.createElement('text'));
+		var video = autoplay.appendChild(document.createElement('video'));
+		video.controls = true;
+		video.autoplay = true;
+		video.setAttribute('playsinline', true);
+		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		this._root.appendChild(document.createElement('hint'));
 	}
 
@@ -280,7 +286,22 @@ autoplay img {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
-			this._root.querySelector('autoplay img').src = '/med/' + this.list[this.index].src[this.indexImage];
+			var src = this.list[this.index].src[this.indexImage];
+			var img = this._root.querySelector('autoplay img');
+			var video = this._root.querySelector('autoplay video');
+			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+				img.src = '';
+				img.style.display = 'none';
+				video.style.display = '';
+				video.querySelector('source').src = '/med/' + src;
+				video.load();
+				video.play();
+			} else {
+				img.src = '/med/' + src;
+				img.style.display = '';
+				video.querySelector('source').src = '';
+				video.style.display = 'none';
+			}
 			if (this.list[this.index].text) {
 				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 				utterance.lang = 'de-DE';
@@ -366,8 +387,8 @@ autoplay img {
 		}
 		position += this.indexImage + 1;
 		this._root.querySelector('hint').innerText = position + '/' + total;
-		var img = this._root.querySelector('img');
-		var video = this._root.querySelector('video');
+		var img = this._root.querySelector('div img');
+		var video = this._root.querySelector('div video');
 		var src = this.list[this.index].src[this.indexImage];
 		video.pause();
 		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
