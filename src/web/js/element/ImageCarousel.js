@@ -294,6 +294,7 @@ autoplay img {
 				this.indexImage = this.list[this.index].src.length - 1;
 			}
 		}
+		utter();
 	}
 
 	close() {
