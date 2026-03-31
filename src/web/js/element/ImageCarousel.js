@@ -291,8 +291,8 @@ autoplay img {
 				this.indexImage = this.list[this.index].src.length - 1;
 			}
 		};
-		var utter = () => {
-			if (new Date().getTime() - this.time < 5000 && this.indexImage == 0) {
+		var utter = wait => {
+			if (wait && new Date().getTime() - this.time < 5000) {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
@@ -313,11 +313,12 @@ autoplay img {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 			}
+			var wait = this.indexImage == 0;
 			if (this.list[this.index].text && this.indexImage == this.list[this.index].src.length - 1) {
 				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 					utterance.lang = 'de-DE';
-					utterance.addEventListener('end', utter);
+					utterance.addEventListener('end', () => utter(wait));
 					next();
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 						video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
@@ -326,7 +327,7 @@ autoplay img {
 				}, 1000);
 			} else {
 				next();
-				utter();
+				utter(wait);
 			}
 		}
 		utter();
