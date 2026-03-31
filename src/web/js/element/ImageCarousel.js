@@ -264,14 +264,14 @@ autoplay {
 	}
 
 	autoplay() {
-		this.querySelector('autoplay').style.display = 'block';
-		this.querySelector('div').style.display = 'none';
+		this._root.querySelector('autoplay').style.display = 'block';
+		this._root.querySelector('div').style.display = 'none';
 		var utter = () => {
 			if (new Date().getTime() - this.time < 5000) {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
-			this.querySelector('autoplay img').src = this.list[this.index].src[this.indexImage];
+			this._root.querySelector('autoplay img').src = this.list[this.index].src[this.indexImage];
 			var utterance = new SpeechSynthesisUtterance(this.list[this.index].description);
 			utterance.lang = 'de-DE';
 			this.time = new Date().getTime();
@@ -336,8 +336,8 @@ autoplay {
 	}
 
 	update() {
-		this.querySelector('autoplay').style.display = '';
-		this.querySelector('div').style.display = '';
+		this._root.querySelector('autoplay').style.display = '';
+		this._root.querySelector('div').style.display = '';
 		this.updateImage(this.indexImage);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}
