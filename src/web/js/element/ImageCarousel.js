@@ -269,7 +269,7 @@ autoplay img {
 		close.innerText = 'x';
 		var autoplay = this._root.appendChild(document.createElement('autoplay'));
 		autoplay.appendChild(document.createElement('img'));
-		autoplay.appendChild(document.createElement('text'));
+		autoplay.appendChild(document.createElement('hint'));
 		var video = autoplay.appendChild(document.createElement('video'));
 		video.controls = true;
 		video.autoplay = true;
