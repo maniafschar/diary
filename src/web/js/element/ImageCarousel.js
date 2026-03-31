@@ -297,8 +297,8 @@ autoplay hint {
 				this.indexImage = this.list[this.index].src.length - 1;
 			}
 		};
-		var utter = () => {
-			if (new Date().getTime() - this.time < 3000) {
+		var utter = force => {
+			if (!force && new Date().getTime() - this.time < 3000) {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
@@ -328,7 +328,7 @@ autoplay hint {
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 						video.addEventListener('ended', () => {
 							if (this.list[this.index].src.length > 1 && this.indexImage > 0)
-								utter();
+								utter(true);
 							window.speechSynthesis.speak(utterance);
 						});
 					else
