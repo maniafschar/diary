@@ -318,15 +318,15 @@ autoplay img {
 					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 					utterance.lang = 'de-DE';
 					utterance.addEventListener('end', utter);
+					next();
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 						video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
 					else
 						window.speechSynthesis.speak(utterance);
-					next();
 				}, 1000);
 			} else {
-				utter();
 				next();
+				utter();
 			}
 		}
 		utter();
