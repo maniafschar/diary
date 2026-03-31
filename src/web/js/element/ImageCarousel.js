@@ -34,7 +34,8 @@ div {
 	width: 100%;
 	height: 100%;
 }
-div img {
+div img,
+autoplay img {
 	min-width: 100%;
 	min-height: 100%;
 }
@@ -238,9 +239,6 @@ autoplay {
 	bottom: 0;
 	overflow: auto;
 }
-autoplay img {
-	width: 100%;
-}
 autoplay hint {
 	position: fixed;
 	left: 1em;
@@ -304,7 +302,7 @@ autoplay hint {
 				return;
 			console.log((new Date().getTime() - this.time) + ' - ' + force);
 			if (force != true && new Date().getTime() - this.time < 5000) {
-				setTimeout(utter, 5000 - this.time);
+				setTimeout(utter, 5000 - new Date().getTime() + this.time);
 				return;
 			}
 			this._root.querySelector('autoplay').scrollTo({ top: 0, behavior: 'smooth' });
