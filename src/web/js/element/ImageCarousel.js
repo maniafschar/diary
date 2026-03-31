@@ -246,6 +246,8 @@ autoplay hint {
 	margin-left: 0;
 	text-align: left;
 	font-size: 1em;
+	width: initial;
+	bottom: 1em;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
