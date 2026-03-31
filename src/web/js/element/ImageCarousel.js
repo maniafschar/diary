@@ -289,6 +289,7 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
+		this.time = new Date().getTime();
 		var next = () => {
 			this.time = new Date().getTime();
 			this.indexImage++;
