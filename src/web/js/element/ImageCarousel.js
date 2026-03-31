@@ -289,12 +289,12 @@ autoplay hint {
 		this._root.querySelector('div').style.display = 'none';
 		var next = () => {
 			this.time = new Date().getTime();
-			this.indexImage--;
-			if (this.indexImage < 0) {
-				this.index--;
-				if (this.index < 0)
-					this.index = this.list.length - 1;
-				this.indexImage = this.list[this.index].src.length - 1;
+			this.indexImage++;
+			if (this.indexImage >= this.list[this.index].src.length) {
+				this.indexImage = 0;
+				this.index++;
+				if (this.index >= this.list.length)
+					this.index = 0;
 			}
 		};
 		var utter = force => {
