@@ -328,6 +328,8 @@ autoplay img {
 		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
+		this._root.querySelector('div video').pause();
+		this._root.querySelector('autoplay video').pause();
 	}
 
 	data() {
