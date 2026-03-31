@@ -307,7 +307,10 @@ autoplay img {
 				utterance.lang = 'de-DE';
 				this.time = new Date().getTime();
 				utterance.addEventListener('end', utter);
-				window.speechSynthesis.speak(utterance);
+				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+					video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
+				} else
+					window.speechSynthesis.speak(utterance);
 			} else
 				utter();
 			this.indexImage--;
