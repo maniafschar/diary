@@ -4,6 +4,7 @@ class ImageCarousel extends HTMLElement {
 	list = null;
 	index = 0;
 	indexImage = 0;
+	indexProcessed = {};
 	time = 0;
 	constructor() {
 		super();
@@ -287,6 +288,7 @@ autoplay hint {
 	autoplay() {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
+		this.indexProcessed = {};
 		var next = () => {
 			this.time = new Date().getTime();
 			this.indexImage++;
@@ -320,7 +322,8 @@ autoplay hint {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 			}
-			if (this.list[this.index].text && this.indexImage == this.list[this.index].src.length - 1) {
+			if (this.list[this.index].text && !this.indexProcessed[this.index]) {
+				this.indexProcessed[this.index] = true;
 				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 					utterance.lang = 'de-DE';
