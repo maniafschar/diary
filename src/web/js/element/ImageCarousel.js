@@ -325,8 +325,8 @@ autoplay hint {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 				this._root.querySelector('autoplay').scrollTo({
-					top: (img.naturalHeight - this._root.querySelector('imageContainer').clientHeight) / 2,
-					left: (img.naturalWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth'
+					top: (img.naturalHeight - this._root.querySelector('autoplay').clientHeight) / 2,
+					left: (img.naturalWidth - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
 				});
 			}
 			if (this.list[this.index].text && !this.indexProcessed[this.index]) {
