@@ -292,7 +292,7 @@ autoplay img {
 			}
 		};
 		var utter = () => {
-			if (new Date().getTime() - this.time < 5000) {
+			if (new Date().getTime() - this.time < 5000 && this.indexImage == 0) {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
