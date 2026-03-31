@@ -321,7 +321,7 @@ autoplay img {
 					next();
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 						video.addEventListener('ended', () => {
-							if (this.list[this.index].src.length > 0 && this.indexImage > 0)
+							if (this.list[this.index].src.length > 1 && this.indexImage > 0)
 								utter();
 							window.speechSynthesis.speak(utterance);
 						});
