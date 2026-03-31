@@ -291,8 +291,8 @@ autoplay img {
 				this.indexImage = this.list[this.index].src.length - 1;
 			}
 		};
-		var utter = wait => {
-			if (wait && new Date().getTime() - this.time < 5000) {
+		var utter = () => {
+			if (new Date().getTime() - this.time < 3000) {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
@@ -318,7 +318,7 @@ autoplay img {
 				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 					utterance.lang = 'de-DE';
-					utterance.addEventListener('end', () => utter(wait));
+					utterance.addEventListener('end', utter);
 					next();
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 						video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
@@ -327,7 +327,7 @@ autoplay img {
 				}, 1000);
 			} else {
 				next();
-				utter(wait);
+				utter();
 			}
 		}
 		utter();
