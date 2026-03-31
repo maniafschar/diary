@@ -354,7 +354,7 @@ autoplay hint {
 				}
 			}
 		}
-		utter();
+		setTimeout(utter, 500);
 	}
 
 	close() {
