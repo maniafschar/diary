@@ -281,11 +281,14 @@ autoplay img {
 				return;
 			}
 			this._root.querySelector('autoplay img').src = '/med/' + this.list[this.index].src[this.indexImage];
-			var utterance = new SpeechSynthesisUtterance(this.list[this.index].description);
-			utterance.lang = 'de-DE';
-			this.time = new Date().getTime();
-			window.speechSynthesis.addEventListener('end', utter);
-			window.speechSynthesis.speak(utterance);
+			if (this.list[this.index].text) {
+				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+				utterance.lang = 'de-DE';
+				this.time = new Date().getTime();
+				window.speechSynthesis.addEventListener('end', utter);
+				window.speechSynthesis.speak(utterance);
+			} else
+				utter();
 			this.indexImage--;
 			if (this.indexImage < 0) {
 				this.index--;
@@ -300,6 +303,7 @@ autoplay img {
 	close() {
 		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
+		window.speechSynthesis.cancel();
 	}
 
 	data() {
