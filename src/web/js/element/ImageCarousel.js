@@ -289,7 +289,6 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
-		this.time = new Date().getTime();
 		var next = () => {
 			this.time = new Date().getTime();
 			this.indexImage++;
@@ -340,8 +339,15 @@ autoplay hint {
 					next();
 				}, 1000);
 			} else {
-				next();
-				utter();
+				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
+					video.addEventListener('ended', () => {
+						next();
+						utter();
+					});
+				else {
+					next();
+					utter();
+				}
 			}
 		}
 		utter();
