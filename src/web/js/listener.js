@@ -45,7 +45,7 @@ class listener {
 	static updateImageCarousel(index) {
 		var autoplay = !index;
 		if (!index)
-			index = parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 0.5);
+			index = document.querySelectorAll('history item')[parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 0.5)].getAttribute('i');
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
 		var listImages = function (event) {
