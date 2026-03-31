@@ -313,7 +313,6 @@ autoplay img {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 			}
-			var wait = this.indexImage == 0;
 			if (this.list[this.index].text && this.indexImage == this.list[this.index].src.length - 1) {
 				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
@@ -321,7 +320,11 @@ autoplay img {
 					utterance.addEventListener('end', utter);
 					next();
 					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
-						video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
+						video.addEventListener('ended', () => {
+							if (this.list[this.index].src.length > 0 && this.indexImage > 0)
+								utter();
+							window.speechSynthesis.speak(utterance);
+						});
 					else
 						window.speechSynthesis.speak(utterance);
 				}, 1000);
