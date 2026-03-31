@@ -314,8 +314,10 @@ autoplay img {
 					else
 						window.speechSynthesis.speak(utterance);
 				}, 1000);
-			} else
+			} else {
+				this.time = new Date().getTime();
 				utter();
+			}
 			this.indexImage--;
 			if (this.indexImage < 0) {
 				this.index--;
