@@ -286,6 +286,7 @@ autoplay img {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
+			this._root.querySelector('autoplay').scrollTo({ top: 0, behavior: 'smooth' });
 			var src = this.list[this.index].src[this.indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
@@ -302,15 +303,17 @@ autoplay img {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 			}
-			if (this.list[this.index].text) {
-				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
-				utterance.lang = 'de-DE';
-				this.time = new Date().getTime();
-				utterance.addEventListener('end', utter);
-				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-					video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
-				} else
-					window.speechSynthesis.speak(utterance);
+			if (this.list[this.index].text && this.indexImage == this.list[this.index].src.length - 1) {
+				setTimeout(() => {
+					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+					utterance.lang = 'de-DE';
+					this.time = new Date().getTime();
+					utterance.addEventListener('end', utter);
+					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
+						video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
+					else
+						window.speechSynthesis.speak(utterance);
+				}, 1000);
 			} else
 				utter();
 			this.indexImage--;
