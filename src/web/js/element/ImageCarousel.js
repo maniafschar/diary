@@ -302,8 +302,8 @@ autoplay hint {
 		var utter = force => {
 			if (!document.querySelector('image-carousel').style.transform)
 				return;
-			if (!force && new Date().getTime() - this.time < 3000) {
-				setTimeout(utter, new Date().getTime() - this.time);
+			if (!force && new Date().getTime() - this.time < 5000) {
+				setTimeout(utter, 5000 - this.time);
 				return;
 			}
 			this._root.querySelector('autoplay').scrollTo({ top: 0, behavior: 'smooth' });
