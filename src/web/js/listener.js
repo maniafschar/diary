@@ -71,6 +71,8 @@ class listener {
 					src: listImages(events[i]),
 					index: events[i].id,
 					text: events[i].note,
+					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' + events[i].location.name + '<br/>' +
+						(events[i].location.rating ? '<input-rating value="' + events[i].location.rating + '"></input-rating>' : ''),
 					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
 						(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 						(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +

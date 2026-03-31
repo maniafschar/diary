@@ -297,6 +297,7 @@ autoplay img {
 				return;
 			}
 			this._root.querySelector('autoplay').scrollTo({ top: 0, behavior: 'smooth' });
+			this._root.querySelector('autoplay hint') = this.list[this.index].hint;
 			var src = this.list[this.index].src[this.indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
