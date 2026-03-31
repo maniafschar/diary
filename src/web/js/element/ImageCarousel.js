@@ -285,7 +285,7 @@ autoplay img {
 				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 				utterance.lang = 'de-DE';
 				this.time = new Date().getTime();
-				window.speechSynthesis.addEventListener('end', utter);
+				utterance.addEventListener('end', utter);
 				window.speechSynthesis.speak(utterance);
 			} else
 				utter();
