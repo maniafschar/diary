@@ -239,6 +239,12 @@ autoplay {
 }
 autoplay img {
 	width: 100%;
+}
+autoplay hint {
+	position: fixed;
+	left: 1em;
+	margin-left: 0;
+	text-align: left;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
