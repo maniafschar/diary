@@ -280,7 +280,7 @@ autoplay img {
 				setTimeout(utter, new Date().getTime() - this.time);
 				return;
 			}
-			this._root.querySelector('autoplay img').src = this.list[this.index].src[this.indexImage];
+			this._root.querySelector('autoplay img').src = '/med/' + this.list[this.index].src[this.indexImage];
 			var utterance = new SpeechSynthesisUtterance(this.list[this.index].description);
 			utterance.lang = 'de-DE';
 			this.time = new Date().getTime();
