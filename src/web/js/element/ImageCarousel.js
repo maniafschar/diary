@@ -302,7 +302,7 @@ autoplay hint {
 		var utter = force => {
 			if (!document.querySelector('image-carousel').style.transform)
 				return;
-			console.log(new Date().getTime() - this.time);
+			console.log((new Date().getTime() - this.time) + ' - ' + force);
 			if (!force && new Date().getTime() - this.time < 5000) {
 				setTimeout(utter, 5000 - this.time);
 				return;
