@@ -5,7 +5,7 @@ class ImageCarousel extends HTMLElement {
 	index = 0;
 	indexImage = 0;
 	indexProcessed = {};
-	time = 0;
+	time = -1;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -291,6 +291,11 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
+		if (this.time < 0) {
+			var utterance = new SpeechSynthesisUtterance('');
+			utterance.lang = 'de-DE';
+			window.speechSynthesis.speak(utterance);
+		}
 		var next = () => {
 			this.time = new Date().getTime();
 			this.indexImage++;
