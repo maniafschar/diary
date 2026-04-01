@@ -354,7 +354,7 @@ autoplay hint {
 							window.speechSynthesis.speak(utterance);
 						next();
 					}
-				}, 1500);
+				}, this.time < 0 ? 3000 : 1500);
 			} else {
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 					video.addEventListener('ended', () => {
