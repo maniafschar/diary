@@ -337,22 +337,22 @@ autoplay hint {
 			}
 			if (this.list[this.index].text && !this.indexProcessed[this.index]) {
 				this.indexProcessed[this.index] = true;
-				setTimeout(() => {
-					if (document.querySelector('image-carousel').style.transform) {
-						var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
-						utterance.lang = 'de-DE';
-						utterance.addEventListener('end', utter);
-						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
-							video.addEventListener('ended', () => {
-								if (this.list[this.index].src.length > 1 && this.indexImage > 0)
-									utter(true);
-								window.speechSynthesis.speak(utterance);
-							});
-						else
+				//				setTimeout(() => {
+				if (document.querySelector('image-carousel').style.transform) {
+					var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+					utterance.lang = 'de-DE';
+					utterance.addEventListener('end', utter);
+					if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
+						video.addEventListener('ended', () => {
+							if (this.list[this.index].src.length > 1 && this.indexImage > 0)
+								utter(true);
 							window.speechSynthesis.speak(utterance);
-						next();
-					}
-				}, 1500);
+						});
+					else
+						window.speechSynthesis.speak(utterance);
+					next();
+				}
+				//				}, 1500);
 			} else {
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 					video.addEventListener('ended', () => {
