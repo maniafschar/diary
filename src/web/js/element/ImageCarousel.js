@@ -371,6 +371,7 @@ autoplay hint {
 	}
 
 	close() {
+		this.time = 0;
 		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
@@ -396,7 +397,6 @@ autoplay hint {
 		if (style)
 			this._root.querySelector('style.custom').textContent = style;
 		this.list = list;
-		this.time = 0;
 		if (autoplay)
 			this.autoplay();
 		else
