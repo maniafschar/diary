@@ -343,7 +343,7 @@ autoplay hint {
 					resolve();
 			}
 		}
-		var myIndex = this.index, myIndexImage = this.indexImage;
+		var myIndex = this.index, myIndexImage = this.indexImage - 1;
 		var all = new Promise(() => {
 			if (this.first) {
 				this.first = false;
@@ -357,16 +357,15 @@ autoplay hint {
 				resolve();
 		});
 		for (var i = 0; i < this.list.left; i++) {
-			all = all.then((index, indexImage) => utter(index, indexImage));
 			myIndexImage++;
 			if (myIndexImage >= this.list[myIndex].src.length) {
 				myIndexImage = 0;
 				myIndex++;
 				if (myIndex >= this.list.length)
 					myIndex = 0;
-				all = all.then((index, indexImage) => setTimeout(utter(index, indexImage), 2000));
+				all = all.then(() => setTimeout(() => utter(index, indexImage), 2000));
 			} else
-				all = all.then((index, indexImage) => utter(index, indexImage));
+				all = all.then(() => utter(index, indexImage));
 		}
 	}
 
