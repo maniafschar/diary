@@ -1,3 +1,5 @@
+import { Promise } from "core-js/core";
+import { resolve } from "core-js/fn/promise";
 import { api } from "../api";
 
 export { ImageCarousel };
@@ -7,7 +9,7 @@ class ImageCarousel extends HTMLElement {
 	index = 0;
 	indexImage = 0;
 	indexProcessed = {};
-	time = -1;
+	first = true;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -293,30 +295,11 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
-		if (this.time < 0) {
-			var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
-			utterance.lang = 'de-DE';
-			window.speechSynthesis.speak(utterance);
-		}
-		var next = () => {
-			this.time = new Date().getTime();
-			this.indexImage++;
-			if (this.indexImage >= this.list[this.index].src.length) {
-				this.indexImage = 0;
-				this.index++;
-				if (this.index >= this.list.length)
-					this.index = 0;
-			}
-		};
-		var utter = force => {
+		var utter = (index, indexImage) => {
 			if (!document.querySelector('image-carousel').style.transform)
 				return;
-			if (force != true && new Date().getTime() - this.time < 5000) {
-				setTimeout(utter, 5000 - new Date().getTime() + this.time);
-				return;
-			}
-			this._root.querySelector('autoplay hint').innerHTML = this.list[this.index].hint;
-			var src = this.list[this.index].src[this.indexImage];
+			this._root.querySelector('autoplay hint').innerHTML = this.list[index].hint;
+			var src = this.list[index].src[indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
 			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
@@ -337,41 +320,59 @@ autoplay hint {
 					left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
 				});
 			}
-			if (this.list[this.index].text && !this.indexProcessed[this.index]) {
-				this.indexProcessed[this.index] = true;
+			if (this.list[index].text && !indexProcessed[index]) {
+				this.indexProcessed[index] = true;
 				setTimeout(() => {
 					if (document.querySelector('image-carousel').style.transform) {
-						var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
 						utterance.addEventListener('end', utter);
 						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 							video.addEventListener('ended', () => {
-								if (this.list[this.index].src.length > 1 && this.indexImage > 0)
+								if (this.list[index].src.length > 1 && indexImage > 0)
 									utter(true);
 								window.speechSynthesis.speak(utterance);
 							});
 						else
 							window.speechSynthesis.speak(utterance);
-						next();
+						resolve();
 					}
-				}, this.time < 0 ? 3000 : 1500);
+				}, 1500);
 			} else {
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
-					video.addEventListener('ended', () => {
-						next();
-						utter();
-					});
-				else {
-					next();
-					utter();
-				}
+					video.addEventListener('ended', resolve);
+				else
+					resolve();
 			}
 		}
-		setTimeout(utter, 500);
+		var myIndex = this.index, myIndexImage = this.indexImage;
+		var all = new Promise(() => {
+			if (this.first) {
+				this.first = false;
+				setTimeout(() => {
+					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
+					utterance.lang = 'de-DE';
+					window.speechSynthesis.speak(utterance);
+					setTimeout(resolve, 1500);
+				}, 500);
+			} else
+				resolve();
+		});
+		for (var i = 0; i < this.list.left; i++) {
+			all = all.then((index, indexImage) => utter(index, indexImage));
+			myIndexImage++;
+			if (myIndexImage >= this.list[myIndex].src.length) {
+				myIndexImage = 0;
+				myIndex++;
+				if (myIndex >= this.list.length)
+					myIndex = 0;
+				all = all.then((index, indexImage) => setTimeout(utter(index, indexImage), 2000));
+			} else
+				all = all.then((index, indexImage) => utter(index, indexImage));
+		}
 	}
 
 	close() {
-		this.time = 0;
 		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
