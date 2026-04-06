@@ -1,5 +1,3 @@
-import { Promise } from "core-js/core";
-import { resolve } from "core-js/fn/promise";
 import { api } from "../api";
 
 export { ImageCarousel };
