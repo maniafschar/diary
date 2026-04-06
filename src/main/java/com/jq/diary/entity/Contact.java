@@ -1,5 +1,7 @@
 package com.jq.diary.entity;
 
+import com.jq.diary.util.Utilities;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -37,7 +39,7 @@ public class Contact extends BaseEntity {
 	}
 
 	public void setNote(final String note) {
-		this.note = note.length() > 1000 ? note.substring(0, 1000) : note;
+		this.note = note.length() > Utilities.MAX_TEXT_LENGTH ? note.substring(Utilities.MAX_TEXT_LENGTH) : note;
 	}
 
 	public String getImage() {

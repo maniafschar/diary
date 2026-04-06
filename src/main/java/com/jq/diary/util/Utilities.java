@@ -19,6 +19,7 @@ import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Contact;
 
 public class Utilities {
+	public static final int MAX_TEXT_LENGTH = 65000;
 	public static final Pattern EMAIL = Pattern.compile("([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})",
 			Pattern.CASE_INSENSITIVE);
 	private static final SSLContext sslContext;

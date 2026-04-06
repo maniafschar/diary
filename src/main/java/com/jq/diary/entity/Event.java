@@ -7,6 +7,7 @@ import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,7 +55,7 @@ public class Event extends BaseEntity {
 	}
 
 	public void setNote(final String note) {
-		this.note = note.length() > 1000 ? note.substring(0, 1000) : note;
+		this.note = note.length() > Utilities.MAX_TEXT_LENGTH ? note.substring(0, Utilities.MAX_TEXT_LENGTH) : note;
 	}
 
 	public Contact getContact() {
