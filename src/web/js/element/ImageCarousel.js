@@ -325,6 +325,7 @@ autoplay hint {
 					if (document.querySelector('image-carousel').style.transform) {
 						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
+						utterance.addEventListener('end', resolve, true);
 						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 							video.addEventListener('ended', () => {
 								//if (this.list[index].src.length > 1 && indexImage > 0)
@@ -333,7 +334,6 @@ autoplay hint {
 							});
 						else
 							window.speechSynthesis.speak(utterance);
-						resolve();
 					}
 				}, 1500);
 			} else
@@ -346,8 +346,8 @@ autoplay hint {
 				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 					utterance.lang = 'de-DE';
+					utterance.addEventListener('end', resolve, true);
 					window.speechSynthesis.speak(utterance);
-					resolve();
 				}, 1000);
 			} else
 				resolve();
