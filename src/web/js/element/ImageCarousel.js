@@ -346,6 +346,7 @@ autoplay hint {
 		}
 		var all = new Promise(resolve => {
 			if (this.first) {
+				this._root.querySelector('autoplay img').src = '/image/start.png';
 				this.first = false;
 				var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 				utterance.lang = 'de-DE';
