@@ -295,15 +295,16 @@ autoplay hint {
 		this.indexProcessed = {};
 		var utter = (resolve, index, indexImage) => {
 			if (!document.querySelector('image-carousel').style.transform) {
-				resolve();
+				if (resolve)
+					resolve();
 				return;
 			}
 			this._root.querySelector('autoplay hint').innerHTML = this.list[index].hint;
 			var src = this.list[index].src[indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
-			var isVideo = src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
-			if (isVideo) {
+			var isVideo = src => src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
+			if (isVideo(src)) {
 				img.src = '';
 				img.style.display = 'none';
 				video.style.display = '';
@@ -317,31 +318,30 @@ autoplay hint {
 				img.style.display = '';
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
+				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
+					setTimeout(() => utter(null, index, indexImage + 1), 4000);
 			}
 			this._root.querySelector('autoplay').scrollTo({
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
 				left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
 			});
-			if (this.list[index].text && !this.indexProcessed[index]) {
+			if (!this.indexProcessed[index] && this.list[index].text) {
 				this.indexProcessed[index] = true;
 				setTimeout(() => {
 					if (document.querySelector('image-carousel').style.transform) {
 						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
 						utterance.addEventListener('end', resolve, true);
-						if (isVideo)
-							video.addEventListener('ended', () => {
-								//if (this.list[index].src.length > 1 && indexImage > 0)
-								//	utter(true);
-								window.speechSynthesis.speak(utterance);
-							});
+						if (isVideo(src))
+							video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
 						else
 							window.speechSynthesis.speak(utterance);
-					}
+					} else
+						resolve();
 				}, 1500);
-			} else if (isVideo)
+			} else if (isVideo(src))
 				video.addEventListener('ended', resolve);
-			else
+			else if (resolve)
 				resolve();
 		}
 		var myIndex = this.index, myIndexImage = this.indexImage - 1;
