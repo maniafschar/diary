@@ -349,9 +349,10 @@ autoplay hint {
 					window.speechSynthesis.speak(utterance);
 					resolve();
 				}, 1000);
-			}
+			} else
+				resolve();
 		});
-		for (var i = 0; i < this.list.left; i++) {
+		for (var i = 0; i < this.list.length; i++) {
 			myIndexImage++;
 			if (myIndexImage >= this.list[myIndex].src.length) {
 				myIndexImage = 0;
