@@ -293,9 +293,11 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
-		var utter = (index, indexImage) => {
-			if (!document.querySelector('image-carousel').style.transform)
+		var utter = (resolve, index, indexImage) => {
+			if (!document.querySelector('image-carousel').style.transform) {
+				resolve();
 				return;
+			}
 			this._root.querySelector('autoplay hint').innerHTML = this.list[index].hint;
 			var src = this.list[index].src[indexImage];
 			var img = this._root.querySelector('autoplay img');
@@ -331,18 +333,21 @@ autoplay hint {
 							});
 						else
 							window.speechSynthesis.speak(utterance);
+						resolve();
 					}
 				}, 1500);
-			}
+			} else
+				resolve();
 		}
 		var myIndex = this.index, myIndexImage = this.indexImage - 1;
-		var all = new Promise(() => {
+		var all = new Promise(resolve => {
 			if (this.first) {
 				this.first = false;
-				setTimeout(() => {
+				setTimeout(resolve => {
 					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 					utterance.lang = 'de-DE';
 					window.speechSynthesis.speak(utterance);
+					resolve();
 				}, 1000);
 			}
 		});
@@ -353,9 +358,9 @@ autoplay hint {
 				myIndex++;
 				if (myIndex >= this.list.length)
 					myIndex = 0;
-				all = all.then(() => setTimeout(() => utter(index, indexImage), 2000));
+				all = all.then(() => setTimeout(() => utter(resolve, index, indexImage), 2000));
 			} else
-				all = all.then(() => utter(index, indexImage));
+				all = all.then(() => utter(resolve, index, indexImage));
 		}
 	}
 
