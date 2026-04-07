@@ -363,7 +363,7 @@ autoplay hint {
 		var myIndex = this.index;
 		for (var i = 0; i < this.list.length; i++) {
 			for (var myIndexImage = 0; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
-				if (myIndexImage == 0 || isVideo(this.list[myIndex].src[myIndexImage]) || !isVideo(this.list[index].src[myIndexImage - 1])) {
+				if (myIndexImage == 0 || isVideo(this.list[myIndex].src[myIndexImage]) || !isVideo(this.list[myIndex].src[myIndexImage - 1])) {
 					const i1 = myIndex, i2 = myIndexImage;
 					all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
 				}
