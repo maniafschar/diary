@@ -293,6 +293,7 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = 'block';
 		this._root.querySelector('div').style.display = 'none';
 		this.indexProcessed = {};
+		var isVideo = src => src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
 		var utter = (resolve, index, indexImage) => {
 			if (!document.querySelector('image-carousel').style.transform) {
 				if (resolve)
@@ -303,7 +304,6 @@ autoplay hint {
 			var src = this.list[index].src[indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
-			var isVideo = src => src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
 			if (isVideo(src)) {
 				img.src = '';
 				img.style.display = 'none';
@@ -319,7 +319,13 @@ autoplay hint {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
-					setTimeout(resolve, 2000);
+					setTimeout(() => {
+						img.src = '/med/' + this.list[index].src[indexImage + 1];
+						this._root.querySelector('autoplay').scrollTo({
+							top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
+							left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
+						});
+					}, 4000);
 			}
 			this._root.querySelector('autoplay').scrollTo({
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
@@ -357,8 +363,10 @@ autoplay hint {
 		var myIndex = this.index;
 		for (var i = 0; i < this.list.length; i++) {
 			for (var myIndexImage = 0; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
-				const i1 = myIndex, i2 = myIndexImage;
-				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
+				if (myIndexImage == 0 || isVideo(this.list[index].src[indexImage]) || !isVideo(this.list[index].src[indexImage - 1])) {
+					const i1 = myIndex, i2 = myIndexImage;
+					all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
+				}
 			}
 			myIndex++;
 			if (myIndex >= this.list.length)
