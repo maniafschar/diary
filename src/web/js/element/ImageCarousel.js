@@ -319,7 +319,7 @@ autoplay hint {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
-					setTimeout(() => resolve, 2000);
+					setTimeout(resolve, 2000);
 			}
 			this._root.querySelector('autoplay').scrollTo({
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
