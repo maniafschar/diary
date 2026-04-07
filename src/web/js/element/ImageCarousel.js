@@ -343,10 +343,8 @@ autoplay hint {
 					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 					utterance.lang = 'de-DE';
 					window.speechSynthesis.speak(utterance);
-					setTimeout(resolve, 3000);
 				}, 1000);
-			} else
-				resolve();
+			}
 		});
 		for (var i = 0; i < this.list.left; i++) {
 			myIndexImage++;
