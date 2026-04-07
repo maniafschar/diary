@@ -343,7 +343,7 @@ autoplay hint {
 		var all = new Promise(resolve => {
 			if (this.first) {
 				this.first = false;
-				setTimeout(resolve => {
+				setTimeout(() => {
 					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 					utterance.lang = 'de-DE';
 					window.speechSynthesis.speak(utterance);
