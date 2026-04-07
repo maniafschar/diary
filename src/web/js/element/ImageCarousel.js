@@ -302,10 +302,13 @@ autoplay hint {
 			var src = this.list[index].src[indexImage];
 			var img = this._root.querySelector('autoplay img');
 			var video = this._root.querySelector('autoplay video');
-			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+			var isVideo = src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
+			if (isVideo) {
 				img.src = '';
 				img.style.display = 'none';
 				video.style.display = '';
+				video.controls = false;
+				video.autoplay = true;
 				video.querySelector('source').src = '/med/' + src;
 				video.load();
 				video.play();
@@ -326,7 +329,7 @@ autoplay hint {
 						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
 						utterance.addEventListener('end', resolve, true);
-						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
+						if (isVideo)
 							video.addEventListener('ended', () => {
 								//if (this.list[index].src.length > 1 && indexImage > 0)
 								//	utter(true);
@@ -336,7 +339,9 @@ autoplay hint {
 							window.speechSynthesis.speak(utterance);
 					}
 				}, 1500);
-			} else
+			} else if (isVideo)
+				video.addEventListener('ended', resolve);
+			else
 				resolve();
 		}
 		var myIndex = this.index, myIndexImage = this.indexImage - 1;
