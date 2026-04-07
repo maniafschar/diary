@@ -359,9 +359,9 @@ autoplay hint {
 				myIndex++;
 				if (myIndex >= this.list.length)
 					myIndex = 0;
-				all = all.then(() => setTimeout(resolve => utter(resolve, myIndex, myIndexImage), 2000));
+				all = all.then(() => setTimeout(() => utter(resolve, myIndex, myIndexImage), 2000));
 			} else
-				all = all.then(resolve => utter(resolve, myIndex, myIndexImage));
+				all = all.then(() => utter(resolve, myIndex, myIndexImage));
 		}
 
 	}
