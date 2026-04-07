@@ -319,7 +319,7 @@ autoplay hint {
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
 				left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
 			});
-			if (this.list[index].text && !indexProcessed[index]) {
+			if (this.list[index].text && !this.indexProcessed[index]) {
 				this.indexProcessed[index] = true;
 				setTimeout(() => {
 					if (document.querySelector('image-carousel').style.transform) {
