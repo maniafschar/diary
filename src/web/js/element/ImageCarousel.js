@@ -343,12 +343,10 @@ autoplay hint {
 		var all = new Promise(resolve => {
 			if (this.first) {
 				this.first = false;
-				setTimeout(() => {
-					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
-					utterance.lang = 'de-DE';
-					utterance.addEventListener('end', resolve, true);
-					window.speechSynthesis.speak(utterance);
-				}, 1000);
+				var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
+				utterance.lang = 'de-DE';
+				utterance.addEventListener('end', resolve, true);
+				window.speechSynthesis.speak(utterance);
 			} else
 				resolve();
 		});
