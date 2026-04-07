@@ -331,14 +331,8 @@ autoplay hint {
 							});
 						else
 							window.speechSynthesis.speak(utterance);
-						resolve();
 					}
 				}, 1500);
-			} else {
-				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
-					video.addEventListener('ended', resolve);
-				else
-					resolve();
 			}
 		}
 		var myIndex = this.index, myIndexImage = this.indexImage - 1;
