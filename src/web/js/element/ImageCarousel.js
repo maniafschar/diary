@@ -318,14 +318,16 @@ autoplay hint {
 				img.style.display = '';
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
-				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
+				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1])) {
+					const i = index, ii = indexImage;
 					setTimeout(() => {
-						img.src = '/med/' + this.list[index].src[indexImage + 1];
+						img.src = '/med/' + this.list[i].src[ii + 1];
 						this._root.querySelector('autoplay').scrollTo({
 							top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
 							left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
 						});
 					}, 4000);
+				}
 			}
 			this._root.querySelector('autoplay').scrollTo({
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
