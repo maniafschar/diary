@@ -344,7 +344,6 @@ autoplay hint {
 			else if (resolve)
 				resolve();
 		}
-		var myIndex = this.index, myIndexImage = this.indexImage;
 		var all = new Promise(resolve => {
 			if (this.first) {
 				this.first = false;
@@ -355,12 +354,12 @@ autoplay hint {
 			} else
 				resolve();
 		});
+		var myIndex = this.index;
 		for (var i = 0; i < this.list.length; i++) {
-			for (; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
+			for (var myIndexImage = 0; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
 				const i1 = myIndex, i2 = myIndexImage;
 				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
 			}
-			myIndexImage = 0;
 			myIndex++;
 			if (myIndex >= this.list.length)
 				myIndex = 0;
