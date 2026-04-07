@@ -307,24 +307,22 @@ autoplay hint {
 				video.querySelector('source').src = '/med/' + src;
 				video.load();
 				video.play();
-				this._root.querySelector('autoplay').scrollTo({ top: 0, behavior: 'smooth' });
 			} else {
 				img.src = '/med/' + src;
 				img.style.display = '';
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
-				this._root.querySelector('autoplay').scrollTo({
-					top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
-					left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
-				});
 			}
+			this._root.querySelector('autoplay').scrollTo({
+				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
+				left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
+			});
 			if (this.list[index].text && !indexProcessed[index]) {
 				this.indexProcessed[index] = true;
 				setTimeout(() => {
 					if (document.querySelector('image-carousel').style.transform) {
 						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
-						utterance.addEventListener('end', utter);
 						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 							video.addEventListener('ended', () => {
 								if (this.list[index].src.length > 1 && indexImage > 0)
@@ -351,8 +349,8 @@ autoplay hint {
 					var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
 					utterance.lang = 'de-DE';
 					window.speechSynthesis.speak(utterance);
-					setTimeout(resolve, 1500);
-				}, 500);
+					setTimeout(resolve, 3000);
+				}, 1000);
 			} else
 				resolve();
 		});
