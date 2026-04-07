@@ -319,7 +319,7 @@ autoplay hint {
 				video.querySelector('source').src = '';
 				video.style.display = 'none';
 				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
-					setTimeout(() => utter(null, index, indexImage + 1), 4000);
+					setTimeout(() => resolve, 4000);
 			}
 			this._root.querySelector('autoplay').scrollTo({
 				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
@@ -344,7 +344,7 @@ autoplay hint {
 			else if (resolve)
 				resolve();
 		}
-		var myIndex = this.index, myIndexImage = this.indexImage - 1;
+		var myIndex = this.index, myIndexImage = this.indexImage;
 		var all = new Promise(resolve => {
 			if (this.first) {
 				this.first = false;
@@ -356,119 +356,115 @@ autoplay hint {
 				resolve();
 		});
 		for (var i = 0; i < this.list.length; i++) {
-			myIndexImage++;
-			if (myIndexImage >= this.list[myIndex].src.length) {
-				myIndexImage = 0;
-				myIndex++;
-				if (myIndex >= this.list.length)
-					myIndex = 0;
+			for (; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
 				const i1 = myIndex, i2 = myIndexImage;
-				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), 2000)));
-			} else {
-				const i1 = myIndex, i2 = myIndexImage;
-				all = all.then(() => new Promise(resolve => utter(resolve, i1, i2)));
+				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
+			}
+			myIndexImage = 0;
+			myIndex++;
+			if (myIndex >= this.list.length)
+				myIndex = 0;
+		}
+	}
+}
+
+close() {
+	this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
+	this._root.host.style.transform = '';
+	window.speechSynthesis.cancel();
+	this._root.querySelector('div video').pause();
+	this._root.querySelector('autoplay video').pause();
+}
+
+data() {
+	return this._root.querySelector('data');
+}
+
+open(list, index, autoplay, style) {
+	if (index) {
+		var id = parseInt(index.split('.')[0]);
+		for (var i = 0; i < list.length; i++) {
+			if (id == list[i].index) {
+				this.index = i;
+				break;
 			}
 		}
-
+		this.indexImage = parseInt(index.split('.')[1]);
 	}
-
-	close() {
-		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
-		this._root.host.style.transform = '';
-		window.speechSynthesis.cancel();
-		this._root.querySelector('div video').pause();
-		this._root.querySelector('autoplay video').pause();
-	}
-
-	data() {
-		return this._root.querySelector('data');
-	}
-
-	open(list, index, autoplay, style) {
-		if (index) {
-			var id = parseInt(index.split('.')[0]);
-			for (var i = 0; i < list.length; i++) {
-				if (id == list[i].index) {
-					this.index = i;
-					break;
-				}
-			}
-			this.indexImage = parseInt(index.split('.')[1]);
-		}
-		if (style)
-			this._root.querySelector('style.custom').textContent = style;
-		this.list = list;
-		if (autoplay)
-			this.autoplay();
-		else
-			this.update();
-		this._root.host.style.transform = 'scale(1)';
-	}
-
-	navigate(next) {
-		this.indexImage = this.indexImage + (next ? 1 : -1);
-		if (this.indexImage >= this.list[this.index].src.length) {
-			this.indexImage = 0;
-			this.index++;
-			if (this.index >= this.list.length)
-				this.index = 0;
-		} else if (this.indexImage < 0) {
-			this.index--;
-			if (this.index < 0)
-				this.index = this.list.length - 1;
-			this.indexImage = this.list[this.index].src.length - 1;
-		}
+	if (style)
+		this._root.querySelector('style.custom').textContent = style;
+	this.list = list;
+	if (autoplay)
+		this.autoplay();
+	else
 		this.update();
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
-	}
+	this._root.host.style.transform = 'scale(1)';
+}
 
-	update() {
-		this._root.querySelector('autoplay').style.display = '';
-		this._root.querySelector('div').style.display = '';
-		this.updateImage(this.indexImage);
-		this._root.querySelector('description').innerHTML = this.list[this.index].description;
+navigate(next) {
+	this.indexImage = this.indexImage + (next ? 1 : -1);
+	if (this.indexImage >= this.list[this.index].src.length) {
+		this.indexImage = 0;
+		this.index++;
+		if (this.index >= this.list.length)
+			this.index = 0;
+	} else if (this.indexImage < 0) {
+		this.index--;
+		if (this.index < 0)
+			this.index = this.list.length - 1;
+		this.indexImage = this.list[this.index].src.length - 1;
 	}
+	this.update();
+	this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-	updateImage(index) {
-		this.indexImage = index;
-		var position = 0, total = 0;
-		for (var i = 0; i < this.list.length; i++) {
-			if (this.index > i)
-				position += this.list[i].src.length;
-			total += this.list[i].src.length;
-		}
-		position += this.indexImage + 1;
-		this._root.querySelector('hint').innerText = position + '/' + total;
-		var img = this._root.querySelector('div img');
-		var video = this._root.querySelector('div video');
-		var src = this.list[this.index].src[this.indexImage];
-		video.pause();
-		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-			img.src = '';
-			img.style.display = 'none';
-			video.style.display = '';
-			video.querySelector('source').src = '/med/' + src;
-			video.load();
-			video.play();
-		} else {
-			img.src = '/med/' + src;
-			img.style.display = '';
-			video.querySelector('source').src = '';
-			video.style.display = 'none';
-		}
-		this._root.querySelector('nav').textContent = '';
-		if (this.list[this.index].src.length > 1) {
-			var nav = this._root.querySelector('nav');
-			for (var i = 0; i < this.list[this.index].src.length; i++) {
-				var dot = nav.appendChild(document.createElement('dot'));
-				dot.innerText = i + 1;
-				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				if (i == this.indexImage)
-					dot.classList.add('selected');
-			}
-			nav.style.width = (3 * this.list[this.index].src.length) + 'em';
-			nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
-		}
-		setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
+update() {
+	this._root.querySelector('autoplay').style.display = '';
+	this._root.querySelector('div').style.display = '';
+	this.updateImage(this.indexImage);
+	this._root.querySelector('description').innerHTML = this.list[this.index].description;
+}
+
+updateImage(index) {
+	this.indexImage = index;
+	var position = 0, total = 0;
+	for (var i = 0; i < this.list.length; i++) {
+		if (this.index > i)
+			position += this.list[i].src.length;
+		total += this.list[i].src.length;
 	}
+	position += this.indexImage + 1;
+	this._root.querySelector('hint').innerText = position + '/' + total;
+	var img = this._root.querySelector('div img');
+	var video = this._root.querySelector('div video');
+	var src = this.list[this.index].src[this.indexImage];
+	video.pause();
+	if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+		img.src = '';
+		img.style.display = 'none';
+		video.style.display = '';
+		video.querySelector('source').src = '/med/' + src;
+		video.load();
+		video.play();
+	} else {
+		img.src = '/med/' + src;
+		img.style.display = '';
+		video.querySelector('source').src = '';
+		video.style.display = 'none';
+	}
+	this._root.querySelector('nav').textContent = '';
+	if (this.list[this.index].src.length > 1) {
+		var nav = this._root.querySelector('nav');
+		for (var i = 0; i < this.list[this.index].src.length; i++) {
+			var dot = nav.appendChild(document.createElement('dot'));
+			dot.innerText = i + 1;
+			dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+			if (i == this.indexImage)
+				dot.classList.add('selected');
+		}
+		nav.style.width = (3 * this.list[this.index].src.length) + 'em';
+		nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
+	}
+	setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
+}
 }
