@@ -359,9 +359,12 @@ autoplay hint {
 				myIndex++;
 				if (myIndex >= this.list.length)
 					myIndex = 0;
-				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, myIndex, myIndexImage), 2000)));
-			} else
-				all = all.then(() => new Promise(resolve => utter(resolve, myIndex, myIndexImage)));
+				const i1 = myIndex, i2 = myIndexImage;
+				all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), 2000)));
+			} else {
+				const i1 = myIndex, i2 = myIndexImage;
+				all = all.then(() => new Promise(resolve => utter(resolve, i1, i2)));
+			}
 		}
 
 	}
