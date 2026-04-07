@@ -327,8 +327,8 @@ autoplay hint {
 						utterance.lang = 'de-DE';
 						if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)
 							video.addEventListener('ended', () => {
-								if (this.list[index].src.length > 1 && indexImage > 0)
-									utter(true);
+								//if (this.list[index].src.length > 1 && indexImage > 0)
+								//	utter(true);
 								window.speechSynthesis.speak(utterance);
 							});
 						else
@@ -358,10 +358,11 @@ autoplay hint {
 				myIndex++;
 				if (myIndex >= this.list.length)
 					myIndex = 0;
-				all = all.then(() => setTimeout(() => utter(resolve, index, indexImage), 2000));
+				all = all.then(() => setTimeout(resolve => utter(resolve, index, indexImage), 2000));
 			} else
-				all = all.then(() => utter(resolve, index, indexImage));
+				all = all.then(resolve => utter(resolve, index, indexImage));
 		}
+
 	}
 
 	close() {
