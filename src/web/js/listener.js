@@ -199,11 +199,11 @@ input-rating {
 						img.loop = true;
 						img.setAttribute('playsinline', true);
 						var source = img.appendChild(document.createElement('source'));
-						source.src = '/med/' + path;
+						source.setAttribute('s', '/med/' + path);
 						source.type = 'video/mp4';
 					} else {
 						img = item.appendChild(document.createElement('img'));
-						img.src = '/med/' + path;
+						img.setAttribute('s', 'med/' + path);
 					}
 					img.onclick = click;
 					var text = item.appendChild(document.createElement('text'));
