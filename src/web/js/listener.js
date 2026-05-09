@@ -276,8 +276,16 @@ input-rating {
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('history').addEventListener('scroll', () => {
+			var items = document.querySelectorAll('element.history item[s]');
+			var scroll = document.querySelector('history').scrollLeft;
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].clientX + items[i].clientWidth > scroll && items[i].clientX < scroll +?items[i].clientWidth) {
+					items[i].src = items[i].getAttribute('s');
+					items[i].removeAttribute('s');
+				}
+			}
 			document.querySelector('element.history count').innerText =
-				parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 1.5) +
+				parseInt(scroll / document.querySelector('history').clientWidth + 1.5) +
 				'/' + document.querySelectorAll('history item').length;
 		});
 	}
