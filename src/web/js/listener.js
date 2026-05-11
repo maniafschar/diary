@@ -276,7 +276,7 @@ input-rating {
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('history').addEventListener('scroll', () => {
-			var items = document.querySelectorAll('element.history item[s]');
+			var items = document.querySelectorAll('element.history img[s], element.history source[s]');
 			var scroll = document.querySelector('history').scrollLeft;
 			for (var i = 0; i < items.length; i++) {
 				if (items[i].clientX + items[i].clientWidth > scroll && items[i].clientX < scroll + items[i].clientWidth) {
