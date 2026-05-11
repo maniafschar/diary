@@ -191,7 +191,7 @@ input-rating {
 					margin += 100;
 					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
 					var path = events[i].eventImages[i2].image;
-					var img = item.appendChild(document.createElement('img'));
+					var img;
 					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
 						img = item.appendChild(document.createElement('video'));
 						img.autoplay = true;
@@ -279,7 +279,8 @@ input-rating {
 			var items = document.querySelectorAll('element.history img[s], element.history source[s]');
 			var scroll = document.querySelector('history').scrollLeft;
 			for (var i = 0; i < items.length; i++) {
-				if (items[i].clientX + items[i].clientWidth > scroll && items[i].clientX < scroll + items[i].clientWidth) {
+				var parent = items[i].parentElement;
+				if (parent.clientX + parent.clientWidth > scroll && parent.clientX < scroll + parent.clientWidth) {
 					items[i].src = items[i].getAttribute('s');
 					items[i].removeAttribute('s');
 				}
