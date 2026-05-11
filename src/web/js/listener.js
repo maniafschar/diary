@@ -280,7 +280,7 @@ input-rating {
 			var scroll = document.querySelector('history').scrollLeft;
 			for (var i = 0; i < items.length; i++) {
 				var parent = items[i].parentElement;
-				if (parent.clientX + parent.clientWidth > scroll && parent.clientX < scroll + parent.clientWidth) {
+				if (parent.offsetLeft + parent.offsetWidth > scroll && parent.offsetLeft < scroll + parent.offsetWidth) {
 					items[i].src = items[i].getAttribute('s');
 					items[i].removeAttribute('s');
 				}
