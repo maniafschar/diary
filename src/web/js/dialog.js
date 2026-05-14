@@ -369,7 +369,7 @@ value a {
 			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
 			popup.appendChild(document.createElement('label')).innerText = 'Ort';
 			popup.appendChild(document.createElement('value')).innerHTML = event.location.name
-				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address + '</a>' : '')
+				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address.replace(/\n/g, '<br/>') + '</a>' : '')
 				+ (event.location.phone ? '<br/><a href="tel:' + event.location.phone.replace(/\D/g, '') + '">' + event.location.phone + '</a>' : '')
 				+ (event.location.url ? '<br/><a href="' + event.location.url + '" target="_blank">' + event.location.url + '</a>' : '')
 				+ (event.location.email ? '<br/><a href="mailto:' + event.location.email + '">' + event.location.email + '</a>' : '');
