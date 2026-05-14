@@ -280,7 +280,7 @@ input-rating {
 				var parent = items[i].parentElement;
 				if (parent.offsetLeft + parent.offsetWidth > scroll && parent.offsetLeft < scroll + parent.offsetWidth) {
 					if (parent.nodeName == 'VIDEO') {
-						var source = img.appendChild(document.createElement('source'));
+						var source = document.createElement('source');
 						source.src = '/med/' + items[i].getAttribute('s');
 						source.type = 'video/mp4';
 						items[i].appendChild(source);
