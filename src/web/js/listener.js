@@ -198,9 +198,7 @@ input-rating {
 						img.muted = true;
 						img.loop = true;
 						img.setAttribute('playsinline', true);
-						var source = img.appendChild(document.createElement('source'));
-						source.setAttribute('s', '/med/' + path);
-						source.type = 'video/mp4';
+						img.setAttribute('s', '/med/' + path);
 					} else {
 						img = item.appendChild(document.createElement('img'));
 						img.setAttribute('s', 'med/' + path);
@@ -276,14 +274,18 @@ input-rating {
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('history').addEventListener('scroll', () => {
-			var items = document.querySelectorAll('element.history img[s], element.history source[s]');
+			var items = document.querySelectorAll('element.history img[s], element.history video[s]');
 			var scroll = document.querySelector('history').scrollLeft;
 			for (var i = 0; i < items.length; i++) {
 				var parent = items[i].parentElement;
-				if (parent.nodeName == 'VIDEO')
-					parent = parent.parentElement;
 				if (parent.offsetLeft + parent.offsetWidth > scroll && parent.offsetLeft < scroll + parent.offsetWidth) {
-					items[i].src = items[i].getAttribute('s');
+					if (parent.nodeName == 'VIDEO') {
+						var source = img.appendChild(document.createElement('source'));
+						source.src = '/med/' + items[i].getAttribute('s');
+						source.type = 'video/mp4';
+						items[i].appendChild(source);
+					} else
+						items[i].src = items[i].getAttribute('s');
 					items[i].removeAttribute('s');
 				}
 			}
