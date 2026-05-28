@@ -36,7 +36,6 @@ table {
 	display: block;
 	font-size: 1em;
 	z-index: 3;
-	height: 100%;
 }
 
 thead,
