@@ -57,7 +57,7 @@ public class Application {
 		this.driver = createWebDriver(400, 900);
 		this.driver.get(url);
 		final Client client = new Client();
-		client.setName("Manis Tegebuch");
+		client.setName("Manis Tagebuch");
 		this.repository.save(client);
 		final Contact contact = new Contact();
 		contact.setAdmin(true);
