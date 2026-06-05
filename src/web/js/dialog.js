@@ -8,8 +8,42 @@ class dialog {
 	static longitude;
 	static latitude;
 	static nearbySearch;
+	static files;
+	static stylePictures = `
+value.pictures {
+	width: 100%;
+	min-height: 3.2em;
+}
+
+value.pictures div {
+	width: 90%;
+	max-width: 20em;
+	margin: 1%;
+	border-radius: 0.5em;
+	vertical-align: top;
+	display: inline-block;
+	position: relative;
+}
+
+value.pictures div delete {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.8);
+	padding: 0.5em;
+	border-radius: 0 0.5em;
+	font-size: 0.8em;
+}
+
+value.pictures div img,
+value.pictures div video {
+	border-radius: 0.5em;
+	width: 100%;
+	padding: 0;
+}`;
 
 	static add(event) {
+		dialog.files = [];
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
 tabHeader {
@@ -82,7 +116,9 @@ button.location {
 	background-position-x: 0.3em;
 	background-position-y: 0.3em;
 	background-color: rgba(100, 150, 200, 0.2);
-}`;
+}
+
+${dialog.stylePictures}`;
 		var tabHeader = popup.appendChild(document.createElement('tabHeader'));
 		var tab = tabHeader.appendChild(document.createElement('tab'));
 		tab.setAttribute('onclick', 'ui.showTab(event)');
@@ -104,6 +140,35 @@ button.location {
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location?.id);
 		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location?.rating).setAttribute('type', 'edit');
+		element.appendChild(document.createElement('label')).innerText = 'Bilder';
+		var pictures = element.appendChild(document.createElement('value'));
+		pictures.classList.add('pictures');
+		var buttonImage = pictures.appendChild(document.createElement('input-image'));
+		buttonImage.style.right = 0;
+		buttonImage.style.top = 0;
+		buttonImage.style.borderRadius = '0 0.5em';
+		buttonImage.setAttribute('max', 1000);
+		buttonImage.setSuccess(e => {
+			var div = pictures.appendChild(document.createElement('div'));
+			var image;
+			if (e.data.indexOf('.mov') > 0 || e.data.indexOf('.mp4') > 0) {
+				image = div.appendChild(document.createElement('video'));
+				image.autoplay = true;
+				image.muted = true;
+				image.loop = true;
+				image.setAttribute('playsinline', true);
+				var source = image.appendChild(document.createElement('source'));
+				source.src = e.data;
+				source.type = 'video/mp4';
+			} else {
+				image = div.appendChild(document.createElement('img'));
+				image.src = e.data;
+			}
+			image.parentElement.setAttribute('i', dialog.files.length);
+			image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + dialog.files.length + ')');
+			dialog.files.push(e);
+		});
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
@@ -221,10 +286,7 @@ hint {
 	position: relative;
 }
 
-value.pictures {
-	width: 100%;
-	min-height: 3.2em;
-}`;
+${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
 			popup.style.minWidth = '20em';
 			var id = popup.appendChild(document.createElement('input'));
@@ -294,36 +356,7 @@ value item.selected::after {
 	top: 0.5em;
 }
 
-value.pictures {
-	width: 100%;
-	min-height: 3.2em;
-}
-
-value.pictures div {
-	width: 90%;
-	max-width: 20em;
-	margin: 1%;
-	border-radius: 0.5em;
-	vertical-align: top;
-	display: inline-block;
-	position: relative;
-}
-
-value.pictures div delete {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	background: rgba(255, 255, 255, 0.8);
-	padding: 0.5em;
-	border-radius: 0 0.5em;
-	font-size: 0.8em;
-}
-
-value.pictures div img,
-value.pictures div video {
-	border-radius: 0.5em;
-	width: 100%;
-}
+${dialog.stylePictures}
 
 value.participants.history item.selected {
 	display: none;
@@ -364,6 +397,11 @@ participant input {
 
 value a {
 	margin-top: 1em;
+}
+
+button.edit {
+	right: 0;
+	top: 0;
 }`;
 			popup.appendChild(document.createElement('label')).innerText = 'Datum';
 			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
@@ -409,21 +447,22 @@ value a {
 					buttonImage.setAttribute('max', 1000);
 					var addImage = (id, data) => {
 						var div = pictures.appendChild(document.createElement('div'));
+						var image;
 						if (data.indexOf('.mov') > 0 || data.indexOf('.mp4') > 0) {
-							var video = div.appendChild(document.createElement('video'));
-							video.autoplay = true;
-							video.muted = true;
-							video.loop = true;
-							video.setAttribute('playsinline', true);
-							var source = video.appendChild(document.createElement('source'));
+							image = div.appendChild(document.createElement('video'));
+							image.autoplay = true;
+							image.muted = true;
+							image.loop = true;
+							image.setAttribute('playsinline', true);
+							var source = image.appendChild(document.createElement('source'));
 							source.src = data;
 							source.type = 'video/mp4';
 						} else {
-							var image = div.appendChild(document.createElement('img'));
+							image = div.appendChild(document.createElement('img'));
 							image.src = data;
-							image.parentElement.setAttribute('i', id);
-							image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
 						}
+						image.parentElement.setAttribute('i', id);
+						image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
 						if (data.indexOf('med/') != 0)
 							document.dispatchEvent(new CustomEvent('event'));
 					};
@@ -441,8 +480,7 @@ value a {
 				button.appendChild(document.createElement('img')).src = '/image/edit.svg';
 				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, location: event.location, participants: event.contactEvents.length }) + ')');
 				button.classList.add('icon');
-				button.style.right = 0;
-				button.style.top = 0;
+				button.classList.add('edit');
 			}
 			api.contact.getList(contacts => {
 				var pseudonyms = ui.extractPseudonyms(contacts);

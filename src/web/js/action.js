@@ -89,8 +89,8 @@ class action {
 		action.addWithParticipation(event, chooseFile, 'Du kannst nur Bilder zu Events hochladen, an denen Du teilgenommen hast.');
 	}
 
-	static addRating(event, e) {
-		action.addWithParticipation(event, () => api.event.putRating(event.id, e.getAttribute('value'), () => {
+	static addRating(event, value) {
+		action.addWithParticipation(event, () => api.event.putRating(event.id, value, () => {
 			document.dispatchEvent(new CustomEvent('event'));
 			document.dispatchEvent(new CustomEvent('popup'));
 		}), 'Du kannst nur Events bewerten, an denen Du teilgenommen hast.');
@@ -235,12 +235,15 @@ class action {
 	static eventImageDelete(event, id) {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		if (e.querySelector('delete')) {
-			if (event.target.nodeName == 'DELETE')
-				api.event.deleteImage(id, () => {
+			if (event.target.nodeName == 'DELETE') {
+				if (document.querySelector('dialog-popup').content().querySelector('button.edit'))
+					api.event.deleteImage(id, () => {
+						e.remove();
+						document.dispatchEvent(new CustomEvent('event'));
+					});
+				else
 					e.remove();
-					document.dispatchEvent(new CustomEvent('event'));
-				});
-			else
+			} else
 				e.querySelector('delete').remove();
 		} else
 			e.appendChild(document.createElement('delete')).innerText = 'Löschen?';
@@ -250,19 +253,36 @@ class action {
 		var popup = document.querySelector('dialog-popup').content();
 		var date = popup.querySelector('element.event input-date').getAttribute('value');
 		var locationId = popup.querySelector('element.event input-selection').getAttribute('value');
-		if (date && locationId)
+		if (date && locationId) {
+			var event = {
+				id: popup.querySelector('element.event input[name="id"]')?.value,
+				date: date,
+				note: popup.querySelector('element.event textarea').value,
+				location: { id: locationId }
+			};
 			api.event.post(
-				{
-					id: popup.querySelector('element.event input[name="id"]')?.value,
-					date: date,
-					note: popup.querySelector('element.event textarea').value,
-					location: { id: locationId }
-				},
-				() => {
-					document.dispatchEvent(new CustomEvent('popup'));
-					document.dispatchEvent(new CustomEvent('event'));
+				event,
+				id => {
+					event.id = id;
+					var addPictures = () => {
+						var pictures = popup.querySelectorAll('element.event value.pictures div');
+						for (var i = 0; i < pictures.length; i++) {
+							var formData = new FormData();
+							var file = dialog.files[pictures[i].getAttribute('i')];
+							formData.append('file', file.file);
+							api.event.postImage(id, file.type, formData);
+						}
+						document.dispatchEvent(new CustomEvent('event'));
+						document.dispatchEvent(new CustomEvent('popup'));
+					};
+					var rating = popup.querySelector('element.event input-rating').getAttribute('value');
+					if (rating)
+						api.event.putRating(event.id, rating, addPictures);
+					else
+						addPictures();
 				}
 			);
+		}
 	}
 
 	static contactPatch() {
@@ -306,8 +326,10 @@ class action {
 				id => {
 					if (location.id)
 						popup.querySelector('element.location error').innerText = 'Location gespeichert.';
-					else
+					else {
 						popup.querySelectorAll('element.location input,element.location textarea').forEach(e => e.value = '');
+						location.type = 'read';
+					}
 					location.id = id;
 					document.dispatchEvent(new CustomEvent('location', { detail: location }));
 				}
