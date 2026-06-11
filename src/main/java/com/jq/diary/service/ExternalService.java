@@ -37,7 +37,7 @@ public class ExternalService {
 						for (int i2 = 0; i2 < data.size(); i2++) {
 							if (data.get(i2) != null) {
 								final String type = data.get(i2).has("types")
-												&& data.get(i2).has("types").size() > 0
+												&& data.get(i2).get("types").size() > 0
 										? data.get(i2).get("types").get(0).asText()
 										: "";
 								if (street == null && "route".equals(type))
