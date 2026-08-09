@@ -3,9 +3,8 @@ package com.jq.diary;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ import com.jq.diary.util.Encryption;
 				"server.port=9001", "server.servlet.context-path=/rest" })
 @ActiveProfiles("test")
 public class Application {
-	private static String url = "http://localhost:9000/";
+	private static final String URL = "http://localhost:9000/";
 	private WebDriver driver;
 
 	@Autowired
@@ -41,7 +40,7 @@ public class Application {
 
 	@Test
 	public void run() throws Exception {
-		Thread.sleep(600000);
+		Thread.sleep(Duration.ofMinutes(10).toMillis());
 	}
 
 	@BeforeEach
@@ -55,7 +54,7 @@ public class Application {
 			});
 		new ProcessBuilder("./web.sh", "start").start();
 		this.driver = createWebDriver(400, 900);
-		this.driver.get(url);
+		this.driver.get(URL);
 		final Client client = new Client();
 		client.setName("Manis Tagebuch");
 		this.repository.save(client);
@@ -94,17 +93,13 @@ public class Application {
 
 	@AfterEach
 	public void afterEach() throws Exception {
-		this.driver.close();
-		new ProcessBuilder("./web.sh", "stop").start();
+		if (this.driver != null)
+			this.driver.quit();
+		new ProcessBuilder("./web.sh", "stop").start().waitFor();
 	}
 
 	static WebDriver createWebDriver(final int width, final int height) {
-		final ChromeOptions options = new ChromeOptions();
-		final Map<String, Object> deviceMetrics = new HashMap<>();
-		deviceMetrics.put("pixelRatio", 1.0);
-		deviceMetrics.put("width", width);
-		deviceMetrics.put("height", height);
-		options.addArguments("user-data-dir=./chrome");
-		return new ChromeDriver(options);
+		return new ChromeDriver(new ChromeOptions()
+				.addArguments("user-data-dir=./chrome", "window-size=" + width + "," + height));
 	}
 }

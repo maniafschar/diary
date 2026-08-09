@@ -69,7 +69,7 @@ module.exports = (env) => {
 		plugins: [
 			{
 				apply: compiler => {
-					compiler.hooks.shutdown.tap('params', () => {
+					compiler.hooks.done.tapAsync('params', () => {
 						const fs = require('fs');
 						const files = ['dist/js/main.js', 'dist/admin/js/main.js'];
 						files.forEach(file => {

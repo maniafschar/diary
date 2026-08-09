@@ -140,7 +140,7 @@ ${dialog.stylePictures}`;
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location?.id);
 		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location?.rating).setAttribute('type', 'edit');
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
 		element.appendChild(document.createElement('label')).innerText = 'Bilder';
 		var pictures = element.appendChild(document.createElement('value'));
 		pictures.classList.add('pictures');
@@ -478,7 +478,7 @@ button.edit {
 			if (api.user.id == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));
 				button.appendChild(document.createElement('img')).src = '/image/edit.svg';
-				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, location: event.location, participants: event.contactEvents.length }) + ')');
+				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, location: event.location, participants: event.contactEvents.length }) + ')');
 				button.classList.add('icon');
 				button.classList.add('edit');
 			}

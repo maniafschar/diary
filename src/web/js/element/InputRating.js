@@ -78,23 +78,17 @@ ratingSelection span {
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
 			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">
-	<empty><span onclick="this.getRootNode().host.rate(1)">☆</span><span onclick="this.getRootNode().host.rate(2)">☆</span><span
-			onclick="this.getRootNode().host.rate(3)">☆</span><span onclick="this.getRootNode().host.rate(4)">☆</span><span
-			onclick="this.getRootNode().host.rate(5)">☆</span></empty>
-	<full><span onclick="this.getRootNode().host.rate(1)">★</span><span onclick="this.getRootNode().host.rate(2)">★</span><span
-			onclick="this.getRootNode().host.rate(3)">★</span><span onclick="this.getRootNode().host.rate(4)">★</span><span
-			onclick="this.getRootNode().host.rate(5)">★</span></full>
+	<empty><span onclick="this.getRootNode().host.rate(1,true)">☆</span><span onclick="this.getRootNode().host.rate(2,true)">☆</span><span
+			onclick="this.getRootNode().host.rate(3,true)">☆</span><span onclick="this.getRootNode().host.rate(4,true)">☆</span><span
+			onclick="this.getRootNode().host.rate(5,true)">☆</span></empty>
+	<full><span onclick="this.getRootNode().host.rate(1,true)">★</span><span onclick="this.getRootNode().host.rate(2,true)">★</span><span
+			onclick="this.getRootNode().host.rate(3,true)">★</span><span onclick="this.getRootNode().host.rate(4,true)">★</span><span
+			onclick="this.getRootNode().host.rate(5,true)">★</span></full>
 	</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
-			var full = this._root.querySelectorAll('full span');
-			for (var i = 0; i < full.length; i++) {
-				if ((i + 1) * (100 / this.stars) > this.getAttribute('value'))
-					full[i].style.display = 'none';
-			}
-		} else {
+		} else
 			this._root.appendChild(document.createElement('detailRating'));
-			this.rate(parseFloat(this.getAttribute('value')));
-		}
+		this.rate(parseFloat(this.getAttribute('value')));
 	}
 	static get observedAttributes() { return ['value']; }
 
@@ -107,7 +101,7 @@ ratingSelection span {
 		this.onchange = exec;
 	}
 
-	rate(x) {
+	rate(x, click) {
 		this.ignoreCallback = true;
 		if (this._root.host.getAttribute('type') == 'edit' && x == this._root.host.getAttribute('value') / (100 / this.stars))
 			x = 0;
@@ -115,11 +109,11 @@ ratingSelection span {
 			var e = this._root.querySelectorAll('ratingSelection > full span');
 			for (var i = 0; i < e.length; i++)
 				e[i].style.display = i < x ? '' : 'none';
-			this._root.host.setAttribute('value', x * (100 / this.stars));
 			e = this._root.querySelector('ratingSelection > full');
 			if (e)
 				e.style.width = (x * (100 / this.stars)) + '%';
-			if (this.onchange)
+			this._root.host.setAttribute('value', 0);
+			if (this.onchange && click)
 				this.onchange(x * (100 / this.stars));
 		} else {
 			var element = this._root.querySelector('detailRating');
