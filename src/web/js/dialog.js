@@ -119,29 +119,8 @@ button.location {
 }
 
 ${dialog.stylePictures}`;
-		var tabHeader = popup.appendChild(document.createElement('tabHeader'));
-		var tab = tabHeader.appendChild(document.createElement('tab'));
-		tab.setAttribute('onclick', 'ui.showTab(event)');
-		tab.setAttribute('class', 'selected');
-		tab.innerText = 'Event';
-		tab = tabHeader.appendChild(document.createElement('tab'));
-		tab.setAttribute('onclick', 'ui.showTab(event)');
-		tab.innerText = 'Location';
-		var container = popup.appendChild(document.createElement('tabBody'))
-			.appendChild(document.createElement('container'));
-
-		var element = container.appendChild(document.createElement('element'));
-		element.setAttribute('class', 'event');
-		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.year ? event.year + '-' + event.month + '-' + event.day + ' ' + new Date().getHours() + ':00' : event?.date);
-		var date = new Date();
-		date.setMonth(date.getMonth() - 2);
-		inputDate.setAttribute('minuteStep', 15);
-		inputDate.setAttribute('min', date.toISOString());
-		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		dialog.createField(element, 'Ort', 'location', 'input-selection', event?.location?.id);
-		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
-		element.appendChild(document.createElement('label')).innerText = 'Bilder';
+		var element = popup.appendChild(document.createElement('element'));
+		element.appendChild(document.createElement('label')).innerText = 'Bild';
 		var pictures = element.appendChild(document.createElement('value'));
 		pictures.classList.add('pictures');
 		var buttonImage = pictures.appendChild(document.createElement('input-image'));
@@ -169,23 +148,14 @@ ${dialog.stylePictures}`;
 			image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + dialog.files.length + ')');
 			dialog.files.push(e);
 		});
-		if (event?.id) {
-			var inputId = element.appendChild(document.createElement('input'));
-			inputId.setAttribute('type', 'hidden');
-			inputId.setAttribute('name', 'id');
-			inputId.setAttribute('value', event.id);
-		}
-		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
-		if (event?.id && !event.participants) {
-			var button = buttonDiv.appendChild(document.createElement('button'));
-			button.innerText = 'Löschen';
-			button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
-		}
-
-		element = container.appendChild(document.createElement('element'));
-		element.setAttribute('class', 'location');
-		dialog.createField(element, 'Name', 'name', null, event?.location?.name);
-		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.year ? event.year + '-' + event.month + '-' + event.day + ' ' + new Date().getHours() + ':00' : event?.date);
+		var date = new Date();
+		date.setMonth(date.getMonth() - 2);
+		inputDate.setAttribute('minuteStep', 15);
+		inputDate.setAttribute('min', date.toISOString());
+		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
+		dialog.createField(element, 'Ortname', 'locationName', null, event?.locationName);
+		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.address);
 		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'longitude');
@@ -215,22 +185,21 @@ ${dialog.stylePictures}`;
 					}
 				}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 		};
-		dialog.createField(element, 'URL', 'url', null, event?.location?.url).setAttribute('type', 'url');
-		dialog.createField(element, 'Telefon', 'phone', null, event?.location?.phone).setAttribute('type', 'tel');
-		dialog.createField(element, 'Email', 'email', null, event?.location?.email).setAttribute('type', 'email');
-		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.location?.note);
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.location?.rating).setAttribute('type', 'edit');
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));
 			inputId.setAttribute('type', 'hidden');
 			inputId.setAttribute('name', 'id');
-			inputId.setAttribute('value', event.location.id);
+			inputId.setAttribute('value', event.id);
 		}
-		element.appendChild(document.createElement('error'));
-		dialog.createButton(element, 'action.locationPut()');
-
+		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
+		if (event?.id && !event.participants) {
+			var button = buttonDiv.appendChild(document.createElement('button'));
+			button.innerText = 'Löschen';
+			button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
+		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		document.dispatchEvent(new CustomEvent('location', { detail: { type: 'read' } }));
 	}
 
 
@@ -406,7 +375,7 @@ button.edit {
 			popup.appendChild(document.createElement('label')).innerText = 'Datum';
 			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
 			popup.appendChild(document.createElement('label')).innerText = 'Ort';
-			popup.appendChild(document.createElement('value')).innerHTML = event.location.name
+			popup.appendChild(document.createElement('value')).innerHTML = event.locationName
 				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address.replace(/\n/g, '<br/>') + '</a>' : '')
 				+ (event.location.phone ? '<br/><a href="tel:' + event.location.phone.replace(/\D/g, '') + '">' + event.location.phone + '</a>' : '')
 				+ (event.location.url ? '<br/><a href="' + event.location.url + '" target="_blank">' + event.location.url + '</a>' : '')
@@ -472,8 +441,8 @@ button.edit {
 						api.event.postImage(id, e.type, formData, eventImageId => addImage(eventImageId, e.data));
 					});
 				}
-				for (var i = 0; i < event.eventImages?.length; i++)
-					addImage(event.eventImages[i].id, 'med/' + event.eventImages[i].image);
+				if (event.image)
+					addImage(event.image, 'med/' + event.image);
 			}
 			if (api.user.id == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));

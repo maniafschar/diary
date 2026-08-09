@@ -48,12 +48,6 @@ class listener {
 			index = document.querySelectorAll('history item')[parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 0.5)].getAttribute('i');
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
-		var listImages = function (event) {
-			var list = [];
-			for (var i = 0; i < event.eventImages.length; i++)
-				list.push(event.eventImages[i].image);
-			return list;
-		};
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
@@ -62,25 +56,20 @@ class listener {
 		};
 		var addEditButton = function () {
 			if (api.user.id == events[i].contact.id)
-				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: events[i].location, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
+				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, locationName: events[i].locationName, address: events[i].address, longitude: events[i].longitude, latitude: events[i].latitude, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
-			if (events[i].eventImages?.length)
+			if (events[i].image)
 				list.push({
-					src: listImages(events[i]),
+					src: events[i].image,
 					index: events[i].id,
 					text: events[i].note,
-					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' + events[i].location.name + '<br/>' +
+					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
+						(events[i].locationName ? events[i].locationName + '<br/>' : '') +
 						(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
 					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
-						(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
-						(events[i].location.phone ? '<a href="tel:' + events[i].location.phone.replace(/\D/g, '') + '">' + events[i].location.phone + '</a><br/>' : '') +
-						(events[i].location.url ? '<a href="' + events[i].location.url + '" target="_blank">' + events[i].location.url + '</a><br/>' : '') +
-						(events[i].location.email ? '<a href="mailto:' + events[i].location.email + '">' + events[i].location.email + '</a><br/>' : '') +
-						(events[i].location.phone || events[i].location.url || events[i].location.email ? '<br/>' : '') +
-						(events[i].location.rating ? '<rating>Bewertung der Location</rating><br/><input-rating value="' + events[i].location.rating + '"></input-rating>' : '') +
-						(events[i].location.note ? '<br/>' + events[i].location.note.replace(/\n/g, '<br/>') + '<br/>' : '') +
+						(events[i].address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].locationName + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].locationName) + '<br/><br/>' +
 						'<separator></separator>' +
 						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
 						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
@@ -162,7 +151,7 @@ input-rating {
 								textSort = textSort.substring(0, 10).trim();
 						}
 						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) });
-						row.push(list[i].location.name);
+						row.push(list[i].locationName);
 						row.push({ attributes: { i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
@@ -184,13 +173,13 @@ input-rating {
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
-				for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
+				if (events[i].image) {
 					var item = history.appendChild(document.createElement('item'));
 					item.setAttribute('i', events[i].id + '.' + i2);
 					item.style.marginLeft = margin + '%';
 					margin += 100;
 					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
-					var path = events[i].eventImages[i2].image;
+					var path = events[i].image;
 					var img;
 					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
 						img = item.appendChild(document.createElement('video'));
@@ -207,7 +196,7 @@ input-rating {
 					var text = item.appendChild(document.createElement('text'));
 					text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));
 					text.appendChild(document.createElement('br'));
-					text.appendChild(document.createTextNode(events[i].location.name));
+					text.appendChild(document.createTextNode(events[i].locationName));
 					if (events[i].note) {
 						text.appendChild(document.createElement('br'));
 						var note = events[i].note.replace(/\n/g, ' ');

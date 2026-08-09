@@ -13,13 +13,11 @@ import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
-import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
 
 @Service
 public class EventService {
-	private static String THUMBNAIL_TYPE = "jpg";
 	@Autowired
 	private Repository repository;
 
@@ -53,14 +51,6 @@ public class EventService {
 			contactEvent.setEvent(event);
 			this.repository.save(contactEvent);
 		}
-	}
-
-	public void save(final EventImage eventImage) {
-		this.repository.save(eventImage);
-	}
-
-	public void deleteImage(final EventImage eventImage) {
-		this.repository.delete(eventImage);
 	}
 
 	public EventRating putRating(final BigInteger eventId, final BigInteger contactId, final Double rating) {

@@ -160,23 +160,6 @@ class api {
 			});
 		},
 
-		deleteImage(eventImageId, success) {
-			api.ajax({
-				url: 'event/image/' + eventImageId,
-				method: 'DELETE',
-				success: success
-			});
-		},
-
-		postImage(id, type, data, success) {
-			api.ajax({
-				url: 'event/image/' + id + '/' + type,
-				method: 'POST',
-				body: data,
-				success: success
-			});
-		},
-
 		putRating(id, rating, success) {
 			api.ajax({
 				url: 'event/rating/' + id + '/' + rating,
@@ -207,31 +190,6 @@ class api {
 			api.ajax({
 				url: 'event/feedback/' + eventFeedbackId,
 				method: 'DELETE',
-				success: success
-			});
-		}
-	}
-
-	static location = {
-		getList(success) {
-			api.ajax({
-				url: 'location/list',
-				success: success
-			});
-		},
-
-		put(location, success) {
-			api.ajax({
-				url: 'location',
-				method: 'PUT',
-				body: location,
-				success: success
-			});
-		},
-
-		getNearby(latitude, longitude, success) {
-			api.ajax({
-				url: 'location/nearby?latitude=' + latitude + '&longitude=' + longitude,
 				success: success
 			});
 		}

@@ -1,8 +1,8 @@
 package com.jq.diary.api;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
-import com.jq.diary.entity.EventImage;
-import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
+import com.jq.diary.service.ExternalService;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -32,6 +29,9 @@ import com.jq.diary.util.Utilities;
 public class EventApi extends ApplicationApi {
 	@Autowired
 	private EventService eventService;
+
+	@Autowired
+	private ExternalService externalService;
 
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger clientId) {
@@ -61,26 +61,10 @@ public class EventApi extends ApplicationApi {
 		return event.getId();
 	}
 
-	@PostMapping("image/{eventId}/{type}")
-	public BigInteger postImage(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
-			@PathVariable final String type, @RequestParam("file") final MultipartFile file) throws IOException {
-		final EventImage eventImage = new EventImage();
-		eventImage.setEvent(this.repository.one(Event.class, eventId));
-		eventImage.setImage(Attachment.createImage(type, file.getBytes()));
-		eventImage.setContact(this.repository.one(Contact.class, contactId));
-		this.eventService.save(eventImage);
-		return eventImage.getId();
-	}
-
 	@PutMapping("rating/{eventId}/{rating}")
 	public BigInteger putRating(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
 			@PathVariable final Double rating) {
 		return this.eventService.putRating(eventId, contactId, rating).getId();
-	}
-
-	@DeleteMapping("image/{eventImageId}")
-	public void deleteImage(@PathVariable final BigInteger eventImageId) {
-		this.eventService.deleteImage(this.repository.one(EventImage.class, eventImageId));
 	}
 
 	@PutMapping
@@ -119,5 +103,10 @@ public class EventApi extends ApplicationApi {
 	public void deleteFeedback(@RequestHeader final BigInteger contactId,
 			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
 		this.eventService.deleteFeedback(eventFeedbackId);
+	}
+
+	@GetMapping("nearby")
+	public Map<String, Object> getNearby(final double latitude, final double longitude) {
+		return this.externalService.nearby(latitude, longitude);
 	}
 }

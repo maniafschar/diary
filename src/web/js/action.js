@@ -311,38 +311,6 @@ class action {
 		);
 	}
 
-	static locationPut() {
-		var popup = document.querySelector('dialog-popup').content();
-		var location = {
-			address: popup.querySelector('element.location textarea[name="address"]').value,
-			id: popup.querySelector('element.location input[name="id"]')?.value,
-			name: popup.querySelector('element.location input[name="name"]').value,
-			url: popup.querySelector('element.location input[name="url"]').value,
-			phone: popup.querySelector('element.location input[name="phone"]').value,
-			email: popup.querySelector('element.location input[name="email"]').value,
-			note: popup.querySelector('element.location textarea[name="note"]').value,
-			latitude: popup.querySelector('element.location input[name="latitude"]').value,
-			longitude: popup.querySelector('element.location input[name="longitude"]').value,
-			rating: popup.querySelector('element.location input-rating').getAttribute('value')
-		};
-		if (location.name) {
-			popup.querySelector('element.location error').innerText = '';
-			api.location.put(location,
-				id => {
-					if (location.id)
-						popup.querySelector('element.location error').innerText = 'Location gespeichert.';
-					else {
-						popup.querySelectorAll('element.location input,element.location textarea').forEach(e => e.value = '');
-						location.type = 'read';
-					}
-					location.id = id;
-					document.dispatchEvent(new CustomEvent('location', { detail: location }));
-				}
-			);
-		} else
-			popup.querySelector('element.location error').innerText = 'Gib bitte den Namen der Location an.';
-	}
-
 	static participate(contactId, eventId) {
 		var popup = document.querySelector('dialog-popup').content();
 		var fireEvent = type => {

@@ -20,14 +20,15 @@ public class Event extends BaseEntity {
 	private String note;
 	@ManyToOne
 	private Contact contact;
-	@ManyToOne
-	private Location location;
+	private String locationName;
+	private String address;
+	private Double longitude;
+	private Double latitude;
+	private Double altitude;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	private List<ContactEvent> contactEvents;
-	@OneToMany(mappedBy = "event")
-	@JsonManagedReference
-	private List<EventImage> eventImages;
+	private String image;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -66,14 +67,6 @@ public class Event extends BaseEntity {
 		this.contact = contact;
 	}
 
-	public Location getLocation() {
-		return this.location;
-	}
-
-	public void setLocation(final Location location) {
-		this.location = location;
-	}
-
 	public Date getDate() {
 		return this.date;
 	}
@@ -90,12 +83,12 @@ public class Event extends BaseEntity {
 		this.contactEvents = contactEvents;
 	}
 
-	public List<EventImage> getEventImages() {
-		return this.eventImages;
+	public String getImage() {
+		return this.image;
 	}
 
-	public void setEventImages(final List<EventImage> eventImages) {
-		this.eventImages = eventImages;
+	public void setEventImages(final String image) {
+		this.image = image;
 	}
 
 	public List<EventRating> getEventRatings() {
@@ -113,4 +106,45 @@ public class Event extends BaseEntity {
 	public void setEventFeedbacks(final List<EventFeedback> eventFeedbacks) {
 		this.eventFeedbacks = eventFeedbacks;
 	}
+
+	public String getLocationName() {
+		return this.locationName;
+	}
+
+	public void setLocationName(final String locationName) {
+		this.locationName = locationName;
+	}
+
+	public String getAddress() {
+		return this.address;
+	}
+
+	public void setAddress(final String address) {
+		this.address = address;
+	}
+
+	public Double getLongitude() {
+		return this.longitude;
+	}
+
+	public void setLongitude(final Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return this.latitude;
+	}
+
+	public void setLatitude(final Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getAltitude() {
+		return this.altitude;
+	}
+
+	public void setAltitude(final Double altitude) {
+		this.altitude = altitude;
+	}
+
 }
