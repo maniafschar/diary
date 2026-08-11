@@ -22,6 +22,7 @@ import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.ExternalService;
+import com.jq.diary.service.ExternalService.Response;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -105,7 +106,12 @@ public class EventApi extends ApplicationApi {
 		this.eventService.deleteFeedback(eventFeedbackId);
 	}
 
-	@GetMapping("nearby")
+	@GetMapping("location/address")
+	public Response getAddress(final double latitude, final double longitude) {
+		return this.externalService.address(latitude, longitude);
+	}
+
+	@GetMapping("location/nearby")
 	public Map<String, Object> getNearby(final double latitude, final double longitude) {
 		return this.externalService.nearby(latitude, longitude);
 	}

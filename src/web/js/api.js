@@ -137,6 +137,20 @@ class api {
 			});
 		},
 
+		getAddress(longitude, latitude, success) {
+			api.ajax({
+				url: 'event/location/address?longitude=' + longitude + '&latitude=' + latitude,
+				success: success
+			});
+		},
+
+		getNearby(longitude, latitude, success) {
+			api.ajax({
+				url: 'event/location/nearby?longitude=' + longitude + '&latitude=' + latitude,
+				success: success
+			});
+		},
+
 		getContact(contactId, success) {
 			api.ajax({
 				url: 'event/contact/' + contactId,

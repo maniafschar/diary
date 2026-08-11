@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,6 +16,26 @@ public class ExternalService {
 
 	@Value("${app.google.key}")
 	private String googleKey;
+
+	public static record Response(String type, int place_rank, double importance, String addresstype, String name,
+			Address address) {
+	}
+
+	public static record Address(String amenity, String house_number, String road, String neighbourhood, String suburb,
+			String city, String hamlet, String village, String municipality, String state, String postcode,
+			String country, String country_code) {
+	}
+
+	public Response address(final double latitude, final double longitude) {
+		return WebClient
+				.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + latitude + "&lon=" + longitude)
+				.get()
+				.accept(MediaType.APPLICATION_JSON)
+				.header("user-agent",
+						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
+				.retrieve().toEntity(Response.class)
+				.block().getBody();
+	}
 
 	public Map<String, Object> nearby(final double latitude, final double longitude) {
 		final String value = WebClient
@@ -37,9 +58,9 @@ public class ExternalService {
 						for (int i2 = 0; i2 < data.size(); i2++) {
 							if (data.get(i2) != null) {
 								final String type = data.get(i2).has("types")
-												&& data.get(i2).get("types").size() > 0
-										? data.get(i2).get("types").get(0).asText()
-										: "";
+										&& data.get(i2).get("types").size() > 0
+												? data.get(i2).get("types").get(0).asText()
+												: "";
 								if (street == null && "route".equals(type))
 									street = data.get(i2).get("long_name").asText();
 								else if (number == null && "street_number".equals(type))

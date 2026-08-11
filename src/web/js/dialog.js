@@ -167,7 +167,7 @@ ${dialog.stylePictures}`;
 		locationButton.classList.add('icon');
 		locationButton.classList.add('location');
 		locationButton.onclick = () => {
-			var call = () => api.location.getNearby(dialog.latitude, dialog.longitude, address => {
+			var call = () => api.event.getNearby(dialog.latitude, dialog.longitude, address => {
 				var popup = document.querySelector('dialog-popup').content();
 				popup.querySelector('element.location textarea[name="address"]').value = address.address;
 				popup.querySelector('element.location input[name="longitude"]').value = address.longitude;
