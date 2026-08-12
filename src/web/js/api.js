@@ -137,16 +137,16 @@ class api {
 			});
 		},
 
-		getAddress(longitude, latitude, success) {
+		getAddress(latitude, longitude, success) {
 			api.ajax({
 				url: 'event/location/address?longitude=' + longitude + '&latitude=' + latitude,
 				success: success
 			});
 		},
 
-		getNearby(longitude, latitude, success) {
+		getNearby(latitude, longitude, success) {
 			api.ajax({
-				url: 'event/location/nearby?longitude=' + longitude + '&latitude=' + latitude,
+				url: 'event/location/nearby?latitude=' + latitude + '&longitude=' + longitude,
 				success: success
 			});
 		},
