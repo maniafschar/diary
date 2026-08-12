@@ -96,10 +96,14 @@ input {
 									.then(async buffer => {
 										const exif = InputImage.parseExifFromArrayBuffer(buffer);
 										if (exif.datetime)
-											data.datetime = exif.datetime;
+											data.datetime = exif.datetime.replace(':', '-').replace(':', '-');
 										if (exif.gps?.longitude)
-											data.address = await api.event.getAddress(exif.gps.latitude, exif.gps.longitude);
-										t.success(data);
+											api.event.getAddress(exif.gps.latitude, exif.gps.longitude, e => {
+												data.address = e;
+												t.success(data);
+											});
+										else
+											t.success(data);
 									});
 							} else
 								t.success(data);
