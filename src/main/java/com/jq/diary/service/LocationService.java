@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jq.games.entity.Client;
-import com.jq.games.entity.Location;
-import com.jq.games.repository.Repository;
+import com.jq.diary.entity.Client;
+import com.jq.diary.entity.Location;
+import com.jq.diary.repository.Repository;
 
 @Service
 public class LocationService {
