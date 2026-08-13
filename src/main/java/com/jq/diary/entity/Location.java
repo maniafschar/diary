@@ -14,6 +14,10 @@ public class Location extends BaseEntity {
 	private String phone;
 	private String image;
 	private String url;
+	private String address;
+	private Double longitude;
+	private Double latitude;
+	private Double altitude;
 	@ManyToOne
 	private Contact contact;
 
@@ -79,5 +83,29 @@ public class Location extends BaseEntity {
 
 	public void setContact(final Contact contact) {
 		this.contact = contact;
+	}
+
+	public Double getLongitude() {
+		return this.longitude;
+	}
+
+	public void setLongitude(final Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return this.latitude;
+	}
+
+	public void setLatitude(final Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getAltitude() {
+		return this.altitude;
+	}
+
+	public void setAltitude(final Double altitude) {
+		this.altitude = altitude;
 	}
 }
