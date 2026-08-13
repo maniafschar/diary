@@ -113,12 +113,4 @@ public class Event extends BaseEntity {
 	public void setEventFeedbacks(final List<EventFeedback> eventFeedbacks) {
 		this.eventFeedbacks = eventFeedbacks;
 	}
-
-	public String getLocationName() {
-		return this.locationName;
-	}
-
-	public void setLocationName(final String locationName) {
-		this.locationName = locationName;
-	}
 }
