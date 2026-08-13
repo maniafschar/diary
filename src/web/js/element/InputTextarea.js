@@ -1,0 +1,202 @@
+export { InputTextarea };
+
+class InputTextarea extends HTMLElement {
+	constructor() {
+		super();
+		this._root = this.attachShadow({ mode: 'open' });
+	}
+	connectedCallback() {
+		this._root.appendChild(document.createElement('style')).textContent = `
+:host(*) {
+	display: block;
+	position: relative;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}`;
+		this._root.appendChild(document.createElement('input')).onkeyup = this.filter;
+		this._root.appendChild(document.createElement('items'));
+	}
+	onclick(event) {
+		var e = event.target;
+		if (event.target.classList.contains('selected'))
+			return;
+		while (e.previousElementSibling)
+			e = e.previousElementSibling;
+		while (e.nextElementSibling) {
+			e.classList.remove('selected');
+			e = e.nextElementSibling;
+		}
+		e.classList.remove('selected');
+		event.target.classList.add('selected');
+		this.setAttribute('value', event.target.getAttribute('i'));
+		this.dispatchEvent(new CustomEvent('changed'));
+	}
+	captureAudio() {
+		if (navigator.device && navigator.device.capture) {
+			navigator.device.capture.captureAudio(
+				captureSuccess,
+				captureError,
+				{ limit: 1 }
+			);
+			return;
+		}
+
+		if (SpeechRecognition) {
+			if (isRecording) {
+				stopSpeechRecognition();
+			} else {
+				startSpeechRecognition();
+			}
+			return;
+		}
+
+		if (!navigator.mediaDevices || !window.MediaRecorder) {
+			alert('Audio capture plugin is not available and browser recording is unsupported.');
+			return;
+		}
+
+		if (isRecording) {
+			stopRecording();
+		} else {
+			startRecording();
+		}
+	}
+	startSpeechRecognition() {
+		speechRecognition = new SpeechRecognition();
+		speechRecognition.lang = 'de-DE';
+		speechRecognition.interimResults = true;
+		speechRecognition.continuous = false;
+		speechTranscript = '';
+
+		speechRecognition.onresult = event => {
+			speechTranscript = Array.from(event.results)
+				.map(result => result[0].transcript)
+				.join(' ');
+			descriptionInput.value = speechTranscript;
+			currentEntry.description = speechTranscript;
+		};
+
+		speechRecognition.onend = () => {
+			isRecording = false;
+			captureAudioButton.textContent = 'Record Audio Description';
+			audioLabel.textContent = speechTranscript ? 'Speech transcription complete.' : 'No speech detected.';
+			speechRecognition = null;
+		};
+
+		speechRecognition.onerror = event => {
+			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
+			isRecording = false;
+			captureAudioButton.textContent = 'Record Audio Description';
+			audioLabel.textContent = 'Speech transcription failed.';
+			speechRecognition = null;
+		};
+
+		speechRecognition.start();
+		isRecording = true;
+		audioLabel.textContent = 'Listening for speech...';
+		captureAudioButton.textContent = 'Stop Transcription';
+	}
+	startRecording() {
+		navigator.mediaDevices.getUserMedia({ audio: true })
+			.then(stream => {
+				recordingStream = stream;
+				recordedChunks = [];
+				mediaRecorder = new MediaRecorder(stream);
+
+				mediaRecorder.ondataavailable = event => {
+					if (event.data && event.data.size > 0) {
+						recordedChunks.push(event.data);
+					}
+				};
+
+				mediaRecorder.onstop = () => {
+					const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+					const reader = new FileReader();
+
+					reader.onload = () => {
+						currentEntry.audioFile = reader.result;
+						currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
+						audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
+						audioPlayer.hidden = false;
+						audioPlayer.src = currentEntry.audioFile;
+						appendAudioNoteToDescription();
+						captureAudioButton.textContent = 'Record Audio Description';
+						isRecording = false;
+						stopRecordingStream();
+					};
+
+					reader.onerror = () => {
+						alert('Unable to read recorded audio.');
+						isRecording = false;
+						captureAudioButton.textContent = 'Record Audio Description';
+						stopRecordingStream();
+					};
+
+					reader.readAsDataURL(blob);
+				};
+
+				mediaRecorder.onerror = () => {
+					alert('Browser audio recording failed.');
+					isRecording = false;
+					captureAudioButton.textContent = 'Record Audio Description';
+					stopRecordingStream();
+				};
+
+				mediaRecorder.start();
+				isRecording = true;
+				audioLabel.textContent = 'Recording audio...';
+				captureAudioButton.textContent = 'Stop Recording';
+			})
+			.catch(error => {
+				alert('Unable to access microphone: ' + (error.message || error));
+			});
+	}
+	stopRecording() {
+		if (mediaRecorder && mediaRecorder.state === 'recording') {
+			mediaRecorder.stop();
+		} else {
+			stopRecordingStream();
+			isRecording = false;
+			captureAudioButton.textContent = 'Record Audio Description';
+		}
+	}
+	stopSpeechRecognition() {
+		if (speechRecognition) {
+			speechRecognition.stop();
+		}
+		isRecording = false;
+		captureAudioButton.textContent = 'Record Audio Description';
+		audioLabel.textContent = 'Speech transcription stopped.';
+		speechRecognition = null;
+	}
+	stopRecordingStream() {
+		if (recordingStream) {
+			recordingStream.getTracks().forEach(track => track.stop());
+			recordingStream = null;
+		}
+		mediaRecorder = null;
+	}
+	captureSuccess(mediaFiles) {
+		const [file] = mediaFiles;
+		currentEntry.audioFile = file.fullPath || file.localURL || file.name;
+		currentEntry.audioName = file.name || 'Recorded audio';
+		audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
+		audioPlayer.hidden = false;
+		audioPlayer.src = currentEntry.audioFile;
+		appendAudioNoteToDescription();
+	}
+	captureError(error) {
+		alert('Audio capture failed: ' + error.code);
+	}
+	appendAudioNoteToDescription() {
+		const note = '[Audio recorded]';
+		const currentText = descriptionInput.value.trim();
+		if (currentText.includes(note)) {
+			return;
+		}
+		descriptionInput.value = currentText ? `${currentText}\n${note}` : note;
+		currentEntry.description = descriptionInput.value;
+	}
+}

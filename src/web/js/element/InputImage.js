@@ -3,6 +3,7 @@ export { InputImage };
 
 class InputImage extends HTMLElement {
 	success;
+	examineExif = true;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -91,7 +92,7 @@ input {
 								file: scaled.file,
 								sizeRatio: (100 - scaled.size / file.size * 100).toFixed(0)
 							}
-							if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+							if (t.examineExif && (file.type === 'image/jpeg' || file.type === 'image/jpg')) {
 								file.arrayBuffer()
 									.then(async buffer => {
 										const exif = InputImage.parseExifFromArrayBuffer(buffer);
@@ -100,6 +101,7 @@ input {
 										if (exif.gps?.longitude)
 											api.event.getAddress(exif.gps.latitude, exif.gps.longitude, e => {
 												data.address = e;
+												t.examineExif = false;
 												t.success(data);
 											});
 										else

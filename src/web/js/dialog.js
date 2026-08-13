@@ -1,5 +1,6 @@
 import { action } from "./action";
 import { api } from "./api";
+import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
 
 export { dialog };
@@ -132,7 +133,7 @@ ${dialog.stylePictures}`;
 			var div = pictures.appendChild(document.createElement('div'));
 			var image;
 			if (e.datetime)
-				document.querySelector('dialog-popup').content().querySelector('input-date[name="date"]').setAttribute('value', e.datetime);
+				document.querySelector('dialog-popup').content().querySelector('input-date[name="date"]').setAttribute('value', InputDate.local2server(e.datetime));
 			if (e.address) {
 				var a = e.address;
 				document.querySelector('dialog-popup').content().querySelector('input[name="locationName"]').value = a.name;
@@ -387,10 +388,7 @@ button.edit {
 			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
 			popup.appendChild(document.createElement('label')).innerText = 'Ort';
 			popup.appendChild(document.createElement('value')).innerHTML = event.locationName
-				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address.replace(/\n/g, '<br/>') + '</a>' : '')
-				+ (event.location.phone ? '<br/><a href="tel:' + event.location.phone.replace(/\D/g, '') + '">' + event.location.phone + '</a>' : '')
-				+ (event.location.url ? '<br/><a href="' + event.location.url + '" target="_blank">' + event.location.url + '</a>' : '')
-				+ (event.location.email ? '<br/><a href="mailto:' + event.location.email + '">' + event.location.email + '</a>' : '');
+				+ (event.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.address) + '" target="_blank">' + event.address.replace(/\n/g, '<br/>') + '</a>' : '');
 			if (event.note) {
 				popup.appendChild(document.createElement('label')).innerText = 'Bemerkung';
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
@@ -458,7 +456,7 @@ button.edit {
 			if (api.user.id == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));
 				button.appendChild(document.createElement('img')).src = '/image/edit.svg';
-				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, location: event.location, participants: event.contactEvents.length }) + ')');
+				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, locationName: event.locationName, address: event.address, participants: event.contactEvents.length }) + ')');
 				button.classList.add('icon');
 				button.classList.add('edit');
 			}

@@ -16,7 +16,6 @@ class ImageCarousel extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*){
 	transform: scale(0);
-	transition: all ease-out .4s;
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -399,6 +398,7 @@ autoplay hint {
 			this.autoplay();
 		else
 			this.update();
+		this._root.host.style.transition = 'all ease-out .4s';
 		this._root.host.style.transform = 'scale(1)';
 	}
 

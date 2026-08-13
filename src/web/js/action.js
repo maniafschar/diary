@@ -8,6 +8,7 @@ import { InputDate } from "./element/InputDate";
 import { InputImage } from "./element/InputImage";
 import { InputRating } from "./element/InputRating";
 import { InputSelection } from "./element/InputSelection";
+import { InputTextarea } from "./element/InputTextarea";
 import { ProgressBar } from "./element/ProgressBar";
 import { SortableTable } from "./element/SortableTable";
 import { listener } from "./listener";
@@ -365,6 +366,7 @@ customElements.define('input-checkbox', InputCheckbox);
 customElements.define('input-image', InputImage);
 customElements.define('input-rating', InputRating);
 customElements.define('input-selection', InputSelection);
+customElements.define('input-textarea', InputTextarea);
 customElements.define('progress-bar', ProgressBar);
 customElements.define('sortable-table', SortableTable);
 

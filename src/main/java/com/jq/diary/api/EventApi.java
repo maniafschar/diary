@@ -1,6 +1,7 @@
 package com.jq.diary.api;
 
 import java.math.BigInteger;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
+import com.jq.diary.entity.EventImage;
+import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.ExternalService;
 import com.jq.diary.service.ExternalService.Response;
@@ -104,6 +107,20 @@ public class EventApi extends ApplicationApi {
 	public void deleteFeedback(@RequestHeader final BigInteger contactId,
 			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
 		this.eventService.deleteFeedback(eventFeedbackId);
+	}
+
+	@PostMapping("image/{eventId}/{type}")
+	public BigInteger postImage(@PathVariable final BigInteger eventId,
+			@PathVariable final String type, @RequestBody final EventImage eventImage) {
+		eventImage.setEvent(this.repository.one(Event.class, eventId));
+		eventImage.setImage(Attachment.createImage(type, Base64.getDecoder().decode(eventImage.getImage())));
+		this.eventService.save(eventImage);
+		return eventImage.getId();
+	}
+
+	@DeleteMapping("image/{eventImageId}")
+	public void deleteImage(@PathVariable final BigInteger eventImageId) {
+		this.eventService.delete(this.repository.one(EventImage.class, eventImageId));
 	}
 
 	@GetMapping("location/address")

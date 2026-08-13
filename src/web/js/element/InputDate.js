@@ -289,7 +289,7 @@ next::after {
 		if (i > 0) {
 			var step = this.getAttribute('minuteStep');
 			step = step ? parseInt(step) : 5;
-			i += step - 1;
+			i += step / 2;
 			i = parseInt(i / step) * step;
 			if (i == 60) {
 				var hour = parseInt(this.get('hour')?.getAttribute('value') || new Date().getHours()) + 1;

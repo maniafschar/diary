@@ -28,7 +28,9 @@ public class Event extends BaseEntity {
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	private List<ContactEvent> contactEvents;
-	private String image;
+	@OneToMany(mappedBy = "event")
+	@JsonManagedReference
+	private List<EventImage> eventImages;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -83,12 +85,12 @@ public class Event extends BaseEntity {
 		this.contactEvents = contactEvents;
 	}
 
-	public String getImage() {
-		return this.image;
+	public List<EventImage> getEventImages() {
+		return this.eventImages;
 	}
 
-	public void setEventImages(final String image) {
-		this.image = image;
+	public void setEventImages(final List<EventImage> eventImages) {
+		this.eventImages = eventImages;
 	}
 
 	public List<EventRating> getEventRatings() {

@@ -13,6 +13,7 @@ import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
+import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
 
@@ -83,5 +84,13 @@ public class EventService {
 				"from Feedback feedback, Contact contact where feedback.contactId=contact.id and contact.clientId="
 						+ client.getId() + " ORDER BY createdAt DESC",
 				EventFeedback.class);
+	}
+
+	public void save(final EventImage eventImage) {
+		this.repository.save(eventImage);
+	}
+
+	public void delete(final EventImage eventImage) {
+		this.repository.delete(eventImage);
 	}
 }

@@ -69,7 +69,7 @@ class listener {
 						(events[i].locationName ? events[i].locationName + '<br/>' : '') +
 						(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
 					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
-						(events[i].address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].locationName + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].locationName) + '<br/><br/>' +
+						(events[i].address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].locationName + '<br/>' + events[i].address.replace(/\n/g, '<br/>') + '</a>' : events[i].locationName) + '<br/><br/>' +
 						'<separator></separator>' +
 						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
 						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
