@@ -137,20 +137,6 @@ class api {
 			});
 		},
 
-		getAddress(latitude, longitude, success) {
-			api.ajax({
-				url: 'event/location/address?longitude=' + longitude + '&latitude=' + latitude,
-				success: success
-			});
-		},
-
-		getNearby(latitude, longitude, success) {
-			api.ajax({
-				url: 'event/location/nearby?latitude=' + latitude + '&longitude=' + longitude,
-				success: success
-			});
-		},
-
 		getContact(contactId, success) {
 			api.ajax({
 				url: 'event/contact/' + contactId,
@@ -227,7 +213,7 @@ class api {
 		post(location, success) {
 			api.ajax({
 				url: 'location',
-				method: event.id ? 'PUT' : 'POST',
+				method: location.id ? 'PUT' : 'POST',
 				body: location,
 				success: success
 			});
