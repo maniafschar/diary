@@ -109,7 +109,7 @@ next::after {
 		element.setAttribute('name', 'day');
 		this._root.appendChild(element);
 		element = document.createElement('cell')
-		element.setAttribute('onclick', 'this.getRootNode().host.openMonth()');
+		element.setAttribute('onclick', 'this.getRootNode().host.openDay()');
 		element.setAttribute('name', 'month');
 		this._root.appendChild(element);
 		element = document.createElement('cell')
@@ -123,7 +123,7 @@ next::after {
 			element.style.marginLeft = '0.5em';
 			this._root.appendChild(element);
 			element = document.createElement('cell')
-			element.setAttribute('onclick', 'this.getRootNode().host.openMinute()');
+			element.setAttribute('onclick', 'this.getRootNode().host.openHour()');
 			element.setAttribute('name', 'minute');
 			this._root.appendChild(element);
 		}
