@@ -1,3 +1,4 @@
+import { api } from "../api";
 
 export { InputImage };
 
@@ -99,7 +100,7 @@ input {
 										if (exif.datetime)
 											data.datetime = exif.datetime.replace(':', '-').replace(':', '-');
 										if (exif.gps?.longitude)
-											api.event.getAddress(exif.gps.latitude, exif.gps.longitude, e => {
+											api.location.getAddress(exif.gps.latitude, exif.gps.longitude, e => {
 												data.address = e;
 												t.examineExif = false;
 												t.success(data);
