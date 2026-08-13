@@ -56,7 +56,7 @@ class listener {
 		};
 		var addEditButton = function () {
 			if (api.user.id == events[i].contact.id)
-				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, locationName: events[i].locationName, address: events[i].address, longitude: events[i].longitude, latitude: events[i].latitude, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
+				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, locationName: events[i].location.name, address: events[i].location.address, longitude: events[i].longitude, latitude: events[i].latitude, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
@@ -66,10 +66,10 @@ class listener {
 					index: events[i].id,
 					text: events[i].note,
 					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
-						(events[i].locationName ? events[i].locationName + '<br/>' : '') +
+						(events[i].location.name ? events[i].location.name + '<br/>' : '') +
 						(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
 					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
-						(events[i].address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].locationName + '<br/>' + events[i].address.replace(/\n/g, '<br/>') + '</a>' : events[i].locationName) + '<br/><br/>' +
+						(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 						'<separator></separator>' +
 						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
 						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
@@ -151,7 +151,7 @@ input-rating {
 								textSort = textSort.substring(0, 10).trim();
 						}
 						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) });
-						row.push(list[i].locationName);
+						row.push(list[i].location.name);
 						row.push({ attributes: { i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
@@ -196,7 +196,7 @@ input-rating {
 					var text = item.appendChild(document.createElement('text'));
 					text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));
 					text.appendChild(document.createElement('br'));
-					text.appendChild(document.createTextNode(events[i].locationName));
+					text.appendChild(document.createTextNode(events[i].location.name));
 					if (events[i].note) {
 						text.appendChild(document.createElement('br'));
 						var note = events[i].note.replace(/\n/g, ' ');
