@@ -209,6 +209,31 @@ class api {
 		}
 	}
 
+	static location = {
+		getAddress(latitude, longitude, success) {
+			api.ajax({
+				url: 'location/address?longitude=' + longitude + '&latitude=' + latitude,
+				success: success
+			});
+		},
+
+		getNearby(latitude, longitude, success) {
+			api.ajax({
+				url: 'location/nearby?latitude=' + latitude + '&longitude=' + longitude,
+				success: success
+			});
+		},
+
+		post(location, success) {
+			api.ajax({
+				url: 'location',
+				method: event.id ? 'PUT' : 'POST',
+				body: location,
+				success: success
+			});
+		}
+	}
+
 	static contact = {
 		get(id, success) {
 			api.ajax({
