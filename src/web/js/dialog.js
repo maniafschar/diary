@@ -166,8 +166,8 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		dialog.createField(element, 'Ortname', 'locationName', null, event?.locationName);
-		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.address);
+		dialog.createField(element, 'Ortname', 'locationName', null, event?.location.name);
+		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
 		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'longitude');
@@ -387,8 +387,8 @@ button.edit {
 			popup.appendChild(document.createElement('label')).innerText = 'Datum';
 			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
 			popup.appendChild(document.createElement('label')).innerText = 'Ort';
-			popup.appendChild(document.createElement('value')).innerHTML = event.locationName
-				+ (event.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.address) + '" target="_blank">' + event.address.replace(/\n/g, '<br/>') + '</a>' : '');
+			popup.appendChild(document.createElement('value')).innerHTML = event.location.name
+				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address.replace(/\n/g, '<br/>') + '</a>' : '');
 			if (event.note) {
 				popup.appendChild(document.createElement('label')).innerText = 'Bemerkung';
 				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
@@ -456,7 +456,7 @@ button.edit {
 			if (api.user.id == event.contact.id) {
 				var button = popup.appendChild(document.createElement('button'));
 				button.appendChild(document.createElement('img')).src = '/image/edit.svg';
-				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, locationName: event.locationName, address: event.address, participants: event.contactEvents.length }) + ')');
+				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, location: event.location, participants: event.contactEvents.length }) + ')');
 				button.classList.add('icon');
 				button.classList.add('edit');
 			}
