@@ -260,35 +260,38 @@ class action {
 		var date = popup.querySelector('element.event input-date').getAttribute('value');
 		var locationId = popup.querySelector('element.event input-selection').getAttribute('value');
 		if (date && locationId) {
-			var event = {
+			api.location.post({
 				id: popup.querySelector('element.event input[name="id"]')?.value,
 				date: date,
 				note: popup.querySelector('element.event textarea').value,
 				location: { id: locationId }
-			};
-			api.event.post(
-				event,
-				id => {
-					event.id = id;
-					var addPictures = () => {
-						var pictures = popup.querySelectorAll('element.event value.pictures div');
-						for (var i = 0; i < pictures.length; i++) {
-							var formData = new FormData();
-							var file = dialog.files[pictures[i].getAttribute('i')];
-							formData.append('file', file.file);
-							api.event.postImage(id, file.type, formData);
-						}
-						document.dispatchEvent(new CustomEvent('event'));
-						document.dispatchEvent(new CustomEvent('popup'));
-					};
-					var rating = popup.querySelector('element.event input-rating').getAttribute('value');
-					if (rating)
-						api.event.putRating(event.id, rating, addPictures);
-					else
-						addPictures();
-				}
-			);
-		}
+			}, location => {
+				api.event.post({
+					id: popup.querySelector('element.event input[name="id"]')?.value,
+					date: date,
+					note: popup.querySelector('element.event textarea').value,
+					location: { id: location.id }
+					}, id => {
+						var addPictures = () => {
+							var pictures = popup.querySelectorAll('element.event value.pictures div');
+							for (var i = 0; i < pictures.length; i++) {
+								var formData = new FormData();
+								var file = dialog.files[pictures[i].getAttribute('i')];
+								formData.append('file', file.file);
+								api.event.postImage(id, file.type, formData);
+							}
+							document.dispatchEvent(new CustomEvent('event'));
+							document.dispatchEvent(new CustomEvent('popup'));
+						};
+						var rating = popup.querySelector('element.event input-rating').getAttribute('value');
+						if (rating)
+							api.event.putRating(id, rating, addPictures);
+						else
+							addPictures();
+					}
+				);
+			}
+		});
 	}
 
 	static contactPatch() {
