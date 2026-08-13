@@ -20,11 +20,8 @@ public class Event extends BaseEntity {
 	private String note;
 	@ManyToOne
 	private Contact contact;
-	private String locationName;
-	private String address;
-	private Double longitude;
-	private Double latitude;
-	private Double altitude;
+	@ManyToOne
+	private Location location;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	private List<ContactEvent> contactEvents;
@@ -44,6 +41,14 @@ public class Event extends BaseEntity {
 	private Double rating;
 	@Formula("(select count(1) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Integer ratingCount;
+
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(final Location location) {
+		this.location = location;
+	}
 
 	public Double getRating() {
 		return this.rating;
@@ -116,37 +121,4 @@ public class Event extends BaseEntity {
 	public void setLocationName(final String locationName) {
 		this.locationName = locationName;
 	}
-
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(final String address) {
-		this.address = address;
-	}
-
-	public Double getLongitude() {
-		return this.longitude;
-	}
-
-	public void setLongitude(final Double longitude) {
-		this.longitude = longitude;
-	}
-
-	public Double getLatitude() {
-		return this.latitude;
-	}
-
-	public void setLatitude(final Double latitude) {
-		this.latitude = latitude;
-	}
-
-	public Double getAltitude() {
-		return this.altitude;
-	}
-
-	public void setAltitude(final Double altitude) {
-		this.altitude = altitude;
-	}
-
 }
