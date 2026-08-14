@@ -1,0 +1,9 @@
+				date
+				note
+				locationName
+          address
+          longitude
+          latitude
+          altitude
+pictures
+						rating
