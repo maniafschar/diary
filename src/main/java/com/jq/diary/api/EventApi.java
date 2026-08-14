@@ -65,9 +65,9 @@ public class EventApi extends ApplicationApi {
 	@PostMapping
 	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final NewEvent newEvent) {
+		final Event event = newEvent.getEvent();
 		event.setContact(this.verifyContactClient(contactId, clientId));
 		locationService.save(newEvent.getLocation());
-		final Event event = newEvent.getEvent();
 		event.setLocationId(newEvent.getLocation().getId());
 		this.eventService.save(event);
 		this.eventService.putRating(event.getId(), contactId, newEvent.getRating());
