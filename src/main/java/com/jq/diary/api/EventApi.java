@@ -66,12 +66,14 @@ public class EventApi extends ApplicationApi {
 	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final NewEvent newEvent) {
 		final Event event = newEvent.getEvent();
+		final Double rating = event.getRating();
 		event.setContact(this.verifyContactClient(contactId, clientId));
 		locationService.save(newEvent.getLocation());
 		event.setLocationId(newEvent.getLocation().getId());
 		this.eventService.save(event);
-		this.eventService.putRating(event.getId(), contactId, newEvent.getRating());
-		for (final EventImage eventImage : newEvent.getImages()) {
+		if (rating != null)
+			this.eventService.putRating(event.getId(), contactId, rating);
+		for (final EventImage eventImage : event.getEventImages()) {
 			eventImage.setEvent(event);
 			eventImage.setImage(Attachment.createImage(type, Base64.getDecoder().decode(eventImage.getImage())));
 			this.eventService.save(eventImage);
