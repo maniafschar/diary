@@ -85,18 +85,6 @@ public class AuthenticationService {
 		}
 	}
 
-	public static class Unique {
-		public final String email;
-		public final boolean unique;
-		public final boolean blocked;
-
-		private Unique(final String email, final boolean unique, final boolean blocked) {
-			this.email = email;
-			this.unique = unique;
-			this.blocked = blocked;
-		}
-	}
-
 	static {
 		try {
 			BLOCKED_EMAIL_DOMAINS.addAll(Arrays.asList(Json.toObject(
@@ -162,58 +150,9 @@ public class AuthenticationService {
 		}
 	}
 
-	public Contact register(final Registration registration) {
-		if (!registration.isAgb())
-			throw new IllegalArgumentException("legal");
-		final int minimum = 5000;
-		if (registration.getTime() < minimum)
-			throw new IllegalArgumentException("time");
-		if (!Utilities.isEmail(registration.getEmail()))
-			throw new IllegalArgumentException("email");
-		final Unique unique = this.unique(registration.getClientId(), registration.getEmail());
-		if (!unique.unique)
-			throw new IllegalArgumentException("email");
-		if (unique.blocked) {
-			this.adminService.createTicket(new Ticket("email registration blocked: " + registration.toString()));
-			throw new IllegalArgumentException("domain");
-		}
-		final List<Contact> list = this.repository.list("from Contact where email='"
-				+ registration.getEmail().toLowerCase().trim() + "' and client.id="
-				+ registration.getClientId(), Contact.class);
-		final Contact contact = list.size() == 0 ? new Contact() : list.get(0);
-		contact.setName(registration.getName());
-		contact.setEmail(registration.getEmail().toLowerCase().trim());
-		contact.setClient(this.repository.one(Client.class, registration.getClientId()));
-		try {
-			if (contact.getEmail().contains("@"))
-				this.emailService.send(contact.getEmail(),
-						this.createEmailLoginLink(contact, this.generateLoginParam(contact)));
-			this.saveRegistration(contact, registration);
-			return contact;
-		} catch (final IllegalArgumentException ex) {
-			throw new IllegalArgumentException("email");
-		} catch (final EmailException ex) {
-			throw new IllegalArgumentException("email");
-		}
-	}
-
 	private String createEmailLoginLink(final Contact contact, final String link) {
 		return "Hallo " + contact.getName() + ",\n\nklick auf den Link\n\nhttps://diary.cafe?" + link
 				+ "\n\nDu kannst dann Dein Passwort setzen.\n\nViele Grüße\nhttps://diary.cafe";
-	}
-
-	public Unique unique(final BigInteger clientId, String email) {
-		email = email.toLowerCase();
-		final List<ContactEvent> list = this.repository
-				.list("from Contact where LOWER(email)='" + email + "' and client.id=" + clientId, ContactEvent.class);
-		return new Unique(email, list.size() == 0, AuthenticationService.BLOCKED_EMAIL_DOMAINS
-				.contains(email.substring(email.indexOf('@') + 1)));
-	}
-
-	void saveRegistration(final Contact contact, final Registration registration) {
-		contact.setClient(this.repository.one(Client.class, registration.getClientId()));
-		contact.setEmail(contact.getEmail().toLowerCase().trim());
-		this.savePassword(contact, Utilities.generatePin(20));
 	}
 
 	public Contact login(final String email, final String password, final String salt) {
