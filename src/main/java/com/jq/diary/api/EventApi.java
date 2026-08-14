@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jq.diary.api.model.NewEvent;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
@@ -26,6 +27,7 @@ import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.ExternalService;
 import com.jq.diary.service.ExternalService.Response;
+import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -33,6 +35,9 @@ import com.jq.diary.util.Utilities;
 public class EventApi extends ApplicationApi {
 	@Autowired
 	private EventService eventService;
+
+	@Autowired
+	private LocationService locationService;
 
 	@Autowired
 	private ExternalService externalService;
@@ -59,9 +64,18 @@ public class EventApi extends ApplicationApi {
 
 	@PostMapping
 	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final Event event) {
+			@RequestBody final NewEvent newEvent) {
 		event.setContact(this.verifyContactClient(contactId, clientId));
+		locationService.save(newEvent.getLocation());
+		final Event event = newEvent.getEvent();
+		event.setLocationId(newEvent.getLocation().getId());
 		this.eventService.save(event);
+		this.eventService.putRating(event.getId(), contactId, newEvent.getRating());
+		for (final EventImage eventImage : newEvent.getImages()) {
+			eventImage.setEvent(event);
+			eventImage.setImage(Attachment.createImage(type, Base64.getDecoder().decode(eventImage.getImage())));
+			this.eventService.save(eventImage);
+		}
 		return event.getId();
 	}
 
