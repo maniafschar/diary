@@ -26,6 +26,12 @@ public class LocationService {
 	public void save(final Location location) {
 		if (location.getName() == null || location.getName().isBlank())
 			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
-		this.repository.save(location);
+		final List<Location> locations = this.repository.list(
+				"from Location where contact.client.id=" + client.getId() +
+				" and lower(name) like '%" + location.getName().toLowerCase() + "%'", Location.class);
+		if (locations.size() > 0)
+			loction.setId(locations.get(0).getId());
+		else
+			this.repository.save(location);
 	}
 }
