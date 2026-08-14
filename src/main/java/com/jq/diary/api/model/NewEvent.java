@@ -1,6 +1,7 @@
 package com.jq.diary.api.model;
 
-import java.math.BigInteger;
+import com.jq.diary.entity.Event;
+import com.jq.diary.entity.Location;
 
 public class NewEvent {
 	private Event event;
