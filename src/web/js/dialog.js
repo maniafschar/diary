@@ -137,6 +137,9 @@ ${dialog.stylePictures}`;
 			if (e.address) {
 				var a = e.address;
 				document.querySelector('dialog-popup').content().querySelector('input[name="locationName"]').value = a.name;
+				document.querySelector('dialog-popup').content().querySelector('input[name="longitude"]').value = a.longitude;
+				document.querySelector('dialog-popup').content().querySelector('input[name="latitude"]').value = a.latitude;
+				document.querySelector('dialog-popup').content().querySelector('input[name="altitude"]').value = a.altitude;
 				a = a.address;
 				document.querySelector('dialog-popup').content().querySelector('textarea[name="address"]').value =
 					((((a.road || '') + ' ' + (a.house_number || '')).trim() + '\n'

@@ -259,21 +259,10 @@ class action {
 		var popup = document.querySelector('dialog-popup').content();
 		var date = popup.querySelector('element input-date').getAttribute('value');
 		if (date) {
-			var pictures = popup.querySelectorAll('element value.pictures div');
-			var eventImages = [];
-			for (var i = 0; i < pictures.length; i++) {
-				var data = dialog.files[pictures[i].getAttribute('i')].data;
-				eventImages.push({
-					image: data.substring(data.indexOf(',') + 1)
-				});
-			}
-			api.event.post({
-				event: {
-					date: date,
-					note: popup.querySelector('element textarea[name="note"]').value,
-					eventImages: eventImages,
-					rating: popup.querySelector('element input-rating').getAttribute('value')
-				},
+			var event = {
+				date: date,
+				note: popup.querySelector('element textarea[name="note"]').value,
+				rating: popup.querySelector('element input-rating').getAttribute('value'),
 				location: {
 					name: popup.querySelector('element input[name="locationName"]').value,
 					address: popup.querySelector('element textarea[name="address"]').value,
@@ -281,9 +270,23 @@ class action {
 					latitude: popup.querySelector('element input[name="latitude"]').value,
 					altitude: popup.querySelector('element input[name="altitude"]').value
 				}
-			}, () => {
-				document.dispatchEvent(new CustomEvent('event'));
-				document.dispatchEvent(new CustomEvent('popup'));
+			};
+			api.event.postExists(event, exists => {
+				if (exists == 'false') {
+					var pictures = popup.querySelectorAll('element value.pictures div');
+					event.eventImages = [];
+					for (var i = 0; i < pictures.length; i++) {
+						var data = dialog.files[pictures[i].getAttribute('i')].data;
+						event.eventImages.push({
+							image: data.substring(data.indexOf(',') + 1)
+						});
+					}
+					api.event.post(event, () => {
+						document.dispatchEvent(new CustomEvent('event'));
+						document.dispatchEvent(new CustomEvent('popup'));
+					});
+				} else
+					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Der Eintrag existiert bereits.' } }));
 			});
 		}
 	}

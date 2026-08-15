@@ -160,6 +160,15 @@ class api {
 			});
 		},
 
+		postExists(event, success) {
+			api.ajax({
+				url: 'event/exists',
+				method: 'POST',
+				body: event,
+				success: success
+			});
+		},
+
 		deleteImage(eventImageId, success) {
 			api.ajax({
 				url: 'event/image/' + eventImageId,

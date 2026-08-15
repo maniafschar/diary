@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jq.diary.api.model.NewEvent;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
@@ -62,15 +61,21 @@ public class EventApi extends ApplicationApi {
 		return Utilities.filter(this.eventService.listContact(contactId));
 	}
 
+	@PostMapping("exists")
+	public boolean postExists(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@RequestBody final Event event) {
+		event.setContact(this.verifyContactClient(contactId, clientId));
+		event.getLocation().setContact(event.getContact());
+		return this.locationService.find(event.getLocation()) != null && this.eventService.exists(event);
+	}
+
 	@PostMapping
 	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final NewEvent newEvent) {
-		final Event event = newEvent.getEvent();
+			@RequestBody final Event event) {
 		final Double rating = event.getRating();
 		event.setContact(this.verifyContactClient(contactId, clientId));
-		newEvent.getLocation().setContact(event.getContact());
-		this.locationService.save(newEvent.getLocation());
-		event.setLocation(newEvent.getLocation());
+		event.getLocation().setContact(event.getContact());
+		this.locationService.save(event.getLocation());
 		this.eventService.save(event);
 		if (rating != null)
 			this.eventService.putRating(event.getId(), contactId, rating);

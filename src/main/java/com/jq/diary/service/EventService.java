@@ -43,6 +43,14 @@ public class EventService {
 		return this.repository.one(Event.class, id);
 	}
 
+	public boolean exists(final Event event) {
+		return this.repository.list(
+				"from Event where contact.id=" + event.getContact().getId()
+						+ " and date=cast('" + event.getDate().toInstant().toString().substring(0, 19)
+						+ "' as timestamp)",
+				Event.class).size() > 0;
+	}
+
 	public void save(final Event event) {
 		final BigInteger id = event.getId();
 		this.repository.save(event);
