@@ -14,7 +14,6 @@ public class Location extends BaseEntity {
 	private String phone;
 	private String image;
 	private String url;
-	private String address;
 	private Double longitude;
 	private Double latitude;
 	private Double altitude;

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jq.diary.entity.Location;
 import com.jq.diary.service.ExternalService;
+import com.jq.diary.service.ExternalService.Response;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Utilities;
 
@@ -32,7 +33,7 @@ public class LocationApi extends ApplicationApi {
 		return Utilities.filter(this.locationService.one(id));
 	}
 
-	@PutMapping
+	@PostMapping
 	public BigInteger put(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Location location) {
 		if (location.getId() == null)
@@ -53,5 +54,10 @@ public class LocationApi extends ApplicationApi {
 	@GetMapping("nearby")
 	public Map<String, Object> getNearby(final double latitude, final double longitude) {
 		return this.externalService.nearby(latitude, longitude);
+	}
+
+	@GetMapping("address")
+	public Response getAddress(final double latitude, final double longitude) {
+		return this.externalService.address(latitude, longitude);
 	}
 }

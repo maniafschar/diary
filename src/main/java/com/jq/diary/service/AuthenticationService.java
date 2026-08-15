@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.jq.diary.api.model.Registration;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;

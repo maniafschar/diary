@@ -154,8 +154,25 @@ class api {
 		post(event, success) {
 			api.ajax({
 				url: 'event',
-				method: event.id ? 'PUT' : 'POST',
+				method: 'POST',
 				body: event,
+				success: success
+			});
+		},
+
+		deleteImage(eventImageId, success) {
+			api.ajax({
+				url: 'event/image/' + eventImageId,
+				method: 'DELETE',
+				success: success
+			});
+		},
+
+		postImage(id, type, data, success) {
+			api.ajax({
+				url: 'event/image/' + id + '/' + type,
+				method: 'POST',
+				body: data,
 				success: success
 			});
 		},

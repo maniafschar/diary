@@ -112,7 +112,7 @@ ratingSelection span {
 			e = this._root.querySelector('ratingSelection > full');
 			if (e)
 				e.style.width = (x * (100 / this.stars)) + '%';
-			this._root.host.setAttribute('value', 0);
+			this._root.host.setAttribute('value', x * (100 / this.stars));
 			if (this.onchange && click)
 				this.onchange(x * (100 / this.stars));
 		} else {

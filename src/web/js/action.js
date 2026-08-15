@@ -257,41 +257,35 @@ class action {
 
 	static eventPost() {
 		var popup = document.querySelector('dialog-popup').content();
-		var date = popup.querySelector('element.event input-date').getAttribute('value');
-		var locationId = popup.querySelector('element.event input-selection').getAttribute('value');
-		if (date && locationId) {
-			api.location.post({
-				id: popup.querySelector('element.event input[name="id"]')?.value,
-				date: date,
-				note: popup.querySelector('element.event textarea').value,
-				location: { id: locationId }
-			}, location => {
-				api.event.post({
-					id: popup.querySelector('element.event input[name="id"]')?.value,
-					date: date,
-					note: popup.querySelector('element.event textarea').value,
-					location: { id: location.id }
-					}, id => {
-						var addPictures = () => {
-							var pictures = popup.querySelectorAll('element.event value.pictures div');
-							for (var i = 0; i < pictures.length; i++) {
-								var formData = new FormData();
-								var file = dialog.files[pictures[i].getAttribute('i')];
-								formData.append('file', file.file);
-								api.event.postImage(id, file.type, formData);
-							}
-							document.dispatchEvent(new CustomEvent('event'));
-							document.dispatchEvent(new CustomEvent('popup'));
-						};
-						var rating = popup.querySelector('element.event input-rating').getAttribute('value');
-						if (rating)
-							api.event.putRating(id, rating, addPictures);
-						else
-							addPictures();
-					}
-				);
+		var date = popup.querySelector('element input-date').getAttribute('value');
+		if (date) {
+			var pictures = popup.querySelectorAll('element value.pictures div');
+			var eventImages = [];
+			for (var i = 0; i < pictures.length; i++) {
+				var data = dialog.files[pictures[i].getAttribute('i')].data;
+				eventImages.push({
+					image: data.substring(data.indexOf(',') + 1)
+				});
 			}
-		});
+			api.event.post({
+				event: {
+					date: date,
+					note: popup.querySelector('element textarea[name="note"]').value,
+					eventImages: eventImages,
+					rating: popup.querySelector('element input-rating').getAttribute('value')
+				},
+				location: {
+					name: popup.querySelector('element input[name="locationName"]').value,
+					address: popup.querySelector('element textarea[name="address"]').value,
+					longitude: popup.querySelector('element input[name="longitude"]').value,
+					latitude: popup.querySelector('element input[name="latitude"]').value,
+					altitude: popup.querySelector('element input[name="altitude"]').value
+				}
+			}, () => {
+				document.dispatchEvent(new CustomEvent('event'));
+				document.dispatchEvent(new CustomEvent('popup'));
+			});
+		}
 	}
 
 	static contactPatch() {
