@@ -101,10 +101,13 @@ input {
 											data.datetime = exif.datetime.replace(':', '-').replace(':', '-');
 										if (exif.gps?.longitude)
 											api.location.getAddress(exif.gps.latitude, exif.gps.longitude, e => {
-												e.longitude = exif.gps.longitude;
-												e.latitude = exif.gps.latitude;
-												e.altitude = exif.gps.altitude;
-												data.address = e;
+												data.location = {
+													longitude: exif.gps.longitude,
+													latitude: exif.gps.latitude,
+													altitude: exif.gps.altitude,
+													address: e.address,
+													name: e.name
+												};
 												t.examineExif = false;
 												t.success(data);
 											});

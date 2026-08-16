@@ -173,13 +173,13 @@ input-rating {
 			var margin = 0;
 			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
-				if (events[i].image) {
+				for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
 					var item = history.appendChild(document.createElement('item'));
 					item.setAttribute('i', events[i].id + '.' + i2);
 					item.style.marginLeft = margin + '%';
 					margin += 100;
 					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
-					var path = events[i].image;
+					var path = events[i].eventImages[i2].image;
 					var img;
 					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
 						img = item.appendChild(document.createElement('video'));

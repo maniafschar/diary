@@ -229,13 +229,6 @@ class api {
 			});
 		},
 
-		getNearby(latitude, longitude, success) {
-			api.ajax({
-				url: 'location/nearby?latitude=' + latitude + '&longitude=' + longitude,
-				success: success
-			});
-		},
-
 		post(location, success) {
 			api.ajax({
 				url: 'location',

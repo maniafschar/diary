@@ -261,7 +261,7 @@ class action {
 		if (date) {
 			var event = {
 				date: date,
-				note: popup.querySelector('element textarea[name="note"]').value,
+				note: popup.querySelector('element input-textarea[name="note"]').value,
 				rating: popup.querySelector('element input-rating').getAttribute('value'),
 				location: {
 					name: popup.querySelector('element input[name="locationName"]').value,

@@ -131,20 +131,16 @@ ${dialog.stylePictures}`;
 		buttonImage.setAttribute('max', 1000);
 		buttonImage.setSuccess(e => {
 			var div = pictures.appendChild(document.createElement('div'));
+			var content = document.querySelector('dialog-popup').content();
 			var image;
 			if (e.datetime)
-				document.querySelector('dialog-popup').content().querySelector('input-date[name="date"]').setAttribute('value', InputDate.local2server(e.datetime));
-			if (e.address) {
-				var a = e.address;
-				document.querySelector('dialog-popup').content().querySelector('input[name="locationName"]').value = a.name;
-				document.querySelector('dialog-popup').content().querySelector('input[name="longitude"]').value = a.longitude;
-				document.querySelector('dialog-popup').content().querySelector('input[name="latitude"]').value = a.latitude;
-				document.querySelector('dialog-popup').content().querySelector('input[name="altitude"]').value = a.altitude;
-				a = a.address;
-				document.querySelector('dialog-popup').content().querySelector('textarea[name="address"]').value =
-					((((a.road || '') + ' ' + (a.house_number || '')).trim() + '\n'
-						+ ((a.postcode || '') + ' ' + (a.city || a.village || a.hamlet || '')).trim()).trim() + '\n'
-						+ (a.country || '')).trim();
+				content.querySelector('input-date[name="date"]').setAttribute('value', InputDate.local2server(e.datetime));
+			if (e.location) {
+				content.querySelector('input[name="locationName"]').value = e.location.name;
+				content.querySelector('input[name="longitude"]').value = e.location.longitude;
+				content.querySelector('input[name="latitude"]').value = e.location.latitude;
+				content.querySelector('input[name="altitude"]').value = e.location.altitude;
+				content.querySelector('textarea[name="address"]').value = e.location.address;
 			}
 			if (e.data.indexOf('.mov') > 0 || e.data.indexOf('.mp4') > 0) {
 				image = div.appendChild(document.createElement('video'));
@@ -185,11 +181,13 @@ ${dialog.stylePictures}`;
 		locationButton.classList.add('icon');
 		locationButton.classList.add('location');
 		locationButton.onclick = () => {
-			var call = () => api.location.getNearby(dialog.latitude, dialog.longitude, address => {
+			var call = () => api.location.getAddress(dialog.latitude, dialog.longitude, e => {
 				var popup = document.querySelector('dialog-popup').content();
-				popup.querySelector('element.location textarea[name="address"]').value = address.address;
-				popup.querySelector('element.location input[name="longitude"]').value = address.longitude;
-				popup.querySelector('element.location input[name="latitude"]').value = address.latitude;
+				popup.querySelector('element input[name="locationName"]').value = e.name;
+				popup.querySelector('element textarea[name="address"]').value = e.address;
+				popup.querySelector('element input[name="longitude"]').value = e.longitude;
+				popup.querySelector('element input[name="latitude"]').value = e.latitude;
+				popup.querySelector('element input[name="altitude"]').value = e.altitude;
 				popup.querySelector('button.location').remove();
 			});
 			if (dialog.latitude)
@@ -203,7 +201,7 @@ ${dialog.stylePictures}`;
 					}
 				}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 		};
-		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note).style.height = '14em';
+		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
 		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
 		if (event?.id) {
 			var inputId = element.appendChild(document.createElement('input'));

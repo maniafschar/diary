@@ -12,10 +12,28 @@ class InputTextarea extends HTMLElement {
 	position: relative;
 }
 
+textarea {
+	appearance: none;
+	position: relative;
+	font-size: 1em;
+	font-weight: normal;
+	outline: none !important;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	height: 14em;
+	padding: 0em 0.75em;
+	border-radius: 0.5em;
+	background: rgba(255, 255, 255, 0.85);
+	vertical-align: top;
+	border: none;
+	width: 100%;
+	color: black;
+	user-select: text;
+}
+
 *::-webkit-scrollbar {
 	display: none;
 }`;
-		this._root.appendChild(document.createElement('input')).onkeyup = this.filter;
+		this._root.appendChild(document.createElement('textarea')).onkeyup = e => this.value = this._root.querySelector('textarea').value;
 		this._root.appendChild(document.createElement('items'));
 	}
 	onclick(event) {

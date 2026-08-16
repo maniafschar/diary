@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jq.diary.entity.Location;
 import com.jq.diary.service.ExternalService;
-import com.jq.diary.service.ExternalService.Response;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Utilities;
 
@@ -57,7 +56,7 @@ public class LocationApi extends ApplicationApi {
 	}
 
 	@GetMapping("address")
-	public Response getAddress(final double latitude, final double longitude) {
+	public Map<String, String> getAddress(final double latitude, final double longitude) {
 		return this.externalService.address(latitude, longitude);
 	}
 }

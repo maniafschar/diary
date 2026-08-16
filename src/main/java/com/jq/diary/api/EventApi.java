@@ -3,7 +3,6 @@ package com.jq.diary.api;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import com.jq.diary.entity.EventImage;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.ExternalService;
-import com.jq.diary.service.ExternalService.Response;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Utilities;
 
@@ -143,15 +141,5 @@ public class EventApi extends ApplicationApi {
 	@DeleteMapping("image/{eventImageId}")
 	public void deleteImage(@PathVariable final BigInteger eventImageId) {
 		this.eventService.delete(this.repository.one(EventImage.class, eventImageId));
-	}
-
-	@GetMapping("location/address")
-	public Response getAddress(final double latitude, final double longitude) {
-		return this.externalService.address(latitude, longitude);
-	}
-
-	@GetMapping("location/nearby")
-	public Map<String, Object> getNearby(final double latitude, final double longitude) {
-		return this.externalService.nearby(latitude, longitude);
 	}
 }
