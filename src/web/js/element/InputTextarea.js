@@ -20,7 +20,7 @@ textarea {
 	outline: none !important;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	height: 14em;
-	padding: 0em 0.75em;
+	padding: 0.5em 0.75em 0 0.75em;
 	border-radius: 0.5em;
 	background: rgba(255, 255, 255, 0.85);
 	vertical-align: top;
@@ -30,26 +30,37 @@ textarea {
 	user-select: text;
 }
 
+button.speech {
+	background-image: url(image/location.svg);
+	background-size: 1.4em;
+	top: 0;
+	right: 0;
+	border-radius: 0 0.4em;
+	background-repeat: no-repeat;
+	background-position-x: 0.3em;
+	background-position-y: 0.3em;
+	background-color: rgba(100, 150, 200, 0.2);
+	border: none;
+	padding: 0.5em 1em;
+	outline: none;
+	cursor: pointer;
+	font: inherit;
+	font-size: 0.8em;
+	position: absolute;
+	font-size: 1.3em;
+    width: 2em;
+    height: 2em;
+    margin: 0;
+}
+
 *::-webkit-scrollbar {
 	display: none;
 }`;
 		this._root.appendChild(document.createElement('textarea')).onkeyup = e => this.value = this._root.querySelector('textarea').value;
-		this._root.appendChild(document.createElement('items'));
-	}
-	onclick(event) {
-		var e = event.target;
-		if (event.target.classList.contains('selected'))
-			return;
-		while (e.previousElementSibling)
-			e = e.previousElementSibling;
-		while (e.nextElementSibling) {
-			e.classList.remove('selected');
-			e = e.nextElementSibling;
-		}
-		e.classList.remove('selected');
-		event.target.classList.add('selected');
-		this.setAttribute('value', event.target.getAttribute('i'));
-		this.dispatchEvent(new CustomEvent('changed'));
+		var speechButton = this._root.appendChild(document.createElement('button'));
+		speechButton.classList.add('icon');
+		speechButton.classList.add('speech');
+		speechButton.onclick = this.captureAudio;
 	}
 	captureAudio() {
 		if (navigator.device && navigator.device.capture) {
