@@ -1,6 +1,13 @@
 export { InputTextarea };
 
 class InputTextarea extends HTMLElement {
+	isRecording = false;
+	mediaRecorder = null;
+	recordingStream = null;
+	recordedChunks = [];
+	speechRecognition = null;
+	speechTranscript = '';
+
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -60,24 +67,24 @@ button.speech {
 		var speechButton = this._root.appendChild(document.createElement('button'));
 		speechButton.classList.add('icon');
 		speechButton.classList.add('speech');
-		speechButton.onclick = this.captureAudio;
+		var t = this;
+		speechButton.onclick = () => this.captureAudio(t);
 	}
-	captureAudio() {
+	captureAudio(t) {
 		if (navigator.device && navigator.device.capture) {
 			navigator.device.capture.captureAudio(
-				captureSuccess,
-				captureError,
+				t.captureSuccess,
+				t.captureError,
 				{ limit: 1 }
 			);
 			return;
 		}
 
-		if (SpeechRecognition) {
-			if (isRecording) {
-				stopSpeechRecognition();
-			} else {
-				startSpeechRecognition();
-			}
+		if (t.speechRecognition) {
+			if (t.isRecording)
+				t.stopSpeechRecognition(t);
+			else
+				t.startSpeechRecognition(t);
 			return;
 		}
 
@@ -86,62 +93,61 @@ button.speech {
 			return;
 		}
 
-		if (isRecording) {
-			stopRecording();
-		} else {
-			startRecording();
-		}
+		if (t.isRecording)
+			t.stopRecording(t);
+		else
+			t.startRecording(t);
 	}
-	startSpeechRecognition() {
-		speechRecognition = new SpeechRecognition();
-		speechRecognition.lang = 'de-DE';
-		speechRecognition.interimResults = true;
-		speechRecognition.continuous = false;
-		speechTranscript = '';
+	startSpeechRecognition(t) {
+		t.speechRecognition = new SpeechRecognition();
+		t.speechRecognition.lang = 'de-DE';
+		t.speechRecognition.interimResults = true;
+		t.speechRecognition.continuous = false;
+		t.speechTranscript = '';
 
-		speechRecognition.onresult = event => {
-			speechTranscript = Array.from(event.results)
+		t.speechRecognition.onresult = event => {
+			t.speechTranscript = Array.from(event.results)
 				.map(result => result[0].transcript)
 				.join(' ');
-			descriptionInput.value = speechTranscript;
-			currentEntry.description = speechTranscript;
+			descriptionInput.value = t.speechTranscript;
+			currentEntry.description = t.speechTranscript;
 		};
 
-		speechRecognition.onend = () => {
-			isRecording = false;
-			captureAudioButton.textContent = 'Record Audio Description';
-			audioLabel.textContent = speechTranscript ? 'Speech transcription complete.' : 'No speech detected.';
-			speechRecognition = null;
+		t.speechRecognition.onend = () => {
+			t.isRecording = false;
+			t.captureAudioButton.textContent = 'Record Audio Description';
+			audioLabel.textContent = t.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.';
+			t.speechRecognition = null;
 		};
 
-		speechRecognition.onerror = event => {
+		t.speechRecognition.onerror = event => {
 			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
-			isRecording = false;
-			captureAudioButton.textContent = 'Record Audio Description';
+			t.isRecording = false;
+			t.captureAudioButton.textContent = 'Record Audio Description';
 			audioLabel.textContent = 'Speech transcription failed.';
-			speechRecognition = null;
+			t.speechRecognition = null;
 		};
 
-		speechRecognition.start();
-		isRecording = true;
+		t.speechRecognition.start();
+		t.isRecording = true;
 		audioLabel.textContent = 'Listening for speech...';
-		captureAudioButton.textContent = 'Stop Transcription';
+		t.captureAudioButton.textContent = 'Stop Transcription';
 	}
-	startRecording() {
+	startRecording(t) {
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
-				recordingStream = stream;
-				recordedChunks = [];
-				mediaRecorder = new MediaRecorder(stream);
+				t.recordingStream = stream;
+				t.recordingStream = [];
+				t.mediaRecorder = new MediaRecorder(stream);
 
-				mediaRecorder.ondataavailable = event => {
+				t.mediaRecorder.ondataavailable = event => {
 					if (event.data && event.data.size > 0) {
-						recordedChunks.push(event.data);
+						t.recordingStream.push(event.data);
 					}
 				};
 
-				mediaRecorder.onstop = () => {
-					const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+				t.mediaRecorder.onstop = () => {
+					const blob = new Blob(t.recordingStream, { type: 'audio/webm' });
 					const reader = new FileReader();
 
 					reader.onload = () => {
@@ -150,62 +156,61 @@ button.speech {
 						audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
 						audioPlayer.hidden = false;
 						audioPlayer.src = currentEntry.audioFile;
-						appendAudioNoteToDescription();
-						captureAudioButton.textContent = 'Record Audio Description';
-						isRecording = false;
-						stopRecordingStream();
+						t.appendAudioNoteToDescription();
+						t.captureAudioButton.textContent = 'Record Audio Description';
+						t.isRecording = false;
+						t.stopRecordingStream();
 					};
 
 					reader.onerror = () => {
 						alert('Unable to read recorded audio.');
-						isRecording = false;
-						captureAudioButton.textContent = 'Record Audio Description';
-						stopRecordingStream();
+						t.isRecording = false;
+						t.captureAudioButton.textContent = 'Record Audio Description';
+						t.stopRecordingStream();
 					};
 
 					reader.readAsDataURL(blob);
 				};
 
-				mediaRecorder.onerror = () => {
+				t.mediaRecorder.onerror = () => {
 					alert('Browser audio recording failed.');
-					isRecording = false;
-					captureAudioButton.textContent = 'Record Audio Description';
-					stopRecordingStream();
+					t.isRecording = false;
+					t.captureAudioButton.textContent = 'Record Audio Description';
+					t.stopRecordingStream();
 				};
 
-				mediaRecorder.start();
-				isRecording = true;
+				t.mediaRecorder.start();
+				t.isRecording = true;
 				audioLabel.textContent = 'Recording audio...';
-				captureAudioButton.textContent = 'Stop Recording';
+				t.captureAudioButton.textContent = 'Stop Recording';
 			})
 			.catch(error => {
 				alert('Unable to access microphone: ' + (error.message || error));
 			});
 	}
-	stopRecording() {
-		if (mediaRecorder && mediaRecorder.state === 'recording') {
-			mediaRecorder.stop();
-		} else {
-			stopRecordingStream();
-			isRecording = false;
-			captureAudioButton.textContent = 'Record Audio Description';
+	stopRecording(t) {
+		if (t.mediaRecorder && t.mediaRecorder.state === 'recording')
+			t.mediaRecorder.stop();
+		else {
+			t.stopRecordingStream();
+			t.isRecording = false;
+			t.captureAudioButton.textContent = 'Record Audio Description';
 		}
 	}
-	stopSpeechRecognition() {
-		if (speechRecognition) {
-			speechRecognition.stop();
-		}
-		isRecording = false;
-		captureAudioButton.textContent = 'Record Audio Description';
+	stopSpeechRecognition(t) {
+		if (t.speechRecognition)
+			t.speechRecognition.stop();
+		t.isRecording = false;
+		t.captureAudioButton.textContent = 'Record Audio Description';
 		audioLabel.textContent = 'Speech transcription stopped.';
-		speechRecognition = null;
+		t.speechRecognition = null;
 	}
-	stopRecordingStream() {
-		if (recordingStream) {
-			recordingStream.getTracks().forEach(track => track.stop());
-			recordingStream = null;
+	stopRecordingStream(t) {
+		if (t.recordingStream) {
+			t.recordingStream.getTracks().forEach(track => track.stop());
+			t.recordingStream = null;
 		}
-		mediaRecorder = null;
+		t.mediaRecorder = null;
 	}
 	captureSuccess(mediaFiles) {
 		const [file] = mediaFiles;
@@ -214,7 +219,7 @@ button.speech {
 		audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
 		audioPlayer.hidden = false;
 		audioPlayer.src = currentEntry.audioFile;
-		appendAudioNoteToDescription();
+		t.appendAudioNoteToDescription();
 	}
 	captureError(error) {
 		alert('Audio capture failed: ' + error.code);
@@ -222,9 +227,8 @@ button.speech {
 	appendAudioNoteToDescription() {
 		const note = '[Audio recorded]';
 		const currentText = descriptionInput.value.trim();
-		if (currentText.includes(note)) {
+		if (currentText.includes(note))
 			return;
-		}
 		descriptionInput.value = currentText ? `${currentText}\n${note}` : note;
 		currentEntry.description = descriptionInput.value;
 	}

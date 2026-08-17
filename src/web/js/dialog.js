@@ -6,9 +6,6 @@ import { ui } from "./ui";
 export { dialog };
 
 class dialog {
-	static longitude;
-	static latitude;
-	static nearbySearch;
 	static files;
 	static stylePictures = `
 value.pictures {
@@ -181,25 +178,22 @@ ${dialog.stylePictures}`;
 		locationButton.classList.add('icon');
 		locationButton.classList.add('location');
 		locationButton.onclick = () => {
-			var call = () => api.location.getAddress(dialog.latitude, dialog.longitude, e => {
-				var popup = document.querySelector('dialog-popup').content();
-				popup.querySelector('element input[name="locationName"]').value = e.name;
-				popup.querySelector('element textarea[name="address"]').value = e.address;
-				popup.querySelector('element input[name="longitude"]').value = e.longitude;
-				popup.querySelector('element input[name="latitude"]').value = e.latitude;
-				popup.querySelector('element input[name="altitude"]').value = e.altitude;
-				popup.querySelector('button.location').remove();
-			});
-			if (dialog.latitude)
-				call();
-			else
-				navigator.geolocation.getCurrentPosition(result => {
-					if (result.coords && result.coords.latitude) {
-						dialog.latitude = result.coords.latitude;
-						dialog.longitude = result.coords.longitude;
-						call();
-					}
-				}, null, { timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
+			navigator.geolocation.getCurrentPosition(result => {
+				if (result.coords && result.coords.latitude) {
+					api.location.getAddress(result.coords.latitude, result.coords.longitude, e => {
+						var popup = document.querySelector('dialog-popup').content();
+						popup.querySelector('element input[name="locationName"]').value = e.name;
+						popup.querySelector('element textarea[name="address"]').value = e.address;
+						popup.querySelector('element input[name="longitude"]').value = e.longitude;
+						popup.querySelector('element input[name="latitude"]').value = e.latitude;
+						popup.querySelector('element input[name="altitude"]').value = e.altitude;
+						var locationButton = popup.querySelector('button.location');
+						if (locationButton)
+							locationButton.remove();
+					});
+				}
+			}, error => console.warn('Location lookup failed:', error && error.code, error && error.message),
+				{ timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 		};
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
 		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
