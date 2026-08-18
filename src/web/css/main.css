@@ -51,7 +51,6 @@ body>container elementContainer {
 	display: flex;
 	transition: ease .4s all;
 	min-height: 20em;
-	background: rgba(255, 20, 10, 0.1);
 }
 
 body>container elementContainer>element {
