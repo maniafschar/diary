@@ -62,7 +62,7 @@ class listener {
 		};
 		var addEditButton = function () {
 			if (api.user.id == events[i].contact.id)
-				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, locationName: events[i].location.name, address: events[i].location.address, longitude: events[i].longitude, latitude: events[i].latitude, participants: events[i].contactEvents.length }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
+				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
