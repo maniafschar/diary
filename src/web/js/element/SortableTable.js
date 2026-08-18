@@ -91,10 +91,11 @@ td.text {
 
 td.image {
 	overflow-y: hidden;
+	padding: 0;
 }
 
 td.image img {
-	padding: 0.1em;
+	padding: 0.15em;
 	height: 3em;
 	border-radius: 0.5em;
 }
