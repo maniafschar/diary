@@ -22,6 +22,7 @@ class SortableTable extends HTMLElement {
 :host(*) {
 	display: block;
 	position: relative;
+	height: 100%;
 }
 
 *::-webkit-scrollbar {
