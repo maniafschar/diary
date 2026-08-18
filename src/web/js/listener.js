@@ -45,7 +45,7 @@ class listener {
 	static updateImageCarousel(index) {
 		var autoplay = !index;
 		if (!index)
-			index = document.querySelectorAll('history item')[parseInt(document.querySelector('history').scrollLeft / document.querySelector('history').clientWidth + 0.5)].getAttribute('i');
+			index = 0;
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
 		var listRatings = function (event) {
@@ -168,56 +168,12 @@ input-rating {
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
 			calendar.setOpen(event => event.id ? dialog.event(event.id) : dialog.add(event));
-			var history = document.querySelector('history');
-			history.textContent = '';
-			var margin = 0;
-			for (var i = events.length - 1; i >= 0; i--) {
-				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || '[[Kein Text]]', rating: events[i].rating });
-				for (var i2 = 0; i2 < events[i].eventImages.length; i2++) {
-					var item = history.appendChild(document.createElement('item'));
-					item.setAttribute('i', events[i].id + '.' + i2);
-					item.style.marginLeft = margin + '%';
-					margin += 100;
-					var click = event => listener.updateImageCarousel(event.target.parentElement.getAttribute('i'));
-					var path = events[i].eventImages[i2].image;
-					var img;
-					if (path.indexOf('.mov') > 0 || path.indexOf('.mp4') > 0) {
-						img = item.appendChild(document.createElement('video'));
-						img.autoplay = true;
-						img.muted = true;
-						img.loop = true;
-						img.setAttribute('playsinline', true);
-						img.setAttribute('s', '/med/' + path);
-					} else {
-						img = item.appendChild(document.createElement('img'));
-						img.setAttribute('s', 'med/' + path);
-					}
-					img.onclick = click;
-					var text = item.appendChild(document.createElement('text'));
-					text.appendChild(document.createTextNode(ui.formatTime(new Date(events[i].date.replace('+00:00', '')))));
-					text.appendChild(document.createElement('br'));
-					text.appendChild(document.createTextNode(events[i].location.name));
-					if (events[i].note) {
-						text.appendChild(document.createElement('br'));
-						var note = events[i].note.replace(/\n/g, ' ');
-						while (note.length > 40)
-							note = note.substring(0, note.lastIndexOf(' ')).trim();
-						if (note.length < events[i].note.length)
-							note += ' ...';
-						text.appendChild(document.createTextNode(note));
-					}
-					text.onclick = click;
-				}
-			}
 			calendar.render();
 			if (events.length) {
 				var pastEvents = document.querySelector('sortable-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
 			} else
 				document.querySelector('element.event div.title count').innerText = '';
-			if (document.querySelector('element.history item'))
-				document.querySelector('element.history').style.display = 'block';
-			document.querySelector('history').scrollLeft = document.querySelector('history').scrollWidth;
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('event').previousElementSibling.style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
@@ -265,25 +221,5 @@ input-rating {
 		});
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);
-		document.querySelector('history').addEventListener('scroll', () => {
-			var items = document.querySelectorAll('element.history img[s], element.history video[s]');
-			var scroll = document.querySelector('history').scrollLeft;
-			for (var i = 0; i < items.length; i++) {
-				var parent = items[i].parentElement;
-				if (parent.offsetLeft + parent.offsetWidth > scroll && parent.offsetLeft < scroll + parent.offsetWidth) {
-					if (parent.nodeName == 'VIDEO') {
-						var source = document.createElement('source');
-						source.src = '/med/' + items[i].getAttribute('s');
-						source.type = 'video/mp4';
-						items[i].appendChild(source);
-					} else
-						items[i].src = items[i].getAttribute('s');
-					items[i].removeAttribute('s');
-				}
-			}
-			document.querySelector('element.history count').innerText =
-				parseInt(scroll / document.querySelector('history').clientWidth + 1.5) +
-				'/' + document.querySelectorAll('history item').length;
-		});
 	}
 }
