@@ -142,7 +142,7 @@ input-rating {
 				var now = new Date();
 				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true });
-				table.columns.push({ label: 'Bilder', sort: true, width: 15, detail: true, attributes: { class: 'image' } });
+				table.columns.push({ label: 'Bilder', sort: true, width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
 				table.setConvert(list => {
 					var d = [];
@@ -162,7 +162,7 @@ input-rating {
 								textSort = textSort.substring(0, 10).trim();
 						}
 						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + '<br/>' + list[i].location.name });
-						row.push(images);
+						row.push({ attributes: { class: 'image' }, text: images });
 						row.push({ attributes: { i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
