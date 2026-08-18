@@ -49,6 +49,7 @@ body>container elementContainer {
 	width: 300%;
 	position: relative;
 	display: block;
+	transition: ease .4s all;
 }
 
 body>container elementContainer>element {
