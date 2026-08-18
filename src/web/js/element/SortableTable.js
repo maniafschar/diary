@@ -71,7 +71,6 @@ th {
 	text-align: left;
 	padding: 0.5em 0.75em;
 	position: relative;
-	white-space: nowrap;
 	font-size: 1em;
 	overflow: auto;
 	max-height: 3.8em;
@@ -83,6 +82,19 @@ th {
 th {
 	font-weight: bold;
 	background: rgba(100, 150, 200, 0.2);
+	white-space: nowrap;
+}
+
+td {
+	white-space: break-spaces;
+}
+
+td.image {
+	padding: 0.1em 0 0 0;
+}
+
+td.image img {
+	height: 3em;
 }
 
 tbody tr:hover {
