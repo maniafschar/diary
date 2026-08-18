@@ -232,6 +232,10 @@ event {
 	height: 28.5em;
 }
 
+user {
+	height: calc(100% - 1.5em);
+}
+
 a {
 	text-decoration: none;
 	color: darkblue;
