@@ -116,7 +116,7 @@ button.speech {
 		t.speechRecognition.onend = () => {
 			t.isRecording = false;
 			t.captureAudioButton.textContent = 'Record Audio Description';
-			audioLabel.textContent = t.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.';
+			console.log(t.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.');
 			t.speechRecognition = null;
 		};
 
@@ -124,13 +124,13 @@ button.speech {
 			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
 			t.isRecording = false;
 			t.captureAudioButton.textContent = 'Record Audio Description';
-			audioLabel.textContent = 'Speech transcription failed.';
+			console.log('Speech transcription failed.');
 			t.speechRecognition = null;
 		};
 
 		t.speechRecognition.start();
 		t.isRecording = true;
-		audioLabel.textContent = 'Listening for speech...';
+		console.log('Listening for speech...');
 		t.captureAudioButton.textContent = 'Stop Transcription';
 	}
 	startRecording(t) {
@@ -153,7 +153,7 @@ button.speech {
 					reader.onload = () => {
 						currentEntry.audioFile = reader.result;
 						currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
-						audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
+						console.log(`Audio recorded: ${currentEntry.audioName}`);
 						audioPlayer.hidden = false;
 						audioPlayer.src = currentEntry.audioFile;
 						t.appendAudioNoteToDescription();
@@ -181,7 +181,7 @@ button.speech {
 
 				t.mediaRecorder.start();
 				t.isRecording = true;
-				audioLabel.textContent = 'Recording audio...';
+				console.log('Recording audio...');
 				t.captureAudioButton.textContent = 'Stop Recording';
 			})
 			.catch(error => {
@@ -202,7 +202,7 @@ button.speech {
 			t.speechRecognition.stop();
 		t.isRecording = false;
 		t.captureAudioButton.textContent = 'Record Audio Description';
-		audioLabel.textContent = 'Speech transcription stopped.';
+		console.log('Speech transcription stopped.');
 		t.speechRecognition = null;
 	}
 	stopRecordingStream(t) {
@@ -216,7 +216,7 @@ button.speech {
 		const [file] = mediaFiles;
 		currentEntry.audioFile = file.fullPath || file.localURL || file.name;
 		currentEntry.audioName = file.name || 'Recorded audio';
-		audioLabel.textContent = `Audio recorded: ${currentEntry.audioName}`;
+		console.log(`Audio recorded: ${currentEntry.audioName}`);
 		audioPlayer.hidden = false;
 		audioPlayer.src = currentEntry.audioFile;
 		t.appendAudioNoteToDescription();
