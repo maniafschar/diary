@@ -60,10 +60,13 @@ body>container buttons {
 	position: relative;
 	display: block;
 	text-align: center;
+	height: 3.6em;
+	padding-top: 0.5em;
 }
 
 body>container buttons>button {
-	position: relative;
+	position: relative !important;
+	margin: 0 0.5em !important;
 }
 
 body>container>element,
