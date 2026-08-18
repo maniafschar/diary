@@ -91,7 +91,7 @@ button.icon {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
 	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
-	height: calc(100% - 3em);
+	height: calc(100% - 1.5em);
 }
 
 .cal-day {
