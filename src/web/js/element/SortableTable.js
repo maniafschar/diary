@@ -77,23 +77,20 @@ th {
 	-webkit-text-size-adjust: 100%;
 	box-sizing: border-box;
 	display: inline-block;
+	white-space: nowrap;
 }
 
 th {
 	font-weight: bold;
 	background: rgba(100, 150, 200, 0.2);
-	white-space: nowrap;
 }
 
-td {
+td.text {
 	white-space: break-spaces;
 }
 
-td.image {
-	padding: 0.1em 0 0 0;
-}
-
-td.image img {
+td img {
+	padding: 0.1em;
 	height: 3em;
 }
 
