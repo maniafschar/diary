@@ -56,7 +56,7 @@ class ui {
 	}
 
 	static navigate(i) {
-		document.querySelector('elementContainer').style.marginLeft = (i * 100) + '%';
+		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
 	}
 
 	static showTab(event) {
