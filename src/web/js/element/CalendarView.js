@@ -26,6 +26,10 @@ class CalendarView extends HTMLElement {
 	height: 100%;
 }
 
+*::-webkit-scrollbar {
+	display: none;
+}
+
 .calendar-wrapper {
 	width: 100%;
 	height: 100%;
@@ -147,9 +151,11 @@ button.icon {
 }
 
 .event-list {
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: calc(100% - 1em);
+	position: relative;
+	display: block;
 }
 
 .event-pill {
