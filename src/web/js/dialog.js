@@ -44,64 +44,10 @@ value.pictures div video {
 		dialog.files = [];
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
-tabHeader {
-	white-space: nowrap;
-	overflow-x: auto;
+element {
+	width: 40em;
 	max-width: 100%;
-	position: relative;
 	display: block;
-	padding: 0 0.75em;
-	z-index: 3;
-}
-
-tabBody {
-	display: inline-block;
-	width: 100%;
-	max-width: 50em;
-	position: relative;
-	overflow-x: hidden;
-	height: 100%;
-	text-align: left;
-}
-
-tabBody>container {
-	width: 200%;
-	max-height: 70vh;
-	transition: all ease-out .4s;
-	overflow: hidden;
-	position: relative;
-	display: flex;
-}
-
-tabBody element {
-	position: relative;
-	width: 50%;
-	min-height: 10em;
-	box-sizing: border-box;
-	overflow-y: auto;
-	border: solid 1em transparent;
-	background: rgba(170, 170, 255, 0.2);
-	border-radius: 1em;
-}
-
-tabBody img {
-	padding: 1em;
-	background: rgba(255, 255, 255, 0.3);
-	border-radius: 1em;
-	margin-top: 0.5em;
-	max-width: 98%;
-}
-
-tab {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	padding: 0.75em 1em;
-	border-radius: 1em 1em 0 0;
-}
-
-tab.selected {
-	background: rgba(170, 170, 255, 0.2);
 }
 
 button.location {

@@ -140,7 +140,7 @@ input-rating {
 			table.style('tr.past td:first-child{opacity:0.5;}input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
-				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
+				table.setOpenDetail(event => listener.updateImageCarousel(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true });
 				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
