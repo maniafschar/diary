@@ -48,14 +48,13 @@ body>container {
 body>container elementContainer {
 	width: 300%;
 	position: relative;
-	display: block;
+	display: flex;
 	transition: ease .4s all;
 	min-height: 20em;
 }
 
 body>container elementContainer>element {
 	width: 33.3333%;
-	float: left;
 }
 
 body>container buttons {
