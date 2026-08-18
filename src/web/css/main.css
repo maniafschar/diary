@@ -43,7 +43,6 @@ body>container {
 	overflow-y: auto;
 	opacity: 0;
 	transition: .8s ease-out;
-	min-height: 20em;
 }
 
 body>container elementContainer {
@@ -51,6 +50,7 @@ body>container elementContainer {
 	position: relative;
 	display: block;
 	transition: ease .4s all;
+	min-height: 20em;
 }
 
 body>container elementContainer>element {
