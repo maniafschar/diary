@@ -217,25 +217,10 @@ class action {
 		document.querySelectorAll('event sortable-table, user sortable-table').forEach(e => e.table().querySelector('tbody').textContent = '');
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
-		document.querySelector('history').scrollLeft = 0;
-		document.querySelector('element.history').style.display = '';
-		document.querySelector('history').textContent = '';
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="groupname"]').innerText = '';
-	}
-
-	static imageNavigate(next) {
-		var history = document.querySelector('history');
-		var left = history.scrollLeft, width = document.querySelector('history').offsetWidth, x;
-		if (left == 0 && !next)
-			x = history.scrollWidth;
-		else
-			x = (parseInt(left / width) + (next ? 1 : -1)) * width;
-		if (next && x >= history.scrollWidth)
-			x = 0;
-		history.scrollTo({ left: x, behavior: 'smooth' });
 	}
 
 	static eventImageDelete(event, id) {
