@@ -141,8 +141,8 @@ input-rating {
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
-				table.columns.push({ label: 'Datum', sort: true, width: 30, detail: true });
-				table.columns.push({ label: 'Ort', sort: true, width: 30, detail: true });
+				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true });
+				table.columns.push({ label: 'Bilder', sort: true, width: 30, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 40, detail: true });
 				table.setConvert(list => {
 					var d = [];
@@ -150,14 +150,19 @@ input-rating {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var text = list[i].note ? list[i].note.split('\n')[0] : '', textSort = text;
+						var images = '';
+						if (list[i].eventImages) {
+							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
+								images += '<img src="/med/' + list[i].eventImages[i2].image + '" />';
+						}
 						if (list[i].rating) {
 							text = '<input-rating class="minimal" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
 							textSort = list[i].rating + textSort;
 							if (textSort.length > 10)
 								textSort = textSort.substring(0, 10).trim();
 						}
-						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) });
-						row.push(list[i].location.name);
+						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + '<br/>' + list[i].location.name });
+						row.push(images);
 						row.push({ attributes: { i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
