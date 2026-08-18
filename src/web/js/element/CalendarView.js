@@ -23,16 +23,19 @@ class CalendarView extends HTMLElement {
 	font-family: Comfortaa;
 	text-align: left;
 	display: block;
+	height: 100%;
 }
 
 .calendar-wrapper {
 	width: 100%;
+	height: 100%;
 }
 
 .cal-header {
 	display: block;
 	position: relative;
 	text-align: center;
+	height: 3em;
 }
 
 .cal-title {
@@ -69,11 +72,13 @@ button.icon {
 
 .cal-grid-outer {
 	overflow: hidden;
+	height: calc(100% - 3em);
 }
 
 .cal-weekdays {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
+	height: 1.5em;
 }
 
 .cal-weekday {
@@ -86,6 +91,7 @@ button.icon {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
 	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
+	height: calc(100% - 3em);
 }
 
 .cal-day {
