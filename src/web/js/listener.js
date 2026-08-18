@@ -142,7 +142,7 @@ input-rating {
 				var now = new Date();
 				table.setOpenDetail(event => dialog.event(document.querySelector('event sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true });
-				table.columns.push({ label: 'Bilder', sort: true, width: 15, detail: true });
+				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
 				table.setConvert(list => {
 					var d = [];
