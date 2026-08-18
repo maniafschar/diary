@@ -174,8 +174,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '<';
-		button.style.left = '-0.5em';
-		button.style.borderRadius = '0 0 0.5em 0';
+		button.style.left = 0;
 		button = header.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
@@ -187,8 +186,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
-		button.style.right = '-0.5em';
-		button.style.borderRadius = '0 0 0 0.5em';
+		button.style.right = 0;
 		var title = header.appendChild(document.createElement('div'));
 		title.classList.add('cal-title');
 		title.onclick = () => {
