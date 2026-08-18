@@ -61,7 +61,7 @@ body>container elementContainer>element {
 body>container buttons {
 	position: relative;
 	display: block;
-	text-align: center;
+	text-align: right;
 	height: 3.6em;
 	padding-top: 0.5em;
 }
