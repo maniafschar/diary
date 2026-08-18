@@ -50,7 +50,7 @@ body>container elementContainer {
 	position: relative;
 	display: flex;
 	transition: ease .4s all;
-	min-height: 20em;
+	height: 30em;
 }
 
 body>container elementContainer>element {
