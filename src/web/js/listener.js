@@ -48,6 +48,12 @@ class listener {
 			index = 0;
 		var events = document.querySelector('event sortable-table').list;
 		var list = [];
+		var listImages = function (event) {
+			var list = [];
+			for (var i = 0; i < event.eventImages.length; i++)
+				list.push(event.eventImages[i].image);
+			return list;
+		};
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
@@ -60,9 +66,9 @@ class listener {
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
-			if (events[i].image)
+			if (events[i].eventImages?.length)
 				list.push({
-					src: events[i].image,
+					src: listImages(events[i]),
 					index: events[i].id,
 					text: events[i].note,
 					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
