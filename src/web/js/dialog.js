@@ -173,28 +173,30 @@ ${dialog.stylePictures}`;
 		input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'altitude');
-		var locationButton = address.parentElement.appendChild(document.createElement('button'));
-		locationButton.src = 'image/location.svg';
-		locationButton.classList.add('icon');
-		locationButton.classList.add('location');
-		locationButton.onclick = () => {
-			navigator.geolocation.getCurrentPosition(result => {
-				if (result.coords && result.coords.latitude) {
-					api.location.getAddress(result.coords.latitude, result.coords.longitude, e => {
-						var popup = document.querySelector('dialog-popup').content();
-						popup.querySelector('element input[name="locationName"]').value = e.name;
-						popup.querySelector('element textarea[name="address"]').value = e.address;
-						popup.querySelector('element input[name="longitude"]').value = e.longitude;
-						popup.querySelector('element input[name="latitude"]').value = e.latitude;
-						popup.querySelector('element input[name="altitude"]').value = e.altitude;
-						var locationButton = popup.querySelector('button.location');
-						if (locationButton)
-							locationButton.remove();
-					});
-				}
-			}, error => console.warn('Location lookup failed:', error && error.code, error && error.message),
-				{ timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
-		};
+		if (navigator.geolocation) {
+			var locationButton = address.parentElement.appendChild(document.createElement('button'));
+			locationButton.src = 'image/location.svg';
+			locationButton.classList.add('icon');
+			locationButton.classList.add('location');
+			locationButton.onclick = () => {
+				navigator.geolocation.getCurrentPosition(result => {
+					if (result.coords && result.coords.latitude) {
+						api.location.getAddress(result.coords.latitude, result.coords.longitude, e => {
+							var popup = document.querySelector('dialog-popup').content();
+							popup.querySelector('element input[name="locationName"]').value = e.name;
+							popup.querySelector('element textarea[name="address"]').value = e.address;
+							popup.querySelector('element input[name="longitude"]').value = e.longitude;
+							popup.querySelector('element input[name="latitude"]').value = e.latitude;
+							popup.querySelector('element input[name="altitude"]').value = e.altitude;
+							var locationButton = popup.querySelector('button.location');
+							if (locationButton)
+								locationButton.remove();
+						});
+					}
+				}, error => console.warn('Location lookup failed:', error && error.code, error && error.message),
+					{ timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
+			};
+		}
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
 		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
 		if (event?.id) {
