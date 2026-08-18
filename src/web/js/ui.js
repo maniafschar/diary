@@ -55,6 +55,10 @@ class ui {
 		return ui.day[date.getDay()] + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear() - 2000) + ' ' + date.getHours() + ':' + date.getMinutes() + suffix;
 	}
 
+	static navigate(i) {
+		document.querySelector('elementContainer').style.marginLeft = (i * 100) + '%';
+	}
+
 	static showTab(event) {
 		var tabHeader = ui.parents(event.target, 'tabHeader');
 		var i = [...tabHeader.children].indexOf(ui.parents(event.target, 'tab'));
@@ -67,6 +71,7 @@ class ui {
 			behavior: 'smooth',
 		});
 	}
+
 	static parents(e, nodeName) {
 		if (e) {
 			nodeName = nodeName.toUpperCase();
@@ -75,6 +80,7 @@ class ui {
 		}
 		return e;
 	}
+
 	static toggle(event) {
 		var toggle = ui.parents(event.target, 'toggle');
 		var element = toggle.nextElementSibling;
