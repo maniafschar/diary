@@ -163,7 +163,7 @@ input-rating {
 						}
 						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + '<br/>' + list[i].location.name });
 						row.push({ attributes: { class: 'image' }, text: images });
-						row.push({ attributes: { i: 'note_' + list[i].id, value: textSort }, text: text });
+						row.push({ attributes: { class: 'text', i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
 							row.row = { class: 'past' };
 						d.push(row);
