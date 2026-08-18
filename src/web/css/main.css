@@ -43,6 +43,7 @@ body>container {
 	overflow-y: auto;
 	opacity: 0;
 	transition: .8s ease-out;
+	min-height: 20em;
 }
 
 body>container elementContainer {
