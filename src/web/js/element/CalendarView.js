@@ -22,6 +22,7 @@ class CalendarView extends HTMLElement {
 :host(*) {
 	font-family: Comfortaa;
 	text-align: left;
+	display: block;
 }
 
 .calendar-wrapper {
