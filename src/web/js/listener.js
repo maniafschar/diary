@@ -179,7 +179,7 @@ input-rating {
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
 			calendar.setOpen(event => event.id ? dialog.event(event.id) : dialog.add(event));
-			for (var i = events.length - 1; i >= 0; i--)
+			for (var i = 0; i < events.length; i++)
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Teilnehmer', rating: events[i].rating });
 			calendar.render();
 			if (events.length) {
