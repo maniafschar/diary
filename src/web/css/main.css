@@ -70,6 +70,10 @@ body>container buttons>button {
 	vertical-align: bottom;
 }
 
+body>container buttons>button>img {
+	padding: 0.3em;
+}
+
 body>container>element,
 body>container>elementContainer>element {
 	display: block;
