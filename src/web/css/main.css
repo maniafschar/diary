@@ -61,13 +61,13 @@ body>container buttons {
 	position: relative;
 	display: block;
 	text-align: right;
-	height: 3.6em;
 	padding-top: 0.5em;
 }
 
 body>container buttons>button {
 	position: relative !important;
 	margin: 0 0.5em !important;
+	vertical-align: bottom;
 }
 
 body>container>element,
