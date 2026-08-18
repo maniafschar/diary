@@ -89,9 +89,14 @@ td.text {
 	white-space: break-spaces;
 }
 
-td img {
+td.image {
+	overflow-y: hidden;
+}
+
+td.image img {
 	padding: 0.1em;
 	height: 3em;
+	border-radius: 0.5em;
 }
 
 tbody tr:hover {
