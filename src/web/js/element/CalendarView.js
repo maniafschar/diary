@@ -72,6 +72,7 @@ button.icon {
 	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
+	top: 0.5em;
 }
 
 .cal-grid-outer {
