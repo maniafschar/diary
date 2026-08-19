@@ -25,9 +25,15 @@ class InputRating extends HTMLElement {
 	display: inline;
 }
 
+:host(.minimal) {
+	margin-right: 0.5em;
+	float: left;
+	padding-top: 0.1em;
+}
+
 :host(.minimal) svg {
-	width: 1em;
-	height: 1em;
+	width: 0.3em;
+	height: 0.3em;
 }
 
 detailRating {
@@ -39,14 +45,6 @@ detailRating {
 
 :host(.inline) detailRating {
 	font-size: 1em;
-}
-	
-:host(.minimal) detailRating {
-	font-size: 0.5em;
-}
-		
-:host(.minimal) ratingSelection full {
-	color: darkblue;
 }
 
 rating,
