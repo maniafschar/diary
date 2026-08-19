@@ -116,11 +116,11 @@ ratingSelection span {
 				if (this.classList.contains('minimal')) {
 					var widthTop = x < 60 ? x * 10 / 6 : 100;
 					var widthBottom = x > 60 ? (x - 60) / 20 : 0;
-					element.innerHTML = `<ratingSelection><full style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full>`
-							+ (widthBottom ? `<br /><full style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</full>` : '')
+					element.innerHTML = `<ratingSelection><empty style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</empty>`
+							+ (widthBottom ? `<br /><empty style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</empty>` : '')
 							+ '</ratingSelection>';
 				} else
-					element.innerHTML = `<ratingSelection><full style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
+					element.innerHTML = `<ratingSelection><empty style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</empty></ratingSelection>`;
 			}
 		}
 		this.ignoreCallback = false;
