@@ -117,8 +117,8 @@ ratingSelection span {
 				if (this.classList.contains('minimal')) {
 					var widthTop = x < 60 ? x * 10 / 6 : 100;
 					var widthBottom = x > 60 ? (x - 60) / 20 : 0;
-					element.innerHTML = `<ratingSelection><empty>${this.star()}${this.star()}${this.star()}</empty><full style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full><br />' +
-						'<empty>${this.star()}${this.star()}</empty><full style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
+					element.innerHTML = `<ratingSelection><empty>${this.star()}${this.star()}${this.star()}</empty><full style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full><br />
+							<empty>${this.star()}${this.star()}</empty><full style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
 				} else
 					element.innerHTML = `<ratingSelection><empty>${this.star()}${this.star()}${this.star()}${this.star()}${this.star()}</empty><full style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
 			}
