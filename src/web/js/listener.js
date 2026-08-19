@@ -178,7 +178,7 @@ input-rating {
 
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
-			calendar.setOpen(event => event.id ? dialog.event(event.id) : dialog.add(event));
+			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
 			for (var i = 0; i < events.length; i++)
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Teilnehmer', rating: events[i].rating });
 			calendar.render();
