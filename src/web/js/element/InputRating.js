@@ -76,7 +76,7 @@ ratingSelection span {
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">${this.star(1,true)}${this.star(2,true)}${this.star(3,true)}${this.star(4,true)}${this.star(5,true)}</ratingSelection>`;
+			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">${this.star(1,0)}${this.star(2,0)}${this.star(3,0)}${this.star(4,0)}${this.star(5,0)}</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
 		} else
 			this._root.appendChild(document.createElement('detailRating'));
@@ -99,12 +99,8 @@ ratingSelection span {
 			x = 0;
 		if (this.getAttribute('type') == 'edit') {
 			var e = this._root.querySelectorAll('ratingSelection > svg');
-			for (var i = 0; i < e.length; i++) {
-				if (i < x)
-					e[i].classList.add('fill');
-				else
-					e[i].classList.remove('fill');
-			}
+			for (var i = 0; i < e.length; i++)
+				e[i].querySelector('clipPath>rect').setAttribute('width', i < x ? 100 : 0);
 			this._root.host.setAttribute('value', x * (100 / this.stars));
 			if (this.onchange && click)
 				this.onchange(x * (100 / this.stars));
@@ -114,17 +110,20 @@ ratingSelection span {
 				if (this.classList.contains('minimal')) {
 					var widthTop = x < 60 ? x * 10 / 6 : 100;
 					var widthBottom = x > 60 ? (x - 60) / 20 : 0;
-					element.innerHTML = `<ratingSelection><empty style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</empty>`
-							+ (widthBottom ? `<br /><empty style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</empty>` : '')
-							+ '</ratingSelection>';
+					element.innerHTML = `<ratingSelection>${this.star(null,x>20?null:x)}${this.star(null,x>40?null:x)}${this.star(null,x>60?null:x)}
+							<br />${this.star(null,x>80?null:x)}${this.star(null,x)}</ratingSelection>`;
 				} else
-					element.innerHTML = `<ratingSelection><empty style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</empty></ratingSelection>`;
+					element.innerHTML = `<ratingSelection>${this.star(null,x>20?null:x)}${this.star(null,x>40?null:x)}${this.star(null,x>60?null:x)}${this.star(null,x>80?null:x)}${this.star(null,x)}</ratingSelection>`;
 			}
 		}
 		this.ignoreCallback = false;
 	}
 
-	star(no, full) {
-		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="currentColor" fill="transparent"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><style>.fill{stroke:rgb(200, 205, 0);fill:rgb(210, 225, 20)}</style><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
+	star(no, x) {
+		return `<svg width="24" height="24" viewBox="0 0 16 16" stroke="currentColor"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '>
+					<clipPath id="fillClip"><rect x="0" y="0" width="${isNaN(x) ? 24 : x * 24 / 100}" height="24" /></clipPath>
+					<path clip-path="url(#fillClip)" d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+					<path fill="none" stroke="#0000FF" stroke-width="3" stroke-linejoin="round" d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+				</svg>`;
 	}
 }
