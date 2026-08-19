@@ -285,7 +285,7 @@ filter count {
 					else
 						td.style.width = widths[i2] + '%';
 					if (this.columns[i2].noaction)
-						td.setAttribute('class', 'unclickable');
+						td.classList.add('unclickable');
 					else
 						td.setAttribute('onclick', 'this.getRootNode().host.openDetails(event)');
 				}
