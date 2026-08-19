@@ -180,7 +180,7 @@ input-rating {
 			calendar.reset();
 			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
 			for (var i = 0; i < events.length; i++)
-				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Teilnehmer', rating: events[i].rating });
+				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 			calendar.render();
 			if (events.length) {
 				var pastEvents = document.querySelector('sortable-table')._root.querySelectorAll('tr.past').length;
