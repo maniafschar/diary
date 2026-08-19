@@ -78,8 +78,8 @@ ratingSelection span {
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
 			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">
-	<empty>${star(1)}${star(2)}${star(3)}${star(4)}${star(5)}</empty>
-	<full>${star(1,true)}${star(2,true)}${star(3,true)}${star(4,true)}${star(5,true)}</full>
+	<empty>${this.star(1)}${this.star(2)}${this.star(3)}${this.star(4)}${this.star(5)}</empty>
+	<full>${this.star(1,true)}${this.star(2,true)}${this.star(3,true)}${this.star(4,true)}${this.star(5,true)}</full>
 	</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
 		} else
@@ -87,9 +87,6 @@ ratingSelection span {
 		this.rate(parseFloat(this.getAttribute('value')));
 	}
 	static get observedAttributes() { return ['value']; }
-	static star(no, full) {
-		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="' + (full ? 'transparent' : 'black') + '" fill="' + (full ? 'rgb(210, 225, 20)' : 'transparent') + '"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
-	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (!this.ignoreCallback)
@@ -125,5 +122,9 @@ ratingSelection span {
 			}
 		}
 		this.ignoreCallback = false;
+	}
+
+	star(no, full) {
+		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="' + (full ? 'transparent' : 'black') + '" fill="' + (full ? 'rgb(210, 225, 20)' : 'transparent') + '"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
 	}
 }
