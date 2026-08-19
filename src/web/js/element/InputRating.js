@@ -76,10 +76,7 @@ ratingSelection span {
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">
-	<empty>${this.star(1)}${this.star(2)}${this.star(3)}${this.star(4)}${this.star(5)}</empty>
-	<full>${this.star(1,true)}${this.star(2,true)}${this.star(3,true)}${this.star(4,true)}${this.star(5,true)}</full>
-	</ratingSelection>`;
+			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">${this.star(1,true)}${this.star(2,true)}${this.star(3,true)}${this.star(4,true)}${this.star(5,true)}</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
 		} else
 			this._root.appendChild(document.createElement('detailRating'));
@@ -101,12 +98,13 @@ ratingSelection span {
 		if (this._root.host.getAttribute('type') == 'edit' && x == this._root.host.getAttribute('value') / (100 / this.stars))
 			x = 0;
 		if (this.getAttribute('type') == 'edit') {
-			var e = this._root.querySelectorAll('ratingSelection > full span');
-			for (var i = 0; i < e.length; i++)
-				e[i].style.display = i < x ? '' : 'none';
-			e = this._root.querySelector('ratingSelection > full');
-			if (e)
-				e.style.width = (x * (100 / this.stars)) + '%';
+			var e = this._root.querySelectorAll('ratingSelection > svg');
+			for (var i = 0; i < e.length; i++) {
+				if (i > x)
+					e[i].classList.add('fill');
+				else
+					e[i].classList.remove('fill');
+			}
 			this._root.host.setAttribute('value', x * (100 / this.stars));
 			if (this.onchange && click)
 				this.onchange(x * (100 / this.stars));
@@ -127,6 +125,6 @@ ratingSelection span {
 	}
 
 	star(no, full) {
-		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="' + (no && full ? 'transparent' : 'black') + '" fill="' + (full ? 'rgb(210, 225, 20)' : 'transparent') + '"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
+		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="currentColor"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><style>.fill{stroke:transparent;fill:rgb(210, 225, 20)}</style><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
 	}
 }
