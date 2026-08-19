@@ -438,20 +438,22 @@ autoplay hint {
 		this._root.querySelector('hint').innerText = position + '/' + total;
 		var img = this._root.querySelector('div img');
 		var video = this._root.querySelector('div video');
-		var src = this.list[this.index].src[this.indexImage];
 		video.pause();
-		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-			img.src = '';
-			img.style.display = 'none';
-			video.style.display = '';
-			video.querySelector('source').src = '/med/' + src;
-			video.load();
-			video.play();
-		} else {
-			img.src = '/med/' + src;
-			img.style.display = '';
-			video.querySelector('source').src = '';
-			video.style.display = 'none';
+		img.src = '';
+		video.querySelector('source').src = '';
+		var src = this.list[this.index].src[this.indexImage];
+		if (src) {
+			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+				img.style.display = 'none';
+				video.style.display = '';
+				video.querySelector('source').src = '/med/' + src;
+				video.load();
+				video.play();
+			} else {
+				img.src = '/med/' + src;
+				img.style.display = '';
+				video.style.display = 'none';
+			}
 		}
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
