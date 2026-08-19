@@ -107,8 +107,7 @@ ratingSelection span {
 		} else {
 			var element = this._root.querySelector('detailRating');
 			if (element)
-				element.innerHTML = `<ratingSelection>${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}
-						${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}</ratingSelection>`;
+				element.innerHTML = `<ratingSelection>${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}</ratingSelection>`;
 		}
 		this.ignoreCallback = false;
 	}
