@@ -440,11 +440,12 @@ autoplay hint {
 		var video = this._root.querySelector('div video');
 		video.pause();
 		img.src = '';
+		img.style.display = 'none';
 		video.querySelector('source').src = '';
+		video.style.display = 'none';
 		var src = this.list[this.index].src[this.indexImage];
 		if (src) {
 			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-				img.style.display = 'none';
 				video.style.display = '';
 				video.querySelector('source').src = '/med/' + src;
 				video.load();
@@ -452,7 +453,6 @@ autoplay hint {
 			} else {
 				img.src = '/med/' + src;
 				img.style.display = '';
-				video.style.display = 'none';
 			}
 		}
 		this._root.querySelector('nav').textContent = '';
