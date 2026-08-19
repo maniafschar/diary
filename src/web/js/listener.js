@@ -66,26 +66,25 @@ class listener {
 			return '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
-			if (events[i].eventImages?.length)
-				list.push({
-					src: listImages(events[i]),
-					index: events[i].id,
-					text: events[i].note,
-					hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
-						(events[i].location.name ? events[i].location.name + '<br/>' : '') +
-						(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
-					description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
-						(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
-						'<separator></separator>' +
-						(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
-						(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
-						addEditButton() +
-						listener.listFeedbacks(events[i]) +
-						'<separator></separator>' +
-						'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
-						'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
-						'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
-				});
+			list.push({
+				src: listImages(events[i]),
+				index: events[i].id,
+				text: events[i].note,
+				hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
+					(events[i].location.name ? events[i].location.name + '<br/>' : '') +
+					(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
+				description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
+					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
+					'<separator></separator>' +
+					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
+					(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
+					addEditButton() +
+					listener.listFeedbacks(events[i]) +
+					'<separator></separator>' +
+					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
+					'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
+					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
+			});
 		}
 		document.querySelector('image-carousel').open(list, index, autoplay, `
 rating {
