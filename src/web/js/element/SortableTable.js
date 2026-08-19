@@ -75,7 +75,7 @@ th {
 	position: relative;
 	font-size: 1em;
 	overflow: auto;
-	max-height: 3.2em;
+	max-height: 3.3em;
 	-webkit-text-size-adjust: 100%;
 	box-sizing: border-box;
 	display: inline-block;
