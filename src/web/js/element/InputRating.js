@@ -45,9 +45,9 @@ ratingSelection {
 }
 
 ratingSelection svg {
-	margin: 0.75em;
-	width: 2em;
-	height: 2em;
+	margin: 0.7em;
+	width: 1.8em;
+	height: 1.8em;
 }`;
 		if (!this.getAttribute('value'))
 			this.setAttribute('value', 0);
