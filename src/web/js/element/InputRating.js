@@ -58,8 +58,7 @@ ratingSelection empty {
 	position: relative;
 }
 
-rating full,
-ratingSelection full {
+rating full {
 	position: absolute;
 	left: 0;
 	overflow: hidden;
@@ -117,16 +116,16 @@ ratingSelection span {
 				if (this.classList.contains('minimal')) {
 					var widthTop = x < 60 ? x * 10 / 6 : 100;
 					var widthBottom = x > 60 ? (x - 60) / 20 : 0;
-					element.innerHTML = `<ratingSelection><empty>${this.star()}${this.star()}${this.star()}</empty><full style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full><br />
-							<empty>${this.star()}${this.star()}</empty><full style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
+					element.innerHTML = `<ratingSelection><full style="width:${widthTop}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full>`
+							+ (widthBottom ? `<br /><full style="width:${widthBottom}em;top:1em;margin-left:0.5em;">${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>` : '');
 				} else
-					element.innerHTML = `<ratingSelection><empty>${this.star()}${this.star()}${this.star()}${this.star()}${this.star()}</empty><full style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
+					element.innerHTML = `<ratingSelection><full style="width:${x}%;">${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}${this.star(null,true)}</full></ratingSelection>`;
 			}
 		}
 		this.ignoreCallback = false;
 	}
 
 	star(no, full) {
-		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="' + (full ? 'transparent' : 'black') + '" fill="' + (full ? 'rgb(210, 225, 20)' : 'transparent') + '"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
+		return '<svg width="24" height="24" viewBox="0 0 16 16" stroke="' + (no && full ? 'transparent' : 'black') + '" fill="' + (full ? 'rgb(210, 225, 20)' : 'transparent') + '"' + (no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : '') + '><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path></svg>';
 	}
 }
