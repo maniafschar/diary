@@ -13,16 +13,11 @@ class InputRating extends HTMLElement {
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
-	overflow: auto;
 	max-width: 100%;
 	position: relative;
-	display: block;
 	overflow: hidden;
-}
-
-:host(.inline),
-:host(.minimal) {
 	display: inline;
+	line-height: 1;
 }
 
 :host(.minimal) {
@@ -32,54 +27,33 @@ class InputRating extends HTMLElement {
 }
 
 :host(.minimal) svg {
-	width: 0.3em;
-	height: 0.3em;
+	width: 0.45em;
+	height: 0.45em;
 }
 
 detailRating {
 	position: relative;
-	color: darkgoldenrod;
-	font-size: 1.6em;
 	text-align: center;
-}
-
-:host(.inline) detailRating {
-	font-size: 1em;
-}
-
-rating,
-ratingSelection {
-	position: relative;
-	line-height: 1;
 	display: inline-block;
 	white-space: nowrap;
 }
 
-rating empty,
-ratingSelection empty {
-	opacity: 0.5;
+ratingSelection {
 	position: relative;
-}
-
-rating full {
-	position: absolute;
-	left: 0;
-	overflow: hidden;
-	top: 0;
-	color: rgb(210, 225, 20);
-}
-
-ratingSelection span {
-	width: 1.6em;
 	display: inline-block;
-	position: relative;
-	cursor: pointer;
+	white-space: nowrap;
+}
+
+ratingSelection svg {
+	margin: 0.75em;
+	width: 2em;
+	height: 2em;
 }`;
 		if (!this.getAttribute('value'))
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection style="font-size:1.9em;margin:0.5em 0;">${this.star(1,0)}${this.star(2,0)}${this.star(3,0)}${this.star(4,0)}${this.star(5,0)}</ratingSelection>`;
+			element.innerHTML = `<ratingSelection>${this.star(1,0)}${this.star(2,0)}${this.star(3,0)}${this.star(4,0)}${this.star(5,0)}</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
 		} else
 			this._root.appendChild(document.createElement('detailRating'));
@@ -110,7 +84,7 @@ ratingSelection span {
 		} else {
 			var element = this._root.querySelector('detailRating');
 			if (element)
-				element.innerHTML = `<ratingSelection>${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}</ratingSelection>`;
+				element.innerHTML = `${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}`;
 		}
 		this.ignoreCallback = false;
 	}
