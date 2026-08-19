@@ -106,15 +106,9 @@ ratingSelection span {
 				this.onchange(x * (100 / this.stars));
 		} else {
 			var element = this._root.querySelector('detailRating');
-			if (element) {
-				if (this.classList.contains('minimal')) {
-					var widthTop = x < 60 ? x * 10 / 6 : 100;
-					var widthBottom = x > 60 ? (x - 60) / 20 : 0;
-					element.innerHTML = `<ratingSelection>${this.star(null,x>20?null:x)}${this.star(null,x>40?null:x)}${this.star(null,x>60?null:x)}
-							<br />${this.star(null,x>80?null:x)}${this.star(null,x)}</ratingSelection>`;
-				} else
-					element.innerHTML = `<ratingSelection>${this.star(null,x>20?null:x)}${this.star(null,x>40?null:x)}${this.star(null,x>60?null:x)}${this.star(null,x>80?null:x)}${this.star(null,x)}</ratingSelection>`;
-			}
+			if (element)
+				element.innerHTML = `<ratingSelection>${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}
+						${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}</ratingSelection>`;
 		}
 		this.ignoreCallback = false;
 	}
@@ -122,7 +116,7 @@ ratingSelection span {
 	star(no, x) {
 		var id = new Date().getTime() + Math.random();
 		return `<svg width="24" height="24" viewBox="0 0 16 16" stroke="currentColor"${no ? ' onclick="this.getRootNode().host.rate(' + no + ', true)"' : ''}>
-					<clipPath id="fillClip${id}"><rect x="0" y="0" width="${isNaN(x) ? 24 : x * 24 / 100}" height="24" /></clipPath>
+					<clipPath id="fillClip${id}"><rect x="0" y="0" width="${isNaN(x) || x < 0 ? 24 : x * 24 / 100}" height="24" /></clipPath>
 					<path clip-path="url(#fillClip${id})" d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 					<path fill="none" stroke="#0000FF" stroke-width="3" stroke-linejoin="round" d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 				</svg>`;
