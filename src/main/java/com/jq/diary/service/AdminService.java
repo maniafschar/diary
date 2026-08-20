@@ -1,8 +1,5 @@
 package com.jq.diary.service;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -10,23 +7,15 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import org.apache.commons.io.IOUtils;
-import org.jcodec.api.FrameGrab;
-import org.jcodec.common.model.Picture;
-import org.jcodec.scale.AWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
-import com.jq.diary.repository.Repository.Attachment;
-import com.jq.diary.util.Utilities;
 
 @Service
 public class AdminService {
@@ -108,38 +97,7 @@ public class AdminService {
 	}
 
 	public String execute() {
-		final List<EventImage> eventImages = this.repository.list("from EventImage", EventImage.class);
-		int i = 0;
-		final StringBuilder result = new StringBuilder();
-		for (final EventImage eventImage : eventImages) {
-			if (eventImage.getImageThumbnail() == null) {
-				try {
-					eventImage.setImageThumbnail(Attachment.createImage("jpg",
-							Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
-					this.repository.save(eventImage);
-					i++;
-				} catch (final Exception e) {
-					try {
-						final File videoFile = new File(Attachment.fullPath(eventImage.getImage()));
-						final Picture picture = FrameGrab.getFrameAtSec(videoFile, 0.0);
-						if (picture != null) {
-							final BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
-							final ByteArrayOutputStream out = new ByteArrayOutputStream();
-							ImageIO.write(bufferedImage, "jpg", out);
-							eventImage.setImageThumbnail(Attachment.createImage("jpg",
-									Utilities.scaleImage(out.toByteArray(), 150)));
-							this.repository.save(eventImage);
-							i++;
-						}
-					} catch (final Exception ex) {
-						result.append(Utilities.stackTraceToString(ex));
-						result.append("\n\n");
-					}
-				}
-			}
-		}
-		result.append(i);
-		return result.toString();
+		return null;
 	}
 
 	private void validateSearch(final String search) {

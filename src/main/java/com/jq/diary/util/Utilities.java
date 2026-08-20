@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
@@ -19,6 +20,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509ExtendedTrustManager;
+
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
+import org.jcodec.api.PictureWithMetadata;
+import org.jcodec.common.DemuxerTrackMeta.Orientation;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.scale.AWTUtil;
 
 import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Contact;
@@ -152,5 +160,38 @@ public class Utilities {
 		} catch (final IOException ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+
+	public static byte[] createVideoThumbnail(final String path) throws IOException, JCodecException {
+		final PictureWithMetadata picture = FrameGrab.createFrameGrab(NIOUtils.readableChannel(new File(path)))
+				.getNativeFrameWithMetadata();
+		if (picture != null) {
+			BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture.getPicture());
+			final Orientation o = picture.getOrientation();
+			if (o != Orientation.D_0) {
+				final int w = bufferedImage.getWidth();
+				final int h = bufferedImage.getHeight();
+				final BufferedImage dest = o == Orientation.D_180
+						? new BufferedImage(w, h, bufferedImage.getType())
+						: new BufferedImage(h, w, bufferedImage.getType());
+				final Graphics2D graphics2D = dest.createGraphics();
+				if (o == Orientation.D_90) {
+					graphics2D.translate((h - w) / 2, (h - w) / 2);
+					graphics2D.rotate(Math.PI / 2, h / 2, w / 2);
+				} else if (o == Orientation.D_270) {
+					graphics2D.translate((w - h) / 2, (w - h) / 2);
+					graphics2D.rotate(3 * Math.PI / 2, h / 2, w / 2);
+				} else {
+					graphics2D.translate(0, 0);
+					graphics2D.rotate(2 * Math.PI / 2, w / 2, h / 2);
+				}
+				graphics2D.drawRenderedImage(bufferedImage, null);
+				bufferedImage = dest;
+			}
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ImageIO.write(bufferedImage, "jpg", out);
+			return out.toByteArray();
+		}
+		throw new IllegalArgumentException("No video format");
 	}
 }
