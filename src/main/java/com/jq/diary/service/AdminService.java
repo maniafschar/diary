@@ -102,15 +102,22 @@ public class AdminService {
 	public String execute() {
 		final List<EventImage> eventImages = this.repository.list("from EventImage", EventImage.class);
 		int i = 0;
+		final StringBuilder result = new StringBuilder();
 		for (final EventImage eventImage : eventImages) {
-			if (eventImage.getImageThumbnail() == null && !eventImage.getImage().endsWith(".mov")) {
-				eventImage.setImageThumbnail(Attachment.createImage("jpg",
-						Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
-				this.repository.save(eventImage);
-				i++;
+			if (eventImage.getImageThumbnail() == null) {
+				try {
+					eventImage.setImageThumbnail(Attachment.createImage("jpg",
+							Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
+					this.repository.save(eventImage);
+					i++;
+				} catch (final Exception ex) {
+					result.append(Utilities.stackTraceToString(ex));
+					result.append("\n\n");
+				}
 			}
 		}
-		return "" + i;
+		result.append(i);
+		return result.toString();
 	}
 
 	private void validateSearch(final String search) {
