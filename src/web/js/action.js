@@ -226,7 +226,7 @@ class action {
 	static eventImageDelete(event, id) {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		if (!e)
-			e = document.querySelector('image-carousel').content().querySelector('thumbnail [i="' + id + '"]');
+			e = document.querySelector('image-carousel').data().querySelector('thumbnail [i="' + id + '"]');
 		if (e.querySelector('delete')) {
 			if (event.target.nodeName == 'DELETE') {
 				if (document.querySelector('dialog-popup').content().querySelector('button.edit'))
