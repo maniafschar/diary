@@ -135,7 +135,7 @@ public class AdminService {
 	@Scheduled(cron = "0 0 * * * *")
 	private void backup() throws InterruptedException, IOException {
 		new ProcessBuilder("./backup.sh", this.user, this.password,
-				"client client_contacts contact contact_event contact_token event event_image feedback location log ticket")
+				"client contact contact_event contact_token event event_feedback event_image event_rating location log ticket")
 				.start().waitFor();
 	}
 }
