@@ -56,8 +56,9 @@ class listener {
 		};
 		var listImageThumbnails = function (event) {
 			var list = '';
+			image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + dialog.files.length + ')');
 			for (var i = 0; i < event.eventImages.length; i++)
-				list += '<thumbnail><img src="/med/' + event.eventImages[i].imageThumbnail + '" /></thumbnail>';
+				list += '<thumbnail onclick="action.eventImageDelete(event,' + event.eventImages[i].id + ')" i="' + event.eventImages[i].id + '"><img src=" / med / ' + event.eventImages[i].imageThumbnail + '" /></thumbnail>';
 			return list;
 		};
 		var listRatings = function (event) {
