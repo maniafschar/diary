@@ -131,9 +131,9 @@ ${dialog.stylePictures}`;
 							var popup = document.querySelector('dialog-popup').content();
 							popup.querySelector('element input[name="locationName"]').value = e.name;
 							popup.querySelector('element textarea[name="address"]').value = e.address;
-							popup.querySelector('element input[name="longitude"]').value = e.longitude;
-							popup.querySelector('element input[name="latitude"]').value = e.latitude;
-							popup.querySelector('element input[name="altitude"]').value = e.altitude;
+							popup.querySelector('element input[name="longitude"]').value = result.coords.longitude;
+							popup.querySelector('element input[name="latitude"]').value = result.coords.latitude;
+							popup.querySelector('element input[name="altitude"]').value = result.coords.altitude;
 							var locationButton = popup.querySelector('button.location');
 							if (locationButton)
 								locationButton.remove();

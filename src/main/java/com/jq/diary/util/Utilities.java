@@ -1,6 +1,10 @@
 package com.jq.diary.util;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.net.Socket;
@@ -10,6 +14,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
@@ -121,5 +126,31 @@ public class Utilities {
 			}
 		}
 		return data;
+	}
+
+	public static byte[] scaleImage(final byte[] data, final int size) {
+		try {
+			final BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(data));
+			int width = originalImage.getWidth();
+			int height = originalImage.getHeight();
+			if (width > height) {
+				height = height * size / width;
+				width = size;
+			} else {
+				width = width * size / height;
+				height = size;
+			}
+			final BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			final Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(originalImage, 0, 0, width, height, 0, 0, originalImage.getWidth(), originalImage.getHeight(),
+					null);
+			resizedImage.flush();
+			g.dispose();
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ImageIO.write(resizedImage, "jpg", out);
+			return out.toByteArray();
+		} catch (final IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 }

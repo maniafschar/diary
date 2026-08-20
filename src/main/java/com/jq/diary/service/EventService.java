@@ -16,6 +16,8 @@ import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.repository.Repository.Attachment;
+import com.jq.diary.util.Utilities;
 
 @Service
 public class EventService {
@@ -95,6 +97,8 @@ public class EventService {
 	}
 
 	public void save(final EventImage eventImage) {
+		eventImage.setImageThumpnail(Attachment.createImage("jpg",
+				Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
 		this.repository.save(eventImage);
 	}
 

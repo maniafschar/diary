@@ -258,17 +258,18 @@ class action {
 			};
 			api.event.postExists(event, exists => {
 				if (exists == 'false') {
-					var pictures = popup.querySelectorAll('element value.pictures div');
-					event.eventImages = [];
-					for (var i = 0; i < pictures.length; i++) {
-						var data = dialog.files[pictures[i].getAttribute('i')].data;
-						event.eventImages.push({
-							image: data.substring(data.indexOf(',') + 1)
-						});
-					}
-					api.event.post(event, () => {
-						document.dispatchEvent(new CustomEvent('event'));
-						document.dispatchEvent(new CustomEvent('popup'));
+					api.event.post(event, id => {
+						var call = (pictures, index) => {
+							if (pictures[index]) {
+								var formData = new FormData();
+								formData.append('file', dialog.files[pictures[index].getAttribute('i')].file);
+								api.event.postImage(id, 'jpg', formData, () => call(pictures, index + 1));
+							} else {
+								document.dispatchEvent(new CustomEvent('event'));
+								document.dispatchEvent(new CustomEvent('popup'));
+							}
+						};
+						call(popup.querySelectorAll('element value.pictures div'), 0);
 					});
 				} else
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Der Eintrag existiert bereits.' } }));

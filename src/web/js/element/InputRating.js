@@ -48,12 +48,13 @@ ratingSelection svg {
 	margin: 0.7em;
 	width: 1.8em;
 	height: 1.8em;
+	cursor: pointer;
 }`;
 		if (!this.getAttribute('value'))
 			this.setAttribute('value', 0);
 		if (this.getAttribute('type') == 'edit') {
 			var element = document.createElement('div');
-			element.innerHTML = `<ratingSelection>${this.star(1,0)}${this.star(2,0)}${this.star(3,0)}${this.star(4,0)}${this.star(5,0)}</ratingSelection>`;
+			element.innerHTML = `<ratingSelection>${this.star(1, 0)}${this.star(2, 0)}${this.star(3, 0)}${this.star(4, 0)}${this.star(5, 0)}</ratingSelection>`;
 			this._root.appendChild(element.children[0]);
 		} else
 			this._root.appendChild(document.createElement('detailRating'));
@@ -84,7 +85,7 @@ ratingSelection svg {
 		} else {
 			var element = this._root.querySelector('detailRating');
 			if (element)
-				element.innerHTML = `${this.star(null,(x-0)/20*100)}${this.star(null,(x-20)/20*100)}${this.star(null,(x-40)/20*100)}${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null,(x-60)/20*100)}${this.star(null,(x-80)/20*100)}`;
+				element.innerHTML = `${this.star(null, (x - 0) / 20 * 100)}${this.star(null, (x - 20) / 20 * 100)}${this.star(null, (x - 40) / 20 * 100)}${this.classList.contains('minimal') ? '<br />' : ''}${this.star(null, (x - 60) / 20 * 100)}${this.star(null, (x - 80) / 20 * 100)}`;
 		}
 		this.ignoreCallback = false;
 	}

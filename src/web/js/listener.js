@@ -152,7 +152,7 @@ input-rating {
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
-								images += '<img src="/med/' + list[i].eventImages[i2].image + '" />';
+								images += '<img src="/med/' + list[i].eventImages[i2].imageThumpnail + '" />';
 						}
 						if (list[i].rating) {
 							text = '<input-rating class="minimal" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');

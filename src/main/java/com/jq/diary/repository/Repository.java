@@ -113,6 +113,21 @@ public class Repository {
 			return type + SEPARATOR + Base64.getEncoder().encodeToString(data);
 		}
 
+		public static byte[] image(final String data) {
+			if (data != null) {
+				if (data.contains(SEPARATOR))
+					return Base64.getDecoder().decode(data.substring(data.indexOf(SEPARATOR) + 1));
+				final String path = fullPath(data);
+				if (new File(path).exists())
+					try {
+						return IOUtils.toByteArray(new FileInputStream(new File(path)));
+					} catch (final IOException ex) {
+						throw new RuntimeException(ex);
+					}
+			}
+			return null;
+		}
+
 		private static void delete(final BaseEntity entity) {
 			final Field[] fields = entity.getClass().getDeclaredFields();
 			for (final Field field : fields) {
@@ -121,7 +136,7 @@ public class Repository {
 						field.setAccessible(true);
 						final String value = "" + field.get(entity);
 						if (FILE_ID.matcher(value).matches()) {
-							final File f = new File(PATH + (value.contains(".") ? PUBLIC : "") + value);
+							final File f = new File(fullPath(value));
 							if (f.exists()) {
 								final Path path = Paths.get(PATH + "DELETED/" + value);
 								if (!Files.exists(path.getParent()))
@@ -194,11 +209,10 @@ public class Repository {
 				throws IOException {
 			if (value == null) {
 				if (old != null && FILE_ID.matcher(old).matches())
-					new File(PATH + (old.contains(".") ? PUBLIC : "") + old).delete();
+					new File(fullPath(old)).delete();
 				return value;
 			}
-			if (FILE_ID.matcher(value).matches()
-					&& new File(PATH + (value.contains(".") ? PUBLIC : "") + value).exists())
+			if (FILE_ID.matcher(value).matches() && new File(fullPath(value)).exists())
 				return value;
 			final String id;
 			// value = "jpg" + SEPARATOR + "base64data";

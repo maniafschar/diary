@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.repository.Repository.Attachment;
+import com.jq.diary.util.Utilities;
 
 @Service
 public class AdminService {
@@ -94,6 +97,17 @@ public class AdminService {
 						+ "'", Ticket.class)
 				.size() == 0)
 			this.repository.save(ticket);
+	}
+
+	public void execute() {
+		final List<EventImage> eventImages = this.repository.list("from EventImage", EventImage.class);
+		for (final EventImage eventImage : eventImages) {
+			if (eventImage.getImageThumpnail() == null) {
+				eventImage.setImageThumpnail(Attachment.createImage("jpg",
+						Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
+				this.repository.save(eventImage);
+			}
+		}
 	}
 
 	private void validateSearch(final String search) {
