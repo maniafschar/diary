@@ -54,6 +54,12 @@ class listener {
 				list.push(event.eventImages[i].image);
 			return list;
 		};
+		var listImageThumbnails = function (event) {
+			var list = '';
+			for (var i = 0; i < event.eventImages.length; i++)
+				list += '<div><img src="/med/' + event.eventImages[i].imageThumbnail + '" /></div>';
+			return list;
+		};
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
@@ -82,7 +88,7 @@ class listener {
 					listener.listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
-					'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial;"><button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
+					'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
