@@ -227,7 +227,7 @@ class action {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		var popup = true;
 		if (!e) {
-			e = document.querySelector('image-carousel').data().querySelector('thumbnail [i="' + id + '"]');
+			e = document.querySelector('image-carousel').data().querySelector('thumbnail[i="' + id + '"]');
 			popup = false;
 		}
 		if (e.querySelector('delete')) {
