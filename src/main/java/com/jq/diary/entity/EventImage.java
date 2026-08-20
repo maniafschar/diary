@@ -10,8 +10,18 @@ public class EventImage extends BaseEntity {
 	@ManyToOne
 	@JsonBackReference
 	private Event event;
+	@ManyToOne
+	private Contact contact;
 	private String image;
 	private String imageThumbnail;
+
+	public Contact getContact() {
+		return this.contact;
+	}
+
+	public void setContact(final Contact contact) {
+		this.contact = contact;
+	}
 
 	public String getImage() {
 		return this.image;
