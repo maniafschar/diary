@@ -97,7 +97,7 @@ public class EventService {
 	}
 
 	public void save(final EventImage eventImage) {
-		eventImage.setImageThumpnail(Attachment.createImage("jpg",
+		eventImage.setImageThumbnail(Attachment.createImage("jpg",
 				Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
 		this.repository.save(eventImage);
 	}

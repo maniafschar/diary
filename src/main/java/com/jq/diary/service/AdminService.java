@@ -103,8 +103,8 @@ public class AdminService {
 		final List<EventImage> eventImages = this.repository.list("from EventImage", EventImage.class);
 		int i = 0;
 		for (final EventImage eventImage : eventImages) {
-			if (eventImage.getImageThumpnail() == null) {
-				eventImage.setImageThumpnail(Attachment.createImage("jpg",
+			if (eventImage.getImageThumbnail() == null) {
+				eventImage.setImageThumbnail(Attachment.createImage("jpg",
 						Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
 				this.repository.save(eventImage);
 				i++;
