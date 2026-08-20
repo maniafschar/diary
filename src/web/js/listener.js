@@ -57,7 +57,7 @@ class listener {
 		var listImageThumbnails = function (event) {
 			var list = '';
 			for (var i = 0; i < event.eventImages.length; i++)
-				list += '<div><img src="/med/' + event.eventImages[i].imageThumbnail + '" /></div>';
+				list += '<thumbnail><img src="/med/' + event.eventImages[i].imageThumbnail + '" /></thumbnail>';
 			return list;
 		};
 		var listRatings = function (event) {
