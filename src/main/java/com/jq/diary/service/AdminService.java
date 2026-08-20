@@ -99,15 +99,18 @@ public class AdminService {
 			this.repository.save(ticket);
 	}
 
-	public void execute() {
+	public String execute() {
 		final List<EventImage> eventImages = this.repository.list("from EventImage", EventImage.class);
+		int i = 0;
 		for (final EventImage eventImage : eventImages) {
 			if (eventImage.getImageThumpnail() == null) {
 				eventImage.setImageThumpnail(Attachment.createImage("jpg",
 						Utilities.scaleImage(Attachment.image(eventImage.getImage()), 150)));
 				this.repository.save(eventImage);
+				i++;
 			}
 		}
+		return "" + i;
 	}
 
 	private void validateSearch(final String search) {

@@ -39,6 +39,11 @@ public class AdminApi {
 		return Utilities.filter(this.adminService.sql(search));
 	}
 
+	@GetMapping("execute")
+	public String execute() {
+		return this.adminService.execute();
+	}
+
 	@PostMapping("build/{type}")
 	public String postBuild(@PathVariable final String type) throws IOException {
 		return this.adminService.build(type);
