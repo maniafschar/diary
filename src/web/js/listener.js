@@ -119,8 +119,14 @@ input-rating {
 	padding-top: 0.5em;
 }
 thumbnail {
-	display: inline-block;
+	display: block;
 	position: relative;
+	text-align: left;
+}
+thumbnail img {
+	margin: 0.25em;
+	border-radius: 0.5em;
+	float: left;
 }
 .addImage{
 	right: 0;
