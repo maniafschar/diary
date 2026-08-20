@@ -122,6 +122,7 @@ thumbnail {
 	display: inline-block;
 	position: relative;
 	text-align: left;
+	cursor: pointer;
 }
 thumbnail img {
 	margin: 0.25em;
