@@ -118,6 +118,10 @@ feedback>span {
 input-rating {
 	padding-top: 0.5em;
 }
+thumbnail {
+	display: inline-block;
+	position: relative;
+}
 .addImage{
 	right: 0;
 	top: 0;

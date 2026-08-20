@@ -35,8 +35,8 @@ div {
 	width: 100%;
 	height: 100%;
 }
-div img,
-autoplay img {
+imageContainer div img,
+imageContainer autoplay img {
 	min-width: 100%;
 	min-height: 100%;
 }
