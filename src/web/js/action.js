@@ -225,17 +225,20 @@ class action {
 
 	static eventImageDelete(event, id) {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
-		if (!e)
+		var popup = true;
+		if (!e) {
 			e = document.querySelector('image-carousel').data().querySelector('thumbnail [i="' + id + '"]');
+			popup = false;
+		}
 		if (e.querySelector('delete')) {
 			if (event.target.nodeName == 'DELETE') {
-				if (document.querySelector('dialog-popup').content().querySelector('button.edit'))
+				if (popup)
+					e.remove();
+				else
 					api.event.deleteImage(id, () => {
 						e.remove();
 						document.dispatchEvent(new CustomEvent('event'));
 					});
-				else
-					e.remove();
 			} else
 				e.querySelector('delete').remove();
 		} else
