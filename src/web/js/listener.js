@@ -127,6 +127,15 @@ thumbnail img {
 	margin: 0.25em;
 	border-radius: 0.5em;
 }
+thumbnail delete {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.8);
+	padding: 0.5em;
+	border-radius: 0 0.5em;
+	font-size: 0.8em;
+}
 .addImage{
 	right: 0;
 	top: 0;
