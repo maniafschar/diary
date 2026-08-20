@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,25 +121,15 @@ public class AdminService {
 				} catch (final Exception e) {
 					try {
 						final File videoFile = new File(Attachment.fullPath(eventImage.getImage()));
-						try {
-							// Holt das Frame an der gewünschten Sekunde
-							final Picture picture = FrameGrab.getFrameAtSec(videoFile, 0.0);
-
-							if (picture != null) {
-								// Konvertiert das JCodec-Picture in ein Java BufferedImage
-								final BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
-
-								// Speichert das Bild als JPEG
-								final ByteArrayOutputStream out = new ByteArrayOutputStream();
-								ImageIO.write(bufferedImage, "jpg", out);
-								eventImage.setImageThumbnail(Attachment.createImage("jpg",
-										Utilities.scaleImage(out.toByteArray(), 150)));
-								this.repository.save(eventImage);
-								i++;
-							}
-						} catch (IOException | JCodecException e) {
-							System.err.println("Fehler beim Extrahieren des Thumbnails: " + e.getMessage());
-							e.printStackTrace();
+						final Picture picture = FrameGrab.getFrameAtSec(videoFile, 0.0);
+						if (picture != null) {
+							final BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
+							final ByteArrayOutputStream out = new ByteArrayOutputStream();
+							ImageIO.write(bufferedImage, "jpg", out);
+							eventImage.setImageThumbnail(Attachment.createImage("jpg",
+									Utilities.scaleImage(out.toByteArray(), 150)));
+							this.repository.save(eventImage);
+							i++;
 						}
 					} catch (final Exception ex) {
 						result.append(Utilities.stackTraceToString(ex));
