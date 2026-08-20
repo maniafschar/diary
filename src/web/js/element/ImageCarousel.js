@@ -35,13 +35,13 @@ div {
 	width: 100%;
 	height: 100%;
 }
-imageContainer div img,
+imageContainer img,
 imageContainer autoplay img {
 	min-width: 100%;
 	min-height: 100%;
 }
-div video,
-autoplay video {
+imageContainer video,
+imageContainer autoplay video {
 	width: 100%;
 }
 hint {
