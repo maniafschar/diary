@@ -88,7 +88,7 @@ class listener {
 					listener.listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
-					'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
+					'<label>Bilder hochladen</label><field style="min-height: 3.2em; max-height: initial; text-align: left;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
@@ -119,14 +119,13 @@ input-rating {
 	padding-top: 0.5em;
 }
 thumbnail {
-	display: block;
+	display: inline-block;
 	position: relative;
 	text-align: left;
 }
 thumbnail img {
 	margin: 0.25em;
 	border-radius: 0.5em;
-	float: left;
 }
 .addImage{
 	right: 0;
