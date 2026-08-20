@@ -11,7 +11,7 @@ public class EventImage extends BaseEntity {
 	@JsonBackReference
 	private Event event;
 	private String image;
-	private String imageThumpnail;
+	private String imageThumbnail;
 
 	public String getImage() {
 		return this.image;
@@ -21,12 +21,12 @@ public class EventImage extends BaseEntity {
 		this.image = image;
 	}
 
-	public String getImageThumpnail() {
-		return this.imageThumpnail;
+	public String getImageThumbnail() {
+		return this.imageThumbnail;
 	}
 
-	public void setImageThumpnail(final String imageThumpnail) {
-		this.imageThumpnail = imageThumpnail;
+	public void setImageThumbnail(final String imageThumbnail) {
+		this.imageThumbnail = imageThumbnail;
 	}
 
 	public Event getEvent() {

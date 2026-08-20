@@ -154,8 +154,7 @@ public class Repository {
 		public static void save(final BaseEntity entity) {
 			final Field[] fields = entity.getClass().getDeclaredFields();
 			for (final Field field : fields) {
-				if (RESOLVABLE_COLUMNS.matcher(field.getName()).matches()
-						&& (entity.getId() == null || entity.old(field.getName()) != null)) {
+				if (RESOLVABLE_COLUMNS.matcher(field.getName()).matches()) {
 					try {
 						field.setAccessible(true);
 						field.set(entity,
