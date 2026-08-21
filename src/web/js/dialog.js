@@ -102,7 +102,7 @@ ${dialog.stylePictures}`;
 			image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + dialog.files.length + ')');
 			dialog.files.push(e);
 		});
-		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date');
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.year ? event.year + '-' + event.month + '-' + event.day + ' ' + new Date().getHours() + ':00' : null);
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
