@@ -158,6 +158,7 @@ ${dialog.stylePictures}`;
 			button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+		document.dispatchEvent(new CustomEvent('location'));
 	}
 
 	static addUser() {
@@ -283,6 +284,7 @@ element {
 		button.innerText = 'Löschen';
 		button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+		document.dispatchEvent(new CustomEvent('location'));
 	}
 
 	static createField(element, label, name, type, value) {

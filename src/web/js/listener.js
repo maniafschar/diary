@@ -70,6 +70,18 @@ class listener {
 			return api.user.id == events[i].contact.id ?
 				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { name: events[i].location.name, address: events[i].location.address } }).replace(/"/g, '&quot;') + ')"' : '';
 		}
+		var listFeedbacks = function (event) {
+			var s = '';
+			if (event.eventFeedbacks) {
+				var addEdit = function (feedback) {
+					return api.user.id == feedback.contact.id ?
+						' onclick="dialog.feedback(' + JSON.stringify({ id: feedback.id, note: event.eventFeedbacks[i].note }).replace(/"/g, '&quot;') + ')"' : '';
+				}
+				for (var i = 0; i < event.eventFeedbacks.length; i++)
+					s += '<feedback' + addEdit(event.eventFeedbacks[i]) + '><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
+			}
+			return s;
+		}
 		for (var i = events.length - 1; i >= 0; i--) {
 			list.push({
 				src: listImages(events[i]),
@@ -83,7 +95,7 @@ class listener {
 					'<separator></separator>' +
 					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
-					listener.listFeedbacks(events[i]) +
+					listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 					'<label>Bilder</label><field style="min-height: 3.2em; max-height: initial; text-align: left;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
@@ -106,6 +118,7 @@ note {
 	position: relative;
 	display: block;
 	margin-bottom: 1em;
+	cursor: pointer;
 }
 feedback {
 	display: block;
@@ -228,36 +241,20 @@ thumbnail delete {
 		else
 			api.activateProgressbar();
 	}
-	static listFeedbacks(event) {
-		var s = '';
-		if (event.eventFeedbacks) {
-			var addEdit = function (feedback) {
-				return api.user.id == feedback.contact.id ?
-					' onclick="dialog.feedback(' + JSON.stringify({ id: feedback.id, note: event.eventFeedbacks[i].note }).replace(/"/g, '&quot;') + ')"' : '';
-			}
-			for (var i = 0; i < event.eventFeedbacks.length; i++)
-				s += '<feedback' + addEdit(event.eventFeedbacks[i]) + '><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
-		}
-		return s;
-	}
 	static init() {
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
 				listener.updateCotacts();
 		});
 		document.addEventListener('location', event => {
-			var selection = document.querySelector('dialog-popup').content().querySelector('.event input-selection');
+			var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
 			if (selection) {
-				if (event.detail?.id)
-					selection.setAttribute('value', event.detail.id);
 				api.location.getList(locations => {
 					selection.clear();
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));
 				});
 			}
-			if (event.detail?.type != 'read')
-				listener.updateEvents();
 		});
 		document.addEventListener('contact', listener.updateCotacts);
 		document.addEventListener('event', listener.updateEvents);
