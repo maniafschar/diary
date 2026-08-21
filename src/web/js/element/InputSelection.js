@@ -81,7 +81,7 @@ input {
 		item.innerText = label;
 		item.setAttribute('i', id);
 		item.setAttribute('onclick', 'this.getRootNode().host.onclick(event)');
-		if (this.getAttribute('value') == id || !this.getAttribute('value') && this._root.querySelectorAll('item').length == 1) {
+		if (this.getAttribute('value') == id) {
 			item.classList.add('selected');
 			this.setAttribute('value', id);
 			items.insertBefore(item, items.firstChild);
