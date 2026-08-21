@@ -108,7 +108,7 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		var location = dialog.createField(element, 'Ortname', 'locationName', 'input');
+		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
 		var buttonToggle = location.createElement('span');
 		buttonToggle.innerText = '+';
 		buttonToggle.onclick = () => {
@@ -118,7 +118,7 @@ ${dialog.stylePictures}`;
 			else
 				classList.add('open');
 		};
-		location.parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
+		location.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
 			document.querySelector('dialog-popup').content().querySelector('input[name="locationName"]').value = event.detail.label.split(' · ')[0];
 			document.querySelector('dialog-popup').content().querySelector('textarea[name="address"]').value = event.detail.label.split(' · ')[1].replace(/, /g, '\n');
 		});
@@ -161,7 +161,7 @@ ${dialog.stylePictures}`;
 		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location'));
-		location.parentElement.querySelector('input-selection')._root.querySelector('input').style.marginTop = '1em';
+		location.querySelector('input-selection')._root.querySelector('input').style.marginTop = '1em';
 	}
 
 	static addUser() {
