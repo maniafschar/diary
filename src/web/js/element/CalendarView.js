@@ -169,31 +169,31 @@ button.icon {
 .event-pill::after {
 	content: ' ';
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 0.2em;
+	top: 0.5em;
 	width: 0.8em;
 	height: 0.8em;
 	border-radius: 50%;
 }
 
 .event-pill.rank80::after {
-	background: 'rgba(255, 223, 0, 0.8)';
+	background: rgba(255, 223, 0, 0.8);
 }
 
 .event-pill.rank60::after {
-	background: 'rgba(192, 192, 192, 0.6)';
+	background: rgba(192, 192, 192, 0.6);
 }
 
 .event-pill.rank40::after {
-	background: 'rgba(235, 147, 80, 0.4)';
+	background: rgba(235, 147, 80, 0.4);
 }
 
 .event-pill.rank20::after {
-	background: 'rgba(235, 147, 80, 0.25)';
+	background: rgba(235, 147, 80, 0.25);
 }
 
 .event-pill.rank0::after {
-	background: 'rgba(235, 147, 80, 0.1)';
+	background: rgba(235, 147, 80, 0.1);
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
