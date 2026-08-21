@@ -76,7 +76,7 @@ input {
 		selection.appendChild(document.createElement('items'));
 	}
 	add(id, label) {
-		var items = this._root.querySelector('items').;
+		var items = this._root.querySelector('items');
 		var item = document.createElement('item');
 		item.innerText = label;
 		item.setAttribute('i', id);
