@@ -164,6 +164,7 @@ button.icon {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: pointer;
+	position: relative;
 }
 
 .event-pill::after {
