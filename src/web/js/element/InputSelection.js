@@ -76,14 +76,17 @@ input {
 		selection.appendChild(document.createElement('items'));
 	}
 	add(id, label) {
-		var item = this._root.querySelector('items').appendChild(document.createElement('item'));
+		var items = this._root.querySelector('items').;
+		var item = document.createElement('item');
 		item.innerText = label;
 		item.setAttribute('i', id);
 		item.setAttribute('onclick', 'this.getRootNode().host.onclick(event)');
 		if (this.getAttribute('value') == id || !this.getAttribute('value') && this._root.querySelectorAll('item').length == 1) {
 			item.classList.add('selected');
 			this.setAttribute('value', id);
-		}
+			items.insertBefore(item, items.firstChild);
+		} else
+			items.appendChild(item);
 		this._root.querySelector('input').style.display = this._root.querySelectorAll('item').length > 10 ? 'block' : '';
 	}
 	onclick(event) {
