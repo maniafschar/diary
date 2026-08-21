@@ -28,7 +28,7 @@ hint>div {
 	overflow: hidden;
 	text-align: center;
 	background: rgba(0, 0, 255, 0.05);
-    border-radius: 0.5em;
+	border-radius: 0.5em;
 }
 hint>div>div {
 	padding: 1em 0;
