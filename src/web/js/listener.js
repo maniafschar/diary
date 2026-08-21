@@ -68,7 +68,7 @@ class listener {
 		};
 		var addEdit = function () {
 			return api.user.id == events[i].contact.id ?
-				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { name: events[i].location.name, address: events[i].location.address } }).replace(/"/g, '&quot;') + ')"' : '';
+				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { id: events[i].location.id } }).replace(/"/g, '&quot;') + ')"' : '';
 		}
 		var listFeedbacks = function (event) {
 			var s = '';
@@ -251,6 +251,8 @@ thumbnail delete {
 			if (selection) {
 				api.location.getList(locations => {
 					selection.clear();
+					if (event.detail?.id)
+						selection.setAttribute('value', event.detail.id);
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));
 				});

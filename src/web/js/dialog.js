@@ -102,14 +102,15 @@ ${dialog.stylePictures}`;
 			image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + dialog.files.length + ')');
 			dialog.files.push(e);
 		});
-		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event?.year ? event.year + '-' + event.month + '-' + event.day + ' ' + new Date().getHours() + ':00' : event?.date);
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date');
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		dialog.createField(element, 'Ortname', 'locationName', 'input-selection', event?.location.name);
-		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
+		var location = dialog.createField(element, 'Ortname', 'locationName', 'input');
+		location.parentElement.appendChild(document.createElement('input-selection'));
+		var address = dialog.createField(element, 'Adresse', 'address', 'textarea');
 		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
 		input.setAttribute('name', 'longitude');
@@ -143,20 +144,9 @@ ${dialog.stylePictures}`;
 					{ timeout: 10000, maximumAge: 10000, enableHighAccuracy: true });
 			};
 		}
-		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating', event?.rating).setAttribute('type', 'edit');
-		if (event?.id) {
-			var inputId = element.appendChild(document.createElement('input'));
-			inputId.setAttribute('type', 'hidden');
-			inputId.setAttribute('name', 'id');
-			inputId.setAttribute('value', event.id);
-		}
+		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea');
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating').setAttribute('type', 'edit');
 		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
-		if (event?.id && !event.participants) {
-			var button = buttonDiv.appendChild(document.createElement('button'));
-			button.innerText = 'Löschen';
-			button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
-		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location'));
 	}
@@ -272,8 +262,7 @@ element {
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		dialog.createField(element, 'Ortname', 'locationName', 'input-selection', event.location.name);
-		dialog.createField(element, 'Adresse', 'address', 'textarea', event.location.address);
+		dialog.createField(element, 'Ort', 'location', 'input-selection');
 		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
 		var inputId = element.appendChild(document.createElement('input'));
 		inputId.setAttribute('type', 'hidden');
@@ -284,7 +273,7 @@ element {
 		button.innerText = 'Löschen';
 		button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		document.dispatchEvent(new CustomEvent('location'));
+		document.dispatchEvent(new CustomEvent('location', { detail: { id: event.location.id } }));
 	}
 
 	static createField(element, label, name, type, value) {
