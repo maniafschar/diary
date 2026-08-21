@@ -12,18 +12,26 @@ class InputSelection extends HTMLElement {
 	position: relative;
 }
 
+:host(.open) selection {
+	grid-template-rows: 1fr;
+}
+
 *::-webkit-scrollbar {
 	display: none;
-}
+}	
 
 selection {
 	display: grid;
 	grid-template-rows: 0fr;
 	transition: grid-template-rows 0.4s ease-out;
-}
+}	
 
-:host(.open) selection {
-	grid-template-rows: 1fr;
+span {
+	position: absolute;
+	right: 0.3em;
+	font-size: 2.3em;
+	top: 0;
+	opacity: 0.2;
 }
 
 items {
