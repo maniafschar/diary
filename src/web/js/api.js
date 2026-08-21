@@ -231,7 +231,7 @@ class api {
 
 		getList(success) {
 			api.ajax({
-				url: 'location',
+				url: 'location/list',
 				success: success
 			});
 		}
