@@ -17,7 +17,7 @@ class CalendarView extends HTMLElement {
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *:::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :host(*) {
 	font-family: Comfortaa;
@@ -167,7 +167,7 @@ button.icon {
 	border-bottom: solid 1px rgba(0, 0, 0, 0.05);
 }
 
-.event-pill:after{
+.event-pill::after {
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -176,23 +176,23 @@ button.icon {
 	border-radius: 50%;
 }
 
-.event-pill.rank80:after {
+.event-pill.rank80::after {
 	background: 'rgba(255, 223, 0, 0.8)';
 }
 
-.event-pill.rank60:after {
+.event-pill.rank60::after {
 	background: 'rgba(192, 192, 192, 0.6)';
 }
 
-.event-pill.rank40:after {
+.event-pill.rank40::after {
 	background: 'rgba(235, 147, 80, 0.4)';
 }
 
-.event-pill.rank20:after {
+.event-pill.rank20::after {
 	background: 'rgba(235, 147, 80, 0.25)';
 }
 
-.event-pill.rank0:after {
+.event-pill.rank0::after {
 	background: 'rgba(235, 147, 80, 0.1)';
 }`;
 		var wrapper = document.createElement('div');
