@@ -68,7 +68,7 @@ class listener {
 		};
 		var addEdit = function () {
 			return api.user.id == events[i].contact.id ?
-				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note }).replace(/"/g, '&quot;') + ')"' : '';
+				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { name: events[i].location.name, address: events[i].location.address } }).replace(/"/g, '&quot;') + ')"' : '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
 			list.push({
@@ -78,11 +78,11 @@ class listener {
 				hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
 					(events[i].location.name ? events[i].location.name + '<br/>' : '') +
 					(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
-				description: '<div' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</div>' +
+				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 					'<separator></separator>' +
 					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
-					(events[i].note ? '<div' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</div>' : '') +
+					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
 					listener.listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
@@ -100,6 +100,12 @@ separator {
 	border-bottom: solid 1px rgba(0, 0, 0, 0.2);
 	display: block;
 	margin: 1em 0;
+}
+date,
+note {
+	position: relative;
+	display: block;
+	margin-bottom: 1em;
 }
 feedback {
 	display: block;
