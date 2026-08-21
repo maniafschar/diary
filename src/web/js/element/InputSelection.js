@@ -71,6 +71,7 @@ input {
 }`;
 		var selection = this._root.appendChild(document.createElement('selection'));
 		selection.classList.add('open');
+		selection = selection.appendChild(document.createElement('div'));
 		selection.appendChild(document.createElement('input')).onkeyup = this.filter;
 		selection.appendChild(document.createElement('items'));
 	}
