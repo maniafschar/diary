@@ -109,8 +109,7 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input');
-		location.style.marginBottom = '1em';
-		location.parentElement.appendChild(document.createElement('input-selection'));
+		location.parentElement.appendChild(document.createElement('input-selection'))._root.querySelector('input').style.marginTop = '1em';
 		var address = dialog.createField(element, 'Adresse', 'address', 'textarea');
 		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
@@ -264,7 +263,7 @@ element {
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
-		dialog.createField(element, 'Ort', 'locationId', 'input-selection').querySelector('input').style.marginTop = '1em';
+		dialog.createField(element, 'Ort', 'locationId', 'input-selection');
 		var inputId = element.appendChild(document.createElement('input'));
 		inputId.setAttribute('type', 'hidden');
 		inputId.setAttribute('name', 'id');
