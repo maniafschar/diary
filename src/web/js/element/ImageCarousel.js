@@ -93,7 +93,7 @@ data {
 	display: block;
 }
 data description {
-	border: solid 2em transparent;
+	border: solid 5vw transparent;
 	position: relative;
 	display: block;
 	overflow-x: hidden;
