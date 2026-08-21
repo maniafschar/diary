@@ -109,9 +109,18 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input');
+		var buttonToggle = location.createElement('span');
+		buttonToggle.innerText = '+';
+		buttonToggle.onclick = () => {
+			var classList = document.querySelector('dialog-popup').content().querySelector('input-selection').classList;
+			if (classList.contains('open'))
+				classList.remove('open');
+			else
+				classList.add('open');
+		};
 		location.parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
 			document.querySelector('dialog-popup').content().querySelector('input[name="locationName"]').value = event.detail.label.split(' · ')[0];
-			document.querySelector('dialog-popup').content().querySelector('textarea[name="address"]').value = event.detail.label.split(' · ')[1].replace(', ', '\n');
+			document.querySelector('dialog-popup').content().querySelector('textarea[name="address"]').value = event.detail.label.split(' · ')[1].replace(/, /g, '\n');
 		});
 		var address = dialog.createField(element, 'Adresse', 'address', 'textarea');
 		var input = address.parentElement.appendChild(document.createElement('input'));

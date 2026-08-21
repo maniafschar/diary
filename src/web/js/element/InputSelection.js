@@ -70,7 +70,6 @@ input {
 	user-select: text;
 }`;
 		var selection = this._root.appendChild(document.createElement('selection'));
-		selection.classList.add('open');
 		selection = selection.appendChild(document.createElement('div'));
 		selection.style.overflow = 'hidden';
 		selection.appendChild(document.createElement('input')).onkeyup = this.filter;
