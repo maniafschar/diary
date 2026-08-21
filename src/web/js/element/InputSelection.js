@@ -22,7 +22,7 @@ selection {
 	transition: grid-template-rows 0.4s ease-out;
 }
 
-:host(*).open selection {
+:host(.open) selection {
 	grid-template-rows: 1fr;
 }
 
