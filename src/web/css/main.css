@@ -66,7 +66,10 @@ body>container buttons {
 body>container buttons>button {
 	position: relative !important;
 	margin: 0 0.5em !important;
-	vertical-align: bottom;
+}
+
+body>container buttons>button.selected {
+	background: rgba(220, 220, 100, 0.4);
 }
 
 body>container buttons>button>img {

@@ -56,20 +56,10 @@ class ui {
 	}
 
 	static navigate(i) {
+		var buttons = document.querySelectorAll('element>buttons>button');
+		buttons.forEach(e => e.classList.remove('selected'));
+		buttons[i].classList.add('selected');
 		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
-	}
-
-	static showTab(event) {
-		var tabHeader = ui.parents(event.target, 'tabHeader');
-		var i = [...tabHeader.children].indexOf(ui.parents(event.target, 'tab'));
-		tabHeader.nextElementSibling.querySelector('container').style.marginLeft = -(i * 100) + '%';
-		tabHeader.querySelector('tab.selected')?.classList.remove('selected');
-		tabHeader.querySelectorAll('tab')[i].classList.add('selected');
-		tabHeader.scrollBy({
-			top: 0,
-			left: i > 1 ? 500 : -500,
-			behavior: 'smooth',
-		});
 	}
 
 	static parents(e, nodeName) {
