@@ -64,7 +64,7 @@ class listener {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating>';
 			for (var i = 0; i < event.eventRatings.length; i++)
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
-			return s + '<br/>';
+			return s + '<br/><br/>';
 		};
 		var addEdit = function () {
 			return api.user.id == events[i].contact.id ?
@@ -93,7 +93,7 @@ class listener {
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 					'<separator></separator>' +
-					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
+					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					'<separator></separator>' +
