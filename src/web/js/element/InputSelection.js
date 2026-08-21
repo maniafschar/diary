@@ -100,7 +100,7 @@ input {
 		e.classList.remove('selected');
 		event.target.classList.add('selected');
 		this.setAttribute('value', event.target.getAttribute('i'));
-		this.dispatchEvent(new CustomEvent('changed'));
+		this.dispatchEvent(new CustomEvent('changed', { detail: { id: event.target.getAttribute('i'), label: event.target.innerText } }));
 	}
 	clear() {
 		this._root.querySelector('items').textContent = '';
