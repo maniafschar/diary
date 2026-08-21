@@ -253,6 +253,7 @@ thumbnail delete {
 					selection.clear();
 					if (event.detail?.id)
 						selection.setAttribute('value', event.detail.id);
+					locations.sort((a, b) => (a.name + a.address).toLowerCase().localeCompare((b.name + b.address).toLowerCase()));
 					for (var i = 0; i < locations.length; i++)
 						selection.add(locations[i].id, locations[i].name + (locations[i].address ? ' · ' + locations[i].address.replace(/\n/g, ', ') : ''));
 				});
