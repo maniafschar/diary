@@ -151,6 +151,15 @@ class api {
 			});
 		},
 
+		patch(event, success) {
+			api.ajax({
+				url: 'event',
+				method: 'PATCH',
+				body: event,
+				success: success
+			});
+		},
+
 		post(event, success) {
 			api.ajax({
 				url: 'event',

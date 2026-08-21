@@ -245,6 +245,23 @@ class action {
 			e.appendChild(document.createElement('delete')).innerText = 'Löschen?';
 	}
 
+	static eventPatch() {
+		var popup = document.querySelector('dialog-popup').content();
+		var date = popup.querySelector('element input-date').getAttribute('value');
+		if (date) {
+			api.event.patch({
+				date: date,
+				note: popup.querySelector('element input-textarea[name="note"]').value,
+				location: {
+					id: popup.querySelector('element input[name="locationId"]').value
+				}
+			}, () => {
+				document.dispatchEvent(new CustomEvent('event'));
+				document.dispatchEvent(new CustomEvent('popup'));
+			});
+		}
+	}
+
 	static eventPost() {
 		var popup = document.querySelector('dialog-popup').content();
 		var date = popup.querySelector('element input-date').getAttribute('value');

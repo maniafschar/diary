@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -81,6 +82,17 @@ public class EventApi extends ApplicationApi {
 		if (rating != null)
 			this.eventService.putRating(event.getId(), contactId, rating);
 		return event.getId();
+	}
+
+	@PatchMapping
+	public void patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@RequestBody final Event event) {
+		this.verifyContactClient(contactId, clientId);
+		final Event original = this.eventService.one(event.getId());
+		original.setNote(event.getNote());
+		original.setDate(event.getDate());
+		original.setLocation(this.locationService.one(event.getLocation().getId()));
+		this.eventService.save(original);
 	}
 
 	@PutMapping("rating/{eventId}/{rating}")
