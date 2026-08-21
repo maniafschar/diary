@@ -169,11 +169,11 @@ button.icon {
 .event-pill::after {
 	content: ' ';
 	position: absolute;
-	right: 0.2em;
+	right: 0;
 	top: 0.5em;
 	width: 0.8em;
 	height: 0.8em;
-	border-radius: 50%;
+	border-radius: 50% 0 0 50%;
 }
 
 .event-pill.rank80::after {
