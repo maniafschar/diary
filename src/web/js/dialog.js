@@ -111,6 +111,7 @@ ${dialog.stylePictures}`;
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
 		var buttonToggle = location.appendChild(document.createElement('span'));
 		buttonToggle.innerText = '+';
+		buttonToggle.setAttribute('style', 'position: absolute; right: 0.3em; font-size: 2.3em; top: 0; opacity: 0.2;');
 		buttonToggle.onclick = () => {
 			var classList = document.querySelector('dialog-popup').content().querySelector('input-selection').classList;
 			if (classList.contains('open'))

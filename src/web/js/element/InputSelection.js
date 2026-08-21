@@ -26,14 +26,6 @@ selection {
 	transition: grid-template-rows 0.4s ease-out;
 }	
 
-span {
-	position: absolute;
-	right: 0.3em;
-	font-size: 2.3em;
-	top: 0;
-	opacity: 0.2;
-}
-
 items {
 	max-height: 12em;
 	position: relative;
