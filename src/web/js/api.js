@@ -229,11 +229,9 @@ class api {
 			});
 		},
 
-		post(location, success) {
+		getList(success) {
 			api.ajax({
 				url: 'location',
-				method: location.id ? 'PUT' : 'POST',
-				body: location,
 				success: success
 			});
 		}
