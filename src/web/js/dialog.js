@@ -109,7 +109,7 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
-		var buttonToggle = location.createElement('span');
+		var buttonToggle = location.appendChild(document.createElement('span'));
 		buttonToggle.innerText = '+';
 		buttonToggle.onclick = () => {
 			var classList = document.querySelector('dialog-popup').content().querySelector('input-selection').classList;
