@@ -16,6 +16,16 @@ class InputSelection extends HTMLElement {
 	display: none;
 }
 
+selection {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.4s ease-out;
+}
+
+selection.open {
+	grid-template-rows: 1fr;
+}
+
 items {
 	max-height: 12em;
 	position: relative;
@@ -59,8 +69,10 @@ input {
 	color: black;
 	user-select: text;
 }`;
-		this._root.appendChild(document.createElement('input')).onkeyup = this.filter;
-		this._root.appendChild(document.createElement('items'));
+		var selection = this._root.appendChild(document.createElement('selection'));
+		selection.classList.add('open');
+		selection.appendChild(document.createElement('input')).onkeyup = this.filter;
+		selection.appendChild(document.createElement('items'));
 	}
 	add(id, label) {
 		var item = this._root.querySelector('items').appendChild(document.createElement('item'));
