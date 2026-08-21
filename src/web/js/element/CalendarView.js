@@ -87,7 +87,8 @@ button.icon {
 }
 
 .cal-weekday {
-	padding: 0.2em;
+	padding: 0.5em 0 0 0.25em;
+	font-size: 0.8em;
 }
 
 .cal-weekday.weekend { color: #8b4513; }
@@ -95,14 +96,13 @@ button.icon {
 .cal-days {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
-	box-shadow: 0 0.25em 1.5em rgba(0, 0, 0, 0.06);
 	height: calc(100% - 1.5em);
 }
 
 .cal-day {
 	min-height: 12vh;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
 	cursor: pointer;
 	transition: background .12s;
 	position: relative;
