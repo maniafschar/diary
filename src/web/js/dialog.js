@@ -111,7 +111,7 @@ ${dialog.stylePictures}`;
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
 		var buttonToggle = location.appendChild(document.createElement('span'));
 		buttonToggle.innerText = '+';
-		buttonToggle.setAttribute('style', 'position: absolute; cursor: pointer; background: rgba(100, 150, 200, 0.2); color: white; top: 0.31em; right: 0.31em; border-radius: 0 0.3em 0.3em 0; width: 1.32em; height: 1.25em; font-size: 1.6em; text-align: center;');
+		buttonToggle.setAttribute('style', 'position: absolute; cursor: pointer; background: rgba(100, 150, 200, 0.2); color: white; top: 0.31em; right: 0.31em; border-radius: 0 0.3em 0.3em 0; width: 1.32em; height: 1.25em; font-size: 1.6em; text-align: center; padding: 0 0.16em;');
 		buttonToggle.onclick = () => {
 			var classList = document.querySelector('dialog-popup').content().querySelector('input-selection').classList;
 			if (classList.contains('open'))
