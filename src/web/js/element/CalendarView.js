@@ -43,10 +43,9 @@ class CalendarView extends HTMLElement {
 }
 
 .cal-title {
-	font-size: 1.3em;
 	position: relative;
 	display: inline-block;
-	padding-top: 1em;
+	padding-top: 1.5em;
 	cursor: pointer;
 	
 }
