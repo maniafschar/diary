@@ -115,7 +115,7 @@ button.speech {
 
 		t.speechRecognition.onend = () => {
 			t.isRecording = false;
-			t.captureAudioButton.textContent = 'Record Audio Description';
+			//t.captureAudioButton.textContent = 'Record Audio Description';
 			console.log(t.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.');
 			t.speechRecognition = null;
 		};
@@ -123,7 +123,7 @@ button.speech {
 		t.speechRecognition.onerror = event => {
 			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
 			t.isRecording = false;
-			t.captureAudioButton.textContent = 'Record Audio Description';
+			//t.captureAudioButton.textContent = 'Record Audio Description';
 			console.log('Speech transcription failed.');
 			t.speechRecognition = null;
 		};
@@ -131,7 +131,7 @@ button.speech {
 		t.speechRecognition.start();
 		t.isRecording = true;
 		console.log('Listening for speech...');
-		t.captureAudioButton.textContent = 'Stop Transcription';
+		//t.captureAudioButton.textContent = 'Stop Transcription';
 	}
 	startRecording(t) {
 		navigator.mediaDevices.getUserMedia({ audio: true })
@@ -157,7 +157,7 @@ button.speech {
 						audioPlayer.hidden = false;
 						audioPlayer.src = currentEntry.audioFile;
 						t.appendAudioNoteToDescription();
-						t.captureAudioButton.textContent = 'Record Audio Description';
+						//t.captureAudioButton.textContent = 'Record Audio Description';
 						t.isRecording = false;
 						t.stopRecordingStream();
 					};
@@ -165,7 +165,7 @@ button.speech {
 					reader.onerror = () => {
 						alert('Unable to read recorded audio.');
 						t.isRecording = false;
-						t.captureAudioButton.textContent = 'Record Audio Description';
+						//t.captureAudioButton.textContent = 'Record Audio Description';
 						t.stopRecordingStream();
 					};
 
@@ -175,14 +175,14 @@ button.speech {
 				t.mediaRecorder.onerror = () => {
 					alert('Browser audio recording failed.');
 					t.isRecording = false;
-					t.captureAudioButton.textContent = 'Record Audio Description';
+					//t.captureAudioButton.textContent = 'Record Audio Description';
 					t.stopRecordingStream();
 				};
 
 				t.mediaRecorder.start();
 				t.isRecording = true;
 				console.log('Recording audio...');
-				t.captureAudioButton.textContent = 'Stop Recording';
+				//t.captureAudioButton.textContent = 'Stop Recording';
 			})
 			.catch(error => {
 				alert('Unable to access microphone: ' + (error.message || error));
@@ -194,14 +194,14 @@ button.speech {
 		else {
 			t.stopRecordingStream();
 			t.isRecording = false;
-			t.captureAudioButton.textContent = 'Record Audio Description';
+			//t.captureAudioButton.textContent = 'Record Audio Description';
 		}
 	}
 	stopSpeechRecognition(t) {
 		if (t.speechRecognition)
 			t.speechRecognition.stop();
 		t.isRecording = false;
-		t.captureAudioButton.textContent = 'Record Audio Description';
+		//t.captureAudioButton.textContent = 'Record Audio Description';
 		console.log('Speech transcription stopped.');
 		t.speechRecognition = null;
 	}
