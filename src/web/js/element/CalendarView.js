@@ -100,8 +100,8 @@ button.icon {
 
 .cal-day {
 	min-height: 12vh;
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-right: 1px solid rgba(0, 0, 0, 0.05);
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
 	cursor: pointer;
 	transition: background .12s;
 	position: relative;
@@ -167,8 +167,33 @@ button.icon {
 	border-bottom: solid 1px rgba(0, 0, 0, 0.05);
 }
 
-.event-pill:last-child {
-	border-bottom: none;
+.event-pill:after{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 0.8em;
+	height: 0.8em;
+	border-radius: 50%;
+}
+
+.event-pill.rank80:after {
+	background: 'rgba(255, 223, 0, 0.8)';
+}
+
+.event-pill.rank60:after {
+	background: 'rgba(192, 192, 192, 0.6)';
+}
+
+.event-pill.rank40:after {
+	background: 'rgba(235, 147, 80, 0.4)';
+}
+
+.event-pill.rank20:after {
+	background: 'rgba(235, 147, 80, 0.25)';
+}
+
+.event-pill.rank0:after {
+	background: 'rgba(235, 147, 80, 0.1)';
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
@@ -299,15 +324,15 @@ button.icon {
 				pill.className = 'event-pill'
 				if (ev.rating) {
 					if (ev.rating > 80)
-						pill.style.background = 'rgba(255, 223, 0, 0.8)';
+						pill.classList.add('rank80');
 					else if (ev.rating > 60)
-						pill.style.background = 'rgba(192, 192, 192, 0.6)';
+						pill.classList.add('rank60');
 					else if (ev.rating > 40)
-						pill.style.background = 'rgba(235, 147, 80, 0.4)'
+						pill.classList.add('rank40');
 					else if (ev.rating > 20)
-						pill.style.background = 'rgba(235, 147, 80, 0.25)'
+						pill.classList.add('rank20');
 					else
-						pill.style.background = 'rgba(235, 147, 80, 0.1)'
+						pill.classList.add('rank0');
 				}
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {

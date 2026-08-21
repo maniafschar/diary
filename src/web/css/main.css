@@ -66,6 +66,7 @@ body>container buttons {
 body>container buttons>button {
 	position: relative !important;
 	margin: 0 0.5em !important;
+	transition: ease .4s all;
 }
 
 body>container buttons>button.selected {
