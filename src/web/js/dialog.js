@@ -108,7 +108,7 @@ ${dialog.stylePictures}`;
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
-		dialog.createField(element, 'Ortname', 'locationName', null, event?.location.name);
+		dialog.createField(element, 'Ortname', 'locationName', 'input-selection', event?.location.name);
 		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event?.location?.address);
 		var input = address.parentElement.appendChild(document.createElement('input'));
 		input.setAttribute('type', 'hidden');
@@ -159,7 +159,6 @@ ${dialog.stylePictures}`;
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
-
 
 	static addUser() {
 		var popup = document.createElement('div');
@@ -257,180 +256,33 @@ ${dialog.stylePictures}`;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
-	static event(id) {
-		api.event.get(id, event => {
-			var futureEvent = new Date(event.date.replace('+00:00', '')) > new Date();
-			var popup = document.createElement('div');
-			popup.appendChild(document.createElement('style')).textContent = `
-value item {
-	display: inline-block;
-	position: relative;
-	padding: 0.5em;
-	margin: 0.25em;
-	border-radius: 0.5em;
-	cursor: pointer;
-	padding-right: 2em;
-}
-
-value item.selected {
-	background-color: rgba(255, 255, 255, 0.6);
-}
-
-value item.selected::after {
-	content: '✓';
-	position: absolute;
-	right: 0.5em;
-	top: 0.5em;
-}
-
-${dialog.stylePictures}
-
-value.participants.history item.selected {
-	display: none;
-}
-
-value.participants {
-	max-height: initial;
-	text-align: center;
-	width: 100%;
-	min-width: 15em;
-}
-
-participant {
-	position: relative;
+	static event(event) {
+		var popup = document.createElement('div');
+		popup.appendChild(document.createElement('style')).textContent = `
+element {
+	width: 40em;
+	max-width: 100%;
 	display: block;
-	margin: 0.5em;
-	text-align: left;
-}
-
-participant remove {
-	position: absolute;
-	right: 0;
-	width: 2em;
-	background-color: rgba(255, 0, 0, 0.4);
-	text-align: center;
-	margin-left: 0.5em;
-	border-radius: 1em;
-}
-
-participant input {
-	position: absolute;
-	right: 3em;
-	width: 4em;
-	text-align: right;
-	height: 1.5em;
-	border: none;
-}
-
-value a {
-	margin-top: 1em;
-}
-
-button.edit {
-	right: 0;
-	top: 0;
 }`;
-			popup.appendChild(document.createElement('label')).innerText = 'Datum';
-			popup.appendChild(document.createElement('value')).innerText = ui.formatTime(new Date(event.date.replace('+00:00', '')), true);
-			popup.appendChild(document.createElement('label')).innerText = 'Ort';
-			popup.appendChild(document.createElement('value')).innerHTML = event.location.name
-				+ (event.location.address ? '<br/><a href="https://maps.google.com/maps/place/' + encodeURIComponent(event.location.address) + '" target="_blank">' + event.location.address.replace(/\n/g, '<br/>') + '</a>' : '');
-			if (event.note) {
-				popup.appendChild(document.createElement('label')).innerText = 'Bemerkung';
-				popup.appendChild(document.createElement('value')).innerHTML = event.note.replace(/\n/g, '<br/>');
-			}
-			if (!futureEvent && (event.contact.id == api.user.id || event.ratingCount > 0)) {
-				popup.appendChild(document.createElement('label')).innerText = 'Bewertung';
-				var value = popup.appendChild(document.createElement('value'));
-				value.style.textAlign = 'center';
-				if (event.contact.id == api.user.id) {
-					var rating = value.appendChild(document.createElement('input-rating'));
-					rating.setAttribute('value', 0);
-					rating.setAttribute('type', 'edit');
-					rating.setOnchange(rating => api.event.putRating(id, rating, () => document.dispatchEvent(new CustomEvent('event'))));
-				}
-				if (event.ratingCount > 0) {
-					value.appendChild(document.createElement('br'));
-					rating = value.appendChild(document.createElement('input-rating'));
-					rating.setAttribute('value', event.rating / event.ratingCount);
-				}
-			}
-			popup.appendChild(document.createElement('label')).innerText = 'Teilnehmer';
-			var participants = popup.appendChild(document.createElement('value'));
-			participants.setAttribute('i', id);
-			participants.classList.add('participants');
-			if (!futureEvent) {
-				popup.appendChild(document.createElement('label')).innerText = 'Bilder';
-				var pictures = popup.appendChild(document.createElement('value'));
-				pictures.classList.add('pictures');
-				if (event.contact.id == api.user.id) {
-					var buttonImage = pictures.appendChild(document.createElement('input-image'));
-					buttonImage.style.right = 0;
-					buttonImage.style.top = 0;
-					buttonImage.style.borderRadius = '0 0.5em';
-					buttonImage.setAttribute('max', 1000);
-					var addImage = (id, data) => {
-						var div = pictures.appendChild(document.createElement('div'));
-						var image;
-						if (data.indexOf('.mov') > 0 || data.indexOf('.mp4') > 0) {
-							image = div.appendChild(document.createElement('video'));
-							image.autoplay = true;
-							image.muted = true;
-							image.loop = true;
-							image.setAttribute('playsinline', true);
-							var source = image.appendChild(document.createElement('source'));
-							source.src = data;
-							source.type = 'video/mp4';
-						} else {
-							image = div.appendChild(document.createElement('img'));
-							image.src = data;
-						}
-						image.parentElement.setAttribute('i', id);
-						image.parentElement.setAttribute('onclick', 'action.eventImageDelete(event,' + id + ')');
-						if (data.indexOf('med/') != 0)
-							document.dispatchEvent(new CustomEvent('event'));
-					};
-					buttonImage.setSuccess(e => {
-						var formData = new FormData();
-						formData.append('file', e.file);
-						api.event.postImage(id, e.type, formData, eventImageId => addImage(eventImageId, e.data));
-					});
-				}
-				if (event.image)
-					addImage(event.image, 'med/' + event.image);
-			}
-			if (api.user.id == event.contact.id) {
-				var button = popup.appendChild(document.createElement('button'));
-				button.appendChild(document.createElement('img')).src = '/image/edit.svg';
-				button.setAttribute('onclick', 'dialog.add(' + JSON.stringify({ id: event.id, date: event.date, note: event.note, rating: event.rating, location: event.location, participants: event.contactEvents.length }) + ')');
-				button.classList.add('icon');
-				button.classList.add('edit');
-			}
-			api.contact.getList(contacts => {
-				var pseudonyms = ui.extractPseudonyms(contacts);
-				var p = {}, participantList = [];
-				for (var i = 0; i < event.contactEvents.length; i++) {
-					p[event.contactEvents[i].contact.id] = event.contactEvents[i];
-					participantList.push({
-						id: event.contactEvents[i].contact.id,
-						name: event.contactEvents[i].contact.name,
-						pseudonym: pseudonyms[event.contactEvents[i].contact.id]
-					});
-				}
-				for (var i = 0; i < contacts.length; i++) {
-					var item = participants.appendChild(document.createElement('item'));
-					item.innerText = contacts[i].pseudonym;
-					item.setAttribute('i', contacts[i].id);
-					item.setAttribute('onclick', 'action.participate(' + contacts[i].id + ',' + id + ')');
-					if (p[contacts[i].id]) {
-						item.setAttribute('contactEventId', p[contacts[i].id].id);
-						item.setAttribute('class', 'selected');
-					}
-				}
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-				document.dispatchEvent(new CustomEvent('event', { detail: { eventId: id, participants: participantList, type: 'read' } }));
-			});
-		});
+		var element = popup.appendChild(document.createElement('element'));
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
+		var date = new Date();
+		date.setMonth(date.getMonth() - 2);
+		inputDate.setAttribute('minuteStep', 15);
+		inputDate.setAttribute('min', date.toISOString());
+		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
+		dialog.createField(element, 'Ortname', 'locationName', 'input-selection', event.location.name);
+		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event.location.address);
+		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
+		var inputId = element.appendChild(document.createElement('input'));
+		inputId.setAttribute('type', 'hidden');
+		inputId.setAttribute('name', 'id');
+		inputId.setAttribute('value', event.id);
+		var buttonDiv = dialog.createButton(element, 'action.eventPatch()');
+		var button = buttonDiv.appendChild(document.createElement('button'));
+		button.innerText = 'Löschen';
+		button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static createField(element, label, name, type, value) {

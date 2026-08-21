@@ -66,10 +66,9 @@ class listener {
 				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/>';
 		};
-		var addEditButton = function () {
-			if (api.user.id == events[i].contact.id)
-				return '<button class="icon edit" onclick="dialog.add(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
-			return '';
+		var addEdit = function () {
+			return api.user.id == events[i].contact.id ?
+				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note }).replace(/"/g, '&quot;') + ')"' : '';
 		}
 		for (var i = events.length - 1; i >= 0; i--) {
 			list.push({
@@ -79,12 +78,11 @@ class listener {
 				hint: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/>' +
 					(events[i].location.name ? events[i].location.name + '<br/>' : '') +
 					(events[i].rating ? '<input-rating value="' + (events[i].rating / events[i].ratingCount) + '"></input-rating>' : ''),
-				description: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '<br/><br/>' +
+				description: '<div' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</div>' +
 					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 					'<separator></separator>' +
 					(events[i].rating ? '<rating>Bewertung des Events</rating><br/>' + listRatings(events[i]) : '') +
-					(events[i].note ? '<br/>' + events[i].note.replace(/\n/g, '<br/>') : '') +
-					addEditButton() +
+					(events[i].note ? '<div' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</div>' : '') +
 					listener.listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
@@ -202,7 +200,7 @@ thumbnail delete {
 
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
-			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
+			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add());
 			for (var i = 0; i < events.length; i++)
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 			calendar.render();
@@ -227,13 +225,12 @@ thumbnail delete {
 	static listFeedbacks(event) {
 		var s = '';
 		if (event.eventFeedbacks) {
-			var addEditButton = function (feedback) {
-				if (api.user.id == feedback.contact.id)
-					return '<button class="icon edit" onclick="dialog.feedback(' + JSON.stringify({ id: feedback.id, note: event.eventFeedbacks[i].note }).replace(/"/g, '&quot;') + ')"><img src="/image/edit.svg" /></button>';
-				return '';
+			var addEdit = function (feedback) {
+				return api.user.id == feedback.contact.id ?
+					' onclick="dialog.feedback(' + JSON.stringify({ id: feedback.id, note: event.eventFeedbacks[i].note }).replace(/"/g, '&quot;') + ')"' : '';
 			}
 			for (var i = 0; i < event.eventFeedbacks.length; i++)
-				s += '<feedback><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + addEditButton(event.eventFeedbacks[i]) + '</feedback>';
+				s += '<feedback' + addEdit() + '><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
 		}
 		return s;
 	}
