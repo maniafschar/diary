@@ -272,8 +272,8 @@ element {
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Ortname', 'locationName', 'input-selection', event.location.name);
-		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', event.location.address);
-		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event?.note);
+		dialog.createField(element, 'Adresse', 'address', 'textarea', event.location.address);
+		dialog.createField(element, 'Bemerkung', 'note', 'textarea', event?.note);
 		var inputId = element.appendChild(document.createElement('input'));
 		inputId.setAttribute('type', 'hidden');
 		inputId.setAttribute('name', 'id');
