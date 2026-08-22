@@ -47,7 +47,6 @@ class CalendarView extends HTMLElement {
 	display: inline-block;
 	padding-top: 1.5em;
 	cursor: pointer;
-	background: rgba(0, 0, 0, 0.03);
 }
 
 button {
@@ -129,6 +128,7 @@ button.icon {
 	text-overflow: ellipsis;
 	position: relative;
 	padding: 0.2em;
+	background: rgba(0, 0, 0, 0.03);
 }
 	
 .day-num span {
