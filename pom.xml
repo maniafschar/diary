@@ -14,7 +14,7 @@
 	<description></description>
 
 	<properties>
-		<java.version>18</java.version>
+		<java.version>25</java.version>
 		<itext.version>9.1.0</itext.version>
 	</properties>
 
