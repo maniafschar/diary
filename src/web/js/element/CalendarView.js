@@ -99,7 +99,7 @@ button.icon {
 
 .cal-day {
 	min-height: 12vh;
-	border-right: 1px solid rgba(0, 0, 0, 0.03);
+	border-right: 1px solid rgba(0, 0, 0, 0.02);
 	cursor: pointer;
 	transition: background .12s;
 	position: relative;
@@ -128,7 +128,7 @@ button.icon {
 	text-overflow: ellipsis;
 	position: relative;
 	padding: 0.2em;
-	background: rgba(0, 0, 0, 0.03);
+	background: rgba(0, 0, 0, 0.02);
 }
 	
 .day-num span {
