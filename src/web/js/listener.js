@@ -220,7 +220,7 @@ thumbnail delete {
 			var calendar = document.querySelector('calendar-view');
 			calendar.reset();
 			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
-			for (var i = 0; i < events.length; i++)
+			for (var i = events.length - 1; i >= 0; i--)
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 			calendar.render();
 			if (events.length) {
