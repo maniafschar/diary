@@ -250,6 +250,7 @@ class action {
 		var date = popup.querySelector('element input-date').getAttribute('value');
 		if (date) {
 			api.event.patch({
+				id: popup.querySelector('element input[name="id"]').value,
 				date: date,
 				note: popup.querySelector('element textarea[name="note"]').value,
 				location: {
