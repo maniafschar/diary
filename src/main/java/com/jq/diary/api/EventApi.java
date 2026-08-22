@@ -20,15 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
+import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
-import com.jq.diary.service.ExternalService;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Utilities;
 
@@ -36,38 +35,41 @@ import com.jq.diary.util.Utilities;
 @RequestMapping("api/event")
 public class EventApi extends ApplicationApi {
 	@Autowired
+	private AuthorizationService authorizationService;
+
+	@Autowired
 	private EventService eventService;
 
 	@Autowired
 	private LocationService locationService;
 
-	@Autowired
-	private ExternalService externalService;
-
 	@GetMapping("list")
-	public List<Event> getList(@RequestHeader final BigInteger clientId) {
-		return Utilities.filter(this.eventService.list(this.repository.one(Client.class, clientId)));
+	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		return Utilities.filter(
+				this.eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
 	}
 
 	@GetMapping("{id}")
-	public Event get(@PathVariable final BigInteger id) {
-		return Utilities.filter(this.eventService.one(id));
+	public Event get(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger id) {
+		return Utilities.filter(this.authorizationService.requireEvent(id, contactId));
 	}
 
 	@DeleteMapping("{id}")
-	public void delete(@PathVariable final BigInteger id) {
-		this.eventService.delete(this.repository.one(Event.class, id));
+	public void delete(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger id) {
+		this.eventService.delete(this.authorizationService.requireEvent(id, contactId));
 	}
 
 	@GetMapping("contact/{contactId}")
-	public List<Event> getContact(@PathVariable final BigInteger contactId) {
-		return Utilities.filter(this.eventService.listContact(contactId));
+	public List<Event> getContact(@PathVariable final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		return Utilities.filter(
+				this.eventService
+						.listContact(this.authorizationService.requireContact(contactId, clientId).getId()));
 	}
 
 	@PostMapping("exists")
 	public boolean postExists(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {
-		event.setContact(this.verifyContactClient(contactId, clientId));
+		event.setContact(this.authorizationService.requireContact(contactId, clientId));
 		event.getLocation().setContact(event.getContact());
 		return this.locationService.find(event.getLocation()) != null && this.eventService.exists(event);
 	}
@@ -76,7 +78,7 @@ public class EventApi extends ApplicationApi {
 	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {
 		final Double rating = event.getRating();
-		event.setContact(this.verifyContactClient(contactId, clientId));
+		event.setContact(this.authorizationService.requireContact(contactId, clientId));
 		event.getLocation().setContact(event.getContact());
 		final Location storedLocation = this.locationService.find(event.getLocation());
 		if (storedLocation == null)
@@ -90,10 +92,8 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@PatchMapping
-	public void patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final Event event) {
-		this.verifyContactClient(contactId, clientId);
-		final Event original = this.eventService.one(event.getId());
+	public void patch(@RequestHeader final BigInteger contactId, @RequestBody final Event event) {
+		final Event original = this.authorizationService.requireEvent(event.getId(), contactId);
 		original.setNote(event.getNote());
 		original.setDate(event.getDate());
 		original.setLocation(this.locationService.one(event.getLocation().getId()));
@@ -103,6 +103,7 @@ public class EventApi extends ApplicationApi {
 	@PutMapping("rating/{eventId}/{rating}")
 	public BigInteger putRating(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
 			@PathVariable final Double rating) {
+		this.authorizationService.requireEvent(eventId, contactId);
 		return this.eventService.putRating(eventId, contactId, rating).getId();
 	}
 
@@ -110,8 +111,8 @@ public class EventApi extends ApplicationApi {
 	public BigInteger put(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {
 		if (event.getId() != null) {
-			final Contact contact = this.repository.one(Event.class, event.getId()).getContact();
-			if (contact.getId().equals(this.verifyContactClient(contactId, clientId).getId())) {
+			final Contact contact = this.authorizationService.requireEvent(event.getId(), contactId).getContact();
+			if (contact.getId().equals(this.authorizationService.requireContact(contactId, clientId).getId())) {
 				event.setContact(contact);
 				this.eventService.save(event);
 			}
@@ -120,42 +121,53 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@PostMapping("feedback/{eventId}")
-	public BigInteger postFeedback(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventId,
-			@RequestBody final EventFeedback feedback) throws EmailException {
-		feedback.setContact(this.repository.one(Contact.class, contactId));
-		feedback.setEvent(this.repository.one(Event.class, eventId));
+	public BigInteger postFeedback(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@PathVariable final BigInteger eventId, @RequestBody final EventFeedback feedback) throws EmailException {
+		feedback.setContact(this.authorizationService.requireContact(contactId, clientId));
+		feedback.setEvent(this.authorizationService.requireEvent(eventId, feedback.getContact().getId()));
 		this.eventService.saveFeedback(feedback);
 		return feedback.getId();
 	}
 
 	@PutMapping("feedback/{eventFeedbackId}")
-	public void putFeedback(@RequestHeader final BigInteger contactId, @PathVariable final BigInteger eventFeedbackId,
+	public void putFeedback(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@PathVariable final BigInteger eventFeedbackId,
 			@RequestBody final EventFeedback feedback) throws EmailException {
 		final EventFeedback f = this.repository.one(EventFeedback.class, eventFeedbackId);
-		if (contactId.equals(f.getContact().getId())) {
+		if (this.authorizationService.requireContact(contactId, clientId).getId().equals(f.getContact().getId())) {
 			f.setNote(feedback.getNote());
 			this.eventService.saveFeedback(f);
 		}
 	}
 
 	@DeleteMapping("feedback/{eventFeedbackId}")
-	public void deleteFeedback(@RequestHeader final BigInteger contactId,
+	public void deleteFeedback(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@PathVariable final BigInteger eventFeedbackId) throws EmailException {
-		this.eventService.deleteFeedback(eventFeedbackId);
+		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
+		final EventFeedback eventFeedback = this.repository.one(EventFeedback.class, eventFeedbackId);
+		if (contact.getId().equals(eventFeedback.getContact().getId()))
+			this.eventService.deleteFeedback(eventFeedback);
 	}
 
 	@PostMapping(path = "image/{eventId}/{type}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public BigInteger postImage(@PathVariable final BigInteger eventId,
-			@PathVariable final String type, @RequestParam("file") final MultipartFile file) throws IOException {
+	public BigInteger postImage(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@PathVariable final BigInteger eventId, @PathVariable final String type,
+			@RequestParam("file") final MultipartFile file) throws IOException {
 		final EventImage eventImage = new EventImage();
-		eventImage.setEvent(this.repository.one(Event.class, eventId));
+		eventImage.setContact(this.authorizationService.requireContact(contactId, clientId));
+		eventImage.setEvent(this.authorizationService.requireEvent(eventId,
+				this.authorizationService.requireContact(contactId, clientId).getId()));
 		eventImage.setImage(Attachment.createImage(type, file.getBytes()));
 		this.eventService.save(eventImage);
 		return eventImage.getId();
 	}
 
 	@DeleteMapping("image/{eventImageId}")
-	public void deleteImage(@PathVariable final BigInteger eventImageId) {
-		this.eventService.delete(this.repository.one(EventImage.class, eventImageId));
+	public void deleteImage(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@PathVariable final BigInteger eventImageId) {
+		final EventImage eventImage = this.repository.one(EventImage.class, eventImageId);
+		if (this.authorizationService.requireContact(contactId, clientId).getId()
+				.equals(eventImage.getContact().getId()))
+			this.eventService.delete(eventImage);
 	}
 }

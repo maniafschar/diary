@@ -85,8 +85,8 @@ public class EventService {
 			this.repository.save(feedback);
 	}
 
-	public void deleteFeedback(final BigInteger id) {
-		this.repository.delete(this.repository.one(EventFeedback.class, id));
+	public void deleteFeedback(final EventFeedback feedback) {
+		this.repository.delete(feedback);
 	}
 
 	public List<EventFeedback> listFeedback(final Client client) {

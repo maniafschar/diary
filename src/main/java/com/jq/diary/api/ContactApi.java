@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
-import com.jq.diary.entity.Event;
+import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.ContactService;
 import com.jq.diary.util.Utilities;
 
@@ -27,22 +26,25 @@ import com.jq.diary.util.Utilities;
 @RequestMapping("api/contact")
 public class ContactApi extends ApplicationApi {
 	@Autowired
+	private AuthorizationService authorizationService;
+
+	@Autowired
 	private ContactService contactService;
 
 	@GetMapping("{id}")
-	public Contact get(@PathVariable final BigInteger id) {
-		return Utilities.filter(this.contactService.one(id));
+	public Contact get(@PathVariable final BigInteger id, @RequestHeader final BigInteger clientId) {
+		return Utilities.filter(this.authorizationService.requireContact(id, clientId));
 	}
 
 	@PatchMapping
 	public BigInteger patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Contact contact) throws EmailException {
+		final Contact c = this.authorizationService.requireContact(contactId, clientId);
 		if (contact.getId() == null) {
-			contact.setClient(this.verifyContactClient(contactId, clientId).getClient());
+			contact.setClient(this.authorizationService.requireContact(contactId, clientId).getClient());
 			this.contactService.save(contact);
 			return contact.getId();
 		}
-		final Contact c = this.repository.one(Contact.class, contact.getId());
 		if (contact.getEmail() != null)
 			c.setEmail(contact.getEmail());
 		if (contact.getName() != null)
@@ -56,29 +58,34 @@ public class ContactApi extends ApplicationApi {
 	}
 
 	@GetMapping("list")
-	public List<Contact> getList(@RequestHeader final BigInteger clientId) {
-		return Utilities.filter(this.contactService.list(this.repository.one(Client.class, clientId)));
+	public List<Contact> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		return Utilities.filter(
+				this.contactService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
 	}
 
 	@GetMapping("event/{eventId}")
-	public List<ContactEvent> getEvent(@PathVariable final BigInteger eventId) {
-		return Utilities.filter(this.contactService.listEvent(eventId));
+	public List<ContactEvent> getEvent(@PathVariable final BigInteger eventId,
+			@RequestHeader final BigInteger contactId) {
+		return Utilities.filter(
+				this.contactService.listEvent(this.authorizationService.requireEvent(eventId, contactId).getId()));
 	}
 
 	@GetMapping("client")
-	public List<Map<String, Object>> getClient(@RequestHeader final BigInteger contactId) {
-		return this.contactService.listClient(contactId);
+	public List<Map<String, Object>> getClient(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		return this.contactService.listClient(this.authorizationService.requireContact(contactId, clientId));
 	}
 
 	@PostMapping("event/{contactId}/{eventId}")
 	public BigInteger postEvent(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @PathVariable(name = "contactId") final BigInteger contactIdEvent,
 			@PathVariable final BigInteger eventId) {
-		final Contact contact = this.repository.one(Contact.class, contactIdEvent);
-		if (this.verifyContactClient(contactId, clientId).getClient().getId().equals(contact.getClient().getId())) {
+		final Contact contact = this.authorizationService.requireContact(contactIdEvent, clientId);
+		final Contact verifiedContact = this.authorizationService.requireContact(contactId, clientId);
+		if (verifiedContact.getClient().getId().equals(contact.getClient().getId())) {
 			final ContactEvent contactEvent = new ContactEvent();
 			contactEvent.setContact(contact);
-			contactEvent.setEvent(this.repository.one(Event.class, eventId));
+			contactEvent.setEvent(this.authorizationService.requireEvent(eventId, verifiedContact.getId()));
 			this.contactService.save(contactEvent);
 			return contactEvent.getId();
 		}
@@ -87,7 +94,11 @@ public class ContactApi extends ApplicationApi {
 	}
 
 	@DeleteMapping("event/{contactEventId}")
-	public void deleteEvent(@PathVariable final BigInteger contactEventId) {
-		this.contactService.delete(this.repository.one(ContactEvent.class, contactEventId));
+	public void deleteEvent(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId, @PathVariable final BigInteger contactEventId) {
+		final ContactEvent contactEvent = this.repository.one(ContactEvent.class, contactEventId);
+		this.authorizationService.requireEvent(contactEvent.getEvent().getId(),
+				this.authorizationService.requireContact(contactId, clientId).getId());
+		this.contactService.delete(contactEvent);
 	}
 }

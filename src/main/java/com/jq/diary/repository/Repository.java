@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,11 +35,11 @@ public class Repository {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
-	private Listeners listeners;
-
-	public <T extends BaseEntity> List<T> list(final String hql, final Class<T> clazz) {
-		return this.em.createQuery(hql, clazz).getResultList();
+	public <T extends BaseEntity> List<T> list(final String hql, final Class<T> clazz, final Object... params) {
+		final jakarta.persistence.TypedQuery<T> query = this.em.createQuery(hql, clazz);
+		for (int i = 0; params != null && i < params.length; i++)
+			query.setParameter(i + 1, params[i]);
+		return query.getResultList();
 	}
 
 	public List<?> list(final String hql) {

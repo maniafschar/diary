@@ -28,8 +28,7 @@ public class ContactService {
 		return this.repository.list("from ContactEvent where event.id=" + eventId, ContactEvent.class);
 	}
 
-	public List<Map<String, Object>> listClient(final BigInteger contactId) {
-		final Contact contact = this.repository.one(Contact.class, contactId);
+	public List<Map<String, Object>> listClient(final Contact contact) {
 		final List<Contact> list = this.repository.list("from Contact where email='" + contact.getEmail() + "'",
 				Contact.class);
 		final List<Map<String, Object>> result = new ArrayList<>();
