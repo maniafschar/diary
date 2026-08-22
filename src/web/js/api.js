@@ -165,7 +165,8 @@ class api {
 				url: 'event',
 				method: 'POST',
 				body: event,
-				success: success
+				success: success,
+				noProgressBar: true
 			});
 		},
 
@@ -174,7 +175,8 @@ class api {
 				url: 'event/exists',
 				method: 'POST',
 				body: event,
-				success: success
+				success: success,
+				noProgressBar: true
 			});
 		},
 
@@ -186,12 +188,13 @@ class api {
 			});
 		},
 
-		postImage(id, type, data, success) {
+		postImage(id, type, data, progressbar, success) {
 			api.ajax({
 				url: 'event/image/' + id + '/' + type,
 				method: 'POST',
 				body: data,
-				success: success
+				success: success,
+				noProgressBar: !progressbar
 			});
 		},
 
@@ -337,6 +340,7 @@ class api {
 						xhrError.setRequestHeader('Content-Type', 'application/json');
 						xhrError.send(JSON.stringify({ note: param.method + ' ' + param.url + ' -> ' + xhr.status + ' ' + xhr.responseURL + '\n' + xhr.response }));
 					}
+					document.dispatchEvent(new CustomEvent('progressbar'));
 					if (param.error) {
 						xhr.param = param;
 						param.error(xhr);

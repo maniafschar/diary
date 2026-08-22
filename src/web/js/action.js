@@ -83,7 +83,7 @@ class action {
 			image.setSuccess(file => {
 				var formData = new FormData();
 				formData.append('file', file.file);
-				api.event.postImage(event.id, file.type, formData,
+				api.event.postImage(event.id, file.type, formData, true,
 					() => {
 						document.querySelector('image-carousel').indexImage++;
 						document.dispatchEvent(new CustomEvent('event'));
@@ -251,7 +251,7 @@ class action {
 		if (date) {
 			api.event.patch({
 				date: date,
-				note: popup.querySelector('element input-textarea[name="note"]').value,
+				note: popup.querySelector('element textarea[name="note"]').value,
 				location: {
 					id: popup.querySelector('element input[name="locationId"]').value
 				}
@@ -278,6 +278,7 @@ class action {
 					altitude: popup.querySelector('element input[name="altitude"]').value
 				}
 			};
+			document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } }));
 			api.event.postExists(event, exists => {
 				if (exists == 'false') {
 					api.event.post(event, id => {
@@ -285,16 +286,19 @@ class action {
 							if (pictures[index]) {
 								var formData = new FormData();
 								formData.append('file', dialog.files[pictures[index].getAttribute('i')].file);
-								api.event.postImage(id, 'jpg', formData, () => call(pictures, index + 1));
+								api.event.postImage(id, 'jpg', formData, false, () => call(pictures, index + 1));
 							} else {
+								document.dispatchEvent(new CustomEvent('progressbar'));
 								document.dispatchEvent(new CustomEvent('event'));
 								document.dispatchEvent(new CustomEvent('popup'));
 							}
 						};
 						call(popup.querySelectorAll('element value.pictures div'), 0);
 					});
-				} else
+				} else {
+					document.dispatchEvent(new CustomEvent('progressbar'));
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Der Eintrag existiert bereits.' } }));
+				}
 			});
 		}
 	}
