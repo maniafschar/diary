@@ -7,6 +7,16 @@ class InputTextarea extends HTMLElement {
 	recordedChunks = [];
 	speechRecognition = null;
 	speechTranscript = '';
+	audioPlayer;
+	currentEntry = {
+		imageData: null,
+		coords: null,
+		address: null,
+		time: null,
+		audioFile: null,
+		audioName: null,
+		description: ''
+	};
 
 	constructor() {
 		super();
@@ -69,6 +79,8 @@ button.speech {
 		speechButton.classList.add('speech');
 		var t = this;
 		speechButton.onclick = () => this.captureAudio(t);
+		this.audioPlayer = document.createElement('audio-player');
+		this.audioPlayer.controls = 'hidden';
 	}
 	captureAudio(t) {
 		if (navigator.device && navigator.device.capture) {
@@ -110,7 +122,7 @@ button.speech {
 				.map(result => result[0].transcript)
 				.join(' ');
 			descriptionInput.value = this.speechTranscript;
-			currentEntry.description = this.speechTranscript;
+			this.currentEntry.description = this.speechTranscript;
 		};
 
 		this.speechRecognition.onend = () => {
@@ -146,27 +158,28 @@ button.speech {
 					}
 				};
 
+				var t = this;
 				this.mediaRecorder.onstop = () => {
-					const blob = new Blob(this.recordingStream, { type: 'audio/webm' });
+					const blob = new Blob(t.recordingStream, { type: 'audio/webm' });
 					const reader = new FileReader();
 
 					reader.onload = () => {
-						currentEntry.audioFile = reader.result;
-						currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
-						console.log(`Audio recorded: ${currentEntry.audioName}`);
-						audioPlayer.hidden = false;
-						audioPlayer.src = currentEntry.audioFile;
-						this.appendAudioNoteToDescription();
-						//this.captureAudioButton.textContent = 'Record Audio Description';
-						this.isRecording = false;
-						this.stopRecordingStream();
+						t.currentEntry.audioFile = reader.result;
+						t.currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
+						console.log(`Audio recorded: ${t.currentEntry.audioName}`);
+						t.audioPlayer.hidden = false;
+						t.audioPlayer.src = t.currentEntry.audioFile;
+						t.appendAudioNoteToDescription();
+						//t.captureAudioButton.textContent = 'Record Audio Description';
+						t.isRecording = false;
+						t.stopRecordingStream();
 					};
 
 					reader.onerror = () => {
 						alert('Unable to read recorded audio.');
-						this.isRecording = false;
-						//this.captureAudioButton.textContent = 'Record Audio Description';
-						this.stopRecordingStream();
+						t.isRecording = false;
+						//t.captureAudioButton.textContent = 'Record Audio Description';
+						t.stopRecordingStream();
 					};
 
 					reader.readAsDataURL(blob);
@@ -174,9 +187,9 @@ button.speech {
 
 				this.mediaRecorder.onerror = () => {
 					alert('Browser audio recording failed.');
-					this.isRecording = false;
-					//this.captureAudioButton.textContent = 'Record Audio Description';
-					this.stopRecordingStream();
+					t.isRecording = false;
+					//t.captureAudioButton.textContent = 'Record Audio Description';
+					t.stopRecordingStream();
 				};
 
 				this.mediaRecorder.start();
@@ -214,11 +227,11 @@ button.speech {
 	}
 	captureSuccess(mediaFiles) {
 		const [file] = mediaFiles;
-		currentEntry.audioFile = file.fullPath || file.localURL || file.name;
-		currentEntry.audioName = file.name || 'Recorded audio';
-		console.log(`Audio recorded: ${currentEntry.audioName}`);
-		audioPlayer.hidden = false;
-		audioPlayer.src = currentEntry.audioFile;
+		this.currentEntry.audioFile = file.fullPath || file.localURL || file.name;
+		this.currentEntry.audioName = file.name || 'Recorded audio';
+		console.log(`Audio recorded: ${this.currentEntry.audioName}`);
+		this.audioPlayer.hidden = false;
+		this.audioPlayer.src = this.currentEntry.audioFile;
 		this.appendAudioNoteToDescription();
 	}
 	captureError(error) {
@@ -230,6 +243,6 @@ button.speech {
 		if (currentText.includes(note))
 			return;
 		descriptionInput.value = currentText ? `${currentText}\n${note}` : note;
-		currentEntry.description = descriptionInput.value;
+		this.currentEntry.description = descriptionInput.value;
 	}
 }

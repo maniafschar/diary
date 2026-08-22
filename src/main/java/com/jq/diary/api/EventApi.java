@@ -25,6 +25,7 @@ import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
+import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.ExternalService;
@@ -77,7 +78,11 @@ public class EventApi extends ApplicationApi {
 		final Double rating = event.getRating();
 		event.setContact(this.verifyContactClient(contactId, clientId));
 		event.getLocation().setContact(event.getContact());
-		this.locationService.save(event.getLocation());
+		final Location storedLocation = this.locationService.find(event.getLocation());
+		if (storedLocation == null)
+			this.locationService.save(event.getLocation());
+		else
+			event.setLocation(storedLocation);
 		this.eventService.save(event);
 		if (rating != null)
 			this.eventService.putRating(event.getId(), contactId, rating);
