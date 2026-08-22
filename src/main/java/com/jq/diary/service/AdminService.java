@@ -90,8 +90,8 @@ public class AdminService {
 
 	public void createTicket(final Ticket ticket) {
 		if (this.repository
-				.list("from Ticket where note like '" + ticket.getNote().replaceAll("\n", "_").replaceAll("'", "_")
-						+ "'", Ticket.class)
+				.list("from Ticket where note like ?1", Ticket.class,
+						ticket.getNote().replaceAll("\n", "_").replaceAll("'", "_"))
 				.size() == 0)
 			this.repository.save(ticket);
 	}

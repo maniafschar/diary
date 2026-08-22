@@ -155,15 +155,14 @@ public class AuthenticationService {
 	}
 
 	public Contact login(final String email, final String password, final String salt) {
-		final List<Contact> list = this.repository.list("from Contact where email='" + email + "' order by id",
-				Contact.class);
+		final List<Contact> list = this.repository.list("from Contact where email=?1 order by id",
+				Contact.class, email);
 		if (list.size() > 0) {
 			final Contact contact = list.get(0);
 			this.verify(contact, password, salt, true);
 			this.repository.list(
-					"from Contact where email='" + contact.getEmail()
-							+ "' and (loginLink is not null or verified=false)",
-					Contact.class).stream().forEach(e -> {
+					"from Contact where email=?1 and (loginLink is not null or verified=false)",
+					Contact.class, contact.getEmail()).stream().forEach(e -> {
 						e.setLoginLink(null);
 						e.setVerified(true);
 						this.repository.save(e);
@@ -194,7 +193,7 @@ public class AuthenticationService {
 
 	public void tokenDelete(final String token) {
 		final List<ContactToken> list = this.repository
-				.list("from ContactToken where token='" + token + "'", ContactToken.class);
+				.list("from ContactToken where token=?1", ContactToken.class, token);
 		if (list.size() > 0) {
 			final ContactToken t = list.get(0);
 			t.setToken("");
@@ -231,7 +230,7 @@ public class AuthenticationService {
 
 	public String tokenRefresh(final Contact contact, final String publicKey) {
 		final List<ContactToken> list = this.repository
-				.list("from ContactToken where contact.id=" + contact.getId() + " and token=''", ContactToken.class);
+				.list("from ContactToken where contact.id=?1 and token=''", ContactToken.class, contact.getId());
 		final ContactToken contactToken;
 		if (list.size() < 1) {
 			contactToken = new ContactToken();
@@ -246,7 +245,7 @@ public class AuthenticationService {
 	public Contact token2User(final String publicKey, final String token) {
 		try {
 			final List<ContactToken> list = this.repository
-					.list("from ContactToken where token='" + token + "'", ContactToken.class);
+					.list("from ContactToken where token=?1", ContactToken.class, token);
 			if (list.size() == 0)
 				return null;
 			final Contact c = list.get(0).getContact();
@@ -262,7 +261,7 @@ public class AuthenticationService {
 	public void logoff(final ContactEvent contact, final String token) {
 		if (token != null) {
 			final List<ContactToken> list = this.repository
-					.list("from ContactToken where token='" + token + "'", ContactToken.class);
+					.list("from ContactToken where token=?1", ContactToken.class, token);
 			if (list.size() > 0)
 				this.repository.delete(list.get(0));
 		}
@@ -270,7 +269,7 @@ public class AuthenticationService {
 
 	public String recoverSendEmail(final String email) throws EmailException {
 		final List<Contact> list = this.repository
-				.list("from Contact where email='" + email + "'", Contact.class);
+				.list("from Contact where email=?1", Contact.class, email);
 		if (list.size() > 0) {
 			final Contact contact = list.get(0);
 			final String s = this.generateLoginParam(contact);
@@ -282,8 +281,8 @@ public class AuthenticationService {
 	}
 
 	public Contact recoverVerifyEmail(final String token, final String password) {
-		final List<Contact> list = this.repository.list("from Contact where loginLink like '%" + token + "%'",
-				Contact.class);
+		final List<Contact> list = this.repository.list("from Contact where loginLink like ?1",
+				Contact.class, "%" + token + "%");
 		if (list.size() != 1)
 			return null;
 		final Contact contact = list.get(0);

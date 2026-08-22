@@ -26,15 +26,14 @@ public class EventService {
 
 	public List<Event> list(final Client client) {
 		return this.repository.list(
-				"from Event event where event.contact.client.id=" + client.getId() + " order by date desc",
-				Event.class);
+				"from Event event where event.contact.client.id=?1 order by date desc",
+				Event.class, client.getId());
 	}
 
 	public List<Event> listContact(final BigInteger contactId) {
 		return this.repository.list(
-				"select e from Event e, ContactEvent ce where ce.contact.id=" + contactId
-						+ " and ce.event.id=e.id",
-				Event.class);
+				"select e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id",
+				Event.class, contactId);
 	}
 
 	public void delete(final Event event) {
@@ -47,10 +46,9 @@ public class EventService {
 
 	public boolean exists(final Event event) {
 		return this.repository.list(
-				"from Event where contact.id=" + event.getContact().getId()
-						+ " and date=cast('" + event.getDate().toInstant().toString().substring(0, 19)
-						+ "' as timestamp)",
-				Event.class).size() > 0;
+				"from Event where contact.id=?1 and date=cast(?2 as timestamp)",
+				Event.class, event.getContact().getId(), event.getDate().toInstant().toString().substring(0, 19))
+				.size() > 0;
 	}
 
 	public void save(final Event event) {
@@ -67,7 +65,7 @@ public class EventService {
 	public EventRating putRating(final BigInteger eventId, final BigInteger contactId, final Double rating) {
 		final EventRating eventRating;
 		final List<EventRating> list = this.repository
-				.list("from EventRating where contact.id=" + contactId + " and event.id=" + eventId, EventRating.class);
+				.list("from EventRating where contact.id=?1 and event.id=?2", EventRating.class, contactId, eventId);
 		if (list.size() > 0)
 			eventRating = list.get(0);
 		else {
@@ -91,9 +89,8 @@ public class EventService {
 
 	public List<EventFeedback> listFeedback(final Client client) {
 		return this.repository.list(
-				"from Feedback feedback, Contact contact where feedback.contactId=contact.id and contact.clientId="
-						+ client.getId() + " ORDER BY createdAt DESC",
-				EventFeedback.class);
+				"from Feedback feedback, Contact contact where feedback.contactId=contact.id and contact.clientId=?1 ORDER BY createdAt DESC",
+				EventFeedback.class, client.getId());
 	}
 
 	public void save(final EventImage eventImage) {

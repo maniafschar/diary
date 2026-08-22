@@ -43,7 +43,7 @@ public class LocationApi extends ApplicationApi {
 	}
 
 	@PostMapping
-	public BigInteger put(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+	public BigInteger post(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Location location) {
 		if (location.getId() == null)
 			location.setContact(this.authorizationService.requireContact(contactId, clientId));

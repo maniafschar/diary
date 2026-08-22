@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,21 +20,19 @@ public class ContactService {
 	private Repository repository;
 
 	public List<Contact> list(final Client client) {
-		return this.repository.list("from Contact where client.id=" + client.getId() + " order by name", Contact.class);
+		return this.repository.list("from Contact where client.id=?1 order by name", Contact.class, client.getId());
 	}
 
 	public List<ContactEvent> listEvent(final BigInteger eventId) {
-		return this.repository.list("from ContactEvent where event.id=" + eventId, ContactEvent.class);
+		return this.repository.list("from ContactEvent where event.id=?1", ContactEvent.class, eventId);
 	}
 
 	public List<Map<String, Object>> listClient(final Contact contact) {
-		final List<Contact> list = this.repository.list("from Contact where email='" + contact.getEmail() + "'",
-				Contact.class);
+		final List<Contact> list = this.repository.list("from Contact where email=?1", Contact.class,
+				contact.getEmail());
 		final List<Map<String, Object>> result = new ArrayList<>();
-		final List<Client> clients = this.repository.list(
-				"from Client where id in ("
-						+ list.stream().map(e -> "" + e.getClient().getId()).collect(Collectors.joining(",")) + ")",
-				Client.class);
+		final List<Client> clients = this.repository.list("from Client where id in ?1", Client.class,
+				list.stream().map(e -> "" + e.getClient().getId()).toArray());
 		for (final Client client : clients) {
 			final Map<String, Object> entry = new HashMap<>();
 			entry.put("id", client.getId());

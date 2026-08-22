@@ -1,6 +1,7 @@
 package com.jq.diary.service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class LocationService {
 	private Repository repository;
 
 	public List<Location> list(final Client client) {
-		return this.repository.list("from Location where contact.client.id=" + client.getId(), Location.class);
+		return this.repository.list("from Location where contact.client.id=?1", Location.class, client.getId());
 	}
 
 	public Location one(final BigInteger id) {
@@ -25,18 +26,22 @@ public class LocationService {
 
 	public Location find(final Location location) {
 		location.getLongitude();
-		String search = "from Location where contact.client.id=" + location.getContact().getClient().getId() +
-				" and lower(name) like '%" + location.getName().trim().toLowerCase() + "%'";
-		if (location.getLongitude() == null)
-			search += " and lower(address) like '%" + location.getAddress().toLowerCase() + "%'";
-		else {
+		final List<Object> values = new ArrayList<>();
+		String search = "from Location where contact.client.id=?1 and lower(name) like ?2";
+		values.add(location.getContact().getClient().getId());
+		values.add("%" + location.getName().trim().toLowerCase() + "%");
+		if (location.getLongitude() == null) {
+			search += " and lower(address) like ?3";
+			values.add("%" + location.getAddress().toLowerCase() + "%");
+		} else {
 			final double delta = 0.003;
-			search += " and longitude>" + (location.getLongitude() - delta) +
-					" and longitude<" + (location.getLongitude() + delta) +
-					" and latitude>" + (location.getLatitude() - delta) +
-					" and latitude<" + (location.getLatitude() + delta);
+			search += " and longitude>?3 and longitude<?4 and latitude>?5 and latitude<?6";
+			values.add(location.getLongitude() - delta);
+			values.add(location.getLongitude() + delta);
+			values.add(location.getLatitude() - delta);
+			values.add(location.getLatitude() + delta);
 		}
-		final List<Location> locations = this.repository.list(search, Location.class);
+		final List<Location> locations = this.repository.list(search, Location.class, values.toArray());
 		return locations.size() > 0 ? locations.get(0) : null;
 	}
 

@@ -48,40 +48,47 @@ public class LogFilter implements Filter {
 		final ContentCachingRequestWrapper req = new ContentCachingRequestWrapper((HttpServletRequest) request);
 		final ContentCachingResponseWrapper res = new ContentCachingResponseWrapper((HttpServletResponse) response);
 		final Log log = new Log();
-		if (req.getHeader("clientId") != null)
-			log.setClientId(new BigInteger(req.getHeader("clientId")));
-		if (req.getHeader("contactId") != null && !req.getServletPath().contains("/sc/")) {
-			try {
-				log.setContactId(new BigInteger(req.getHeader("contactId")));
-			} catch (final Exception ex) {
-				// ignore
-			}
-		}
-		log.setUri(req.getRequestURI());
-		log.setMethod(req.getMethod());
-		if (req.getHeader("referer") != null)
-			log.setReferer(req.getHeader("referer"));
-		log.setIp(this.sanatizeIp(req.getHeader("X-Forwarded-For")));
-		if ("".equals(log.getIp()))
-			log.setIp(request.getRemoteAddr());
-		log.setPort(req.getLocalPort());
-		final String query = req.getQueryString();
-		if (query != null) {
-			if (query.contains("&_="))
-				log.setQuery(URLDecoder.decode(query.substring(0, query.indexOf("&_=")),
-						StandardCharsets.UTF_8.name()));
-			else if (!query.startsWith("_="))
-				log.setQuery(URLDecoder.decode(query, StandardCharsets.UTF_8.name()));
-		}
-		final long time = System.currentTimeMillis();
+		long time = 0;
 		try {
+			if (req.getHeader("clientId") != null)
+				log.setClientId(new BigInteger(req.getHeader("clientId")));
+			if (req.getHeader("contactId") != null && !req.getServletPath().contains("/sc/")) {
+				try {
+					log.setContactId(new BigInteger(req.getHeader("contactId")));
+				} catch (final Exception ex) {
+					// ignore
+				}
+			}
+			log.setUri(req.getRequestURI());
+			log.setMethod(req.getMethod());
+			if (req.getHeader("referer") != null)
+				log.setReferer(req.getHeader("referer"));
+			log.setIp(this.sanatizeIp(req.getHeader("X-Forwarded-For")));
+			if ("".equals(log.getIp()))
+				log.setIp(request.getRemoteAddr());
+			log.setPort(req.getLocalPort());
+			final String query = req.getQueryString();
+			if (query != null) {
+				if (query.contains("&_="))
+					log.setQuery(URLDecoder.decode(query.substring(0, query.indexOf("&_=")),
+							StandardCharsets.UTF_8.name()));
+				else if (!query.startsWith("_="))
+					log.setQuery(URLDecoder.decode(query, StandardCharsets.UTF_8.name()));
+			}
+			time = System.currentTimeMillis();
 			this.authenticate(req);
 			chain.doFilter(req, res);
+		} catch (final NumberFormatException ex) {
+			log.setBody("bad request: " + req.getRequestURI());
+			log.setStatus(HttpStatus.BAD_REQUEST.value());
+			res.setStatus(HttpStatus.BAD_REQUEST.value());
 		} catch (final AuthenticationException ex) {
 			log.setBody("unauthorized acccess, contact: " + req.getHeader("contactId"));
 			log.setStatus(HttpStatus.UNAUTHORIZED.value());
+			res.setStatus(HttpStatus.UNAUTHORIZED.value());
 		} finally {
-			log.setTime((int) (System.currentTimeMillis() - time));
+			if (time > 0)
+				log.setTime((int) (System.currentTimeMillis() - time));
 			if (log.getStatus() == 0)
 				log.setStatus(res.getStatus());
 			log.setCreatedAt(new Timestamp(Instant.now().toEpochMilli() - log.getTime()));
@@ -117,10 +124,8 @@ public class LogFilter implements Filter {
 				req.getHeader("password"), req.getHeader("salt"));
 		if (!BigInteger.ZERO.equals(contactId)
 				&& !contact.getClient().getId().equals(new BigInteger(req.getHeader("clientId")))
-				&& this.repository.list(
-						"from Contact where email='" + contact.getEmail() + "' and client.id="
-								+ req.getHeader("clientId"),
-						Contact.class).size() == 0)
+				&& this.repository.list("from Contact where email=?1 and client.id=?2",
+						Contact.class, contact.getEmail(), req.getHeader("clientId")).size() == 0)
 			throw new AuthenticationException(AuthenticationExceptionType.WrongClient);
 	}
 
