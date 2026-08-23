@@ -70,7 +70,7 @@ button.icon {
 	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
-	top: 0.5em;
+	top: 0;
 }
 
 .cal-grid-outer {
@@ -85,8 +85,13 @@ button.icon {
 }
 
 .cal-weekday {
-	padding: 0.5em 0 0 0.25em;
 	font-size: 0.8em;
+	width: 14.25vw;
+	border-right: 1px solid rgba(0, 0, 0, 0.02);
+}
+	
+.cal-weekday span {
+	padding: 0.3em 0 0 0.25em;
 }
 
 .cal-weekday.weekend { color: #8b4513; }
@@ -110,11 +115,14 @@ button.icon {
 	min-height: 5em;
 }
 
-.cal-day:nth-child(7n) { border-right: none; }
+.cal-day:nth-child(7n),
+.cal-weekday:nth-child(7n) {
+	border-right: none;
+}
 
-.cal-day:nth-last-child(-n+7) { border-bottom: none; }
-
-.cal-day:hover:not(.empty) { background: #f0ebe2; }
+.cal-day:hover:not(.empty) {
+	background: #f0ebe2;
+}
 
 .cal-day.empty {
 	background: #faf8f4;
@@ -265,7 +273,7 @@ button.icon {
 			CalendarView.WEEKDAYS.forEach((d, i) => {
 				const el = document.createElement('div');
 				el.className = 'cal-weekday' + (i >= 5 ? ' weekend' : '');
-				el.textContent = d;
+				el.appendChild(document.createElement('span')).textContent = d;
 				wdEl.appendChild(el);
 			});
 		}

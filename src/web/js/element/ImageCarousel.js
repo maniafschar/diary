@@ -5,7 +5,6 @@ export { ImageCarousel };
 class ImageCarousel extends HTMLElement {
 	list = null;
 	index = 0;
-	indexImage = 0;
 	indexProcessed = {};
 	first = true;
 	constructor() {
@@ -254,13 +253,7 @@ autoplay hint {
 		var div = this._root.appendChild(document.createElement('div'));
 		var data = div.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('nav'));
-		var imageContainer = data.appendChild(document.createElement('imageContainer'));
-		imageContainer.appendChild(document.createElement('img'));
-		var video = imageContainer.appendChild(document.createElement('video'));
-		video.controls = true;
-		video.autoplay = true;
-		video.setAttribute('playsinline', true);
-		video.appendChild(document.createElement('source')).type = 'video/mp4';
+		data.appendChild(document.createElement('imageContainer'));
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
 		next.innerText = '>';
@@ -382,14 +375,12 @@ autoplay hint {
 
 	open(list, index, autoplay, style) {
 		if (index) {
-			var id = parseInt(index.split('.')[0]);
 			for (var i = 0; i < list.length; i++) {
-				if (id == list[i].index) {
+				if (index == list[i].index) {
 					this.index = i;
 					break;
 				}
 			}
-			this.indexImage = parseInt(index.split('.')[1]);
 		}
 		if (style)
 			this._root.querySelector('style.custom').textContent = style;
@@ -403,18 +394,11 @@ autoplay hint {
 	}
 
 	navigate(next) {
-		this.indexImage = this.indexImage + (next ? 1 : -1);
-		if (this.indexImage >= this.list[this.index].src.length) {
-			this.indexImage = 0;
-			this.index++;
-			if (this.index >= this.list.length)
-				this.index = 0;
-		} else if (this.indexImage < 0) {
-			this.index--;
-			if (this.index < 0)
-				this.index = this.list.length - 1;
-			this.indexImage = this.list[this.index].src.length - 1;
-		}
+		this.index = this.index + (next ? 1 : -1);
+		if (this.index >= this.list.length)
+			this.index = 0;
+		else if (this.index < 0)
+			this.index = this.list.length - 1;
 		this.update();
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
@@ -422,20 +406,17 @@ autoplay hint {
 	update() {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
-		this.updateImage(this.indexImage);
+		this.updateImage();
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}
 
-	updateImage(index) {
-		this.indexImage = index;
-		var position = 0, total = 0;
+	updateImage() {
+		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
 			if (this.index > i)
-				position += this.list[i].src.length;
-			total += this.list[i].src.length;
+				position++;
 		}
-		position += this.indexImage + 1;
-		this._root.querySelector('hint').innerText = position + '/' + total;
+		this._root.querySelector('hint').innerText = position + '/' + this.list[i].length;
 		var img = this._root.querySelector('div img');
 		var video = this._root.querySelector('div video');
 		video.pause();
@@ -443,16 +424,25 @@ autoplay hint {
 		img.style.display = 'none';
 		video.querySelector('source').src = '';
 		video.style.display = 'none';
-		var src = this.list[this.index].src[this.indexImage];
+		var src = ;
 		if (src) {
-			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-				video.style.display = '';
-				video.querySelector('source').src = '/med/' + src;
-				video.load();
-				video.play();
-			} else {
-				img.src = '/med/' + src;
-				img.style.display = '';
+			var imageContainer = this._root.querySelector('imageContainer');
+			imageContainer.textContent = '';
+			for (var i = 0; i < this.list[this.index].src.length; i++) {
+				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+					var video = imageContainer.appendChild(document.createElement('video'));
+					video.controls = true;
+					video.autoplay = false;
+					video.setAttribute('playsinline', true);
+					video.appendChild(document.createElement('source')).type = 'video/mp4';
+					video.style.display = '';
+					video.querySelector('source').src = '/med/' + src;
+					video.load();
+				} else {
+					var img = imageContainer.appendChild(document.createElement('img'));
+					img.src = '/med/' + src;
+					img.style.display = '';
+				}
 			}
 		}
 		this._root.querySelector('nav').textContent = '';
@@ -462,7 +452,7 @@ autoplay hint {
 				var dot = nav.appendChild(document.createElement('dot'));
 				dot.innerText = i + 1;
 				dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				if (i == this.indexImage)
+				if (i == 0)
 					dot.classList.add('selected');
 			}
 			nav.style.width = (3 * this.list[this.index].src.length) + 'em';
