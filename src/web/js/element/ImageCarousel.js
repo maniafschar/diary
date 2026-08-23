@@ -416,7 +416,7 @@ autoplay hint {
 			if (this.index > i)
 				position++;
 		}
-		this._root.querySelector('hint').innerText = position + '/' + this.list[i].length;
+		this._root.querySelector('hint').innerText = position + '/' + this.list.length;
 		var img = this._root.querySelector('div img');
 		var video = this._root.querySelector('div video');
 		video.pause();
