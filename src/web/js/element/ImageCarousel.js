@@ -417,29 +417,26 @@ autoplay hint {
 				position++;
 		}
 		this._root.querySelector('hint').innerText = position + '/' + this.list.length;
-		if (this.list[this.index].src) {
+		var src = this.list[this.index].src;
+		if (src) {
 			var imageContainer = this._root.querySelector('imageContainer');
 			imageContainer.textContent = '';
-			for (var i = 0; i < this.list[this.index].src.length; i++) {
-				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+			for (var i = 0; i < src.length; i++) {
+				if (src[i].indexOf('.mp4') > 0 || src[i].indexOf('.mov') > 0) {
 					var video = imageContainer.appendChild(document.createElement('video'));
 					video.controls = true;
 					video.autoplay = false;
 					video.setAttribute('playsinline', true);
 					video.appendChild(document.createElement('source')).type = 'video/mp4';
-					video.style.display = '';
-					video.querySelector('source').src = '/med/' + src;
+					video.querySelector('source').src = '/med/' + src[i];
 					video.load();
-				} else {
-					var img = imageContainer.appendChild(document.createElement('img'));
-					img.src = '/med/' + src;
-					img.style.display = '';
-				}
+				} else
+					imageContainer.appendChild(document.createElement('img')).src = '/med/' + src[i];
 			}
 		}
-		this._root.querySelector('nav').textContent = '';
+		var nav = this._root.querySelector('nav');
+		nav.textContent = '';
 		if (this.list[this.index].src.length > 1) {
-			var nav = this._root.querySelector('nav');
 			for (var i = 0; i < this.list[this.index].src.length; i++) {
 				var dot = nav.appendChild(document.createElement('dot'));
 				dot.innerText = i + 1;
