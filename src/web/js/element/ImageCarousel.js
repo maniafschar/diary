@@ -424,8 +424,7 @@ autoplay hint {
 		img.style.display = 'none';
 		video.querySelector('source').src = '';
 		video.style.display = 'none';
-		var src = ;
-		if (src) {
+		if (this.list[this.index].src) {
 			var imageContainer = this._root.querySelector('imageContainer');
 			imageContainer.textContent = '';
 			for (var i = 0; i < this.list[this.index].src.length; i++) {
