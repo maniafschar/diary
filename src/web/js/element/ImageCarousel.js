@@ -394,7 +394,7 @@ autoplay hint {
 		if (autoplay)
 			this.autoplay();
 		else
-			this.update();
+			this.update(true);
 		this._root.host.style.transition = 'all ease-out .4s';
 		this._root.host.style.transform = 'scale(1)';
 	}
