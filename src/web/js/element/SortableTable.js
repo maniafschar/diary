@@ -71,7 +71,7 @@ td,
 th {
 	vertical-align: top;
 	text-align: left;
-	padding: 0.5em 0.75em;
+	padding: 0.5em 0;
 	position: relative;
 	font-size: 1em;
 	overflow: auto;
@@ -80,6 +80,12 @@ th {
 	box-sizing: border-box;
 	display: inline-block;
 	white-space: nowrap;
+	border-left: solid 0.5em transparent;
+}
+
+td:last-child,
+th:last-child {
+	border-right: solid 0.5em transparent;
 }
 
 th {
