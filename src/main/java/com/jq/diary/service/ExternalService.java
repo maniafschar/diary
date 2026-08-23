@@ -41,10 +41,10 @@ public class ExternalService {
 		result.put("address", (((address.road == null ? "" : address.road)
 				+ (address.house_number == null ? "" : " " + address.house_number)).trim() + "\n" +
 				((address.postcode == null ? "" : address.postcode)
-						+ (address.city == null
-								? (address.town == null ? (address.village == null ? " " : address.village)
+						+ " " + (address.city == null
+								? (address.town == null ? (address.village == null ? "" : address.village)
 										: address.town)
-								: " " + address.city))
+								: address.city))
 						.trim()
 				+ "\n" +
 				(address.country == null ? "" : address.country)).trim());
