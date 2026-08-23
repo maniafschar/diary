@@ -104,7 +104,7 @@ imageContainer {
 	width: 100%;
 }
 data>nav {
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	top: 0;
 	text-align: center;
