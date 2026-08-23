@@ -400,12 +400,7 @@ autoplay hint {
 	}
 
 	navigate(next) {
-		this.index = this.index + (next ? 1 : -1);
-		if (this.index >= this.list.length)
-			this.index = 0;
-		else if (this.index < 0)
-			this.index = this.list.length - 1;
-		if (this.list[this.index].src > 1) {
+		if (this.list[this.index].src.length > 1) {
 			if (next) {
 				var e = document.querySelector('image-carousel')._root.querySelector('nav dot.selected').nextElementSibling;
 				if (e) {
@@ -420,14 +415,19 @@ autoplay hint {
 				}
 			}
 		}
-		this.update();
+		this.index = this.index + (next ? 1 : -1);
+		if (this.index >= this.list.length)
+			this.index = 0;
+		else if (this.index < 0)
+			this.index = this.list.length - 1;
+		this.update(next);
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
-	update() {
+	update(next) {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
-		this.updateImage(0);
+		this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
