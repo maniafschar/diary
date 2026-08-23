@@ -412,7 +412,7 @@ autoplay hint {
 	update() {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
-		this.updateImage();
+		this.updateImage(0);
 		this._root.querySelector('description').innerHTML = this.list[this.index].description;
 	}
 
