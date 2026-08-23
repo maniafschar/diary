@@ -400,6 +400,11 @@ autoplay hint {
 	}
 
 	navigate(next) {
+		this.index = this.index + (next ? 1 : -1);
+		if (this.index >= this.list.length)
+			this.index = 0;
+		else if (this.index < 0)
+			this.index = this.list.length - 1;
 		if (this.list[this.index].src > 1) {
 			if (next) {
 				var e = document.querySelector('image-carousel')._root.querySelector('nav dot.selected').nextElementSibling;
@@ -415,11 +420,6 @@ autoplay hint {
 				}
 			}
 		}
-		this.index = this.index + (next ? 1 : -1);
-		if (this.index >= this.list.length)
-			this.index = 0;
-		else if (this.index < 0)
-			this.index = this.list.length - 1;
 		this.update();
 		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
