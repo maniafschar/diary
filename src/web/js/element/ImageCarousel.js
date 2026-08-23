@@ -417,13 +417,6 @@ autoplay hint {
 				position++;
 		}
 		this._root.querySelector('hint').innerText = position + '/' + this.list.length;
-		var img = this._root.querySelector('div img');
-		var video = this._root.querySelector('div video');
-		video.pause();
-		img.src = '';
-		img.style.display = 'none';
-		video.querySelector('source').src = '';
-		video.style.display = 'none';
 		if (this.list[this.index].src) {
 			var imageContainer = this._root.querySelector('imageContainer');
 			imageContainer.textContent = '';
