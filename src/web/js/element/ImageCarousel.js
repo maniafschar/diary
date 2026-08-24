@@ -446,14 +446,16 @@ autoplay hint {
 		video.querySelector('source').src = '';
 		video.style.display = 'none';
 		var src = this.list[this.index].src[index];
-		if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-			video.style.display = '';
-			video.querySelector('source').src = '/med/' + src;
-			video.load();
-			video.play();
-		} else {
-			img.src = '/med/' + src;
-			img.style.display = '';
+		if (src) {
+			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+				video.style.display = '';
+				video.querySelector('source').src = '/med/' + src;
+				video.load();
+				video.play();
+			} else {
+				img.src = '/med/' + src;
+				img.style.display = '';
+			}
 		}
 		this._root.querySelector('nav').textContent = '';
 		if (this.list[this.index].src.length > 1) {
