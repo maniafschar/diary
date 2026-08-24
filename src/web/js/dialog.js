@@ -216,7 +216,6 @@ hint {
 	display: block;
 	position: relative;
 }
-
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
 			popup.style.minWidth = '20em';
@@ -255,9 +254,9 @@ ${dialog.stylePictures}`;
 					}
 				});
 			}
-			dialog.createButton(popup, 'action.contactPatch()');
 		} else
 			popup.appendChild(document.createTextNode(contact.name));
+		dialog.createButton(popup, 'action.contactPatch()');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 

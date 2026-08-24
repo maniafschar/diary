@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.service.AuthorizationService;
@@ -39,22 +40,29 @@ public class ContactApi extends ApplicationApi {
 	@PatchMapping
 	public BigInteger patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Contact contact) throws EmailException {
-		final Contact c = this.authorizationService.requireContact(contactId, clientId);
+		final Contact original = this.authorizationService.requireContact(contactId, clientId);
 		if (contact.getId() == null) {
-			contact.setClient(this.authorizationService.requireContact(contactId, clientId).getClient());
+			contact.setClient(original.getClient());
 			this.contactService.save(contact);
 			return contact.getId();
 		}
 		if (contact.getEmail() != null)
-			c.setEmail(contact.getEmail());
+			original.setEmail(contact.getEmail());
 		if (contact.getName() != null)
-			c.setName(contact.getName());
+			original.setName(contact.getName());
 		if (contact.getImage() != null)
-			c.setImage(contact.getImage());
+			original.setImage(contact.getImage());
 		if (contact.getNote() != null)
-			c.setNote(contact.getNote());
-		this.contactService.save(c);
-		return c.getId();
+			original.setNote(contact.getNote());
+		this.contactService.save(original);
+		if (contact.getClient() != null && original.getClient().getId().equals(clientId)) {
+			final Client client = original.getClient();
+			client.setImage(contact.getClient().getImage());
+			client.setNote(contact.getClient().getNote());
+			client.setName(contact.getClient().getName());
+			this.repository.save(client);
+		}
+		return original.getId();
 	}
 
 	@GetMapping("list")

@@ -220,7 +220,7 @@ class action {
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
-		document.querySelector('body>[name="groupname"]').innerText = '';
+		document.querySelector('body>[name="clientName"]').innerText = '';
 	}
 
 	static eventImageDelete(event, id) {
@@ -320,6 +320,8 @@ class action {
 		api.contact.patch(
 			contact,
 			id => {
+				if (contact.client.name)
+					document.querySelector('body>[name="clientName"]') = contact.client.name;
 				document.dispatchEvent(new CustomEvent('contact', { detail: { id: id } }));
 				document.dispatchEvent(new CustomEvent('popup'));
 			}

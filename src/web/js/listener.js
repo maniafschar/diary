@@ -168,12 +168,12 @@ thumbnail delete {
 			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			document.querySelector('body>button[name="logoff"]').style.display = '';
-			var groupname = document.querySelector('body>[name="groupname"]');
-			groupname.innerText = api.clients[api.clientId].name;
-			groupname.style.display = '';
+			var clientName = document.querySelector('body>[name="clientName"]');
+			clientName.innerText = api.clients[api.clientId].name;
+			clientName.style.display = '';
 			if (Object.keys(api.clients).length > 1) {
-				groupname.style.cursor = 'pointer';
-				groupname.onclick = dialog.client;
+				clientName.style.cursor = 'pointer';
+				clientName.onclick = dialog.client;
 			}
 
 			var table = document.querySelector('event sortable-table');
