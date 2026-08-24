@@ -111,7 +111,7 @@ button.speech {
 			host.startRecording();
 	}
 	startSpeechRecognition() {
-		var host = this.getRootNode().host;
+		var host = this;
 		host.speechRecognition = new SpeechRecognition();
 		host.speechRecognition.lang = 'de-DE';
 		host.speechRecognition.interimResults = true;
@@ -147,7 +147,7 @@ button.speech {
 		//host.captureAudioButton.textContent = 'Stop Transcription';
 	}
 	startRecording() {
-		var host = this.getRootNode().host;
+		var host = this;
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
 				host.recordingStream = stream;
@@ -202,7 +202,7 @@ button.speech {
 			});
 	}
 	stopRecording() {
-		var host = this.getRootNode().host;
+		var host = this;
 		if (host.mediaRecorder && host.mediaRecorder.state === 'recording')
 			host.mediaRecorder.stop();
 		else {
@@ -212,7 +212,7 @@ button.speech {
 		}
 	}
 	stopSpeechRecognition() {
-		var host = this.getRootNode().host;
+		var host = this;
 		if (host.speechRecognition)
 			host.speechRecognition.stop();
 		host.isRecording = false;
