@@ -82,20 +82,21 @@ button.speech {
 		this.audioPlayer.controls = 'hidden';
 	}
 	captureAudio() {
+		var host = this.getRootNode().host;
 		if (navigator.device && navigator.device.capture) {
 			navigator.device.capture.captureAudio(
-				this.captureSuccess,
-				this.captureError,
+				host.captureSuccess,
+				host.captureError,
 				{ limit: 1 }
 			);
 			return;
 		}
 
-		if (this.speechRecognition) {
-			if (this.isRecording)
-				this.stopSpeechRecognition();
+		if (host.speechRecognition) {
+			if (host.isRecording)
+				host.stopSpeechRecognition();
 			else
-				this.startSpeechRecognition();
+				host.startSpeechRecognition();
 			return;
 		}
 
@@ -104,81 +105,82 @@ button.speech {
 			return;
 		}
 
-		if (this.isRecording)
-			this.stopRecording();
+		if (host.isRecording)
+			host.stopRecording();
 		else
-			this.startRecording();
+			host.startRecording();
 	}
 	startSpeechRecognition() {
-		this.speechRecognition = new SpeechRecognition();
-		this.speechRecognition.lang = 'de-DE';
-		this.speechRecognition.interimResults = true;
-		this.speechRecognition.continuous = false;
-		this.speechTranscript = '';
+		var host = this.getRootNode().host;
+		host.speechRecognition = new SpeechRecognition();
+		host.speechRecognition.lang = 'de-DE';
+		host.speechRecognition.interimResults = true;
+		host.speechRecognition.continuous = false;
+		host.speechTranscript = '';
 
-		this.speechRecognition.onresult = event => {
-			this.speechTranscript = Array.from(event.results)
+		host.speechRecognition.onresult = event => {
+			host.speechTranscript = Array.from(event.results)
 				.map(result => result[0].transcript)
 				.join(' ');
-			this._root.querySelector('textarea').value = this.speechTranscript;
-			this.currentEntry.description = this.speechTranscript;
+			host._root.querySelector('textarea').value = host.speechTranscript;
+			host.currentEntry.description = host.speechTranscript;
 		};
 
-		this.speechRecognition.onend = () => {
-			this.isRecording = false;
-			//this.captureAudioButton.textContent = 'Record Audio Description';
-			console.log(this.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.');
-			this.speechRecognition = null;
+		host.speechRecognition.onend = () => {
+			host.isRecording = false;
+			//host.captureAudioButton.textContent = 'Record Audio Description';
+			console.log(host.speechTranscript ? 'Speech transcription complete.' : 'No speech detected.');
+			host.speechRecognition = null;
 		};
 
-		this.speechRecognition.onerror = event => {
+		host.speechRecognition.onerror = event => {
 			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
-			this.isRecording = false;
-			//this.captureAudioButton.textContent = 'Record Audio Description';
+			host.isRecording = false;
+			//host.captureAudioButton.textContent = 'Record Audio Description';
 			console.log('Speech transcription failed.');
-			this.speechRecognition = null;
+			host.speechRecognition = null;
 		};
 
-		this.speechRecognition.start();
-		this.isRecording = true;
+		host.speechRecognition.start();
+		host.isRecording = true;
 		console.log('Listening for speech...');
-		//this.captureAudioButton.textContent = 'Stop Transcription';
+		//host.captureAudioButton.textContent = 'Stop Transcription';
 	}
 	startRecording() {
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
-				this.recordingStream = stream;
-				this.recordingStream = [];
-				this.mediaRecorder = new MediaRecorder(stream);
+				var host = this.getRootNode().host;
+				host.recordingStream = stream;
+				host.recordingStream = [];
+				host.mediaRecorder = new MediaRecorder(stream);
 
-				this.mediaRecorder.ondataavailable = event => {
+				host.mediaRecorder.ondataavailable = event => {
 					if (event.data && event.data.size > 0) {
-						this.recordingStream.push(event.data);
+						host.recordingStream.push(event.data);
 					}
 				};
 
-				var t = this;
-				this.mediaRecorder.onstop = () => {
+				host.mediaRecorder.onstop = () => {
 					const blob = new Blob(t.recordingStream, { type: 'audio/webm' });
 					const reader = new FileReader();
 
 					reader.onload = () => {
-						t.currentEntry.audioFile = reader.result;
-						t.currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
-						console.log(`Audio recorded: ${t.currentEntry.audioName}`);
-						t.audioPlayer.hidden = false;
-						t.audioPlayer.src = t.currentEntry.audioFile;
-						t.appendAudioNoteToDescription();
-						//t.captureAudioButton.textContent = 'Record Audio Description';
-						t.isRecording = false;
-						t.stopRecordingStream();
+						host.currentEntry.audioFile = reader.result;
+						host.currentEntry.audioName = `Browser audio ${new Date().toISOString()}`;
+						console.log(`Audio recorded: ${host.currentEntry.audioName}`);
+						host.audioPlayer.hidden = false;
+						host.audioPlayer.src = host.currentEntry.audioFile;
+						host.appendAudioNoteToDescription();
+						//host.captureAudioButton.textContent = 'Record Audio Description';
+						host.isRecording = false;
+						host.stopRecordingStream();
 					};
 
 					reader.onerror = () => {
 						alert('Unable to read recorded audio.');
-						t.isRecording = false;
-						//t.captureAudioButton.textContent = 'Record Audio Description';
-						t.stopRecordingStream();
+						host.isRecording = false;
+						//host.captureAudioButton.textContent = 'Record Audio Description';
+						host.stopRecordingStream();
 					};
 
 					reader.readAsDataURL(blob);
@@ -186,52 +188,56 @@ button.speech {
 
 				this.mediaRecorder.onerror = () => {
 					alert('Browser audio recording failed.');
-					t.isRecording = false;
-					//t.captureAudioButton.textContent = 'Record Audio Description';
-					t.stopRecordingStream();
+					host.isRecording = false;
+					//host.captureAudioButton.textContent = 'Record Audio Description';
+					host.stopRecordingStream();
 				};
 
-				this.mediaRecorder.start();
-				this.isRecording = true;
+				host.mediaRecorder.start();
+				host.isRecording = true;
 				console.log('Recording audio...');
-				//this.captureAudioButton.textContent = 'Stop Recording';
+				//host.captureAudioButton.textContent = 'Stop Recording';
 			})
 			.catch(error => {
 				alert('Unable to access microphone: ' + (error.message || error));
 			});
 	}
 	stopRecording() {
-		if (this.mediaRecorder && this.mediaRecorder.state === 'recording')
-			this.mediaRecorder.stop();
+		var host = this.getRootNode().host;
+		if (host.mediaRecorder && host.mediaRecorder.state === 'recording')
+			host.mediaRecorder.stop();
 		else {
-			this.stopRecordingStream();
-			this.isRecording = false;
-			//this.captureAudioButton.textContent = 'Record Audio Description';
+			host.stopRecordingStream();
+			host.isRecording = false;
+			//host.captureAudioButton.textContent = 'Record Audio Description';
 		}
 	}
 	stopSpeechRecognition() {
-		if (this.speechRecognition)
-			this.speechRecognition.stop();
-		this.isRecording = false;
-		//this.captureAudioButton.textContent = 'Record Audio Description';
+		var host = this.getRootNode().host;
+		if (host.speechRecognition)
+			host.speechRecognition.stop();
+		host.isRecording = false;
+		//host.captureAudioButton.textContent = 'Record Audio Description';
 		console.log('Speech transcription stopped.');
-		this.speechRecognition = null;
+		host.speechRecognition = null;
 	}
 	stopRecordingStream() {
-		if (this.recordingStream) {
-			this.recordingStream.getTracks().forEach(track => track.stop());
-			this.recordingStream = null;
+		var host = this.getRootNode().host;
+		if (host.recordingStream) {
+			host.recordingStream.getTracks().forEach(track => track.stop());
+			host.recordingStream = null;
 		}
-		this.mediaRecorder = null;
+		host.mediaRecorder = null;
 	}
 	captureSuccess(mediaFiles) {
+		var host = this.getRootNode().host;
 		const [file] = mediaFiles;
-		this.currentEntry.audioFile = file.fullPath || file.localURL || file.name;
-		this.currentEntry.audioName = file.name || 'Recorded audio';
-		console.log(`Audio recorded: ${this.currentEntry.audioName}`);
-		this.audioPlayer.hidden = false;
-		this.audioPlayer.src = this.currentEntry.audioFile;
-		this.appendAudioNoteToDescription();
+		host.currentEntry.audioFile = file.fullPath || file.localURL || file.name;
+		host.currentEntry.audioName = file.name || 'Recorded audio';
+		console.log(`Audio recorded: ${host.currentEntry.audioName}`);
+		host.audioPlayer.hidden = false;
+		host.audioPlayer.src = host.currentEntry.audioFile;
+		host.appendAudioNoteToDescription();
 	}
 	captureError(error) {
 		alert('Audio capture failed: ' + error.code);
