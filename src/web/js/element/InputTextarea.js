@@ -155,13 +155,12 @@ button.speech {
 				host.mediaRecorder = new MediaRecorder(stream);
 
 				host.mediaRecorder.ondataavailable = event => {
-					if (event.data && event.data.size > 0) {
+					if (event.data && event.data.size > 0)
 						host.recordingStream.push(event.data);
-					}
 				};
 
 				host.mediaRecorder.onstop = () => {
-					const blob = new Blob(t.recordingStream, { type: 'audio/webm' });
+					const blob = new Blob(host.recordingStream, { type: 'audio/webm' });
 					const reader = new FileReader();
 
 					reader.onload = () => {
