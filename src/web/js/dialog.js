@@ -158,7 +158,7 @@ ${dialog.stylePictures}`;
 			};
 		}
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea');
-		dialog.createField(element, 'Bewertung', 'rating', 'input-rating').setAttribute('type', 'edit');
+		dialog.createField(element, 'Bewertung', 'rating', 'input-rating').setAttribute('type', 'edit').style.textAlign = 'center';
 		var buttonDiv = dialog.createButton(element, 'action.eventPost()');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location'));
