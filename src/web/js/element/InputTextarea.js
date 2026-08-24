@@ -100,7 +100,7 @@ button.speech {
 			return;
 		}
 
-		if (!navigator.mediaDevices || !window.MediaRecorder) {
+		if (!navigator.mediaDevices || !window.) {
 			alert('Audio capture plugin is not available and browser recording is unsupported.');
 			return;
 		}
@@ -186,7 +186,7 @@ button.speech {
 					reader.readAsDataURL(blob);
 				};
 
-				this.mediaRecorder.onerror = () => {
+				host.mediaRecorder.onerror = () => {
 					alert('Browser audio recording failed.');
 					host.isRecording = false;
 					//host.captureAudioButton.textContent = 'Record Audio Description';
