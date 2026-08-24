@@ -147,9 +147,9 @@ button.speech {
 		//host.captureAudioButton.textContent = 'Stop Transcription';
 	}
 	startRecording() {
+		var host = this.getRootNode().host;
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
-				var host = this.getRootNode().host;
 				host.recordingStream = stream;
 				host.recordingStream = [];
 				host.mediaRecorder = new MediaRecorder(stream);
