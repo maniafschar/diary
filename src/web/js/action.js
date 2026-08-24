@@ -321,7 +321,7 @@ class action {
 			contact,
 			id => {
 				if (contact.client.name)
-					document.querySelector('body>[name="clientName"]') = contact.client.name;
+					document.querySelector('body>[name="clientName"]').innerText = contact.client.name;
 				document.dispatchEvent(new CustomEvent('contact', { detail: { id: id } }));
 				document.dispatchEvent(new CustomEvent('popup'));
 			}
