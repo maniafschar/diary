@@ -100,7 +100,7 @@ button.speech {
 			return;
 		}
 
-		if (!navigator.mediaDevices || !window.) {
+		if (!navigator.mediaDevices || !window.MediaRecorder) {
 			alert('Audio capture plugin is not available and browser recording is unsupported.');
 			return;
 		}
