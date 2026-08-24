@@ -68,6 +68,7 @@ input {
 	width: 100%;
 	color: black;
 	user-select: text;
+	opacity: 0.5;
 }`;
 		var selection = this._root.appendChild(document.createElement('selection'));
 		selection = selection.appendChild(document.createElement('div'));
