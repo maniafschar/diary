@@ -77,12 +77,11 @@ button.speech {
 		var speechButton = this._root.appendChild(document.createElement('button'));
 		speechButton.classList.add('icon');
 		speechButton.classList.add('speech');
-		var t = this;
-		speechButton.onclick = () => this.captureAudio(t);
+		speechButton.onclick = this.captureAudio;
 		this.audioPlayer = document.createElement('audio-player');
 		this.audioPlayer.controls = 'hidden';
 	}
-	captureAudio(t) {
+	captureAudio() {
 		if (navigator.device && navigator.device.capture) {
 			navigator.device.capture.captureAudio(
 				this.captureSuccess,
@@ -94,9 +93,9 @@ button.speech {
 
 		if (this.speechRecognition) {
 			if (this.isRecording)
-				this.stopSpeechRecognition(t);
+				this.stopSpeechRecognition();
 			else
-				this.startSpeechRecognition(t);
+				this.startSpeechRecognition();
 			return;
 		}
 
@@ -106,11 +105,11 @@ button.speech {
 		}
 
 		if (this.isRecording)
-			this.stopRecording(t);
+			this.stopRecording();
 		else
-			this.startRecording(t);
+			this.startRecording();
 	}
-	startSpeechRecognition(t) {
+	startSpeechRecognition() {
 		this.speechRecognition = new SpeechRecognition();
 		this.speechRecognition.lang = 'de-DE';
 		this.speechRecognition.interimResults = true;
@@ -121,7 +120,7 @@ button.speech {
 			this.speechTranscript = Array.from(event.results)
 				.map(result => result[0].transcript)
 				.join(' ');
-			descriptionInput.value = this.speechTranscript;
+			this._root.querySelector('textarea').value = this.speechTranscript;
 			this.currentEntry.description = this.speechTranscript;
 		};
 
@@ -145,7 +144,7 @@ button.speech {
 		console.log('Listening for speech...');
 		//this.captureAudioButton.textContent = 'Stop Transcription';
 	}
-	startRecording(t) {
+	startRecording() {
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
 				this.recordingStream = stream;
@@ -201,7 +200,7 @@ button.speech {
 				alert('Unable to access microphone: ' + (error.message || error));
 			});
 	}
-	stopRecording(t) {
+	stopRecording() {
 		if (this.mediaRecorder && this.mediaRecorder.state === 'recording')
 			this.mediaRecorder.stop();
 		else {
@@ -210,7 +209,7 @@ button.speech {
 			//this.captureAudioButton.textContent = 'Record Audio Description';
 		}
 	}
-	stopSpeechRecognition(t) {
+	stopSpeechRecognition() {
 		if (this.speechRecognition)
 			this.speechRecognition.stop();
 		this.isRecording = false;
@@ -218,7 +217,7 @@ button.speech {
 		console.log('Speech transcription stopped.');
 		this.speechRecognition = null;
 	}
-	stopRecordingStream(t) {
+	stopRecordingStream() {
 		if (this.recordingStream) {
 			this.recordingStream.getTracks().forEach(track => track.stop());
 			this.recordingStream = null;
@@ -239,10 +238,11 @@ button.speech {
 	}
 	appendAudioNoteToDescription() {
 		const note = '[Audio recorded]';
-		const currentText = descriptionInput.value.trim();
+		var input = this._root.querySelector('textarea');
+		const currentText = input.value.trim();
 		if (currentText.includes(note))
 			return;
-		descriptionInput.value = currentText ? `${currentText}\n${note}` : note;
-		this.currentEntry.description = descriptionInput.value;
+		input.value = currentText ? `${currentText}\n${note}` : note;
+		this.currentEntry.description = input.value;
 	}
 }
