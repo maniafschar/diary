@@ -243,11 +243,12 @@ button.speech {
 	}
 	appendAudioNoteToDescription() {
 		const note = '[Audio recorded]';
-		var input = this._root.querySelector('textarea');
+		var host = this.getRootNode().host;
+		var input = host._root.querySelector('textarea');
 		const currentText = input.value.trim();
 		if (currentText.includes(note))
 			return;
 		input.value = currentText ? `${currentText}\n${note}` : note;
-		this.currentEntry.description = input.value;
+		host.currentEntry.description = input.value;
 	}
 }
