@@ -46,9 +46,9 @@ public class ContactApi extends ApplicationApi {
 			this.contactService.save(contact);
 			return contact.getId();
 		}
-		if (contact.getEmail() != null)
+		if (Utilities.isEmail(contact.getEmail())
 			original.setEmail(contact.getEmail());
-		if (contact.getName() != null)
+		if (contact.getName() != null && contact.getName().trim().length() > 0)
 			original.setName(contact.getName());
 		if (contact.getImage() != null)
 			original.setImage(contact.getImage());
