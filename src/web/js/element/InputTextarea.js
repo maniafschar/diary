@@ -86,7 +86,7 @@ button.speech {
 		this.speechRecognition.continuous = true;
 		this.prepend = this._root.querySelector('textarea').value;
 		if (this.prepend)
-			this.prepend += ' ';
+			this.prepend += '\n\n';
 
 		this.speechRecognition.onresult = event => {
 			this._root.querySelector('textarea').value = this.prepend +
