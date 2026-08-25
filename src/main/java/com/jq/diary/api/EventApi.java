@@ -2,6 +2,7 @@ package com.jq.diary.api;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
@@ -45,7 +46,7 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
-		return Utilities.filter(
+		return filter(
 				this.eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
 	}
 
@@ -169,5 +170,68 @@ public class EventApi extends ApplicationApi {
 		if (this.authorizationService.requireContact(contactId, clientId).getId()
 				.equals(eventImage.getContact().getId()))
 			this.eventService.delete(eventImage);
+	}
+
+	private List<Event> filter(List<Event> list) {
+		final List<Event> filtered = new ArrayList<>();
+		for (final Event event : list) {
+			final Event filteredEvent = new Event();
+			filteredEvent.setDate(event.getDate());
+			filteredEvent.setId(event.getId());
+			filteredEvent.setNote(event.getNote());
+			filteredEvent.setRating(event.getRating());
+			filteredEvent.setRatingCount(event.getRatingCount());
+
+			filteredEvent.setContact(new Contact());
+			filteredEvent.getContact().setId(event.getContact().getId());
+			filteredEvent.getContact().setName(event.getContact().getName());
+
+			filteredEvent.setLocation(new Location());
+			filteredEvent.getLocation().setId(event.getLocation().getId());
+			filteredEvent.getLocation().setAddress(event.getLocation().getAddress());
+			filteredEvent.getLocation().setAltitude(event.getLocation().getAltitude());
+			filteredEvent.getLocation().setLatitude(event.getLocation().getLatitude());
+			filteredEvent.getLocation().setLongitude(event.getLocation().getId());
+			filteredEvent.getLocation().setName(event.getLocation().getName());
+
+			if (event.getEventImages() != null) {
+				filteredEvent.setEventImages(new ArrayList<EventImages>());
+				for (final EventImage eventImage : event.getEventImages()) {
+					final EventImage filteredEventImage = new EventImage();
+					filteredEventImage.setId(eventImage.getId());
+					filteredEventImage.setImage(eventImage.getImage());
+					filteredEventImage.setImageThumbnail(eventImage.getImageThumbnail());
+					filteredEvent.getEventImages().add(filteredEventImage);
+				}
+			}
+
+			if (event.getEventRatings() != null) {
+				filteredEvent.setEventRatings(new ArrayList<EventRating>());
+				for (final EventRating eventRating : event.getEventRatings()) {
+					final EventRating filteredEventRating = new EventRating();
+					filteredEventRating.setId(eventRating.getId());
+					filteredEventRating.setRating(eventRating.getRating());
+					filteredEventRating.setContact(new Contact());
+					filteredEventRating.getContact().setId(eventRating.getId());
+					filteredEventRating.getContact().setName(eventRating.getName());
+					filteredEvent.getEventRatings().add(filteredEventRating);
+				}
+			}
+
+			if (event.getContactEvents() != null) {
+				filteredEvent.setContactEvents(new ArrayList<ContactEvent>());
+				for (final ContactEvent contactEvent : event.getContactEvents()) {
+					final ContactEvent filteredContactEvent = new ContactEvent();
+					filteredContactEvent.setId(contactEvent.getId());
+					filteredContactEvent.setContact(new Contact());
+					filteredContactEvent.getContact().setId(contactEvent.getId());
+					filteredContactEvent.getContact().setName(contactEvent.getName());
+					filteredEvent.getContactEvents().add(filteredContactEvent);
+				}
+			}
+
+			filtered.add(filteredEvent);
+		}
+		return filtered;
 	}
 }
