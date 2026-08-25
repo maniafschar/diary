@@ -71,7 +71,7 @@ public class Event extends BaseEntity {
 	}
 
 	public void setNote(final String note) {
-		this.note = note.length() > Utilities.MAX_TEXT_LENGTH ? note.substring(0, Utilities.MAX_TEXT_LENGTH) : note;
+		this.note = note != null && note.length() > Utilities.MAX_TEXT_LENGTH ? note.substring(0, Utilities.MAX_TEXT_LENGTH) : note;
 	}
 
 	public Contact getContact() {
