@@ -35,7 +35,7 @@ textarea {
 }
 
 button.speech {
-	background-image: url(image/location.svg);
+	background-image: url(image/micro.svg);
 	background-size: 1.4em;
 	top: 0;
 	right: 0;
