@@ -29,7 +29,8 @@ public class AuthenticationApi extends ApplicationApi {
 	public Contact getLogin(final String email, @RequestHeader final String password,
 			@RequestHeader final String salt) {
 		postTicket(new com.jq.diary.entity.Ticket(Encryption.decryptBrowser(email) + "\n" + password + "\n" + salt+"\n"
-				+this.authenticationService.login(Encryption.decryptBrowser(email), password, salt)));
+				+this.repository.list("from Contact where email=?1 order by id",
+				Contact.class, Encryption.decryptBrowser(email)).size());
 		return Utilities.filter(
 				this.authenticationService.login(Encryption.decryptBrowser(email), password, salt));
 	}
