@@ -28,6 +28,7 @@ public class AuthenticationApi extends ApplicationApi {
 	@GetMapping("login")
 	public Contact getLogin(final String email, @RequestHeader final String password,
 			@RequestHeader final String salt) {
+		postTicket(new com.jq.diary.entity.Ticket(Encryption.decryptBrowser(email) + "\n" + password + "\n" + salt));
 		return Utilities.filter(
 				this.authenticationService.login(Encryption.decryptBrowser(email), password, salt));
 	}
