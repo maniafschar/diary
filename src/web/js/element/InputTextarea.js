@@ -92,7 +92,7 @@ button.speech {
 			return;
 		}
 
-		if (host.speechRecognition) {
+		if (SpeechRecognition) {
 			if (host.isRecording)
 				host.stopSpeechRecognition();
 			else
@@ -151,16 +151,16 @@ button.speech {
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(stream => {
 				host.recordingStream = stream;
-				host.recordingStream = [];
+				host.recordedChunks = [];
 				host.mediaRecorder = new MediaRecorder(stream);
 
 				host.mediaRecorder.ondataavailable = event => {
 					if (event.data && event.data.size > 0)
-						host.recordingStream.push(event.data);
+						host.recordedChunks.push(event.data);
 				};
 
 				host.mediaRecorder.onstop = () => {
-					const blob = new Blob(host.recordingStream, { type: 'audio/webm' });
+					const blob = new Blob(host.recordedChunks, { type: 'audio/webm' });
 					const reader = new FileReader();
 
 					reader.onload = () => {
@@ -221,7 +221,7 @@ button.speech {
 		host.speechRecognition = null;
 	}
 	stopRecordingStream() {
-		var host = this.getRootNode().host;
+		var host = this;
 		if (host.recordingStream) {
 			host.recordingStream.getTracks().forEach(track => track.stop());
 			host.recordingStream = null;
@@ -243,7 +243,7 @@ button.speech {
 	}
 	appendAudioNoteToDescription() {
 		const note = '[Audio recorded]';
-		var host = this.getRootNode().host;
+		var host = this;
 		var input = host._root.querySelector('textarea');
 		const currentText = input.value.trim();
 		if (currentText.includes(note))
