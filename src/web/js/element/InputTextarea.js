@@ -72,6 +72,7 @@ button.speech {
 			document.createElement('audio-player').controls = 'hidden';
 		}
 	}
+
 	captureAudio() {
 		var host = this.getRootNode().host;
 		if (host.isRecording)
@@ -79,6 +80,7 @@ button.speech {
 		else
 			host.startSpeechRecognition();
 	}
+
 	startSpeechRecognition() {
 		this.speechRecognition = window.SpeechRecognition ? new SpeechRecognition() : new webkitSpeechRecognition();
 		this.speechRecognition.lang = 'de-DE';
@@ -96,14 +98,11 @@ button.speech {
 
 		this.speechRecognition.onend = () => {
 			this.isRecording = false;
-			//this.captureAudioButton.textContent = 'Record Audio Description';
 			this.speechRecognition = null;
 		};
 
 		this.speechRecognition.onerror = event => {
-			alert('Speech recognition error: ' + (event.error || event.message || 'unknown error'));
 			this.isRecording = false;
-			//this.captureAudioButton.textContent = 'Record Audio Description';
 			console.log('Speech transcription failed.');
 			this.speechRecognition = null;
 		};
@@ -111,13 +110,12 @@ button.speech {
 		this.speechRecognition.start();
 		this.isRecording = true;
 		console.log('Listening for speech...');
-		//this.captureAudioButton.textContent = 'Stop Transcription';
 	}
+
 	stopSpeechRecognition() {
 		if (this.speechRecognition)
 			this.speechRecognition.stop();
 		this.isRecording = false;
-		//this.captureAudioButton.textContent = 'Record Audio Description';
 		console.log('Speech transcription stopped.');
 		this.speechRecognition = null;
 	}
