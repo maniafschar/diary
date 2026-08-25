@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jq.diary.entity.Contact;
+import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
+import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AuthorizationService;
