@@ -62,7 +62,7 @@ public class Event extends BaseEntity {
 		this.rating = rating;
 	}
 
-	public void getRatingCount(final Integer ratingCount) {
+	public void setRatingCount(final Integer ratingCount) {
 		this.ratingCount = ratingCount;
 	}
 
