@@ -193,11 +193,11 @@ public class EventApi extends ApplicationApi {
 			filteredEvent.getLocation().setAddress(event.getLocation().getAddress());
 			filteredEvent.getLocation().setAltitude(event.getLocation().getAltitude());
 			filteredEvent.getLocation().setLatitude(event.getLocation().getLatitude());
-			filteredEvent.getLocation().setLongitude(event.getLocation().getId());
+			filteredEvent.getLocation().setLongitude(event.getLocation().getLongitude());
 			filteredEvent.getLocation().setName(event.getLocation().getName());
 
 			if (event.getEventImages() != null) {
-				filteredEvent.setEventImages(new ArrayList<EventImages>());
+				filteredEvent.setEventImages(new ArrayList<EventImage>());
 				for (final EventImage eventImage : event.getEventImages()) {
 					final EventImage filteredEventImage = new EventImage();
 					filteredEventImage.setId(eventImage.getId());
@@ -214,8 +214,8 @@ public class EventApi extends ApplicationApi {
 					filteredEventRating.setId(eventRating.getId());
 					filteredEventRating.setRating(eventRating.getRating());
 					filteredEventRating.setContact(new Contact());
-					filteredEventRating.getContact().setId(eventRating.getId());
-					filteredEventRating.getContact().setName(eventRating.getName());
+					filteredEventRating.getContact().setId(eventRating.getContact().getId());
+					filteredEventRating.getContact().setName(eventRating.getContact().getName());
 					filteredEvent.getEventRatings().add(filteredEventRating);
 				}
 			}
@@ -226,8 +226,8 @@ public class EventApi extends ApplicationApi {
 					final ContactEvent filteredContactEvent = new ContactEvent();
 					filteredContactEvent.setId(contactEvent.getId());
 					filteredContactEvent.setContact(new Contact());
-					filteredContactEvent.getContact().setId(contactEvent.getId());
-					filteredContactEvent.getContact().setName(contactEvent.getName());
+					filteredContactEvent.getContact().setId(contactEvent.getContact().getId());
+					filteredContactEvent.getContact().setName(contactEvent.getContact().getName());
 					filteredEvent.getContactEvents().add(filteredContactEvent);
 				}
 			}
