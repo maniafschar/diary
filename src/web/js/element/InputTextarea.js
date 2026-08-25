@@ -64,7 +64,7 @@ button.speech {
 		textarea.onkeyup = e => this.value = this._root.querySelector('textarea').value;
 		if (this.getAttribute('value'))
 			textarea.value = this.getAttribute('value');
-		if (SpeechRecognition) {
+		if (window.SpeechRecognition || window.webkitSpeechRecognition) {
 			var speechButton = this._root.appendChild(document.createElement('button'));
 			speechButton.classList.add('icon');
 			speechButton.classList.add('speech');
@@ -80,7 +80,7 @@ button.speech {
 			host.startSpeechRecognition();
 	}
 	startSpeechRecognition() {
-		this.speechRecognition = new SpeechRecognition();
+		this.speechRecognition = window.SpeechRecognition ? new SpeechRecognition() : new webkitSpeechRecognition();
 		this.speechRecognition.lang = 'de-DE';
 		this.speechRecognition.interimResults = true;
 		this.speechRecognition.continuous = true;
