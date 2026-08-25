@@ -62,8 +62,10 @@ button.speech {
 }`;
 		var textarea = this._root.appendChild(document.createElement('textarea'));
 		textarea.onkeyup = e => this.value = this._root.querySelector('textarea').value;
-		if (this.getAttribute('value'))
+		if (this.getAttribute('value')) {
 			textarea.value = this.getAttribute('value');
+			this.value = textarea.value;
+		}
 		if (window.SpeechRecognition || window.webkitSpeechRecognition) {
 			var speechButton = this._root.appendChild(document.createElement('button'));
 			speechButton.classList.add('icon');
