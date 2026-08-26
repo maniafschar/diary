@@ -450,6 +450,20 @@ autoplay hint {
 			img.style.display = 'none';
 			video.querySelector('source').src = '';
 			video.style.display = 'none';
+			this._root.querySelector('nav').textContent = '';
+			if (this.list[this.index].src.length > 1) {
+				var nav = this._root.querySelector('nav');
+				for (var i = 0; i < this.list[this.index].src.length; i++) {
+					var dot = nav.appendChild(document.createElement('dot'));
+					dot.innerText = i + 1;
+					if (i == index)
+						dot.classList.add('selected');
+					else
+						dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+				}
+				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
+				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
+			}
 			if (src) {
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
 					video.style.display = '';
@@ -476,22 +490,9 @@ autoplay hint {
 					};
 					call();
 				}
-			}
-			this._root.querySelector('nav').textContent = '';
-			if (this.list[this.index].src.length > 1) {
-				var nav = this._root.querySelector('nav');
-				for (var i = 0; i < this.list[this.index].src.length; i++) {
-					var dot = nav.appendChild(document.createElement('dot'));
-					dot.innerText = i + 1;
-					if (i == index)
-						dot.classList.add('selected');
-					else
-						dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				}
-				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
-				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
-			}
-			setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
+				setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
+			} else
+				data.style.opacity = 1;
 		}, { once: true });
 		setTimeout(() => data.style.opacity = 0, 50);
 		if (src && !(src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)) {
