@@ -458,13 +458,21 @@ autoplay hint {
 					data.style.opacity = 1;
 					setTimeout(video.play, 400);
 				} else {
+					var progressBar = true;
 					var call = function() {
 						if (image.ready) {
 							img.src = '/med/' + src;
 							img.style.display = '';
 							data.style.opacity = 1;
-						} else
+							if (!progressBar)
+								document.dispatchEvent(new CustomEvent('progressbar'));
+						} else{
 							setTimeout(call, 50);
+							if (progressBar) {
+								progressBar = false;
+								document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } }));
+							}
+						}
 					};
 					call();
 				}
