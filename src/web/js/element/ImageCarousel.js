@@ -381,6 +381,12 @@ autoplay hint {
 	}
 
 	open(list, index, autoplay, style) {
+		var img = this._root.querySelector('imageContainer img');
+		img.src = '';
+		img.style.display = 'none';
+		var video = this._root.querySelector('imageContainer video');
+		video.querySelector('source').src = '';
+		video.style.display = 'none';
 		if (index) {
 			for (var i = 0; i < list.length; i++) {
 				if (index == list[i].index) {
