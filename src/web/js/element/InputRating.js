@@ -92,7 +92,7 @@ ratingSelection svg {
 
 	star(no, x) {
 		var fill = '';
-		if (x > 0) {
+		if (x > 0 || no) {
 			var clippath = '';
 			var clippathAttribute = '';
 			if (x < 100) {
