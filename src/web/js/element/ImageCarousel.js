@@ -39,7 +39,6 @@ imageContainer {
 	position: relative;
 	display: block;
 	width: 100%;
-	transition: all 0.4s ease-out;
 }
 imageContainer img,
 imageContainer autoplay img {
@@ -97,6 +96,7 @@ button img {
 data {
 	position: relative;
 	display: block;
+	transition: all 0.4s ease-out;
 }
 data description {
 	border: solid 2vw transparent;
