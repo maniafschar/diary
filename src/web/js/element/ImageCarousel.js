@@ -372,10 +372,7 @@ autoplay hint {
 
 	close() {
 		this._root.host.addEventListener('transitionend', 
-				() => {
-						this._root.querySelector('div').scrollTop = 0;
-						this._root.querySelector('imageContainer').style.gridTemplateRows = '0fr';
-				}, { capture: false, passive: true, once: true });
+				() => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
 		this._root.querySelector('div video').pause();
@@ -483,6 +480,7 @@ autoplay hint {
 					video.load();
 					data.style.opacity = 1;
 					setTimeout(video.play, 400);
+					data.querySelector('imageContainer').style.gridTemplateRows = '';
 				} else {
 					var progressBar = true;
 					var call = function() {
@@ -508,6 +506,7 @@ autoplay hint {
 				data.style.opacity = 1;
 		}, { once: true });
 		setTimeout(() => data.style.opacity = 0, 50);
+		data.querySelector('imageContainer').style.gridTemplateRows = '0fr';
 		if (src && !(src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)) {
 			image.onload = () => image.ready = true;
 			image.src = '/med/' + src;
