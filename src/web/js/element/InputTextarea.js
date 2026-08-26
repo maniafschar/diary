@@ -55,6 +55,7 @@ button.speech {
 	width: 2em;
 	height: 2em;
 	margin: 0;
+	color: white;
 }
 
 *::-webkit-scrollbar {
