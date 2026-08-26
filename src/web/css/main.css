@@ -130,13 +130,16 @@ body>container element.login {
 	border: solid 1em transparent;
 }
 
+body>container element.event {
+	background: rgba(255, 220, 0, 0.1);
+}
+
 body>container element.user {
 	background: rgba(20, 100, 250, 0.1);
 	display: none;
 }
 
 body>container element.imprint {
-	background: rgba(20, 255, 10, 0.1);
 	border: solid 1em transparent;
 }
 
