@@ -490,7 +490,7 @@ autoplay hint {
 							img.src = '/med/' + src;
 							img.style.display = '';
 							data.style.opacity = 1;
-							this._root.querySelector('imageContainer').style.gridTemplateRows = '';
+							data.querySelector('imageContainer').style.gridTemplateRows = '';
 							if (!progressBar)
 								document.dispatchEvent(new CustomEvent('progressbar'));
 						} else{
