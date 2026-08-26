@@ -37,8 +37,10 @@ div {
 imageContainer {
 	overflow: auto;
 	position: relative;
-	display: block;
+	display: grid;
 	width: 100%;
+	transition: all .4s ease-out;
+	grid-template-rows: 1fr;
 }
 imageContainer img,
 imageContainer autoplay img {
@@ -369,7 +371,11 @@ autoplay hint {
 	}
 
 	close() {
-		this._root.host.addEventListener('transitionend', () => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
+		this._root.host.addEventListener('transitionend', 
+				() => {
+						this._root.querySelector('div').scrollTop = 0;
+						this._root.querySelector('imageContainer').style.gridTemplateRows = '0fr';
+				}, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
 		this._root.querySelector('div video').pause();
@@ -484,6 +490,7 @@ autoplay hint {
 							img.src = '/med/' + src;
 							img.style.display = '';
 							data.style.opacity = 1;
+							this._root.querySelector('imageContainer').style.gridTemplateRows = '';
 							if (!progressBar)
 								document.dispatchEvent(new CustomEvent('progressbar'));
 						} else{
