@@ -56,6 +56,15 @@ button.speech {
 	color: white;
 }
 
+button svg {
+	width: 60%;
+	height: 60%;
+	position: absolute;
+	display: block;
+	top: 20%;
+	left: 20%;
+}
+
 *::-webkit-scrollbar {
 	display: none;
 }`;
