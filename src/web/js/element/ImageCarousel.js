@@ -485,7 +485,7 @@ autoplay hint {
 			}
 			setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 		}, { once: true });
-		data.style.opacity = 0;
+		setTimeout(() => data.style.opacity = 0, 50);
 		if (src && !(src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)) {
 			image.onload = () => image.ready = true;
 			image.src = '/med/' + src;
