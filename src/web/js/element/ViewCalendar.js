@@ -33,20 +33,15 @@ class ViewCalendar extends HTMLElement {
 .calendar-wrapper {
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 .cal-header {
 	display: block;
 	position: relative;
 	text-align: center;
-	height: 3em;
-}
-
-.cal-title {
-	position: relative;
-	display: inline-block;
-	padding-top: 1.5em;
-	cursor: pointer;
+	height: 1em;
+	line-height: 1;
 }
 
 button {
@@ -70,12 +65,13 @@ button.icon {
 	font-size: 1.3em;
 	width: 2em;
 	padding: 0;
-	top: 0;
+	bottom: 0.5em;
+	left: 50%;
 }
 
 .cal-grid-outer {
 	overflow: hidden;
-	height: calc(100% - 3em);
+	height: calc(100% - 1em);
 }
 
 .cal-weekdays {
@@ -209,7 +205,11 @@ button.icon {
 		//Header
 		var header = wrapper.appendChild(document.createElement('div'));
 		header.classList.add('cal-header');
-		var button = header.appendChild(document.createElement('button'));
+		header.onclick = () => {
+			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
+			this.render();
+		};
+		var button = wrapper.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month--;
@@ -220,8 +220,8 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '<';
-		button.style.left = 0;
-		button = header.appendChild(document.createElement('button'));
+		button.style.marginLeft = '-2em';
+		button = wrapper.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
 			this.current.month++;
@@ -232,13 +232,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
-		button.style.right = 0;
-		var title = header.appendChild(document.createElement('div'));
-		title.classList.add('cal-title');
-		title.onclick = () => {
-			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
-			this.render();
-		};
+		button.style.marginLeft = '2em';
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
@@ -265,8 +259,8 @@ button.icon {
 
 	render() {
 		const { year, month } = this.current;
-		this._root.querySelector('.cal-title').innerHTML =
-			`${ViewCalendar.MONTHS_DE[month]} <span>${year}</span>`;
+		this._root.querySelector('.cal-header').innerText =
+			`${ViewCalendar.MONTHS_DE[month]} ${year}`;
 		var bankholidays = InputDate.bankholidays(year);
 		const wdEl = this._root.querySelector('.cal-weekdays');
 		if (!wdEl.children.length) {
