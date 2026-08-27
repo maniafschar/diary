@@ -54,10 +54,10 @@ class ViewMap extends HTMLElement {
 	width: 100%;
 	height: 100%;
 	display: flex;
+	box-sizing:border-box;
 }
-  *{box-sizing:border-box;}
-  button{
- 	background: rgba(100, 150, 200, 0.2);
+button {
+	background: rgba(100, 150, 200, 0.2);
 	border: none;
 	border-radius: 1em;
 	outline: none;
@@ -75,31 +75,27 @@ class ViewMap extends HTMLElement {
 	padding: 0;
 	bottom: 0.5em;
 	left: 50%;
-  }
-  button:hover{background:var(--accent-dark);}
-  button.secondary{
-    background:#2a2f3a;
-  }
-  button.secondary:hover{background:#3a4150;}
-  #map{flex:1;}
-  .leaflet-popup-content-wrapper{
-    background:var(--panel);
-    color:var(--text);
-    border-radius:10px;
-  }
-  .leaflet-popup-tip{background:var(--panel);}
-  .popup-box{min-width:200px;}
-  .popup-box img{width:100%;border-radius:8px;margin-bottom:8px;display:block;}
-  .popup-box h3{margin:0 0 4px 0;font-size:15px;}
-  .popup-box .addr{font-size:12px;color:var(--muted);margin-bottom:6px;}
-  .popup-box .meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
-  .popup-box .note{font-size:12px;line-height:1.4;}`;
+}
+.leaflet-popup-content-wrapper {
+	background:var(--panel);
+	color:var(--text);
+	border-radius:10px;
+}
+.leaflet-popup-tip{background:var(--panel);}
+.popup-box{min-width:200px;}
+.popup-box img{width:100%;border-radius:8px;margin-bottom:8px;display:block;}
+.popup-box h3{margin:0 0 4px 0;font-size:15px;}
+.popup-box .addr{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.popup-box .meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.popup-box .note{font-size:12px;line-height:1.4;}`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
 		var script = this._root.appendChild(document.createElement('script'));
 		script.onload = () => {
-			this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
+			var m = this._root.appendChild(document.createElement('div'));
+			m.style.flex = 1;
+			this.map = L.map(m, { zoomControl: true }).setView(
 				[this.locations[0].latitude, this.locations[0].longitude], 4);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors',
