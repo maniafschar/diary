@@ -217,7 +217,7 @@ thumbnail delete {
 			for (var i = 0; i < trs.length; i++)
 				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: events[i].id, participants: events[i].contactEvents, type: 'read' } }));
 
-			var calendar = document.querySelector('calendar-view');
+			var calendar = document.querySelector('view-calendar');
 			calendar.reset();
 			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
 			for (var i = events.length - 1; i >= 0; i--)
