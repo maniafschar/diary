@@ -1,6 +1,6 @@
 import { DialogPopup } from "../../js/element/DialogPopup";
 import { ProgressBar } from "../../js/element/ProgressBar";
-import { SortableTable } from "../../js/element/SortableTable";
+import { TableSortable } from "../../js/element/TableSortable";
 
 export { api };
 
@@ -277,7 +277,7 @@ class json2html {
 
 customElements.define('dialog-popup', DialogPopup);
 customElements.define('progress-bar', ProgressBar);
-customElements.define('sortable-table', SortableTable);
+customElements.define('table-sortable', TableSortable);
 
 window.api = api;
 window.ui = ui;
