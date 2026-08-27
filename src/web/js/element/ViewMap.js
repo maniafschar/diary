@@ -2,6 +2,8 @@ export { ViewMap };
 
 class ViewMap extends HTMLElement {
 	map = null;
+	currentIndex = -1;
+	tourTimer = null;
 	locations = [
 		{
 			name: "Eiffelturm",
@@ -39,6 +41,19 @@ class ViewMap extends HTMLElement {
 			note: "Jahrtausende altes Bauwerk, über 20.000 km lang.",
 			image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600"
 		}];
+	markers = this.locations.map(loc => {
+		const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
+		const popupHtml = `
+<div class="popup-box">
+	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
+	<h3>${this.escapeHtml(loc.name)}</h3>
+	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
+	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
+	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
+</div>`;
+		marker.bindPopup(popupHtml);
+		return marker;
+	});
 
 	constructor() {
 		super();
@@ -161,10 +176,10 @@ class ViewMap extends HTMLElement {
       <span id="progressCount">0 / 0</span>
     </div>v`;
 		this._root.appendChild(document.createElement('script')).setAttribute('src',
-				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js');
+			'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js');
 		this._root.appendChild(document.createElement('div')).setAttribute('id', 'map');
 		this.map = L.map('map', { zoomControl: true }).setView(
-				[this.locations[0].latitude, this.locations[0].longitude], 4);
+			[this.locations[0].latitude, this.locations[0].longitude], 4);
 
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution: '&copy; OpenStreetMap contributors',
@@ -172,116 +187,51 @@ class ViewMap extends HTMLElement {
 		}).addTo(this.map);
 	}
 
-// ---- Marker + Popups anlegen ----
-const markers = this.locations.map(loc => {
-  const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
-  const popupHtml = `
-    <div class="popup-box">
-      ${loc.image ? `<img src="${loc.image}" alt="${escapeHtml(loc.name)}">` : ''}
-      <h3>${escapeHtml(loc.name)}</h3>
-      ${loc.address ? `<div class="addr">${escapeHtml(loc.address)}</div>` : ''}
-      <div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
-      ${loc.note ? `<div class="note">${escapeHtml(loc.note)}</div>` : ''}
-    </div>
-  `;
-  marker.bindPopup(popupHtml);
-  return marker;
-});
+	// ---- Marker + Popups anlegen ----
 
-function escapeHtml(str){
-  return String(str)
-    .replaceAll('&','&amp;').replaceAll('<','&lt;')
-    .replaceAll('>','&gt;').replaceAll('"','&quot;');
-}
+	escapeHtml(str) {
+		return String(str)
+			.replaceAll('&', '&amp;').replaceAll('<', '&lt;')
+			.replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+	}
 
-// ---- Sidebar-Liste rendern ----
-const listEl = document.getElementById('list');
-this.locations.forEach((loc, i) => {
-  const div = document.createElement('div');
-  div.className = 'stop';
-  div.dataset.index = i;
-  div.innerHTML = `
-    ${loc.image ? `<img src="${loc.image}" alt="">` : '<div style="width:48px;height:48px;border-radius:8px;background:#2a2f3a;"></div>'}
-    <div class="info">
-      <div class="name">${escapeHtml(loc.name)}</div>
-      <div class="addr">${escapeHtml(loc.address || '')}</div>
-    </div>
-  `;
-  div.addEventListener('click', () => flyToIndex(i, true));
-  listEl.appendChild(div);
-});
+	flyToIndex(i, stopAutoTour) {
+		const FLY_DURATION = 1.8;      // Sekunden pro Flug
+		const STOP_ZOOM = 15;           // Ziel-Zoomstufe pro Ort
+		if (i < 0 || i >= this.locations.length)
+			return;
+		if (stopAutoTour)
+			this.stopTour();
 
-// ---- Fly-Logik ----
-let currentIndex = -1;
-let tourTimer = null;
-const FLY_DURATION = 1.8;      // Sekunden pro Flug
-const STOP_ZOOM = 15;           // Ziel-Zoomstufe pro Ort
-const PAUSE_AFTER_ARRIVAL = 3500; // ms Pause bevor automatisch weitergeflogen wird (nur im Tour-Modus)
+		this.currentIndex = i;
+		const loc = this.locations[i];
+		this.map.flyTo([loc.latitude, loc.longitude], STOP_ZOOM, {
+			duration: FLY_DURATION,
+			easeLinearity: 0.25
+		});
 
-function updateSidebarActive(i){
-  document.querySelectorAll('.stop').forEach(el => el.classList.remove('active'));
-  const el = document.querySelector(`.stop[data-index="${i}"]`);
-  if (el) {
-    el.classList.add('active');
-    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }
-}
+		document.getElementById('progressText').textContent = this.locations[i]?.name || '–';
+		document.getElementById('progressCount').textContent = `${i + 1} / ${this.locations.length}`;
 
-function updateProgress(i){
-  document.getElementById('progressText').textContent = this.locations[i]?.name || '–';
-  document.getElementById('progressCount').textContent = `${i + 1} / ${this.locations.length}`;
-}
+		this.map.once('moveend', () => markers[i].openPopup());
+	}
 
-function flyToIndex(i, stopAutoTour){
-  if (i < 0 || i >= this.locations.length) return;
-  if (stopAutoTour) stopTour();
+	startTour() {
+		this.stopTour();
+		let i = 0;
+		const step = () => {
+			this.flyToIndex(i, false);
+			i++;
+			if (i < this.locations.length)
+				this.tourTimer = setTimeout(step, (FLY_DURATION * 1000) + 3500);
+		};
+		step();
+	}
 
-  currentIndex = i;
-  const loc = this.locations[i];
-  this.map.flyTo([loc.latitude, loc.longitude], STOP_ZOOM, {
-    duration: FLY_DURATION,
-    easeLinearity: 0.25
-  });
-
-  updateSidebarActive(i);
-  updateProgress(i);
-
-  this.map.once('moveend', () => {
-    markers[i].openPopup();
-  });
-}
-
-function startTour(){
-  stopTour();
-  let i = 0;
-  const step = () => {
-    flyToIndex(i, false);
-    i++;
-    if (i < this.locations.length) {
-      tourTimer = setTimeout(step, (FLY_DURATION * 1000) + PAUSE_AFTER_ARRIVAL);
-    }
-  };
-  step();
-}
-
-function stopTour(){
-  if (tourTimer) {
-    clearTimeout(tourTimer);
-    tourTimer = null;
-  }
-}
-
-// ---- Buttons ----
-document.getElementById('startBtn').addEventListener('click', startTour);
-document.getElementById('nextBtn').addEventListener('click', () => {
-  const next = (currentIndex + 1 + this.locations.length) % this.locations.length;
-  flyToIndex(next, true);
-});
-document.getElementById('prevBtn').addEventListener('click', () => {
-  const prev = (currentIndex - 1 + this.locations.length) % this.locations.length;
-  flyToIndex(prev, true);
-});
-
-// ---- Initial ersten Ort anzeigen ----
-flyToIndex(0, false);
+	stopTour() {
+		if (this.tourTimer) {
+			clearTimeout(this.tourTimer);
+			this.tourTimer = null;
+		}
+	}
 }
