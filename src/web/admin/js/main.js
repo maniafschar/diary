@@ -1,6 +1,6 @@
 import { DialogPopup } from "../../js/element/DialogPopup";
 import { ProgressBar } from "../../js/element/ProgressBar";
-import { TableSortable } from "../../js/element/TableSortable";
+import { ViewTable } from "../../js/element/ViewTable";
 
 export { api };
 
@@ -20,7 +20,7 @@ class api {
 		api.ajax({
 			url: api.url + 'init',
 			success: xhr => {
-				var log = document.querySelector('log').appendChild(document.createElement('table-sortable'));
+				var log = document.querySelector('log').appendChild(document.createElement('view-table'));
 				log.list = xhr.logs;
 				log.columns.push({ label: 'id', sort: true, width: 5, excludeNarrow: true });
 				log.columns.push({ label: 'createdAt', width: 10, detail: true });
@@ -46,7 +46,7 @@ class api {
 				});
 				log.renderTable();
 
-				var ticket = document.querySelector('ticket').appendChild(document.createElement('table-sortable'));
+				var ticket = document.querySelector('ticket').appendChild(document.createElement('view-table'));
 				ticket.list = xhr.tickets;
 				ticket.deleteButton = true;
 				ticket.columns.push({ label: 'id', width: 10, sort: true, excludeNarrow: true });
@@ -66,7 +66,7 @@ class api {
 				ticket.renderTable();
 				document.addEventListener('table', event => {
 					if (event.detail.type == 'delete')
-						api.deleteTicket(document.querySelector('ticket table-sortable').list[event.detail.index].id, event.detail.index);
+						api.deleteTicket(document.querySelector('ticket view-table').list[event.detail.index].id, event.detail.index);
 				});
 
 				document.querySelector('input[name="searchLogs"]').value = xhr.search;
@@ -102,7 +102,7 @@ class api {
 			url: api.url + 'ticket/' + id,
 			method: 'DELETE',
 			success: () => {
-				document.querySelector('ticket table-sortable').deleteRow(index);
+				document.querySelector('ticket view-table').deleteRow(index);
 				document.dispatchEvent(new CustomEvent('popup'));
 			}
 		});
@@ -113,7 +113,7 @@ class api {
 			api.ajax({
 				url: api.url + 'log?search=' + encodeURIComponent(document.querySelector('input[name="searchLogs"]').value),
 				success: xhr => {
-					var log = document.querySelector('log table-sortable');
+					var log = document.querySelector('log view-table');
 					log.list = xhr;
 					log.renderTable();
 				}
@@ -182,7 +182,7 @@ class ui {
 	}
 
 	static openIp(event) {
-		var ip = document.querySelector('table-sortable').list[event.target.parentElement.getAttribute('i')].ip;
+		var ip = document.querySelector('view-table').list[event.target.parentElement.getAttribute('i')].ip;
 		if (ip)
 			window.open('https://whatismyipaddress.com/ip/' + ip, 'sc_ip');
 	}
@@ -204,8 +204,8 @@ class ui {
 
 	static toggleMultiline() {
 		ui.multiline = !ui.multiline;
-		document.querySelector('log table-sortable').renderTable();
-		document.querySelector('ticket table-sortable').renderTable();
+		document.querySelector('log view-table').renderTable();
+		document.querySelector('ticket view-table').renderTable();
 	}
 
 	static parents(e, nodeName) {
@@ -277,7 +277,7 @@ class json2html {
 
 customElements.define('dialog-popup', DialogPopup);
 customElements.define('progress-bar', ProgressBar);
-customElements.define('table-sortable', TableSortable);
+customElements.define('view-table', ViewTable);
 
 window.api = api;
 window.ui = ui;
