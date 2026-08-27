@@ -171,8 +171,7 @@ class ViewMap extends HTMLElement {
     </div>v`;
 		var script = this._root.appendChild(document.createElement('script'));
 		script.onload = () => {
-			this._root.appendChild(document.createElement('div')).setAttribute('id', 'map');
-			this.map = L.map('map', { zoomControl: true }).setView(
+			this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
 				[this.locations[0].latitude, this.locations[0].longitude], 4);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors',
