@@ -55,15 +55,6 @@ class ViewMap extends HTMLElement {
 	height: 100%;
 	display: flex;
 }
-:root{
-    --bg:#0f1115;
-    --panel:#171a21;
-    --panel-border:#2a2f3a;
-    --text:#e8eaed;
-    --muted:#9aa1ac;
-    --accent:#4f8cff;
-    --accent-dark:#2f5fce;
-  }
   *{box-sizing:border-box;}
   button{
     background:var(--accent);
@@ -81,26 +72,6 @@ class ViewMap extends HTMLElement {
     background:#2a2f3a;
   }
   button.secondary:hover{background:#3a4150;}
-  .stop{
-    display:flex;
-    gap:10px;
-    padding:10px;
-    border-radius:10px;
-    cursor:pointer;
-    margin-bottom:6px;
-    border:1px solid transparent;
-  }
-  .stop:hover{background:#1e222c;}
-  .stop.active{
-    background:#1c2436;
-    border-color:var(--accent);
-  }
-  .stop img{
-    width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#222;
-  }
-  .stop .info{overflow:hidden;}
-  .stop .info .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .stop .info .addr{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #map{flex:1;}
   .leaflet-popup-content-wrapper{
     background:var(--panel);
@@ -134,12 +105,20 @@ class ViewMap extends HTMLElement {
 </div>`;
 				marker.bindPopup(popupHtml);
 				return marker;
-			})
+			});
+			document.getElementById('startBtn').addEventListener('click', startTour);
+			document.getElementById('nextBtn').addEventListener('click', () => {
+				const next = (currentIndex + 1 + locations.length) % locations.length;
+				this.flyToIndex(next, true);
+			});
+			document.getElementById('prevBtn').addEventListener('click', () => {
+				const prev = (currentIndex - 1 + locations.length) % locations.length;
+				this.flyToIndex(prev, true);
+			});
+			this.flyToIndex(0, false);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 	}
-
-	// ---- Marker + Popups anlegen ----
 
 	escapeHtml(str) {
 		return String(str)
@@ -161,10 +140,6 @@ class ViewMap extends HTMLElement {
 			duration: FLY_DURATION,
 			easeLinearity: 0.25
 		});
-
-		document.getElementById('progressText').textContent = this.locations[i]?.name || '–';
-		document.getElementById('progressCount').textContent = `${i + 1} / ${this.locations.length}`;
-
 		this.map.once('moveend', () => this.markers[i].openPopup());
 	}
 
