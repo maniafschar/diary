@@ -171,7 +171,7 @@ class ViewMap extends HTMLElement {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
 			}).addTo(this.map);
-			this.this.locations.map(loc => {
+			this.locations.map(loc => {
 				const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
 				const popupHtml = `
 <div class="popup-box">
