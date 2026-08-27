@@ -11,7 +11,7 @@ import { InputRating } from "./element/InputRating";
 import { InputSelection } from "./element/InputSelection";
 import { InputTextarea } from "./element/InputTextarea";
 import { ProgressBar } from "./element/ProgressBar";
-import { SortableTable } from "./element/SortableTable";
+import { TableSortable } from "./element/TableSortable";
 import { listener } from "./listener";
 import { ui } from "./ui";
 
@@ -386,7 +386,7 @@ customElements.define('input-rating', InputRating);
 customElements.define('input-selection', InputSelection);
 customElements.define('input-textarea', InputTextarea);
 customElements.define('progress-bar', ProgressBar);
-customElements.define('sortable-table', SortableTable);
+customElements.define('table-sortable', TableSortable);
 
 window.api = api;
 window.action = action;
