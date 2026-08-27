@@ -107,7 +107,7 @@ ${dialog.stylePictures}`;
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
-		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
+		document.querySelector('event table-sortable').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
 		var buttonToggle = location.appendChild(document.createElement('span'));
 		buttonToggle.innerText = '+';
@@ -205,7 +205,7 @@ ${dialog.stylePictures}`;
 	}
 
 	static contact(event) {
-		var contact = document.querySelector('user sortable-table').list[ui.parents(event.target, 'tr').getAttribute('i')];
+		var contact = document.querySelector('user table-sortable').list[ui.parents(event.target, 'tr').getAttribute('i')];
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
 img {
@@ -276,7 +276,7 @@ element {
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
 		inputDate.setAttribute('min', date.toISOString());
-		document.querySelector('event sortable-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
+		document.querySelector('event table-sortable').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event.note);
 		dialog.createField(element, 'Ort', 'locationId', 'input-selection').classList.add('open');
 		var inputId = element.appendChild(document.createElement('input'));
