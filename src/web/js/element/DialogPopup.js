@@ -25,7 +25,7 @@ popup {
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	z-index: 9;
+	z-index: 501;
 	border-radius: 1em 0 1em 1em;
 	filter: drop-shadow(0 0 0.5em rgba(0, 0, 0, 0.3));
 	transition: all ease-out .4s;
