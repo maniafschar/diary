@@ -159,13 +159,14 @@ class ViewMap extends HTMLElement {
 	}
 
 	startTour() {
-		this.stopTour();
+		var host = this.getRootNode().host;
+		host.stopTour();
 		let i = 0;
 		const step = () => {
-			this.flyToIndex(i, false);
+			host.flyToIndex(i, false);
 			i++;
-			if (i < this.locations.length)
-				this.tourTimer = setTimeout(step, (FLY_DURATION * 1000) + 3500);
+			if (i < host.locations.length)
+				host.tourTimer = setTimeout(step, (FLY_DURATION * 1000) + 3500);
 		};
 		step();
 	}
