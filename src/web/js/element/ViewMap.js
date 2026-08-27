@@ -141,8 +141,6 @@ class ViewMap extends HTMLElement {
 	}
 
 	flyToIndex(i, stopAutoTour) {
-		const FLY_DURATION = 1.8;      // Sekunden pro Flug
-		const STOP_ZOOM = 15;           // Ziel-Zoomstufe pro Ort
 		if (i < 0 || i >= this.locations.length)
 			return;
 		if (stopAutoTour)
@@ -150,8 +148,8 @@ class ViewMap extends HTMLElement {
 
 		this.currentIndex = i;
 		const loc = this.locations[i];
-		this.map.flyTo([loc.latitude, loc.longitude], STOP_ZOOM, {
-			duration: FLY_DURATION,
+		this.map.flyTo([loc.latitude, loc.longitude], 15, {
+			duration: 2,
 			easeLinearity: 0.25
 		});
 		if (this.markers && this.markers[i])
@@ -166,7 +164,7 @@ class ViewMap extends HTMLElement {
 			host.flyToIndex(i, false);
 			i++;
 			if (i < host.locations.length)
-				host.tourTimer = setTimeout(step, (FLY_DURATION * 1000) + 3500);
+				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
 		};
 		step();
 	}
