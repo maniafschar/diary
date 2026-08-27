@@ -220,7 +220,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '<';
-		button.style.marginLeft = '-2em';
+		button.style.marginLeft = '-5em';
 		button = wrapper.appendChild(document.createElement('button'));
 		button.classList.add('icon');
 		button.onclick = () => {
@@ -232,7 +232,7 @@ button.icon {
 			this.render();
 		};
 		button.innerText = '>';
-		button.style.marginLeft = '2em';
+		button.style.marginLeft = '3em';
 
 		//body
 		var body = wrapper.appendChild(document.createElement('div'));
