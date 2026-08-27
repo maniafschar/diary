@@ -120,12 +120,12 @@ button {
 			L.Marker.prototype.options.icon = L.icon({
 				iconUrl: '/image/marker-icon.png',
 				iconRetinaUrl: '/image/marker-icon-2x.png',
-				iconSize: [30, 50],
-				iconAnchor: [18, 49],
-				popupAnchor: [-7, -36],
+				iconSize: [34, 46],
+				iconAnchor: [20, 45],
+				popupAnchor: [-6, -36],
 				shadowUrl: '/image/marker-shadow.png',
 				shadowSize: [60, 50],
-				shadowAnchor: [18, 49]
+				shadowAnchor: [20, 45]
 			});
 			this.map = L.map(m, { zoomControl: true }).setView(
 				[this.locations[0].latitude, this.locations[0].longitude], 4);
