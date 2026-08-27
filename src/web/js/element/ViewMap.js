@@ -41,19 +41,7 @@ class ViewMap extends HTMLElement {
 			note: "Jahrtausende altes Bauwerk, über 20.000 km lang.",
 			image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600"
 		}];
-	markers = this.locations.map(loc => {
-		const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
-		const popupHtml = `
-<div class="popup-box">
-	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
-	<h3>${this.escapeHtml(loc.name)}</h3>
-	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
-	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
-	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
-</div>`;
-		marker.bindPopup(popupHtml);
-		return marker;
-	});
+	markers = null;
 
 	constructor() {
 		super();
@@ -183,6 +171,19 @@ class ViewMap extends HTMLElement {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
 			}).addTo(this.map);
+			this.this.locations.map(loc => {
+				const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
+				const popupHtml = `
+<div class="popup-box">
+	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
+	<h3>${this.escapeHtml(loc.name)}</h3>
+	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
+	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
+	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
+</div>`;
+				marker.bindPopup(popupHtml);
+				return marker;
+			})
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 	}
@@ -213,7 +214,7 @@ class ViewMap extends HTMLElement {
 		document.getElementById('progressText').textContent = this.locations[i]?.name || '–';
 		document.getElementById('progressCount').textContent = `${i + 1} / ${this.locations.length}`;
 
-		this.map.once('moveend', () => markers[i].openPopup());
+		this.map.once('moveend', () => this.markers[i].openPopup());
 	}
 
 	startTour() {
