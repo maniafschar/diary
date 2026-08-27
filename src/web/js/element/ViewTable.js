@@ -1,8 +1,8 @@
 import { Object } from "core-js";
 
-export { TableSortable };
+export { ViewTable };
 
-class TableSortable extends HTMLElement {
+class ViewTable extends HTMLElement {
 	list = [];
 	filter = null;
 	sort = null;
