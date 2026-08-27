@@ -122,7 +122,7 @@ button {
 				iconRetinaUrl: '/image/marker-icon-2x.png',
 				iconSize: [34, 46],
 				iconAnchor: [20, 45],
-				popupAnchor: [-3, -40],
+				popupAnchor: [-3, -36],
 				shadowUrl: '/image/marker-shadow.png',
 				shadowSize: [60, 50],
 				shadowAnchor: [20, 45]
