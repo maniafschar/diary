@@ -94,6 +94,9 @@ class ViewMap extends HTMLElement {
   .popup-box .addr{font-size:12px;color:var(--muted);margin-bottom:6px;}
   .popup-box .meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
   .popup-box .note{font-size:12px;line-height:1.4;}`;
+		var link = this._root.appendChild(document.createElement('link'));
+		link.setAttribute('rel', 'stylesheet');
+		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
 		var script = this._root.appendChild(document.createElement('script'));
 		script.onload = () => {
 			this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
