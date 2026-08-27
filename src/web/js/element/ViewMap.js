@@ -177,14 +177,14 @@ class ViewMap extends HTMLElement {
     </div>v`;
 		var script = this._root.appendChild(document.createElement('script'));
 		script.onload = () => {
+			this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
+				[this.locations[0].latitude, this.locations[0].longitude], 4);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
 			}).addTo(this.map);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
-		this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
-			[this.locations[0].latitude, this.locations[0].longitude], 4);
 	}
 
 	// ---- Marker + Popups anlegen ----
