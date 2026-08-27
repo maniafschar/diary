@@ -1,6 +1,7 @@
 export { ViewMap };
 
 class ViewMap extends HTMLElement {
+	map = null;
 	locations = [
 		{
 			name: "Eiffelturm",
@@ -159,27 +160,21 @@ class ViewMap extends HTMLElement {
       <span id="progressText">–</span>
       <span id="progressCount">0 / 0</span>
     </div>v`;
-		this._root.appendChild(document.createElement('map'))
+		this._root.appendChild(document.createElement('script')).setAttribute('src',
+				'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js');
+		this._root.appendChild(document.createElement('div')).setAttribute('id', 'map');
+		this.map = L.map('map', { zoomControl: true }).setView(
+				[this.locations[0].latitude, this.locations[0].longitude], 4);
+
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; OpenStreetMap contributors',
+			maxZoom: 19
+		}).addTo(this.map);
 	}
 
-	/* ==========================================================
-   HIER die eigenen Locations eintragen.
-   Jedes Objekt entspricht dem im Chat vorgegebenen Schema:
-   { name, address, latitude, longitude, altitude, note, image }
-   ========================================================== */
-// ---- Karte initialisieren ----
-const map = L.map('map', { zoomControl: true }).setView(
-  [locations[0].latitude, locations[0].longitude], 4
-);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors',
-  maxZoom: 19
-}).addTo(map);
-
 // ---- Marker + Popups anlegen ----
-const markers = locations.map((loc) => {
-  const marker = L.marker([loc.latitude, loc.longitude]).addTo(map);
+const markers = this.locations.map(loc => {
+  const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
   const popupHtml = `
     <div class="popup-box">
       ${loc.image ? `<img src="${loc.image}" alt="${escapeHtml(loc.name)}">` : ''}
@@ -201,7 +196,7 @@ function escapeHtml(str){
 
 // ---- Sidebar-Liste rendern ----
 const listEl = document.getElementById('list');
-locations.forEach((loc, i) => {
+this.locations.forEach((loc, i) => {
   const div = document.createElement('div');
   div.className = 'stop';
   div.dataset.index = i;
@@ -233,17 +228,17 @@ function updateSidebarActive(i){
 }
 
 function updateProgress(i){
-  document.getElementById('progressText').textContent = locations[i]?.name || '–';
-  document.getElementById('progressCount').textContent = `${i + 1} / ${locations.length}`;
+  document.getElementById('progressText').textContent = this.locations[i]?.name || '–';
+  document.getElementById('progressCount').textContent = `${i + 1} / ${this.locations.length}`;
 }
 
 function flyToIndex(i, stopAutoTour){
-  if (i < 0 || i >= locations.length) return;
+  if (i < 0 || i >= this.locations.length) return;
   if (stopAutoTour) stopTour();
 
   currentIndex = i;
-  const loc = locations[i];
-  map.flyTo([loc.latitude, loc.longitude], STOP_ZOOM, {
+  const loc = this.locations[i];
+  this.map.flyTo([loc.latitude, loc.longitude], STOP_ZOOM, {
     duration: FLY_DURATION,
     easeLinearity: 0.25
   });
@@ -251,7 +246,7 @@ function flyToIndex(i, stopAutoTour){
   updateSidebarActive(i);
   updateProgress(i);
 
-  map.once('moveend', () => {
+  this.map.once('moveend', () => {
     markers[i].openPopup();
   });
 }
@@ -262,7 +257,7 @@ function startTour(){
   const step = () => {
     flyToIndex(i, false);
     i++;
-    if (i < locations.length) {
+    if (i < this.locations.length) {
       tourTimer = setTimeout(step, (FLY_DURATION * 1000) + PAUSE_AFTER_ARRIVAL);
     }
   };
@@ -279,11 +274,11 @@ function stopTour(){
 // ---- Buttons ----
 document.getElementById('startBtn').addEventListener('click', startTour);
 document.getElementById('nextBtn').addEventListener('click', () => {
-  const next = (currentIndex + 1 + locations.length) % locations.length;
+  const next = (currentIndex + 1 + this.locations.length) % this.locations.length;
   flyToIndex(next, true);
 });
 document.getElementById('prevBtn').addEventListener('click', () => {
-  const prev = (currentIndex - 1 + locations.length) % locations.length;
+  const prev = (currentIndex - 1 + this.locations.length) % this.locations.length;
   flyToIndex(prev, true);
 });
 
