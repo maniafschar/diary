@@ -8,7 +8,7 @@ class listener {
 	static updateCotacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
-			var table = document.querySelector('user table-sortable');
+			var table = document.querySelector('user view-table');
 			table.list = contacts;
 			if (!table.columns.length) {
 				table.setOpenDetail(dialog.contact);
@@ -46,7 +46,7 @@ class listener {
 		var autoplay = !index;
 		if (!index)
 			index = 0;
-		var events = document.querySelector('event table-sortable').list;
+		var events = document.querySelector('event view-table').list;
 		var list = [];
 		var listImages = function (event) {
 			var list = [];
@@ -176,12 +176,12 @@ thumbnail delete {
 				clientName.onclick = dialog.client;
 			}
 
-			var table = document.querySelector('event table-sortable');
+			var table = document.querySelector('event view-table');
 			table.list = events;
 			table.style('tr.past td:first-child{opacity:0.5;}input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
-				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event table-sortable').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
+				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true, style: 'overflow-y:hidden;' });
 				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
@@ -224,7 +224,7 @@ thumbnail delete {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 			calendar.render();
 			if (events.length) {
-				var pastEvents = document.querySelector('table-sortable')._root.querySelectorAll('tr.past').length;
+				var pastEvents = document.querySelector('view-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
 			} else
 				document.querySelector('element.event div.title count').innerText = '';
@@ -236,7 +236,7 @@ thumbnail delete {
 			if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
 				setTimeout(listener.updateViewImage, 100);
 		});
-		if (!document.querySelector('user table-sortable').table().querySelector('tbody')?.childElementCount)
+		if (!document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();
 		else
 			api.activateProgressbar();
