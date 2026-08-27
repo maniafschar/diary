@@ -3,7 +3,7 @@ import { dialog } from "./dialog";
 import { ViewCalendar } from "./element/ViewCalendar";
 import { ViewMap } from "./element/ViewMap";
 import { DialogPopup } from "./element/DialogPopup";
-import { ImageCarousel } from "./element/ImageCarousel";
+import { ViewImage } from "./element/ViewImage";
 import { InputCheckbox } from "./element/InputCheckbox";
 import { InputDate } from "./element/InputDate";
 import { InputImage } from "./element/InputImage";
@@ -378,7 +378,7 @@ window.onresize = function () {
 customElements.define('view-calendar', ViewCalendar);
 customElements.define('view-map', ViewMap);
 customElements.define('dialog-popup', DialogPopup);
-customElements.define('image-carousel', ImageCarousel);
+customElements.define('view-image', ViewImage);
 customElements.define('input-date', InputDate);
 customElements.define('input-checkbox', InputCheckbox);
 customElements.define('input-image', InputImage);
