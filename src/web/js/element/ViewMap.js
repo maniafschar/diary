@@ -175,16 +175,16 @@ class ViewMap extends HTMLElement {
       <span id="progressText">–</span>
       <span id="progressCount">0 / 0</span>
     </div>v`;
-		this._root.appendChild(document.createElement('script')).setAttribute('src',
-			'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js');
-		this._root.appendChild(document.createElement('div')).setAttribute('id', 'map');
-		this.map = L.map('map', { zoomControl: true }).setView(
+		var script = this._root.appendChild(document.createElement('script'));
+		script.onload = () => {
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; OpenStreetMap contributors',
+				maxZoom: 19
+			}).addTo(this.map);
+		};
+		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+		this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
 			[this.locations[0].latitude, this.locations[0].longitude], 4);
-
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; OpenStreetMap contributors',
-			maxZoom: 19
-		}).addTo(this.map);
 	}
 
 	// ---- Marker + Popups anlegen ----
