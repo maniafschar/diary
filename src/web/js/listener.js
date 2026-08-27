@@ -42,7 +42,7 @@ class listener {
 		});
 	}
 
-	static updateImageCarousel(index) {
+	static updateViewImage(index) {
 		var autoplay = !index;
 		if (!index)
 			index = 0;
@@ -102,7 +102,7 @@ class listener {
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
-		document.querySelector('image-carousel').open(list, index, autoplay, `
+		document.querySelector('view-image').open(list, index, autoplay, `
 rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;
@@ -181,7 +181,7 @@ thumbnail delete {
 			table.style('tr.past td:first-child{opacity:0.5;}input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
-				table.setOpenDetail(event => listener.updateImageCarousel(document.querySelector('event table-sortable').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
+				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event table-sortable').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true, style: 'overflow-y:hidden;' });
 				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
@@ -219,7 +219,7 @@ thumbnail delete {
 
 			var calendar = document.querySelector('view-calendar');
 			calendar.reset();
-			calendar.setOpen(event => event.id ? listener.updateImageCarousel(event.id + '.0') : dialog.add(event));
+			calendar.setOpen(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
 			for (var i = events.length - 1; i >= 0; i--)
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 			calendar.render();
@@ -233,8 +233,8 @@ thumbnail delete {
 			document.querySelector('element.login').style.display = 'none';
 			document.querySelector('element.calendar').style.display = 'block';
 			document.querySelector('element.user').style.display = 'block';
-			if (document.querySelector("image-carousel").style.transform?.indexOf('1') > 0)
-				setTimeout(listener.updateImageCarousel, 100);
+			if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
+				setTimeout(listener.updateViewImage, 100);
 		});
 		if (!document.querySelector('user table-sortable').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();
