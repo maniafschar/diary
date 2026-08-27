@@ -13,7 +13,7 @@ class ViewImage extends HTMLElement {
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
-:host(*){
+:host(*) {
 	transform: scale(0);
 	position: fixed;
 	left: 0;
@@ -371,8 +371,8 @@ autoplay hint {
 	}
 
 	close() {
-		this._root.host.addEventListener('transitionend', 
-				() => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
+		this._root.host.addEventListener('transitionend',
+			() => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
 		this._root.querySelector('div video').pause();
@@ -483,7 +483,7 @@ autoplay hint {
 					data.querySelector('imageContainer').style.gridTemplateRows = '';
 				} else {
 					var progressBar = true;
-					var call = function() {
+					var call = function () {
 						if (image.ready) {
 							img.src = '/med/' + src;
 							img.style.display = '';
@@ -491,7 +491,7 @@ autoplay hint {
 							data.querySelector('imageContainer').style.gridTemplateRows = '';
 							if (!progressBar)
 								document.dispatchEvent(new CustomEvent('progressbar'));
-						} else{
+						} else {
 							setTimeout(call, 50);
 							if (progressBar) {
 								progressBar = false;

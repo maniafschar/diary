@@ -49,6 +49,12 @@ class ViewMap extends HTMLElement {
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
+:host(*) {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
 :root{
     --bg:#0f1115;
     --panel:#171a21;
