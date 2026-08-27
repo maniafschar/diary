@@ -126,16 +126,12 @@ class ViewMap extends HTMLElement {
 		start.addEventListener('click', this.startTour);
 		var next = this._root.appendChild(document.createElement('button'));
 		next.style.marginLeft = '2em';
-		next.addEventListener('click', () => {
-			const next = (currentIndex + 1 + locations.length) % locations.length;
-			this.flyToIndex(next, true);
-		});
+		next.addEventListener('click', () =>
+			this.flyToIndex((this.currentIndex + 1 + this.locations.length) % this.locations.length, true));
 		var prev = this._root.appendChild(document.createElement('button'));
 		prev.style.marginLeft = '-2em';
-		prev.addEventListener('click', () => {
-			const prev = (currentIndex - 1 + locations.length) % locations.length;
-			this.flyToIndex(prev, true);
-		});
+		prev.addEventListener('click', () =>
+			this.flyToIndex((this.currentIndex - 1 + this.locations.length) % this.locations.length, true));
 	}
 
 	escapeHtml(str) {
@@ -158,7 +154,7 @@ class ViewMap extends HTMLElement {
 			duration: FLY_DURATION,
 			easeLinearity: 0.25
 		});
-		this.map.once('moveend', () => this.markers[i].openPopup());
+		this.map.once('moveend', m[i].openPopup);
 	}
 
 	startTour() {
