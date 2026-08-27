@@ -118,9 +118,9 @@ button {
 			var m = this._root.appendChild(document.createElement('div'));
 			m.style.flex = 1;
 			L.Marker.prototype.options.icon = L.icon({
-				iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-				iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-				shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
+				iconUrl: '/image/marker-icon.png',
+				iconRetinaUrl: '/image/marker-icon-2x.png',
+				shadowUrl: '/image/marker-shadow.png'
 			});
 			this.map = L.map(m, { zoomControl: true }).setView(
 				[this.locations[0].latitude, this.locations[0].longitude], 4);
