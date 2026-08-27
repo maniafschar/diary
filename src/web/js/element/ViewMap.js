@@ -64,11 +64,10 @@ button {
 	cursor: pointer;
 	font: inherit;
 	margin: 0 0.5em;
-	font-size: 1em;
 	height: 2em;
 	color: white;
 	line-height: 1;
-	z-index: 2;
+	z-index: 400;
 	position: absolute;
 	font-size: 1.3em;
 	width: 2em;
@@ -77,17 +76,40 @@ button {
 	left: 50%;
 }
 .leaflet-popup-content-wrapper {
-	background:var(--panel);
-	color:var(--text);
-	border-radius:10px;
+	background: var(--panel);
+	color: var(--text);
+	border-radius: 10px;
 }
-.leaflet-popup-tip{background:var(--panel);}
-.popup-box{min-width:200px;}
-.popup-box img{width:100%;border-radius:8px;margin-bottom:8px;display:block;}
-.popup-box h3{margin:0 0 4px 0;font-size:15px;}
-.popup-box .addr{font-size:12px;color:var(--muted);margin-bottom:6px;}
-.popup-box .meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
-.popup-box .note{font-size:12px;line-height:1.4;}`;
+.leaflet-popup-tip {
+	background: var(--panel);
+}
+.popup-box {
+	min-width: 200px;
+}
+.popup-box img {
+	width: 100%;
+	border-radius: 8px;
+	margin-bottom: 8px;
+	display: block;
+}
+.popup-box h3 {
+	margin: 0 0 4px 0;
+	font-size: 15px;
+}
+.popup-box .addr {
+	font-size: 12px;
+	color: var(--muted);
+	margin-bottom:  6px;
+}
+.popup-box .meta {
+	font-size: 11px;
+	color: var(--muted);
+	margin-bottom: 6px;
+}
+.popup-box .note {
+	font-size: 12px;
+	line-height: 1.4;
+}`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
@@ -115,22 +137,22 @@ button {
 				return marker;
 			});
 			this.flyToIndex(0, false);
-			var start = this._root.appendChild(document.createElement('button'));
-			start.style.marginLeft = '-1em';
-			start.innerText = 'v';
-			start.addEventListener('click', this.startTour);
-			var next = this._root.appendChild(document.createElement('button'));
-			next.style.marginLeft = '3em';
-			next.innerText = '>';
-			next.addEventListener('click', () =>
-				this.flyToIndex((this.currentIndex + 1 + this.locations.length) % this.locations.length, true));
-			var prev = this._root.appendChild(document.createElement('button'));
-			prev.style.marginLeft = '-5em';
-			prev.innerText = '<';
-			prev.addEventListener('click', () =>
-				this.flyToIndex((this.currentIndex - 1 + this.locations.length) % this.locations.length, true));
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+		var start = this._root.appendChild(document.createElement('button'));
+		start.style.marginLeft = '-1em';
+		start.innerText = 'v';
+		start.addEventListener('click', this.startTour);
+		var next = this._root.appendChild(document.createElement('button'));
+		next.style.marginLeft = '3em';
+		next.innerText = '>';
+		next.addEventListener('click', () =>
+			this.flyToIndex((this.currentIndex + 1 + this.locations.length) % this.locations.length, true));
+		var prev = this._root.appendChild(document.createElement('button'));
+		prev.style.marginLeft = '-5em';
+		prev.innerText = '<';
+		prev.addEventListener('click', () =>
+			this.flyToIndex((this.currentIndex - 1 + this.locations.length) % this.locations.length, true));
 	}
 
 	escapeHtml(str) {
