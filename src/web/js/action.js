@@ -1,6 +1,7 @@
 import { api } from "./api";
 import { dialog } from "./dialog";
-import { CalendarView } from "./element/CalendarView";
+import { ViewCalendar } from "./element/ViewCalendar";
+import { ViewMap } from "./element/ViewMap";
 import { DialogPopup } from "./element/DialogPopup";
 import { ImageCarousel } from "./element/ImageCarousel";
 import { InputCheckbox } from "./element/InputCheckbox";
@@ -374,7 +375,8 @@ window.onresize = function () {
 	}
 }
 
-customElements.define('calendar-view', CalendarView);
+customElements.define('view-calendar', ViewCalendar);
+customElements.define('view-map', ViewMap);
 customElements.define('dialog-popup', DialogPopup);
 customElements.define('image-carousel', ImageCarousel);
 customElements.define('input-date', InputDate);
