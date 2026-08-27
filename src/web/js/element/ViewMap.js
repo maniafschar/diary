@@ -174,8 +174,7 @@ button {
 			duration: 2,
 			easeLinearity: 0.25
 		});
-		if (this.markers && this.markers[i])
-			this.map.once('moveend', this.markers[i].openPopup);
+		this.map.once('moveend', () => { this.markers[i].openPopup(); vonsole.log('moveend ' + i); });
 	}
 
 	startTour() {
