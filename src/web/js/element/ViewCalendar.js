@@ -1,8 +1,8 @@
 import { InputDate } from "./InputDate";
 
-export { CalendarView };
+export { ViewCalendar };
 
-class CalendarView extends HTMLElement {
+class ViewCalendar extends HTMLElement {
 	static MONTHS_DE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 	static WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 	events = {};
@@ -266,11 +266,11 @@ button.icon {
 	render() {
 		const { year, month } = this.current;
 		this._root.querySelector('.cal-title').innerHTML =
-			`${CalendarView.MONTHS_DE[month]} <span>${year}</span>`;
+			`${ViewCalendar.MONTHS_DE[month]} <span>${year}</span>`;
 		var bankholidays = InputDate.bankholidays(year);
 		const wdEl = this._root.querySelector('.cal-weekdays');
 		if (!wdEl.children.length) {
-			CalendarView.WEEKDAYS.forEach((d, i) => {
+			ViewCalendar.WEEKDAYS.forEach((d, i) => {
 				const el = document.createElement('div');
 				el.className = 'cal-weekday' + (i >= 5 ? ' weekend' : '');
 				el.appendChild(document.createElement('span')).textContent = d;
