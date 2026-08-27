@@ -12,7 +12,7 @@ class ViewMap extends HTMLElement {
 			longitude: 2.2945,
 			altitude: 330,
 			note: "Wahrzeichen von Paris, erbaut 1889 für die Weltausstellung.",
-			image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600"
+			image: "/med/10000/8.jpg"
 		},
 		{
 			name: "Kolosseum",
@@ -21,7 +21,7 @@ class ViewMap extends HTMLElement {
 			longitude: 12.4922,
 			altitude: 21,
 			note: "Größtes je gebautes Amphitheater des Römischen Reiches.",
-			image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600"
+			image: "/med/10000/7.jpg"
 		},
 		{
 			name: "Freiheitsstatue",
@@ -30,7 +30,7 @@ class ViewMap extends HTMLElement {
 			longitude: -74.0445,
 			altitude: 93,
 			note: "Geschenk Frankreichs an die USA, eingeweiht 1886.",
-			image: "https://images.unsplash.com/photo-1508433957232-3107f5fd5995?w=600"
+			image: "/med/10000/6.jpg"
 		},
 		{
 			name: "Great Wall of China",
@@ -39,7 +39,7 @@ class ViewMap extends HTMLElement {
 			longitude: 116.5704,
 			altitude: 550,
 			note: "Jahrtausende altes Bauwerk, über 20.000 km lang.",
-			image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600"
+			image: "/med/10000/5.jpg"
 		}];
 	markers = [];
 
