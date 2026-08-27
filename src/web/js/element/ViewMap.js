@@ -154,7 +154,7 @@ class ViewMap extends HTMLElement {
 			duration: FLY_DURATION,
 			easeLinearity: 0.25
 		});
-		this.map.once('moveend', m[i].openPopup);
+		this.map.once('moveend', this.markers[i].openPopup);
 	}
 
 	startTour() {
