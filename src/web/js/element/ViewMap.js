@@ -41,7 +41,7 @@ class ViewMap extends HTMLElement {
 			note: "Jahrtausende altes Bauwerk, über 20.000 km lang.",
 			image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600"
 		}];
-	markers = null;
+	markers = [];
 
 	constructor() {
 		super();
@@ -67,7 +67,7 @@ button {
 	height: 2em;
 	color: white;
 	line-height: 1;
-	z-index: 400;
+	z-index: 500;
 	position: absolute;
 	font-size: 1.3em;
 	width: 2em;
@@ -134,6 +134,7 @@ button {
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
 </div>`;
 				marker.bindPopup(popupHtml);
+				this.markers.push(marker);
 				return marker;
 			});
 			this.flyToIndex(0, false);
