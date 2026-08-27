@@ -1,19 +1,19 @@
-import { api } from "./api";
-import { dialog } from "./dialog";
-import { ViewCalendar } from "./element/ViewCalendar";
-import { ViewMap } from "./element/ViewMap";
-import { DialogPopup } from "./element/DialogPopup";
-import { ViewImage } from "./element/ViewImage";
-import { InputCheckbox } from "./element/InputCheckbox";
-import { InputDate } from "./element/InputDate";
-import { InputImage } from "./element/InputImage";
-import { InputRating } from "./element/InputRating";
-import { InputSelection } from "./element/InputSelection";
-import { InputTextarea } from "./element/InputTextarea";
-import { ProgressBar } from "./element/ProgressBar";
-import { TableSortable } from "./element/TableSortable";
-import { listener } from "./listener";
-import { ui } from "./ui";
+import { api } from './api';
+import { dialog } from './dialog';
+import { ViewCalendar } from './element/ViewCalendar';
+import { ViewMap } from './element/ViewMap';
+import { DialogPopup } from './element/DialogPopup';
+import { ViewImage } from './element/ViewImage';
+import { InputCheckbox } from './element/InputCheckbox';
+import { InputDate } from './element/InputDate';
+import { InputImage } from './element/InputImage';
+import { InputRating } from './element/InputRating';
+import { InputSelection } from './element/InputSelection';
+import { InputTextarea } from './element/InputTextarea';
+import { ProgressBar } from './element/ProgressBar';
+import { ViewTable } from './element/ViewTable';
+import { listener } from './listener';
+import { ui } from './ui';
 
 export { action };
 
@@ -375,18 +375,18 @@ window.onresize = function () {
 	}
 }
 
-customElements.define('view-calendar', ViewCalendar);
-customElements.define('view-map', ViewMap);
 customElements.define('dialog-popup', DialogPopup);
-customElements.define('view-image', ViewImage);
-customElements.define('input-date', InputDate);
 customElements.define('input-checkbox', InputCheckbox);
+customElements.define('input-date', InputDate);
 customElements.define('input-image', InputImage);
 customElements.define('input-rating', InputRating);
 customElements.define('input-selection', InputSelection);
 customElements.define('input-textarea', InputTextarea);
 customElements.define('progress-bar', ProgressBar);
-customElements.define('table-sortable', TableSortable);
+customElements.define('view-calendar', ViewCalendar);
+customElements.define('view-image', ViewImage);
+customElements.define('view-map', ViewMap);
+customElements.define('view-table', ViewTable);
 
 window.api = api;
 window.action = action;
