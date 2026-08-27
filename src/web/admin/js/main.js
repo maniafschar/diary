@@ -20,7 +20,7 @@ class api {
 		api.ajax({
 			url: api.url + 'init',
 			success: xhr => {
-				var log = document.querySelector('log').appendChild(document.createElement('sortable-table'));
+				var log = document.querySelector('log').appendChild(document.createElement('table-sortable'));
 				log.list = xhr.logs;
 				log.columns.push({ label: 'id', sort: true, width: 5, excludeNarrow: true });
 				log.columns.push({ label: 'createdAt', width: 10, detail: true });
@@ -46,7 +46,7 @@ class api {
 				});
 				log.renderTable();
 
-				var ticket = document.querySelector('ticket').appendChild(document.createElement('sortable-table'));
+				var ticket = document.querySelector('ticket').appendChild(document.createElement('table-sortable'));
 				ticket.list = xhr.tickets;
 				ticket.deleteButton = true;
 				ticket.columns.push({ label: 'id', width: 10, sort: true, excludeNarrow: true });
@@ -66,7 +66,7 @@ class api {
 				ticket.renderTable();
 				document.addEventListener('table', event => {
 					if (event.detail.type == 'delete')
-						api.deleteTicket(document.querySelector('ticket sortable-table').list[event.detail.index].id, event.detail.index);
+						api.deleteTicket(document.querySelector('ticket table-sortable').list[event.detail.index].id, event.detail.index);
 				});
 
 				document.querySelector('input[name="searchLogs"]').value = xhr.search;
@@ -102,7 +102,7 @@ class api {
 			url: api.url + 'ticket/' + id,
 			method: 'DELETE',
 			success: () => {
-				document.querySelector('ticket sortable-table').deleteRow(index);
+				document.querySelector('ticket table-sortable').deleteRow(index);
 				document.dispatchEvent(new CustomEvent('popup'));
 			}
 		});
@@ -113,7 +113,7 @@ class api {
 			api.ajax({
 				url: api.url + 'log?search=' + encodeURIComponent(document.querySelector('input[name="searchLogs"]').value),
 				success: xhr => {
-					var log = document.querySelector('log sortable-table');
+					var log = document.querySelector('log table-sortable');
 					log.list = xhr;
 					log.renderTable();
 				}
@@ -182,7 +182,7 @@ class ui {
 	}
 
 	static openIp(event) {
-		var ip = document.querySelector('sortable-table').list[event.target.parentElement.getAttribute('i')].ip;
+		var ip = document.querySelector('table-sortable').list[event.target.parentElement.getAttribute('i')].ip;
 		if (ip)
 			window.open('https://whatismyipaddress.com/ip/' + ip, 'sc_ip');
 	}
@@ -204,8 +204,8 @@ class ui {
 
 	static toggleMultiline() {
 		ui.multiline = !ui.multiline;
-		document.querySelector('log sortable-table').renderTable();
-		document.querySelector('ticket sortable-table').renderTable();
+		document.querySelector('log table-sortable').renderTable();
+		document.querySelector('ticket table-sortable').renderTable();
 	}
 
 	static parents(e, nodeName) {
