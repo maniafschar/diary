@@ -50,14 +50,14 @@ class action {
 	}
 
 	static addFeedback(eventId) {
-		var note = document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value;
+		var note = document.querySelector('view-image').data().querySelector('textarea[name="feedback"]').value;
 		if (note)
 			api.event.postFeedback(eventId, { note: note }, () => {
-				document.querySelector('image-carousel').data().querySelector('textarea[name="feedback"]').value = '';
+				document.querySelector('view-image').data().querySelector('textarea[name="feedback"]').value = '';
 				document.dispatchEvent(new CustomEvent('event'));
 				var div = document.createElement('div');
 				div.innerHTML = listener.listFeedbacks({ eventFeedbacks: [{ createdAt: new Date().toISOString(), note: note, contact: { id: api.user.id } }] });
-				document.querySelector('image-carousel').data().querySelector('description').insertBefore(div.firstChild, document.querySelector('image-carousel').data().querySelector('separator'));
+				document.querySelector('view-image').data().querySelector('description').insertBefore(div.firstChild, document.querySelector('view-image').data().querySelector('separator'));
 			});
 	}
 
@@ -80,13 +80,13 @@ class action {
 	static addImage(event) {
 		var chooseFile = () => {
 			event.contactEvents.push({ contact: { id: api.user.id } });
-			var image = document.querySelector('image-carousel').data().querySelector('input-image');
+			var image = document.querySelector('view-image').data().querySelector('input-image');
 			image.setSuccess(file => {
 				var formData = new FormData();
 				formData.append('file', file.file);
 				api.event.postImage(event.id, file.type, formData, true,
 					() => {
-						document.querySelector('image-carousel').indexImage++;
+						document.querySelector('view-image').indexImage++;
 						document.dispatchEvent(new CustomEvent('event'));
 						document.dispatchEvent(new CustomEvent('popup'));
 					})
@@ -228,7 +228,7 @@ class action {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		var popup = true;
 		if (!e) {
-			e = document.querySelector('image-carousel').data().querySelector('thumbnail[i="' + id + '"]');
+			e = document.querySelector('view-image').data().querySelector('thumbnail[i="' + id + '"]');
 			popup = false;
 		}
 		if (e.querySelector('delete')) {
