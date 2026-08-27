@@ -1,8 +1,8 @@
 import { api } from "../api";
 
-export { ImageCarousel };
+export { ViewImage };
 
-class ImageCarousel extends HTMLElement {
+class ViewImage extends HTMLElement {
 	list = null;
 	index = 0;
 	indexProcessed = {};
