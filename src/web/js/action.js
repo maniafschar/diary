@@ -168,7 +168,7 @@ class action {
 		api.contact.patch(contact, () => {
 			api.authentication.getVerify(contact.email, e => {
 				if (e == 'ok') {
-					document.querySelector('user sortable-table').table().querySelector('td[contact*="\\"id\\":' + contact.id + ',"]').innerText = '...';
+					document.querySelector('user table-sortable').table().querySelector('td[contact*="\\"id\\":' + contact.id + ',"]').innerText = '...';
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde gesendet. Nach dem Klick auf den Link in der Email ist der Benutzer verifiziert.' } }));
 				} else
 					document.querySelector('element.login error').innerText = e;
@@ -215,7 +215,7 @@ class action {
 	static logoff() {
 		api.authentication.deleteToken();
 		api.logoff();
-		document.querySelectorAll('event sortable-table, user sortable-table').forEach(e => e.table().querySelector('tbody').textContent = '');
+		document.querySelectorAll('event table-sortable, user table-sortable').forEach(e => e.table().querySelector('tbody').textContent = '');
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('element.calendar').style.display = '';
