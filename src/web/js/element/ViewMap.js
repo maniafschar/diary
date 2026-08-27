@@ -57,15 +57,24 @@ class ViewMap extends HTMLElement {
 }
   *{box-sizing:border-box;}
   button{
-    background:var(--accent);
-    color:white;
-    border:none;
-    border-radius:8px;
-    padding:8px 12px;
-    font-size:13px;
-    cursor:pointer;
-    flex:1;
-    transition:background .15s ease;
+ 	background: rgba(100, 150, 200, 0.2);
+	border: none;
+	border-radius: 1em;
+	outline: none;
+	cursor: pointer;
+	font: inherit;
+	margin: 0 0.5em;
+	font-size: 1em;
+	height: 2em;
+	color: white;
+	line-height: 1;
+	z-index: 2;
+	position: absolute;
+	font-size: 1.3em;
+	width: 2em;
+	padding: 0;
+	bottom: 0.5em;
+	left: 50%;
   }
   button:hover{background:var(--accent-dark);}
   button.secondary{
@@ -106,18 +115,24 @@ class ViewMap extends HTMLElement {
 				marker.bindPopup(popupHtml);
 				return marker;
 			});
-			document.getElementById('startBtn').addEventListener('click', startTour);
-			document.getElementById('nextBtn').addEventListener('click', () => {
-				const next = (currentIndex + 1 + locations.length) % locations.length;
-				this.flyToIndex(next, true);
-			});
-			document.getElementById('prevBtn').addEventListener('click', () => {
-				const prev = (currentIndex - 1 + locations.length) % locations.length;
-				this.flyToIndex(prev, true);
-			});
 			this.flyToIndex(0, false);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+		var start = this._root.appendChild(document.createElement('button'));
+		start.style.marginLeft = '-1em';
+		start.addEventListener('click', this.startTour);
+		var next = this._root.appendChild(document.createElement('button'));
+		next.style.marginLeft = '2em';
+		next.addEventListener('click', () => {
+			const next = (currentIndex + 1 + locations.length) % locations.length;
+			this.flyToIndex(next, true);
+		});
+		var prev = this._root.appendChild(document.createElement('button'));
+		prev.style.marginLeft = '-2em';
+		prev.addEventListener('click', () => {
+			const prev = (currentIndex - 1 + locations.length) % locations.length;
+			this.flyToIndex(prev, true);
+		});
 	}
 
 	escapeHtml(str) {
