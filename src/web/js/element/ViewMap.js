@@ -51,9 +51,9 @@ class ViewMap extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	position: relative;
-	display: block;
 	width: 100%;
 	height: 100%;
+	display: flex;
 }
 :root{
     --bg:#0f1115;
@@ -65,36 +65,6 @@ class ViewMap extends HTMLElement {
     --accent-dark:#2f5fce;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
-  #app{display:flex;height:100vh;width:100vw;}
-  #sidebar{
-    width:320px;
-    min-width:320px;
-    background:var(--panel);
-    border-right:1px solid var(--panel-border);
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-  }
-  #sidebar header{
-    padding:16px 18px;
-    border-bottom:1px solid var(--panel-border);
-  }
-  #sidebar header h1{
-    font-size:16px;
-    margin:0 0 4px 0;
-  }
-  #sidebar header p{
-    margin:0;
-    font-size:12px;
-    color:var(--muted);
-  }
-  #controls{
-    padding:12px 18px;
-    display:flex;
-    gap:8px;
-    border-bottom:1px solid var(--panel-border);
-  }
   button{
     background:var(--accent);
     color:white;
@@ -111,11 +81,6 @@ class ViewMap extends HTMLElement {
     background:#2a2f3a;
   }
   button.secondary:hover{background:#3a4150;}
-  #list{
-    flex:1;
-    overflow-y:auto;
-    padding:8px;
-  }
   .stop{
     display:flex;
     gap:10px;
@@ -148,27 +113,7 @@ class ViewMap extends HTMLElement {
   .popup-box h3{margin:0 0 4px 0;font-size:15px;}
   .popup-box .addr{font-size:12px;color:var(--muted);margin-bottom:6px;}
   .popup-box .meta{font-size:11px;color:var(--muted);margin-bottom:6px;}
-  .popup-box .note{font-size:12px;line-height:1.4;}
-  #progress{
-    padding:10px 18px;
-    border-top:1px solid var(--panel-border);
-    font-size:12px;
-    color:var(--muted);
-    display:flex;
-    justify-content:space-between;
-  }`;
-		var sidebar = this._root.appendChild(document.createElement('sidebar'));
-		sidebar.innerHTML = `
-    <div id="controls">
-      <button id="startBtn">▶ Tour starten</button>
-      <button id="prevBtn" class="secondary">◀</button>
-      <button id="nextBtn" class="secondary">▶</button>
-    </div>
-    <div id="list"></div>
-    <div id="progress">
-      <span id="progressText">–</span>
-      <span id="progressCount">0 / 0</span>
-    </div>v`;
+  .popup-box .note{font-size:12px;line-height:1.4;}`;
 		var script = this._root.appendChild(document.createElement('script'));
 		script.onload = () => {
 			this.map = L.map(this._root.appendChild(document.createElement('div')), { zoomControl: true }).setView(
