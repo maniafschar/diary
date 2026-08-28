@@ -17,7 +17,7 @@ container {
 	opacity: 0;
 	background-color: rgba(0, 0, 0, 0.2);
 	transition: all .4s ease-out;
-	z-index: 10;
+	z-index: 600;
 }
 
 loader {
