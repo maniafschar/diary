@@ -2,45 +2,9 @@ export { ViewMap };
 
 class ViewMap extends HTMLElement {
 	map = null;
-	currentIndex = -1;
+	currentIndex = 0;
 	tourTimer = null;
-	locations = [
-		{
-			name: "Eiffelturm",
-			address: "Champ de Mars, 5 Av. Anatole France, 75007 Paris",
-			latitude: 48.8584,
-			longitude: 2.2945,
-			altitude: 330,
-			note: "Wahrzeichen von Paris, erbaut 1889 für die Weltausstellung.",
-			image: "/med/10000/8.jpg"
-		},
-		{
-			name: "Kolosseum",
-			address: "Piazza del Colosseo, 1, 00184 Roma RM, Italien",
-			latitude: 41.8902,
-			longitude: 12.4922,
-			altitude: 21,
-			note: "Größtes je gebautes Amphitheater des Römischen Reiches.",
-			image: "/med/10000/7.jpg"
-		},
-		{
-			name: "Freiheitsstatue",
-			address: "Liberty Island, New York, NY 10004, USA",
-			latitude: 40.6892,
-			longitude: -74.0445,
-			altitude: 93,
-			note: "Geschenk Frankreichs an die USA, eingeweiht 1886.",
-			image: "/med/10000/6.jpg"
-		},
-		{
-			name: "Great Wall of China",
-			address: "Huairou, China",
-			latitude: 40.4319,
-			longitude: 116.5704,
-			altitude: 550,
-			note: "Jahrtausende altes Bauwerk, über 20.000 km lang.",
-			image: "/med/10000/5.jpg"
-		}];
+	locations = [];
 	markers = [];
 
 	constructor() {
@@ -112,6 +76,9 @@ button {
 	font-size: 2em !important;
 	padding: 0.25em 0.4em 1em 1em !important;
 	opacity: 0.3 !important;
+}
+.leaflet-popup-content {
+	max-width: 150px !important;
 }`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
@@ -130,27 +97,11 @@ button {
 				shadowSize: [60, 50],
 				shadowAnchor: [20, 45]
 			});
-			this.map = L.map(m, { zoomControl: true }).setView(
-				[this.locations[0].latitude, this.locations[0].longitude], 4);
+			this.map = L.map(m, { zoomControl: true })setView([48.137154, 11.576124], 4);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
 			}).addTo(this.map);
-			this.locations.map(loc => {
-				const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
-				const popupHtml = `
-<div class="popup-box">
-	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
-	<h3>${this.escapeHtml(loc.name)}</h3>
-	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
-	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
-	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
-</div>`;
-				marker.bindPopup(popupHtml);
-				this.markers.push(marker);
-				return marker;
-			});
-			this.flyToIndex(0, false);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 		var start = this._root.appendChild(document.createElement('button'));
@@ -167,6 +118,25 @@ button {
 		prev.innerText = '<';
 		prev.addEventListener('click', () =>
 			this.flyToIndex((this.currentIndex - 1 + this.locations.length) % this.locations.length, true));
+	}
+
+	setLocations(locations) {
+		this.locations = locations;
+		this.locations.map(loc => {
+			const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
+			const popupHtml = `
+<div class="popup-box">
+	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
+	<h3>${this.escapeHtml(loc.name)}</h3>
+	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
+	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
+	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
+</div>`;
+			marker.bindPopup(popupHtml);
+			this.markers.push(marker);
+			return marker;
+		});
+		this.flyToIndex(this.currentIndex, false);
 	}
 
 	escapeHtml(str) {
