@@ -50,7 +50,7 @@ class listener {
 		var list = [];
 		var listImages = function (event) {
 			var list = [];
-			for (var i = 0; i < event.eventImages.length; i++)
+			for (var i = 0; i < event.eventImages?.length; i++)
 				list.push(event.eventImages[i].image);
 			return list;
 		};
@@ -220,9 +220,21 @@ thumbnail delete {
 			var calendar = document.querySelector('view-calendar');
 			calendar.reset();
 			calendar.setOpen(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
-			for (var i = events.length - 1; i >= 0; i--)
+			var map = [];
+			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
+				map.push({
+					name: events[i].location.name,
+					address: events[i].location.address,
+					latitude: events[i].latitude,
+					longitude: events[i].longitude,
+					altitude: events[i].altitude,
+					note: events[i].note,
+					image: events[i].eventImages ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
+				});
+			}
 			calendar.render();
+			document.querySelector('view-map').setLocations(map);
 			if (events.length) {
 				var pastEvents = document.querySelector('view-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
@@ -241,6 +253,7 @@ thumbnail delete {
 		else
 			api.activateProgressbar();
 	}
+
 	static init() {
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
