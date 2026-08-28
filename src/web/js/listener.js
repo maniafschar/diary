@@ -225,6 +225,7 @@ thumbnail delete {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
+						date: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))),
 						name: events[i].location.name,
 						address: events[i].location.address,
 						latitude: events[i].location.latitude,
