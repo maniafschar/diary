@@ -20,6 +20,9 @@ class ViewMap extends HTMLElement {
 	display: flex;
 	box-sizing:border-box;
 }
+*::-webkit-scrollbar {
+	display: none;
+}
 button {
 	background: rgba(100, 150, 200, 0.2);
 	border: none;
@@ -59,10 +62,14 @@ button {
 .popup-box h3 {
 	margin: 0 0 0.5em 0;
 	font-size: 1.3em;
+	overflow-x: auto;
+	white-space: nowrap;
 }
 .popup-box .addr {
 	color: var(--muted);
 	margin-bottom:  0.5em;
+	overflow-x: auto;
+	white-space: nowrap;
 }
 .popup-box .note {
 	max-height: 6em;
