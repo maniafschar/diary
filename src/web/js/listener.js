@@ -223,7 +223,7 @@ thumbnail delete {
 			var map = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
-					address = address.substring(0, address.lastIndexOf('\n));
+					address = address.substring(0, address.lastIndexOf('\n'));
 				return address;
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
