@@ -13,14 +13,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.jq.diary.entity.Location;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.service.LocationService;
+import com.jq.diary.util.Json;
 
 @Service
 public class AdminService {
 	@Autowired
 	private Repository repository;
+
+	@Autowired
+	private LocationService locationService;
 
 	@Value("${app.admin.buildScript}")
 	private String buildScript;
@@ -97,7 +104,19 @@ public class AdminService {
 	}
 
 	public String execute() {
-		return null;
+		int updated = 0;
+		int failed = 0;
+		final List<Location> locations = this.repository.list("from Location where longitude is null", Location.class);
+		for (final Location location : locations) {
+			locationService.addGeoData(location);
+			if (location.getLongitude() == null)
+				failed++;
+			else {
+				repository.save(location);
+				updated++;
+			}
+		}
+		return "updated: " + updated + ", failed: " + failed;
 	}
 
 	private void validateSearch(final String search) {
