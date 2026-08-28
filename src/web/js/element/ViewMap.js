@@ -121,16 +121,16 @@ button {
 
 	setLocations(locations) {
 		this.locations = locations;
-		this.locations.map(loc => {
-			const marker = L.marker([loc.latitude, loc.longitude]).addTo(this.map);
-			const popupHtml = `
+		this.locations.map((loc, index) => {
+			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
+			marker.bindPopup(`
 <div class="popup-box">
 	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
 	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
-</div>`;
-			marker.bindPopup(popupHtml);
+</div>`);
+			marker.on('click', e => this.currentIndex = this.options.index);
 			this.markers.push(marker);
 			return marker;
 		});
