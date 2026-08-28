@@ -107,7 +107,7 @@ public class AdminService {
 	public String execute() {
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
-			if (Math.random() >0.8) {
+			if (Math.random() > 0.6) {
 				try {
 					locationService.addGeoData(location);
 				} catch(Exception ex) {
@@ -126,7 +126,7 @@ public class AdminService {
 				return "updated: " + location.getId();
 			}
 		}
-		return null;
+		return "no match";
 	}
 
 	private void validateSearch(final String search) {
