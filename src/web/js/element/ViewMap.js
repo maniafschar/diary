@@ -130,7 +130,7 @@ button {
 	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
 </div>`);
-			marker.on('click', e => this.currentIndex = this.options.index);
+			marker.on('click', e => this.currentIndex = e.target.options.index);
 			this.markers.push(marker);
 			return marker;
 		});
