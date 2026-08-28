@@ -2,7 +2,7 @@ export { ViewMap };
 
 class ViewMap extends HTMLElement {
 	map = null;
-	currentIndex = 0;
+	currentIndex = -1;
 	tourTimer = null;
 	locations = [];
 	markers = [];
@@ -120,6 +120,8 @@ button {
 	}
 
 	setLocations(locations) {
+		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
+			this.currentIndex = locations.length - 1;
 		this.locations = locations;
 		this.locations.map((loc, index) => {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
