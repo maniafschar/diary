@@ -49,9 +49,23 @@ public class LocationService {
 		if (location.getName() == null || location.getName().isBlank())
 			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
 		final Location locationStored = this.find(location);
-		if (locationStored == null)
+		if (locationStored == null) {
+			if (location.getLongitude() == null)
+				addGeoData(location);
 			this.repository.save(location);
-		else
-			location.setId(location.getId());
+		} else
+			location.setId(locationStored.getId());
+	}
+
+	private void addGeoData(Location location) {
+		final JsonNode response = Json.toNode(WebClient
+				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + location.getAddress().replace("\n", ", "))
+				.get()
+				.accept(MediaType.APPLICATION_JSON)
+				.header("user-agent",
+						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
+				.retrieve().toEntity(String.class)
+				.block().getBody());
+
 	}
 }
