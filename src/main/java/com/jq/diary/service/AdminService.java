@@ -106,9 +106,13 @@ public class AdminService {
 	public String execute() {
 		int updated = 0;
 		int failed = 0;
-		final List<Location> locations = this.repository.list("from Location where longitude is null", Location.class);
+		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
-			locationService.addGeoData(location);
+			try {
+				locationService.addGeoData(location);
+			} catch(Exception ex) {
+				return "updated: " + updated + ", failed: " + failed + "\n" + Utilities.stackTraceToString(ex);
+			}
 			if (location.getLongitude() == null)
 				failed++;
 			else {
