@@ -78,37 +78,35 @@ button {
 .leaflet-popup-content-wrapper {
 	background: var(--panel);
 	color: var(--text);
-	border-radius: 10px;
+	border-radius: 0.5em;
 }
 .leaflet-popup-tip {
 	background: var(--panel);
 }
 .popup-box {
-	min-width: 200px;
+	min-width: 10em;
 }
 .popup-box img {
 	width: 100%;
-	border-radius: 8px;
-	margin-bottom: 8px;
+	border-radius: 0.5em;
+	margin-bottom: 0.5em;
 	display: block;
 }
 .popup-box h3 {
-	margin: 0 0 4px 0;
-	font-size: 15px;
+	margin: 0 0 0.5em 0;
+	font-size: 1.3em;
 }
 .popup-box .addr {
-	font-size: 12px;
 	color: var(--muted);
-	margin-bottom:  6px;
+	margin-bottom:  0.5em;
 }
 .popup-box .meta {
-	font-size: 11px;
+	font-size: 0.8em;
 	color: var(--muted);
-	margin-bottom: 6px;
+	margin-bottom: 0.5em;
 }
-.popup-box .note {
-	font-size: 12px;
-	line-height: 1.4;
+.leaflet-popup-content {
+	margin: 0.5em;
 }`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
