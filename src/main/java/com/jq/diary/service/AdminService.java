@@ -115,7 +115,7 @@ public class AdminService {
 				return "updated: " + updated + ", failed: " + s.toString() + "\n" + Utilities.stackTraceToString(ex);
 			}
 			if (location.getLongitude() == null)
-				return WebClient
+				return org.springframework.web.reactive.function.client.WebClient
 				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress(), StandardCharsets.UTF_8))
 				.get()
 				.accept(MediaType.APPLICATION_JSON)
