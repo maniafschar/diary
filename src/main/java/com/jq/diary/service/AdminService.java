@@ -114,14 +114,7 @@ public class AdminService {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
 				if (location.getLongitude() == null)
-					return "data from openstreetmap\n" + org.springframework.web.reactive.function.client.WebClient
-							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
-							.get()
-							.accept(org.springframework.http.MediaType.APPLICATION_JSON)
-							.header("user-agent",
-									"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
-							.retrieve().toEntity(String.class)
-							.block().getBody();
+					return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8);
 				repository.save(location);
 				return "updated: " + location.getId();
 			}
