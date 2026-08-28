@@ -158,13 +158,29 @@ button {
 		if (stopAutoTour)
 			this.stopTour();
 
-		this.currentIndex = i;
 		const loc = this.locations[i];
+		var distance = this.calculateDistance(
+				this.locations[this.currentIndex].latitude, this.locations[this.currentIndex].longitude,
+				loc.latitude, loc.longitude);
+		this.currentIndex = i;
 		this.map.flyTo([loc.latitude, loc.longitude], 15, {
-			duration: 2,
+			duration: Math.max(3 * distance / 20000, 0.3),
 			easeLinearity: 0.25
 		});
 		this.map.once('moveend', () => this.markers[i].openPopup());
+	}
+
+	calculateDistance(lat1, lon1, lat2, lon2) {
+		const R = 6371;
+		const rLat1 = lat1 * Math.PI / 180;
+		const rLat2 = lat2 * Math.PI / 180;
+		const dLat = (lat2 - lat1) * Math.PI / 180;
+		const dLon = (lon2 - lon1) * Math.PI / 180;
+		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+					Math.cos(rLat1) * Math.cos(rLat2) *
+					Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return R * c;
 	}
 
 	startTour() {
