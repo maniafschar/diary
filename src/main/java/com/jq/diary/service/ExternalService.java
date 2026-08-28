@@ -66,7 +66,8 @@ public class ExternalService {
 		if (response != null && response.startsWith("[")) {
 			final JsonNode node = Json.toNode(response);
 			if (node.size() > 0)
-				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble() };
+				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
+						node.get(0).has("alt") = node.get(0).get("alt").asDouble() : null};
 		}
 		return null;
 	}
