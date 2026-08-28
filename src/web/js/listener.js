@@ -230,7 +230,7 @@ thumbnail delete {
 					longitude: events[i].longitude,
 					altitude: events[i].altitude,
 					note: events[i].note,
-					image: events[i].eventImages ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
+					image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
 				});
 			}
 			calendar.render();
