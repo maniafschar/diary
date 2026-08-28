@@ -223,15 +223,16 @@ thumbnail delete {
 			var map = [];
 			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
-				map.push({
-					name: events[i].location.name,
-					address: events[i].location.address,
-					latitude: events[i].latitude,
-					longitude: events[i].longitude,
-					altitude: events[i].altitude,
-					note: events[i].note,
-					image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
-				});
+				if (events[i].latitude)
+					map.push({
+						name: events[i].location.name,
+						address: events[i].location.address,
+						latitude: events[i].latitude,
+						longitude: events[i].longitude,
+						altitude: events[i].altitude,
+						note: events[i].note,
+						image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
+					});
 			}
 			calendar.render();
 			document.querySelector('view-map').setLocations(map);
