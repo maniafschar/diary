@@ -61,6 +61,7 @@ public class ExternalService {
 				.accept(MediaType.APPLICATION_JSON)
 				.header("user-agent",
 						"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
+				.header("Accept-Language", "de-DE")
 				.retrieve().toEntity(String.class)
 				.block().getBody();
 		if (response != null && response.startsWith("[")) {
