@@ -223,13 +223,13 @@ thumbnail delete {
 			var map = [];
 			for (var i = events.length - 1; i >= 0; i--) {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
-				if (events[i].latitude)
+				if (events[i].location.latitude)
 					map.push({
 						name: events[i].location.name,
 						address: events[i].location.address,
-						latitude: events[i].latitude,
-						longitude: events[i].longitude,
-						altitude: events[i].altitude,
+						latitude: events[i].location.latitude,
+						longitude: events[i].location.longitude,
+						altitude: events[i].location.altitude,
 						note: events[i].note,
 						image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
 					});
