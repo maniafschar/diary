@@ -136,7 +136,7 @@ button {
 <div class="popup-box">
 	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
-	${`<div class="addr">${loc.date}${loc.address ? '<br/>' + this.escapeHtml(loc.address) : ''}</div>`}
+	${`<div class="addr">${loc.date}${loc.address ? '<br/>' + this.escapeHtml(loc.address).replace(/\n/g, '<br/>') : ''}</div>`}
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
 </div>`);
 			marker.on('click', e => this.currentIndex = e.target.options.index);
