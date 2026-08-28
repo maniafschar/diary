@@ -164,7 +164,7 @@ button {
 				loc.latitude, loc.longitude);
 		this.currentIndex = i;
 		this.map.flyTo([loc.latitude, loc.longitude], 15, {
-			duration: Math.max(3 * distance / 20000, 0.3),
+			duration: 0.271221 * Math.log(1.05279 * distance + 1) + 0.3,
 			easeLinearity: 0.25
 		});
 		this.map.once('moveend', () => this.markers[i].openPopup());
