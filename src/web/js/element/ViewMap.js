@@ -106,7 +106,12 @@ button {
 	margin-bottom: 0.5em;
 }
 .leaflet-popup-content {
-	margin: 0.5em;
+	margin: 0.5em !important;
+}
+.leaflet-container a.leaflet-popup-close-button {
+	font-size: 2em !important;
+	padding: 0.25em 0.4em 1em 1em !important;
+	opacity: 0.3 !important;
 }`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
