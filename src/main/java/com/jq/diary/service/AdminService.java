@@ -118,7 +118,7 @@ public class AdminService {
 				return org.springframework.web.reactive.function.client.WebClient
 				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress(), StandardCharsets.UTF_8))
 				.get()
-				.accept(MediaType.APPLICATION_JSON)
+				.accept(org.springframework.http.MediaType.APPLICATION_JSON)
 				.header("user-agent",
 						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 				.retrieve().toEntity(String.class)
