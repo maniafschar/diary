@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jq.diary.util.Json;
@@ -50,6 +52,23 @@ public class ExternalService {
 				(address.country == null ? "" : address.country)).trim());
 		result.put("countryCode", address.country_code);
 		return result;
+	}
+
+	public double[] geoData(final String address) {
+		final String response = WebClient
+				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + UriUtils.encode(address.replace("\n", ", "), StandardCharsets.UTF_8))
+				.get()
+				.accept(MediaType.APPLICATION_JSON)
+				.header("user-agent",
+						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
+				.retrieve().toEntity(String.class)
+				.block().getBody();
+		if (response != null && response.startsWith("[")) {
+			final JsonNode node = Json.toNode(response);
+			if (node.size() > 0)
+				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble() };
+		}
+		return null;
 	}
 
 	public Map<String, Object> nearby(final double latitude, final double longitude) {
