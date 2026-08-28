@@ -50,7 +50,7 @@ class listener {
 		var list = [];
 		var listImages = function (event) {
 			var list = [];
-			for (var i = 0; i < event.eventImages?.length; i++)
+			for (var i = 0; i < event.eventImages.length; i++)
 				list.push(event.eventImages[i].image);
 			return list;
 		};
