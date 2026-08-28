@@ -64,10 +64,9 @@ button {
 	color: var(--muted);
 	margin-bottom:  0.5em;
 }
-.popup-box .meta {
-	font-size: 0.8em;
-	color: var(--muted);
-	margin-bottom: 0.5em;
+.popup-box .note {
+	max-height: 6em;
+	overflow: auto;
 }
 .leaflet-popup-content {
 	margin: 0.5em !important;
@@ -129,7 +128,6 @@ button {
 	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
 	${loc.address ? `<div class="addr">${this.escapeHtml(loc.address)}</div>` : ''}
-	<div class="meta">Höhe: ${loc.altitude} m · ${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}</div>
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
 </div>`;
 			marker.bindPopup(popupHtml);
