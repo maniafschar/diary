@@ -97,7 +97,7 @@ button {
 				shadowSize: [60, 50],
 				shadowAnchor: [20, 45]
 			});
-			this.map = L.map(m, { zoomControl: true })setView([48.137154, 11.576124], 4);
+			this.map = L.map(m, { zoomControl: true }).setView([48.137154, 11.576124], 4);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
