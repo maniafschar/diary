@@ -66,6 +66,7 @@ public class LocationService {
 		if (geoData != null) {
 			location.setLatitude(geoData[0]);
 			location.setLongitude(geoData[1]);
+			location.setAltitude(geoData[2]);
 		}
 	}
 }
