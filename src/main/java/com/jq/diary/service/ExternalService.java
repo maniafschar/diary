@@ -54,7 +54,7 @@ public class ExternalService {
 		return result;
 	}
 
-	public double[] geoData(final String address) {
+	public Double[] geoData(final String address) {
 		final String response = WebClient
 				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + UriUtils.encode(address, StandardCharsets.UTF_8))
 				.get()
@@ -66,7 +66,7 @@ public class ExternalService {
 		if (response != null && response.startsWith("[")) {
 			final JsonNode node = Json.toNode(response);
 			if (node.size() > 0)
-				return new double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble() };
+				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble() };
 		}
 		return null;
 	}
