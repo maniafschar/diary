@@ -97,6 +97,14 @@ class api {
 		});
 	}
 
+	static execute() {
+		api.ajax({
+			url: api.url + 'execute',
+			success: xhr =>
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre>' + ui.sanitizeText(xhr) + '</pre>' } }))
+		});
+	}
+
 	static deleteTicket(id, index) {
 		api.ajax({
 			url: api.url + 'ticket/' + id,
