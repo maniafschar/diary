@@ -105,6 +105,27 @@ public class AdminService {
 	}
 
 	public String execute() {
+		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
+		for (final Location location : locations) {
+			if (Math.random() >0.8) {
+				try {
+					locationService.addGeoData(location);
+				} catch(Exception ex) {
+					return "Error\n" + Utilities.stackTraceToString(ex);
+				}
+				if (location.getLongitude() == null)
+					return org.springframework.web.reactive.function.client.WebClient
+							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
+							.get()
+							.accept(org.springframework.http.MediaType.APPLICATION_JSON)
+							.header("user-agent",
+									"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
+							.retrieve().toEntity(String.class)
+							.block().getBody();
+				repository.save(location);
+				return "updated: " + location.getId();
+			}
+		}
 		return null;
 	}
 
