@@ -61,7 +61,7 @@ public class LocationService {
 			location.setId(locationStored.getId());
 	}
 
-	private void addGeoData(Location location) {
+	public void addGeoData(Location location) {
 		final Double[] geoData = externalService.geoData(location.getAddress().replace("\n", ", "));
 		if (geoData != null) {
 			location.setLatitude(geoData[0]);
