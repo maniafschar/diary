@@ -57,8 +57,13 @@ public class LocationService {
 			if (location.getLongitude() == null)
 				addGeoData(location);
 			this.repository.save(location);
-		} else
+		} else {
+			if (locationStored.getLongitude() == null) {
+				addGeoData(locationStored);
+				this.repository.save(locationStored);
+			}
 			location.setId(locationStored.getId());
+		}
 	}
 
 	public void addGeoData(Location location) {
