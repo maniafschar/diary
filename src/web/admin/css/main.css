@@ -156,7 +156,7 @@ tab {
 }
 
 tab.selected {
-	background: rgba(170, 170, 255, 0.15);
+	background: rgba(100, 150, 200, 0.2);
 }
 
 log,
