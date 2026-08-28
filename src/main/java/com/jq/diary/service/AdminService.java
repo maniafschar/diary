@@ -108,7 +108,7 @@ public class AdminService {
 		final StringBuilder s = new StringBuilder();
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations)
-			s.append(location.getId() + " https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8) + "\n")
+			s.append(location.getId() + " https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8) + "\n");
 		return s.toString();
 	}
 
