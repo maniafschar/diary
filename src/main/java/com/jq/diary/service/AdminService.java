@@ -106,22 +106,22 @@ public class AdminService {
 
 	public String execute() {
 		int updated = 0;
-		int failed = 0;
+		final StrngBuilder s = new StringBuilder();
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
 			try {
 				locationService.addGeoData(location);
 			} catch(Exception ex) {
-				return "updated: " + updated + ", failed: " + failed + "\n" + Utilities.stackTraceToString(ex);
+				return "updated: " + updated + ", failed: " + s.toString() + "\n" + Utilities.stackTraceToString(ex);
 			}
 			if (location.getLongitude() == null)
-				failed++;
+				s.append(location.getAddress() + "\n\n");
 			else {
 				repository.save(location);
 				updated++;
 			}
 		}
-		return "updated: " + updated + ", failed: " + failed;
+		return "updated: " + updated + ", failed: " + s.toString();
 	}
 
 	private void validateSearch(final String search) {
