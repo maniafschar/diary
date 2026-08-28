@@ -106,7 +106,7 @@ public class AdminService {
 
 	public String execute() {
 		int updated = 0;
-		final StrngBuilder s = new StringBuilder();
+		final StringBuilder s = new StringBuilder();
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
 			try {
