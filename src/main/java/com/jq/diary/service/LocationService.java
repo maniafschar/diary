@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.service.ExternalService;
 
 @Service
 public class LocationService {
 	@Autowired
 	private Repository repository;
+
+	@Autowired
+	private ExternalService externalService;
 
 	public List<Location> list(final Client client) {
 		return this.repository.list("from Location where contact.client.id=?1", Location.class, client.getId());
@@ -58,14 +62,10 @@ public class LocationService {
 	}
 
 	private void addGeoData(Location location) {
-		final JsonNode response = Json.toNode(WebClient
-				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + location.getAddress().replace("\n", ", "))
-				.get()
-				.accept(MediaType.APPLICATION_JSON)
-				.header("user-agent",
-						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
-				.retrieve().toEntity(String.class)
-				.block().getBody());
-
+		final Double[] geoData = externalService.geoData(location.getAddress().replace("\n", ", "));
+		if (geoData != null) {
+			location.setLatitude(geoData[0]);
+			location.setLongitude(geoData[1]);
+		}
 	}
 }
