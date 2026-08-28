@@ -227,7 +227,7 @@ thumbnail delete {
 					map.push({
 						date: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))),
 						name: events[i].location.name,
-						address: events[i].location.address.replace(/\n/g, '<br/>'),
+						address: events[i].location.address,
 						latitude: events[i].location.latitude,
 						longitude: events[i].location.longitude,
 						altitude: events[i].location.altitude,
