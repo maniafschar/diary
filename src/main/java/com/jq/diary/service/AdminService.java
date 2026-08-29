@@ -77,11 +77,11 @@ public class AdminService {
 		return this.repository.list("from Log where " + search + " order by id desc", Log.class);
 	}
 
-	public List<?> sql(final String search) {
-		this.validateSearch(search);
+	public List<?> sql(final String sql) {
+		this.validateSearch(sql);
 		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
 			return  Arrays.asList(this.repository.executeUpdate(sql));
-		return this.repository.list(search);
+		return this.repository.list(sql);
 	}
 
 	public String build(final String type) throws IOException {
