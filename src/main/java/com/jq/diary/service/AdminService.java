@@ -109,7 +109,14 @@ public class AdminService {
 		for (final Location location : locations) {
 			if (Math.random() > 0.6) {
 				try {
-					locationService.addGeoData(location);
+					//locationService.addGeoData(location);
+					createTicket(new Ticket(org.springframework.web.reactive.function.WebClient
+							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(address, StandardCharsets.UTF_8))
+							.get()
+							.header("user-agent",
+									"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
+							.retrieve().toEntity(String.class)
+							.block().getBody();));
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
