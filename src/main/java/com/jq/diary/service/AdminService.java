@@ -107,7 +107,7 @@ public class AdminService {
 	public String execute() throws Exception {
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations)
-			return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + java.net.URLEncoder.encode(location.getAddress().replace("\n", " ").replace(",", " "), java.nio.charset.StandardCharsets.UTF_8.toString();
+			return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + java.net.URLEncoder.encode(location.getAddress().replace("\n", " ").replace(",", " "), java.nio.charset.StandardCharsets.UTF_8.toString());
 		return null;
 	}
 
