@@ -59,7 +59,7 @@ public class ExternalService {
 	public Double[] geoData(final String address) {
 		try {
 			final String response = WebClient
-					.create("https://nominatim.openstreetmap.org)
+					.create("https://nominatim.openstreetmap.org")
 					.get()
 					.uri(uriBuilder -> uriBuilder
 					        .path("/search")
