@@ -116,7 +116,7 @@ public class AdminService {
 							.header("user-agent",
 									"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
 							.retrieve().toEntity(String.class)
-							.block().getBody();));
+							.block().getBody()));
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
