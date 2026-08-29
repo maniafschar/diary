@@ -111,7 +111,7 @@ public class AdminService {
 			if (location.getLongitude() != null)
 				repository.save(location);
 			Thread.sleep(1200);
-		)
+		}
 		return null;
 	}
 
