@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.jq.diary.entity.Ticket;
 import com.jq.diary.util.Json;
 
 @Service
 public class ExternalService {
+	@Autowired
+	private AdminService adminService;
 
 	@Value("${app.google.key}")
 	private String googleKey;
@@ -64,7 +68,8 @@ public class ExternalService {
 				.header("Accept-Language", "de-DE")
 				.retrieve().toEntity(String.class)
 				.block().getBody();
-		if (response != null && response.startsWith("[")) {
+		if (response != null && response.length() > 0) {
+			this.adminService.createTicket(new Ticket(s));
 			final JsonNode node = Json.toNode(response);
 			if (node.size() > 0)
 				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
