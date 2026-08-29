@@ -114,7 +114,7 @@ public class AdminService {
 		for (final Location location : locations) {
 			if (Math.random() > 0.6) {
 				try {
-					//locationService.addGeoData(location);
+					locationService.addGeoData(location);
 					String address = location.getAddress().replace("\n", " ").replace(",", " ");
 String uri = UriComponentsBuilder
     .fromHttpUrl("https://nominatim.openstreetmap.org/search")
@@ -130,28 +130,18 @@ String uri = UriComponentsBuilder
     .defaultHeader("User-Agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
     .build().get()
     .uri(uri)
-    .exchangeToMono(response -> {
-        System.out.println("status: " + response.statusCode());
-        response.headers().asHttpHeaders().forEach((k, v) -> System.out.println(k + ": " + v));
-        // get raw body as string for logging
-        return response.toEntity(String.class);
-    })
+    .retrieve()
     .block();
-		final ProcessBuilder pb = new ProcessBuilder(
-				new String[]{"curl", "-v", "-G", "https://nominatim.openstreetmap.org/search",
-"--data-urlencode", "-d q=Hanfelder Str. 7 82319 Starnberg",
-"-d format=jsonv2", "-d limit=5", "-d email=mani.afschar@jq-consulting.de",
-"-H User-Agent: diary.cafe/1.0 (mani.afschar@jq-consulting.de)",
-"-H Accept: application/json"});
-		pb.redirectErrorStream(true);
-		return IOUtils.toString(pb.start().getInputStream(), StandardCharsets.UTF_8)
-					+ uri+"\n\n"+resp.getStatusCode()
+				if (location.getLongitude() != null)
+					repository.save(location);
+
+		return location.getLongitude()+"\n\n"+uri+"\n\n"+resp.getStatusCode()
 						+"\n\nfinal headers: " + resp.getHeaders()+
     "\n\nbody: " + resp.getBody();
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
-				/*if (location.getLongitude() == null)
+/*				if (location.getLongitude() == null)
 					return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8);
 				repository.save(location);
 				return "updated: " + location.getId();
