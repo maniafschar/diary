@@ -104,7 +104,7 @@ public class AdminService {
 			this.repository.save(ticket);
 	}
 
-	public String execute() {
+	public String execute() throws Exception {
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
 			locationService.addGeoData(location);
