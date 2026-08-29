@@ -73,12 +73,12 @@ public class AdminService {
 	}
 
 	public List<Log> log(final String search) {
-		this.validateSearch(search);
+		this.validateSql(search);
 		return this.repository.list("from Log where " + search + " order by id desc", Log.class);
 	}
 
 	public List<?> sql(final String sql) {
-		this.validateSearch(sql);
+		this.validateSql(sql);
 		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
 			return  List.of(this.repository.executeUpdate(sql));
 		return this.repository.list(sql);
@@ -117,8 +117,8 @@ public class AdminService {
 		return null;
 	}
 
-	private void validateSearch(final String search) {
-		final StringBuilder s = new StringBuilder(search.toLowerCase());
+	private void validateSql(final String sql) {
+		final StringBuilder s = new StringBuilder(sql.toLowerCase());
 		int p, p2;
 		while ((p = s.indexOf("'")) > -1) {
 			p2 = p;
@@ -127,13 +127,13 @@ public class AdminService {
 			} while (p2 > 0 && "\\".equals(s.substring(p2 - 1, p2)));
 			if (p2 < 0)
 				throw new IllegalArgumentException(
-						"Invalid quote in search: " + search);
+						"Invalid quote in sql: " + search);
 			s.delete(p, p2 + 1);
 		}
 		if (s.indexOf(";") > -1 || s.indexOf("union") > -1 || s.indexOf("update") > 0
 				|| s.indexOf("insert") > 0 || s.indexOf("delete") > 0)
 			throw new IllegalArgumentException(
-					"Invalid expression in search: " + search);
+					"Invalid expression in sql: " + sql);
 	}
 
 	@Scheduled(cron = "0 0 * * * *")
