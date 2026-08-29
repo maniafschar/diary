@@ -142,18 +142,7 @@ String uri = UriComponentsBuilder
 					return resp.getStatusCode()
 						+"\n\nfinal headers: " + resp.getHeaders()+
     "\n\nbody: " + resp.getBody();
-/*					return
-						"https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8)+"\n\n"+
-						org.springframework.web.reactive.function.client.WebClient
-							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", " ").replace(",", " "), StandardCharsets.UTF_8))
-							.get()
-							.header("Accept", "text/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-							.header("Accept-Language", "en-US,en;q=0.9")
-							.header("user-agent",
-									"diary.cafe (mani.afschar@jq-consulting.de)")
-							.retrieve().toEntity(String.class)
-							.block().getBody() 
-		*/				/*+ "\n\n\n" +
+				/*+ "\n\n\n" +
 							org.springframework.web.reactive.function.client.WebClient
 									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=48.77&lon=11.88")
 									.get()
