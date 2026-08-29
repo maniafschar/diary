@@ -80,7 +80,7 @@ public class AdminService {
 	public List<?> sql(final String sql) {
 		this.validateSearch(sql);
 		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
-			return  Arrays.asList(this.repository.executeUpdate(sql));
+			return  List.of(this.repository.executeUpdate(sql));
 		return this.repository.list(sql);
 	}
 
