@@ -22,6 +22,11 @@ import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Json;
 import com.jq.diary.util.Utilities;
 
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
+
 @Service
 public class AdminService {
 	@Autowired
@@ -110,7 +115,34 @@ public class AdminService {
 			if (Math.random() > 0.6) {
 				try {
 					//locationService.addGeoData(location);
-					return
+					String address = location.getAddress().replace("\n", ", ");
+String uri = UriComponentsBuilder
+    .fromHttpUrl("https://nominatim.openstreetmap.org/search")
+    .queryParam("format", "jsonv2")
+    .queryParam("q", address)
+    // optional, help narrow results & show you're a valid client:
+    .queryParam("limit", 5)
+    .queryParam("email", "mani.afschar@jq-consulting.de")
+    .build(true) // true => don't double-encode reserved chars
+    .toUriString();
+					ResponseEntity<String> resp = WebClient.builder()
+    .defaultHeader("Accept", "application/json")
+    .defaultHeader("Accept-Language", "en-US,en;q=0.9")
+    // User-Agent MUST identify your application and include a contact per Nominatim policy:
+    .defaultHeader("User-Agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
+    .build().get()
+    .uri(uri)
+    .exchangeToMono(response -> {
+        System.out.println("status: " + response.statusCode());
+        response.headers().asHttpHeaders().forEach((k, v) -> System.out.println(k + ": " + v));
+        // get raw body as string for logging
+        return response.toEntity(String.class);
+    })
+    .block();
+					return resp.getStatusCode()
+						+"\n\nfinal headers: " + resp.getHeaders()
+    "\n\nbody: " + resp.getBody();
+/*					return
 						"https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8)+"\n\n"+
 						org.springframework.web.reactive.function.client.WebClient
 							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", " ").replace(",", " "), StandardCharsets.UTF_8))
@@ -121,7 +153,7 @@ public class AdminService {
 									"diary.cafe (mani.afschar@jq-consulting.de)")
 							.retrieve().toEntity(String.class)
 							.block().getBody() 
-						/*+ "\n\n\n" +
+		*/				/*+ "\n\n\n" +
 							org.springframework.web.reactive.function.client.WebClient
 									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=48.77&lon=11.88")
 									.get()
