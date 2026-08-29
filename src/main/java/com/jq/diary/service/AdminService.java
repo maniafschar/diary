@@ -143,8 +143,8 @@ String uri = UriComponentsBuilder
 				"curl -v -G \""https://nominatim.openstreetmap.org/search\""
 +" --data-urlencode -d \"q=Hanfelder Str. 7 82319 Starnberg\""
 +" -d format=jsonv2 -d limit=5 -d \""email=mani.afschar@jq-consulting.de\""
-+" -H "User-Agent: diary.cafe/1.0 (mani.afschar@jq-consulting.de)"
-+" -H "Accept: application/json");
++" -H \""User-Agent: diary.cafe/1.0 (mani.afschar@jq-consulting.de)\""
++" -H \""Accept: application/json\"");
 		pb.redirectErrorStream(true);
 		return IOUtils.toString(pb.start().getInputStream(), StandardCharsets.UTF_8)
 					+ uri+"\n\n"+resp.getStatusCode()
