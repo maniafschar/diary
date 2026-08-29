@@ -119,12 +119,12 @@ public class AdminService {
 String uri = UriComponentsBuilder
     .fromHttpUrl("https://nominatim.openstreetmap.org/search")
     .queryParam("format", "jsonv2")
-    .queryParam("q", address)
+    .queryParam("q", address).encode()
     // optional, help narrow results & show you're a valid client:
     .queryParam("limit", 5)
     .queryParam("email", "mani.afschar@jq-consulting.de")
     .build(true) // true => don't double-encode reserved chars
-    .encode().toUriString();
+    .toUriString();
 					ResponseEntity<String> resp = WebClient.builder()
     .defaultHeader("Accept", "application/json")
     .defaultHeader("Accept-Language", "en-US,en;q=0.9")
