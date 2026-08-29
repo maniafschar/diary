@@ -119,7 +119,7 @@ public class AdminService {
 String uri = UriComponentsBuilder
     .fromHttpUrl("https://nominatim.openstreetmap.org/search")
     .queryParam("format", "jsonv2")
-    .queryParam("q", java.net.URLEncoder.encode(address, java.text.StandardCharsets.UTF_8.toString()))
+    .queryParam("q", java.net.URLEncoder.encode(address, java.nio.charset.StandardCharsets.UTF_8.toString()))
     // optional, help narrow results & show you're a valid client:
     .queryParam("limit", 5)
     .queryParam("email", "mani.afschar@jq-consulting.de")
