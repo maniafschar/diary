@@ -119,7 +119,7 @@ public class AdminService {
 							.retrieve().toEntity(String.class)
 							.block().getBody() + "\n\n\n" +
 							org.springframework.web.reactive.function.client.WebClient
-									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.getLatitude() + "&lon=" + location.getLongitude())
+									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=48.77&lon=11.88")
 									.get()
 									.accept(org.springframework.http.MediaType.TEXT_PLAIN)
 									.header("user-agent",
