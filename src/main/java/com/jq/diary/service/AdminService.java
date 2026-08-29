@@ -130,7 +130,7 @@ String uri = UriComponentsBuilder
     .defaultHeader("User-Agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
     .build().get()
     .uri(uri)
-    .retrieve()
+    .retrieve().toEntity(String.class)
     .block();
 				if (location.getLongitude() != null)
 					repository.save(location);
