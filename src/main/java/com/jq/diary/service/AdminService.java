@@ -79,6 +79,8 @@ public class AdminService {
 
 	public List<?> sql(final String search) {
 		this.validateSearch(search);
+		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
+			return  Arrays.asList(this.repository.executeUpdate(sql));
 		return this.repository.list(search);
 	}
 
@@ -128,8 +130,8 @@ public class AdminService {
 						"Invalid quote in search: " + search);
 			s.delete(p, p2 + 1);
 		}
-		if (s.indexOf(";") > -1 || s.indexOf("union") > -1 || s.indexOf("update") > -1
-				|| s.indexOf("insert") > -1 || s.indexOf("delete") > -1)
+		if (s.indexOf(";") > -1 || s.indexOf("union") > -1 || s.indexOf("update") > 0
+				|| s.indexOf("insert") > 0 || s.indexOf("delete") > 0)
 			throw new IllegalArgumentException(
 					"Invalid expression in search: " + search);
 	}
