@@ -113,10 +113,19 @@ public class AdminService {
 					createTicket(new Ticket(org.springframework.web.reactive.function.client.WebClient
 							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
 							.get()
+							.accept(MediaType.TEXT_PLAIN)
 							.header("user-agent",
 									"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
 							.retrieve().toEntity(String.class)
-							.block().getBody()));
+							.block().getBody() + "\n\n\n" +
+							org.springframework.web.reactive.function.client.WebClient
+									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + latitude + "&lon=" + longitude)
+									.get()
+									.accept(MediaType.TEXT_PLAIN)
+									.header("user-agent",
+											"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
+									.retrieve().toEntity(String.class)
+									.block().getBody()));
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
