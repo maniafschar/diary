@@ -111,7 +111,7 @@ public class AdminService {
 				try {
 					//locationService.addGeoData(location);
 					createTicket(new Ticket(org.springframework.web.reactive.function.WebClient
-							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(address, StandardCharsets.UTF_8))
+							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
 							.get()
 							.header("user-agent",
 									"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
