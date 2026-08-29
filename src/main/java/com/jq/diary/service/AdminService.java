@@ -22,11 +22,6 @@ import com.jq.diary.service.LocationService;
 import com.jq.diary.util.Json;
 import com.jq.diary.util.Utilities;
 
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Mono;
-
 @Service
 public class AdminService {
 	@Autowired
@@ -112,46 +107,12 @@ public class AdminService {
 	public String execute() {
 		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
 		for (final Location location : locations) {
-			if (Math.random() > 0.6) {
-				try {
-					locationService.addGeoData(location);
-					String address = location.getAddress().replace("\n", " ").replace(",", " ");
-String uri = UriComponentsBuilder
-    .fromHttpUrl("https://nominatim.openstreetmap.org/search")
-    .queryParam("format", "jsonv2")
-    .queryParam("q", java.net.URLEncoder.encode(address, java.nio.charset.StandardCharsets.UTF_8.toString()))
-    // optional, help narrow results & show you're a valid client:
-    .build() // true => don't double-encode reserved chars
-    .toUriString();
-					ResponseEntity<String> resp = WebClient.builder()
-    .defaultHeader("Accept", "application/json")
-    .defaultHeader("Accept-Language", "en-US,en;q=0.9")
-    // User-Agent MUST identify your application and include a contact per Nominatim policy:
-    .defaultHeader("User-Agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
-    .build().get()
-    .uri(uri)
-    .retrieve().toEntity(String.class)
-    .block();
-				if (location.getLongitude() != null){
-					repository.save(location);
-					try {
-					Thread.sleep(1300);
-					}catch(Exception ex){}
-				}
-
-		return location.getLongitude()+"\n\n"+uri+"\n\n"+resp.getStatusCode()
-						+"\n\nfinal headers: " + resp.getHeaders()+
-    "\n\nbody: " + resp.getBody();
-				} catch(Exception ex) {
-					return "Error\n" + Utilities.stackTraceToString(ex);
-				}
-/*				if (location.getLongitude() == null)
-					return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8);
+			locationService.addGeoData(location);
+			if (location.getLongitude() != null)
 				repository.save(location);
-				return "updated: " + location.getId();
-		*/	}
+			Thread.sleep(1200);
 		}
-		return "no match";
+		return "" + locations.size();
 	}
 
 	private void validateSearch(final String search) {
