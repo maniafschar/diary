@@ -130,11 +130,11 @@ public class AdminService {
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
-				if (location.getLongitude() == null)
+				/*if (location.getLongitude() == null)
 					return "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8);
 				repository.save(location);
 				return "updated: " + location.getId();
-			}
+		*/	}
 		}
 		return "no match";
 	}
