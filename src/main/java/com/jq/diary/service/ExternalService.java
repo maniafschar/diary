@@ -59,8 +59,13 @@ public class ExternalService {
 	public Double[] geoData(final String address) {
 		try {
 			final String response = WebClient
-					.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + URLEncoder.encode(address, StandardCharsets.UTF_8.toString()))
+					.create("https://nominatim.openstreetmap.org)
 					.get()
+					.uri(uriBuilder -> uriBuilder
+					        .path("/search")
+					        .queryParam("format", "jsonv2")
+					        .queryParam("q", address)
+					        .build())
 					.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
 					.header("Accept-Language", "en-US,en;q=0.9")
 					.retrieve().toEntity(String.class)
