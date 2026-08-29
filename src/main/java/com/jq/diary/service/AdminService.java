@@ -142,15 +142,6 @@ String uri = UriComponentsBuilder
 					return resp.getStatusCode()
 						+"\n\nfinal headers: " + resp.getHeaders()+
     "\n\nbody: " + resp.getBody();
-				/*+ "\n\n\n" +
-							org.springframework.web.reactive.function.client.WebClient
-									.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=48.77&lon=11.88")
-									.get()
-									.accept(org.springframework.http.MediaType.TEXT_PLAIN)
-									.header("user-agent",
-											"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
-									.retrieve().toEntity(String.class)
-									.block().getBody()*/;
 				} catch(Exception ex) {
 					return "Error\n" + Utilities.stackTraceToString(ex);
 				}
