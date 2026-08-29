@@ -132,8 +132,12 @@ String uri = UriComponentsBuilder
     .uri(uri)
     .retrieve().toEntity(String.class)
     .block();
-				if (location.getLongitude() != null)
+				if (location.getLongitude() != null){
 					repository.save(location);
+					try {
+					Thread.sleep(1300);
+					}catch(Exception ex){}
+				}
 
 		return location.getLongitude()+"\n\n"+uri+"\n\n"+resp.getStatusCode()
 						+"\n\nfinal headers: " + resp.getHeaders()+
