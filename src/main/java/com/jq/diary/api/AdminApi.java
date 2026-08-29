@@ -40,7 +40,7 @@ public class AdminApi {
 	}
 
 	@GetMapping("execute")
-	public String execute() {
+	public String execute() throws Exception {
 		return this.adminService.execute();
 	}
 
