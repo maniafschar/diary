@@ -124,7 +124,7 @@ String uri = UriComponentsBuilder
     .queryParam("limit", 5)
     .queryParam("email", "mani.afschar@jq-consulting.de")
     .build(true) // true => don't double-encode reserved chars
-    .toUriString();
+    .encode().toUriString();
 					ResponseEntity<String> resp = WebClient.builder()
     .defaultHeader("Accept", "application/json")
     .defaultHeader("Accept-Language", "en-US,en;q=0.9")
