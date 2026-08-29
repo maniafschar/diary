@@ -1,7 +1,5 @@
 package com.jq.diary.service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,27 +55,23 @@ public class ExternalService {
 	}
 
 	public Double[] geoData(final String address) {
-		try {
-			final String response = WebClient
-					.create("https://nominatim.openstreetmap.org")
-					.get()
-					.uri(uriBuilder -> uriBuilder
-					        .path("/search")
-					        .queryParam("format", "jsonv2")
-					        .queryParam("q", address)
-					        .build())
-					.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
-					.header("Accept-Language", "en-US,en;q=0.9")
-					.retrieve().toEntity(String.class)
-					.block().getBody();
-			if (response != null && response.length() > 0) {
-				final JsonNode node = Json.toNode(response);
-				if (node.size() > 0)
-					return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
-							node.get(0).has("alt") ? node.get(0).get("alt").asDouble() : null };
-			}
-		} catch (UnsupportedEncodingException ex) {
-			throw new RuntimeException(ex);
+		final String response = WebClient
+				.create("https://nominatim.openstreetmap.org")
+				.get()
+				.uri(uriBuilder -> uriBuilder
+						.path("/search")
+						.queryParam("format", "jsonv2")
+						.queryParam("q", address)
+						.build())
+				.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
+				.header("Accept-Language", "en-US,en;q=0.9")
+				.retrieve().toEntity(String.class)
+				.block().getBody();
+		if (response != null && response.length() > 0) {
+			final JsonNode node = Json.toNode(response);
+			if (node.size() > 0)
+				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
+						node.get(0).has("alt") ? node.get(0).get("alt").asDouble() : null };
 		}
 		return null;
 	}
