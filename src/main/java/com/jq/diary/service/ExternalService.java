@@ -70,7 +70,7 @@ public class ExternalService {
 				.retrieve().toEntity(String.class)
 				.block().getBody();
 		if (response != null && response.length() > 0) {
-			this.adminService.createTicket(new Ticket(s));
+			this.adminService.createTicket(new Ticket(response));
 			final JsonNode node = Json.toNode(response);
 			if (node.size() > 0)
 				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
