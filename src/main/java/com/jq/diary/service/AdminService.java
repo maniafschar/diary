@@ -114,6 +114,9 @@ public class AdminService {
 							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
 							.get()
 							.accept(org.springframework.http.MediaType.TEXT_PLAIN)
+							.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+							.header("Accept-Encoding", "gzip, deflate, br, zstd")
+							.header("Accept-Language", "en-US,en;q=0.9")
 							.header("user-agent",
 									"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 							.retrieve().toEntity(String.class)
