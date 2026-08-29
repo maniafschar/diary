@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,11 +57,10 @@ public class ExternalService {
 
 	public Double[] geoData(final String address) {
 		final String response = WebClient
-				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + UriUtils.encode(address, StandardCharsets.UTF_8))
+				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + URLEncoder.encode(address, StandardCharsets.UTF_8.toString()))
 				.get()
-				.header("user-agent",
-						"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
-				.header("Accept-Language", "de-DE")
+				.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
+				.header("Accept-Language", "en-US,en;q=0.9")
 				.retrieve().toEntity(String.class)
 				.block().getBody();
 		if (response != null && response.length() > 0) {
