@@ -132,7 +132,7 @@ class api {
 	static sql(event) {
 		if (event && event.keyCode == 13) {
 			api.ajax({
-				url: api.url + 'sql?search=' + encodeURIComponent(document.querySelector('input[name="sql"]').value),
+				url: api.url + 'sql?sql=' + encodeURIComponent(document.querySelector('input[name="sql"]').value),
 				success: xhr => new json2html().render(xhr)
 			});
 		}
