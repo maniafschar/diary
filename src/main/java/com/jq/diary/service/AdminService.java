@@ -140,7 +140,7 @@ String uri = UriComponentsBuilder
     })
     .block();
 		final ProcessBuilder pb = new ProcessBuilder(
-				"curl -v -G "https://nominatim.openstreetmap.org/search"
+				"curl -v -G \""https://nominatim.openstreetmap.org/search\""
 +" --data-urlencode -d \"q=Hanfelder Str. 7 82319 Starnberg\""
 +" -d format=jsonv2 -d limit=5 -d \""email=mani.afschar@jq-consulting.de\""
 +" -H "User-Agent: diary.cafe/1.0 (mani.afschar@jq-consulting.de)"
