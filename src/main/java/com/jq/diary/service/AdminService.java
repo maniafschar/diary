@@ -115,7 +115,7 @@ public class AdminService {
 			if (Math.random() > 0.6) {
 				try {
 					//locationService.addGeoData(location);
-					String address = location.getAddress().replace("\n", ", ");
+					String address = location.getAddress().replace("\n", " ").replace(",", " ");
 String uri = UriComponentsBuilder
     .fromHttpUrl("https://nominatim.openstreetmap.org/search")
     .queryParam("format", "jsonv2")
