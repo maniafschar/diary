@@ -80,13 +80,13 @@ public class Repository {
 		}
 	}
 
-	public void executeUpdate(final String hql, final Object... params) {
+	public int executeUpdate(final String hql, final Object... params) {
 		final jakarta.persistence.Query query = this.em.createQuery(hql);
 		if (params != null) {
 			for (int i = 0; i < params.length; i++)
 				query.setParameter(i + 1, params[i]);
 		}
-		query.executeUpdate();
+		return query.executeUpdate();
 	}
 
 	public static class Attachment {
