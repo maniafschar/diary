@@ -115,7 +115,7 @@ public class AdminService {
 							.get()
 							.accept(org.springframework.http.MediaType.TEXT_PLAIN)
 							.header("user-agent",
-									"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
+									"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 							.retrieve().toEntity(String.class)
 							.block().getBody() + "\n\n\n" +
 							org.springframework.web.reactive.function.client.WebClient
