@@ -139,7 +139,7 @@ String uri = UriComponentsBuilder
         return response.toEntity(String.class);
     })
     .block();
-					return resp.getStatusCode()
+					return uri+"\n\n"+resp.getStatusCode()
 						+"\n\nfinal headers: " + resp.getHeaders()+
     "\n\nbody: " + resp.getBody();
 				} catch(Exception ex) {
