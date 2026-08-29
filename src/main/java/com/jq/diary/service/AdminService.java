@@ -140,7 +140,7 @@ String uri = UriComponentsBuilder
     })
     .block();
 					return resp.getStatusCode()
-						+"\n\nfinal headers: " + resp.getHeaders()
+						+"\n\nfinal headers: " + resp.getHeaders()+
     "\n\nbody: " + resp.getBody();
 /*					return
 						"https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8)+"\n\n"+
