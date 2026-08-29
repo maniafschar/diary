@@ -35,8 +35,8 @@ public class AdminApi {
 	}
 
 	@GetMapping("sql")
-	public List<?> getSql(@RequestParam final String search) {
-		return Utilities.filter(this.adminService.sql(search));
+	public List<?> getSql(@RequestParam final String sql) {
+		return Utilities.filter(this.adminService.sql(sql));
 	}
 
 	@GetMapping("execute")
