@@ -58,7 +58,6 @@ public class ExternalService {
 		final String response = WebClient
 				.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + UriUtils.encode(address, StandardCharsets.UTF_8))
 				.get()
-				.accept(MediaType.APPLICATION_JSON)
 				.header("user-agent",
 						"https://diary.cafe 1.0 (mani.afschar@jq-consulting.de)")
 				.header("Accept-Language", "de-DE")
