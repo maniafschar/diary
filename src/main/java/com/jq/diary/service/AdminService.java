@@ -113,7 +113,7 @@ public class AdminService {
 					return
 						"https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8)+"\n\n"+
 						org.springframework.web.reactive.function.client.WebClient
-							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", ", "), StandardCharsets.UTF_8))
+							.create("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + org.springframework.web.util.UriUtils.encode(location.getAddress().replace("\n", " ").replace(",", " "), StandardCharsets.UTF_8))
 							.get()
 							.header("Accept", "text/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
 							.header("Accept-Language", "en-US,en;q=0.9")
