@@ -125,7 +125,7 @@ button {
 		prev.addEventListener('click', () => this.next(false));
 	}
 
-	setOpenDetail(exec) {
+	setOpenDetail(openDetail) {
 		this.openDetail = openDetail;
 	}
 
