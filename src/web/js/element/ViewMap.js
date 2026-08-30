@@ -43,6 +43,16 @@ button {
 	bottom: 0.5em;
 	left: 50%;
 }
+imageContainer {
+	width: 100%;
+	overflow-x: auto;
+	position: relative;
+}
+images {
+	display: grid;
+	width: 300%;
+	grid-template-columns: repeat(1, 1fr);
+}
 .leaflet-popup-content-wrapper {
 	background: var(--panel);
 	color: var(--text);
@@ -138,10 +148,10 @@ button {
 			this.currentIndex = locations.length - 1;
 		this.locations = locations;
 		var images = e => {
-			var s = '<images>';
+			var s = '<imageContainer><images>';
 			for (var i = 0; i < e.length; i++)
 				s += '<img src="' + e[i] + '" />';
-			return s + '</images>';
+			return s + '</images></imageContainer>';
 		};
 		this.locations.map((loc, index) => {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);

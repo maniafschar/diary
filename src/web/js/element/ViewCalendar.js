@@ -201,8 +201,6 @@ button.icon {
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
-
-		//Header
 		var header = wrapper.appendChild(document.createElement('div'));
 		header.classList.add('cal-header');
 		header.onclick = () => {
@@ -234,7 +232,6 @@ button.icon {
 		button.innerText = '>';
 		button.style.marginLeft = '3em';
 
-		//body
 		var body = wrapper.appendChild(document.createElement('div'));
 		body.classList.add('cal-grid-outer');
 		var div = body.appendChild(document.createElement('div'));
