@@ -238,6 +238,7 @@ thumbnail delete {
 						longitude: events[i].location.longitude,
 						altitude: events[i].location.altitude,
 						note: events[i].note,
+						rating: events[i].rating ? events[i].rating / events[i].ratingCount : null,
 						images: events[i].eventImages.length ? events[i].eventImages.map(e => '/med/' + e.imageThumbnail) : null
 					});
 			}
