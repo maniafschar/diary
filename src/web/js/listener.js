@@ -219,7 +219,7 @@ thumbnail delete {
 
 			var calendar = document.querySelector('view-calendar');
 			calendar.reset();
-			calendar.setOpen(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
+			calendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
 			var map = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -230,6 +230,7 @@ thumbnail delete {
 				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
+						id: events[i].id,
 						date: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))),
 						name: events[i].location.name,
 						address: formatAddress(events[i].location.address),
@@ -241,7 +242,9 @@ thumbnail delete {
 					});
 			}
 			calendar.render();
-			document.querySelector('view-map').setLocations(map);
+			var map = document.querySelector('view-map');
+			map.setLocations(map);
+			map.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : null);
 			if (events.length) {
 				var pastEvents = document.querySelector('view-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');

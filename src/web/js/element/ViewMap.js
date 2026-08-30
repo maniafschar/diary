@@ -6,6 +6,7 @@ class ViewMap extends HTMLElement {
 	tourTimer = null;
 	locations = [];
 	markers = [];
+	openDetail = null;
 
 	constructor() {
 		super();
@@ -124,6 +125,10 @@ button {
 		prev.addEventListener('click', () => this.next(false));
 	}
 
+	setOpenDetail(exec) {
+		this.openDetail = openDetail;
+	}
+
 	setLocations(locations) {
 		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
 			this.currentIndex = locations.length - 1;
@@ -132,7 +137,7 @@ button {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
 			marker.bindPopup(`
 <div class="popup-box">
-	${loc.image ? `<img src="${loc.image}" alt="${this.escapeHtml(loc.name)}">` : ''}
+	${loc.image ? `<img src="${loc.image}" onclick="this.getRootNode().host.open(${index})">` : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
 	${`<div class="addr">${loc.date}${loc.address ? '<br/>' + this.escapeHtml(loc.address).replace(/\n/g, '<br/>') : ''}</div>`}
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
@@ -181,6 +186,10 @@ button {
 			Math.sin(dLon / 2) * Math.sin(dLon / 2);
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		return R * c;
+	}
+
+	open(i) {
+		this.openDetail(this.locations[i]);
 	}
 
 	startTour() {

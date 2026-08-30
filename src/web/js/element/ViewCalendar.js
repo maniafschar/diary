@@ -9,7 +9,7 @@ class ViewCalendar extends HTMLElement {
 	today = new Date();
 	current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 	_activeDate = null;
-	open = null;
+	openDetail = null;
 
 	constructor() {
 		super();
@@ -245,8 +245,8 @@ button.icon {
 		this.render();
 	}
 
-	setOpen(open) {
-		this.open = open;
+	setOpenDetail(openDetail) {
+		this.openDetail = openDetail;
 	}
 
 	addEvent(dateKey, event) {
@@ -339,8 +339,8 @@ button.icon {
 				pill.textContent = ev.name;
 				pill.addEventListener('click', e => {
 					e.stopPropagation();
-					if (this.open)
-						this.open(ev);
+					if (this.openDetail)
+						this.openDetail(ev);
 					else
 						alert(JSON.stringify(ev));
 				});
@@ -348,7 +348,7 @@ button.icon {
 			});
 			cell.appendChild(list);
 		}
-		cell.addEventListener('click', () => this.open({ day: d, month: m + 1, year: y }));
+		cell.addEventListener('click', () => this.openDetail({ day: d, month: m + 1, year: y }));
 		return cell;
 	}
 
