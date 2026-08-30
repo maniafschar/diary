@@ -26,8 +26,10 @@ class ViewMap extends HTMLElement {
 }
 input-rating {
 	position: absolute;
-	right: 0.5em;
-	top: 0.5em;
+	left: 2em;
+	top: 1.5em;
+	z-index: 4;
+	transform: scale(2.5);
 }
 button {
 	background: rgba(100, 150, 200, 0.2);
