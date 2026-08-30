@@ -79,13 +79,11 @@ public class ExternalService {
 		if (response != null && response.length() > 0) {
 			final JsonNode node = Json.toNode(response);
 			if ("OK".equals(node.get("status").asText())) {
-				JsonNode data = node.get("results").get(0).get("geometry");
-				if (data != null) {
-					data = data.get("location");
-					if (data != null) {
-						return new Double[] { data.get("lat").asDouble(), data.get("lon").asDouble(),
-								data.has("alt") ? data.get("alt").asDouble() : null };
-					}
+				final JsonNode data = node.get("results").get(0).get("geometry");
+				if (data != null && data.has("location")) {
+					return new Double[] { data.get("location").get("lat").asDouble(),
+							data.get("location").get("lon").asDouble(),
+							data.get("location").has("alt") ? data.get("location").get("alt").asDouble() : null };
 				}
 			}
 
