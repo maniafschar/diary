@@ -117,13 +117,11 @@ button {
 		var next = this._root.appendChild(document.createElement('button'));
 		next.style.marginLeft = '3em';
 		next.innerText = '>';
-		next.addEventListener('click', () =>
-			this.flyToIndex((this.currentIndex + 1 + this.locations.length) % this.locations.length, true));
+		next.addEventListener('click', () => this.next(true));
 		var prev = this._root.appendChild(document.createElement('button'));
 		prev.style.marginLeft = '-5em';
 		prev.innerText = '<';
-		prev.addEventListener('click', () =>
-			this.flyToIndex((this.currentIndex - 1 + this.locations.length) % this.locations.length, true));
+		prev.addEventListener('click', this.next);
 	}
 
 	setLocations(locations) {
@@ -143,7 +141,7 @@ button {
 			this.markers.push(marker);
 			return marker;
 		});
-		this.flyToIndex(this.currentIndex, false);
+		this.flyToIndex(this.currentIndex);
 	}
 
 	escapeHtml(str) {
@@ -152,11 +150,14 @@ button {
 			.replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 	}
 
-	flyToIndex(i, stopAutoTour) {
+	next(forward) {
+		this.stopTour();
+		this.flyToIndex(this.currentIndex + (forward ? 1 : -1) + this.locations.length) % this.locations.length;
+	}
+
+	flyToIndex(i) {
 		if (i < 0 || i >= this.locations.length)
 			return;
-		if (stopAutoTour)
-			this.stopTour();
 
 		const loc = this.locations[i];
 		var distance = this.calculateDistance(
@@ -190,7 +191,7 @@ button {
 			return;
 		}
 		const step = () => {
-			host.flyToIndex(host.currentIndex + 1, false);
+			host.flyToIndex(host.currentIndex + 1);
 			if (host.currentIndex < host.locations.length)
 				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
 		};
