@@ -238,7 +238,7 @@ thumbnail delete {
 						longitude: events[i].location.longitude,
 						altitude: events[i].location.altitude,
 						note: events[i].note,
-						image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
+						images: events[i].eventImages.length ? events[i].eventImages.map(e => '/med/' + e.imageThumbnail) : null
 					});
 			}
 			viewCalendar.render();

@@ -137,11 +137,17 @@ button {
 		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
 			this.currentIndex = locations.length - 1;
 		this.locations = locations;
+		var images = e => {
+			var s = '<images>';
+			for (var i = 0; i < e.length; i++)
+				s += '<img src="' + e[i].image + '" />';
+			return s + '</images>';
+		};
 		this.locations.map((loc, index) => {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
 			marker.bindPopup(`
 <div class="popup-box" onclick="this.getRootNode().host.open(${index})">
-	${loc.image ? '<img src="' + loc.image + '>' : ''}
+	${loc.images ? images(loc.images) : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
 	<div class="addr">${loc.date}<br/>${this.escapeHtml(loc.address).replace(/\n/g, '<br/>')}</div>
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
