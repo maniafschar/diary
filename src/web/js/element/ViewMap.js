@@ -24,6 +24,11 @@ class ViewMap extends HTMLElement {
 *::-webkit-scrollbar {
 	display: none;
 }
+input-rating {
+	position: absolute;
+	right: 0.5em;
+	top: 0.5em;
+}
 button {
 	background: rgba(100, 150, 200, 0.2);
 	border: none;
@@ -156,7 +161,7 @@ images {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
 			marker.bindPopup(`
 <div class="popup-box" onclick="this.getRootNode().host.open(${index})">
-	${loc.rating ? '<input-rating value="' + loc.rating + '"></input-rating>' : ''}
+	${loc.rating ? '<input-rating class="minimal" value="' + loc.rating + '"></input-rating>' : ''}
 	${loc.images ? images(loc.images) : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
 	<div class="addr">${loc.date}<br/>${this.escapeHtml(loc.address).replace(/\n/g, '<br/>')}</div>
