@@ -217,9 +217,9 @@ thumbnail delete {
 			for (var i = 0; i < trs.length; i++)
 				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: events[i].id, participants: events[i].contactEvents, type: 'read' } }));
 
-			var calendar = document.querySelector('view-calendar');
-			calendar.reset();
-			calendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
+			var viewCalendar = document.querySelector('view-calendar');
+			viewCalendar.reset();
+			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
 			var map = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -227,7 +227,7 @@ thumbnail delete {
 				return address;
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
-				calendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
+				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
 						id: events[i].id,
@@ -241,10 +241,10 @@ thumbnail delete {
 						image: events[i].eventImages.length ? "/med/" + events[i].eventImages[0].imageThumbnail : ''
 					});
 			}
-			calendar.render();
-			var map = document.querySelector('view-map');
-			map.setLocations(map);
-			map.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : null);
+			viewCalendar.render();
+			var viewMap = document.querySelector('view-map');
+			viewMap.setLocations(map);
+			viewMap.setOpenDetail(event => event.id && listener.updateViewImage(event.id + '.0'));
 			if (events.length) {
 				var pastEvents = document.querySelector('view-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
