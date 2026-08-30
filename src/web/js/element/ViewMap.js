@@ -152,13 +152,12 @@ button {
 
 	next(forward) {
 		this.stopTour();
-		this.flyToIndex(this.currentIndex + (forward ? 1 : -1) + this.locations.lengthx % this.locations.length);
+		this.flyToIndex((this.currentIndex + (forward ? 1 : -1) + this.locations.length) % this.locations.length);
 	}
 
 	flyToIndex(i) {
 		if (i < 0 || i >= this.locations.length)
 			return;
-
 		const loc = this.locations[i];
 		var distance = this.calculateDistance(
 			this.locations[this.currentIndex].latitude, this.locations[this.currentIndex].longitude,
