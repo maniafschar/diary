@@ -202,7 +202,7 @@ button {
 			host.stopTour();
 			return;
 		}
-		this._root.querySelector('button.play').innerText = '‖';
+		this.innerText = '‖';
 		const step = () => {
 			host.flyToIndex(host.currentIndex + 1);
 			if (host.currentIndex < host.locations.length)
