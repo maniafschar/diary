@@ -185,7 +185,7 @@ button {
 
 	startTour() {
 		var host = this.getRootNode().host;
-		if (this.tourTimer) {
+		if (host.tourTimer) {
 			host.stopTour();
 			return;
 		}
