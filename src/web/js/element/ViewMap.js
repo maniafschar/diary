@@ -212,10 +212,10 @@ button {
 	}
 
 	stopTour() {
+		this._root.querySelector('button.play').innerText = '▷';
 		if (this.tourTimer) {
 			clearTimeout(this.tourTimer);
 			this.tourTimer = null;
-			this._root.querySelector('button.play').innerText = '▷';
 		}
 	}
 }
