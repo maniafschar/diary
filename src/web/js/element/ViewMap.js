@@ -112,7 +112,7 @@ button {
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 		var start = this._root.appendChild(document.createElement('button'));
 		start.style.marginLeft = '-1em';
-		start.innerText = 'v';
+		start.innerText = '▷';
 		start.addEventListener('click', this.startTour);
 		var next = this._root.appendChild(document.createElement('button'));
 		next.style.marginLeft = '3em';
@@ -160,8 +160,8 @@ button {
 
 		const loc = this.locations[i];
 		var distance = this.calculateDistance(
-				this.locations[this.currentIndex].latitude, this.locations[this.currentIndex].longitude,
-				loc.latitude, loc.longitude);
+			this.locations[this.currentIndex].latitude, this.locations[this.currentIndex].longitude,
+			loc.latitude, loc.longitude);
 		this.currentIndex = i;
 		this.map.flyTo([loc.latitude, loc.longitude], 15, {
 			duration: 0.271221 * Math.log(1.05279 * distance + 1) + 0.3,
@@ -177,19 +177,20 @@ button {
 		const dLat = (lat2 - lat1) * Math.PI / 180;
 		const dLon = (lon2 - lon1) * Math.PI / 180;
 		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-					Math.cos(rLat1) * Math.cos(rLat2) *
-					Math.sin(dLon / 2) * Math.sin(dLon / 2);
+			Math.cos(rLat1) * Math.cos(rLat2) *
+			Math.sin(dLon / 2) * Math.sin(dLon / 2);
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		return R * c;
 	}
 
 	startTour() {
 		var host = this.getRootNode().host;
-		host.stopTour();
-		let i = 0;
+		if (this.tourTimer) {
+			host.stopTour();
+			return;
+		}
 		const step = () => {
-			host.flyToIndex(i, false);
-			i++;
+			host.flyToIndex(host.currentIndex + 1, false);
 			if (i < host.locations.length)
 				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
 		};

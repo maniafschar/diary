@@ -13,14 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.jq.diary.entity.Location;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
-import com.jq.diary.service.LocationService;
-import com.jq.diary.util.Json;
-import com.jq.diary.util.Utilities;
 
 @Service
 public class AdminService {
@@ -80,7 +75,7 @@ public class AdminService {
 	public List<?> sql(final String sql) {
 		this.validateSql(sql);
 		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
-			return  List.of(this.repository.executeUpdate(sql));
+			return List.of(this.repository.executeUpdate(sql));
 		return this.repository.list(sql);
 	}
 
@@ -107,13 +102,6 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
-		final List<Location> locations = this.repository.list("from Location where longitude is null order by id desc", Location.class);
-		for (final Location location : locations) {
-			locationService.addGeoData(location);
-			if (location.getLongitude() != null)
-				repository.save(location);
-			Thread.sleep(1200);
-		}
 		return null;
 	}
 
