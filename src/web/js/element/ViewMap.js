@@ -205,7 +205,7 @@ button {
 		this.innerText = '‖';
 		const step = () => {
 			host.flyToIndex(host.currentIndex + 1);
-			if (host.currentIndex < host.locations.length)
+			if (host.currentIndex < host.locations.length - 1)
 				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
 			else
 				host.stopTour();
