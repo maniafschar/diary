@@ -51,7 +51,6 @@ imageContainer {
 }
 images {
 	display: grid;
-	grid-template-columns: repeat(1, 1fr);
 }
 .leaflet-popup-content-wrapper {
 	background: var(--panel);
@@ -148,7 +147,7 @@ images {
 			this.currentIndex = locations.length - 1;
 		this.locations = locations;
 		var images = e => {
-			var s = '<imageContainer><images>';
+			var s = '<imageContainer><images style="grid-template-columns: repeat(' + e.length + ', 1fr); width: ' + e.length + '00%;">';
 			for (var i = 0; i < e.length; i++)
 				s += '<img src="' + e[i] + '" />';
 			return s + '</images></imageContainer>';
