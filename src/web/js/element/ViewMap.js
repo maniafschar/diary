@@ -207,6 +207,8 @@ button {
 			host.flyToIndex(host.currentIndex + 1);
 			if (host.currentIndex < host.locations.length)
 				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
+			else
+				host.stopTour();
 		};
 		step();
 	}
