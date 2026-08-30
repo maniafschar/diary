@@ -121,7 +121,7 @@ button {
 		var prev = this._root.appendChild(document.createElement('button'));
 		prev.style.marginLeft = '-5em';
 		prev.innerText = '<';
-		prev.addEventListener('click', this.next);
+		prev.addEventListener('click', () => this.next(false));
 	}
 
 	setLocations(locations) {
@@ -151,9 +151,8 @@ button {
 	}
 
 	next(forward) {
-		var host = this.getRootNode().host;
-		host.stopTour();
-		host.flyToIndex(host.currentIndex + (forward ? 1 : -1) + host.locations.length) % host.locations.length;
+		this.stopTour();
+		this.flyToIndex(this.currentIndex + (forward ? 1 : -1) + this.locations.lengthx % this.locations.length);
 	}
 
 	flyToIndex(i) {
