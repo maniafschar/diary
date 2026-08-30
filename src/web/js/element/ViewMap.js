@@ -140,7 +140,7 @@ button {
 		var images = e => {
 			var s = '<images>';
 			for (var i = 0; i < e.length; i++)
-				s += '<img src="' + e[i].image + '" />';
+				s += '<img src="' + e[i] + '" />';
 			return s + '</images>';
 		};
 		this.locations.map((loc, index) => {
