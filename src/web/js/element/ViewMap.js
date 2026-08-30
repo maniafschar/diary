@@ -117,6 +117,7 @@ button {
 		var start = this._root.appendChild(document.createElement('button'));
 		start.style.marginLeft = '-1em';
 		start.innerText = '▷';
+		start.classList.add('play');
 		start.addEventListener('click', this.startTour);
 		var next = this._root.appendChild(document.createElement('button'));
 		next.style.marginLeft = '3em';
@@ -139,10 +140,10 @@ button {
 		this.locations.map((loc, index) => {
 			const marker = L.marker([loc.latitude, loc.longitude], { index: index }).addTo(this.map);
 			marker.bindPopup(`
-<div class="popup-box">
-	${loc.image ? `<img src="${loc.image}" onclick="this.getRootNode().host.open(${index})">` : ''}
+<div class="popup-box" onclick="this.getRootNode().host.open(${index})">
+	${loc.image ? '<img src="' + loc.image + '>' : ''}
 	<h3>${this.escapeHtml(loc.name)}</h3>
-	${`<div class="addr">${loc.date}${loc.address ? '<br/>' + this.escapeHtml(loc.address).replace(/\n/g, '<br/>') : ''}</div>`}
+	<div class="addr">${loc.date}<br/>${this.escapeHtml(loc.address).replace(/\n/g, '<br/>')}</div>
 	${loc.note ? `<div class="note">${this.escapeHtml(loc.note)}</div>` : ''}
 </div>`);
 			marker.on('click', e => this.currentIndex = e.target.options.index);
@@ -201,6 +202,7 @@ button {
 			host.stopTour();
 			return;
 		}
+		this._root.querySelector('button.play').innerText = '‖';
 		const step = () => {
 			host.flyToIndex(host.currentIndex + 1);
 			if (host.currentIndex < host.locations.length)
@@ -213,6 +215,7 @@ button {
 		if (this.tourTimer) {
 			clearTimeout(this.tourTimer);
 			this.tourTimer = null;
+			this._root.querySelector('button.play').innerText = '▷';
 		}
 	}
 }
