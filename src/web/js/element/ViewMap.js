@@ -151,8 +151,9 @@ button {
 	}
 
 	next(forward) {
-		this.stopTour();
-		this.flyToIndex(this.currentIndex + (forward ? 1 : -1) + this.locations.length) % this.locations.length;
+		var host = this.getRootNode().host;
+		host.stopTour();
+		host.flyToIndex(host.currentIndex + (forward ? 1 : -1) + host.locations.length) % host.locations.length;
 	}
 
 	flyToIndex(i) {
