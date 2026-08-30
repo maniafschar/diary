@@ -47,10 +47,10 @@ imageContainer {
 	width: 100%;
 	overflow-x: auto;
 	position: relative;
+	display: block;
 }
 images {
 	display: grid;
-	width: 300%;
 	grid-template-columns: repeat(1, 1fr);
 }
 .leaflet-popup-content-wrapper {
