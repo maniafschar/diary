@@ -191,7 +191,7 @@ button {
 		}
 		const step = () => {
 			host.flyToIndex(host.currentIndex + 1, false);
-			if (i < host.locations.length)
+			if (host.currentIndex < host.locations.length)
 				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
 		};
 		step();
