@@ -35,7 +35,7 @@ button {
 	height: 2em;
 	color: white;
 	line-height: 1;
-	z-index: 500;
+	z-index: 400;
 	position: absolute;
 	font-size: 1.3em;
 	width: 2em;
@@ -86,6 +86,9 @@ button {
 }
 .leaflet-popup-content {
 	max-width: 150px !important;
+}
+.leaflet-bottom, .leaflet-top {
+	z-index: 400;
 }`;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
