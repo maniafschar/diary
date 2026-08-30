@@ -1,15 +1,12 @@
 package com.jq.diary.service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jq.diary.util.Json;
@@ -55,9 +52,8 @@ public class ExternalService {
 	}
 
 	public Double[] geoData(final String address) {
-		final String response = WebClient
-				.create("https://nominatim.openstreetmap.org")
-				.get()
+		String response = WebClient
+				.create("https://nominatim.openstreetmap.org").get()
 				.uri(uriBuilder -> uriBuilder
 						.path("/search")
 						.queryParam("format", "jsonv2")
@@ -65,13 +61,34 @@ public class ExternalService {
 						.build())
 				.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
 				.header("Accept-Language", "en-US,en;q=0.9")
-				.retrieve().toEntity(String.class)
-				.block().getBody();
+				.retrieve().toEntity(String.class).block().getBody();
 		if (response != null && response.length() > 0) {
 			final JsonNode node = Json.toNode(response);
 			if (node.size() > 0)
 				return new Double[] { node.get(0).get("lat").asDouble(), node.get(0).get("lon").asDouble(),
 						node.get(0).has("alt") ? node.get(0).get("alt").asDouble() : null };
+		}
+		response = WebClient
+				.create("https://maps.googleapis.com").get()
+				.uri(uriBuilder -> uriBuilder
+						.path("/maps/api/place/textsearch/json")
+						.queryParam("query", address)
+						.queryParam("key", this.googleKey)
+						.build())
+				.retrieve().toEntity(String.class).block().getBody();
+		if (response != null && response.length() > 0) {
+			final JsonNode node = Json.toNode(response);
+			if ("OK".equals(node.get("status").asText())) {
+				JsonNode data = node.get("results").get(0).get("geometry");
+				if (data != null) {
+					data = data.get("location");
+					if (data != null) {
+						return new Double[] { data.get("lat").asDouble(), data.get("lon").asDouble(),
+								data.has("alt") ? data.get("alt").asDouble() : null };
+					}
+				}
+			}
+
 		}
 		return null;
 	}
