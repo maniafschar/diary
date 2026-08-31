@@ -375,6 +375,7 @@ button.confirmed::after {
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
 		inputDate.addEventListener('changed', e => {
 			table.deselectAll();
+			var date = inputDate.getAttribute('value');
 			for (var i = 0; i < table.list.length; i++) {
 				if (table.list[i].date > date)
 					table.select(i);
