@@ -69,7 +69,7 @@ class listener {
 		var addEdit = function () {
 			return api.user.id == events[i].contact.id ?
 				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { id: events[i].location.id } }).replace(/"/g, '&quot;') + ')"' : '';
-		}
+		};
 		var listFeedbacks = function (event) {
 			var s = '';
 			if (event.eventFeedbacks) {
@@ -81,7 +81,27 @@ class listener {
 					s += '<feedback' + addEdit(event.eventFeedbacks[i]) + '><span>' + ui.extractPseudonyms()[event.eventFeedbacks[i].contact.id] + ' · ' + ui.formatTime(new Date(event.eventFeedbacks[i].createdAt.replace('+00:00', ''))) + '</span>' + event.eventFeedbacks[i].note.replace(/\n/g, '<br/>') + '</feedback>';
 			}
 			return s;
-		}
+		};
+		var contacts = document.querySelector('user view-table').list;
+		var pseudonyms = ui.extractPseudonyms(contacts);
+		var listParticipants = function (event) {
+			var p = {}, participantList = [], s = '';
+			for (var i = 0; i < event.contactEvents.length; i++) {
+				p[event.contactEvents[i].contact.id] = event.contactEvents[i];
+				participantList.push({
+					id: event.contactEvents[i].contact.id,
+					name: event.contactEvents[i].contact.name,
+					pseudonym: pseudonyms[event.contactEvents[i].contact.id]
+				});
+			}
+			for (var i = 0; i < contacts.length; i++) {
+				s += '<item onclick="action.participate(' + contacts[i].id + ',' + id + ')"' +
+					' i="' + contacts[i].id + '"' +
+					(p[contacts[i].id] ? ' contactEventId="' + p[contacts[i].id].id + '" class="selected"' : '') +
+					'>' + contacts[i].pseudonym + '</item>';
+			}
+			return s;
+		};
 		for (var i = events.length - 1; i >= 0; i--) {
 			list.push({
 				src: listImages(events[i]),
@@ -99,6 +119,7 @@ class listener {
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
 					'<label>Bilder</label><field style="min-height: 3.2em; max-height: initial; text-align: left;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
+					'<label>Teinahmer</label><field style="min-height: 3.2em; max-height: initial;">' + listParticipants(events[i]) + '</field>' +
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
