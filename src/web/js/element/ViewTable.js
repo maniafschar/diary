@@ -191,7 +191,19 @@ filter count {
 	static get observedAttributes() { return ['mode']; }
 
 	attributeChangedCallback() {
+		this.deselectAll();
+	}
+
+	deselectAll() {
 		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
+	}
+
+	select(index) {
+		if (index < 0)
+			return;
+		var trs = this._root.querySelectorAll('tbody tr');
+		if (index < trs.length)
+			trs[index].classList.add('selected');
 	}
 
 	setConvert(convert) {
