@@ -338,10 +338,17 @@ filter count {
 	}
 
 	openDetails(event) {
-		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
 		var tr = event.target;
 		while (tr && tr.nodeName != 'TR')
 			tr = tr.parentElement;
+		if (this.getAttribute('mode') == 'selection') {
+			if (tr.classList.contains('selected'))
+				tr.classList.remove('selected');
+			else
+				tr.classList.add('selected');
+			return;
+		}
+		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
 		tr?.classList.add('selected');
 		if (event.target.getAttribute('onopen')) {
 			var s = event.target.getAttribute('onopen').split('.');
