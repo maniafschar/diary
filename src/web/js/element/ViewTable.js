@@ -26,7 +26,7 @@ class ViewTable extends HTMLElement {
 }
 
 :host(mode="selection") tbody tr:hover {
-	background-color: none;
+	background-color: none !important;
 }
 
 *::-webkit-scrollbar {
