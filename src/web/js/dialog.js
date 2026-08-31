@@ -367,14 +367,18 @@ button.confirmed::after {
 
 	static export() {
 		ui.navigate(0);
-		document.querySelector('event view-table').setAttribute('mode', 'selection');
+		vat table = document.querySelector('event view-table');
+		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = ``;
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
-		var date = new Date();
-		date.setMonth(date.getMonth() - 2);
+		inputDate.addEventListener('changed', e => {
+			
+		});
 		inputDate.setAttribute('type', 'date');
+		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
+		inputDate.setAttribute('max', table.list[0].date);
 		dialog.createButton(popup, 'action.export()').querySelector('button').innerText = 'Export';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => document.querySelector('event view-table').removeAttribute('mode'), { once: true });
