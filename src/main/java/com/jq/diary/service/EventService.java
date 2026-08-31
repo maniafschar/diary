@@ -37,6 +37,10 @@ public class EventService {
 	}
 
 	public void delete(final Event event) {
+		event.getContactEvents().forEach(e -> this.repository.delete(e));
+		event.getEventImages().forEach(e -> this.repository.delete(e));
+		event.getEventRatings().forEach(e -> this.repository.delete(e));
+		event.getEventFeedbacks().forEach(e -> this.repository.delete(e));
 		this.repository.delete(event);
 	}
 
