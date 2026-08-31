@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
@@ -129,5 +130,10 @@ public class AdminService {
 		new ProcessBuilder("./backup.sh", this.user, this.password,
 				"client contact contact_event contact_token event event_feedback event_image event_rating location log ticket")
 				.start().waitFor();
+	}
+
+	@Scheduled(cron = "0 0 * * * *")
+	private void demoData() {
+		this.repository.one(Client.class, BigInteger.valueOf(2l));
 	}
 }

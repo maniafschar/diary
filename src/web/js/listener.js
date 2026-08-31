@@ -95,7 +95,7 @@ class listener {
 				});
 			}
 			for (var i = 0; i < contacts.length; i++) {
-				s += '<item onclick="action.participate(' + contacts[i].id + ',' + id + ')"' +
+				s += '<item onclick="action.participate(' + contacts[i].id + ',' + event.id + ')"' +
 					' i="' + contacts[i].id + '"' +
 					(p[contacts[i].id] ? ' contactEventId="' + p[contacts[i].id].id + '" class="selected"' : '') +
 					'>' + contacts[i].pseudonym + '</item>';
