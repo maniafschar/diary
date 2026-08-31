@@ -226,6 +226,17 @@ class action {
 		ui.navigate(0);
 	}
 
+	static eventDelete(id) {
+		var button = document.querySelector('dialog-popup').content().querySelector('button.delete');
+		if (button.classList.contains('confirmed'))
+			api.event.delete(id, () => {
+				document.dispatchEvent(new CustomEvent('popup'));
+				document.dispatchEvent(new CustomEvent('event'));
+			});
+		else
+			button.classList.add('confirmed');
+	}
+
 	static eventImageDelete(event, id) {
 		var e = document.querySelector('dialog-popup').content().querySelector('value.pictures [i="' + id + '"]');
 		var popup = true;
