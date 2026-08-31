@@ -286,7 +286,8 @@ element {
 		var buttonDiv = dialog.createButton(element, 'action.eventPatch()');
 		var button = buttonDiv.appendChild(document.createElement('button'));
 		button.innerText = 'Löschen';
-		button.setAttribute('onclick', 'api.event.delete(' + event.id + ',()=>{document.dispatchEvent(new CustomEvent("popup"));document.dispatchEvent(new CustomEvent("event"));})');
+		button.classList.add('delete');
+		button.setAttribute('onclick', 'action.eventDelete(' + event.id + ')');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.dispatchEvent(new CustomEvent('location', { detail: { id: event.location.id } }));
 	}
