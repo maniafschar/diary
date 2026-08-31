@@ -276,7 +276,7 @@ button.confirmed {
 button.confirmed::before {
 	content: 'endgültig ';
 }
-.confirmed::after {
+button.confirmed::after {
 	content: '?';
 }`;
 		var element = popup.appendChild(document.createElement('element'));
