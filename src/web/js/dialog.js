@@ -364,4 +364,20 @@ button.confirmed::after {
 			document.dispatchEvent(new CustomEvent('popup'));
 		});
 	}
+
+	static export() {
+		document.querySelector('event view-table').setAttribute('mode', 'selection');
+		var popup = document.createElement('div');
+		popup.appendChild(document.createElement('style')).textContent = `
+button.confirmed::after {
+	content: '?';
+}`;
+		var element = popup.appendChild(document.createElement('element'));
+		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
+		var date = new Date();
+		date.setMonth(date.getMonth() - 2);
+		inputDate.setAttribute('minuteStep', 15);
+		dialog.createButton(popup, 'action.contactPatch()');
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+	}
 }
