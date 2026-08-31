@@ -371,6 +371,7 @@ next::after {
 	}
 	closeHint() {
 		this._root.querySelector('hint').classList.remove('open');
+		this.dispatchEvent(new CustomEvent('changed'));
 	}
 	openDay() {
 		this.openHint(this.createCalendar(), 'day');
