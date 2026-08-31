@@ -269,6 +269,15 @@ element {
 	width: 40em;
 	max-width: 100%;
 	display: block;
+}
+button.confirmed {
+	background: rgba(255,100,100,0.6);
+}
+button.confirmed::before {
+	content: 'endgültig ';
+}
+.confirmed::after {
+	content: '?';
 }`;
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
