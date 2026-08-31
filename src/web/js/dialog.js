@@ -366,18 +366,16 @@ button.confirmed::after {
 	}
 
 	static export() {
+		ui.navigate(0);
 		document.querySelector('event view-table').setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
-		popup.appendChild(document.createElement('style')).textContent = `
-button.confirmed::after {
-	content: '?';
-}`;
+		popup.appendChild(document.createElement('style')).textContent = ``;
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
-		dialog.createButton(popup, 'action.contactPatch()');
+		dialog.createButton(popup, 'action.export()').innerText = 'Export';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => document.querySelector('event view-table').removeAttribute('mode'), { once: true });
 	}
