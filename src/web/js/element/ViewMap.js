@@ -150,6 +150,12 @@ images {
 	}
 
 	setLocations(locations) {
+		this.markers.forEach(marker => this.map.removeLayer(marker));
+		this.markers = [];
+		if (!locations) {
+			this.currentIndex = 0;
+			return;
+		}
 		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
 			this.currentIndex = locations.length - 1;
 		this.locations = locations;

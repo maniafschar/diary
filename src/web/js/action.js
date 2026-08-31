@@ -1,9 +1,6 @@
 import { api } from './api';
 import { dialog } from './dialog';
-import { ViewCalendar } from './element/ViewCalendar';
-import { ViewMap } from './element/ViewMap';
 import { DialogPopup } from './element/DialogPopup';
-import { ViewImage } from './element/ViewImage';
 import { InputCheckbox } from './element/InputCheckbox';
 import { InputDate } from './element/InputDate';
 import { InputImage } from './element/InputImage';
@@ -11,6 +8,9 @@ import { InputRating } from './element/InputRating';
 import { InputSelection } from './element/InputSelection';
 import { InputTextarea } from './element/InputTextarea';
 import { ProgressBar } from './element/ProgressBar';
+import { ViewCalendar } from './element/ViewCalendar';
+import { ViewImage } from './element/ViewImage';
+import { ViewMap } from './element/ViewMap';
 import { ViewTable } from './element/ViewTable';
 import { listener } from './listener';
 import { ui } from './ui';
@@ -216,12 +216,14 @@ class action {
 		api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event view-table, user view-table').forEach(e => e.table().querySelector('tbody').textContent = '');
+		document.querySelectorAll('event view-map').setLocations(null);
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="clientName"]').innerText = '';
+		ui.navigate(0);
 	}
 
 	static eventImageDelete(event, id) {
