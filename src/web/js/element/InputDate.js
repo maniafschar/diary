@@ -413,8 +413,12 @@ next::after {
 		this.openHint(s, 'month');
 	}
 	openYear() {
-		var s = '<style>cell:not([name]){padding:0.34em 0;width:3.5em;text-align:center;}cell.filler{opacity:0;cursor:default;}</style>';
 		var min = this.min().getFullYear(), max = this.max().getFullYear();
+		if (max - min < 2) {
+			this.openDay();
+			return;
+		}
+		var s = '<style>cell:not([name]){padding:0.34em 0;width:3.5em;text-align:center;}cell.filler{opacity:0;cursor:default;}</style>';
 		var desc = min < new Date().getFullYear(), year = this.get('year').getAttribute('value');
 		var maxPerRow = 5;
 		if (max - min > maxPerRow) {
