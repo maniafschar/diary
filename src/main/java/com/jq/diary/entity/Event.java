@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,21 +24,17 @@ public class Event extends BaseEntity {
 	private Location location;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<ContactEvent> contactEvents;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<EventImage> eventImages;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<EventRating> eventRatings;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<EventFeedback> eventFeedbacks;
 	private Date date;
 	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
