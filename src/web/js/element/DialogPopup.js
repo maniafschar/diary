@@ -208,7 +208,7 @@ pre {
 	overflow: auto;
 }`;
 		var popup = this._root.appendChild(document.createElement('popup'));
-		popup.appendChild(document.createElement('close')).onclick = () => this.close(this._root.querySelector('popup'));
+		popup.appendChild(document.createElement('close')).onclick = () => document.dispatchEvent(new CustomEvent('popup'));
 		popup.appendChild(document.createElement('content'));
 		document.addEventListener('popup', event => event.detail?.body ? this.open(event, this._root.querySelector('popup')) : this.close(this._root.querySelector('popup')));
 	}
