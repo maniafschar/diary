@@ -374,7 +374,13 @@ button.confirmed::after {
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
 		inputDate.addEventListener('changed', e => {
-			
+			table.deselectAll();
+			for (var i = 0; i < table.list.length; i++) {
+				if (table.list[i].date > date)
+					table.select(i);
+				else
+					break;
+			}
 		});
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
