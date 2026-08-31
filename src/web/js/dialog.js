@@ -367,7 +367,7 @@ button.confirmed::after {
 
 	static export() {
 		ui.navigate(0);
-		vat table = document.querySelector('event view-table');
+		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = ``;
