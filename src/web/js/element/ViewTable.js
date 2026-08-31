@@ -25,8 +25,8 @@ class ViewTable extends HTMLElement {
 	height: 100%;
 }
 
-:host(mode="selection") tbody tr:hover {
-	background-color: none !important;
+table.selection tbody tr:hover {
+	background-color: transparent;
 }
 
 *::-webkit-scrollbar {
@@ -196,6 +196,10 @@ filter count {
 
 	attributeChangedCallback() {
 		this.deselectAll();
+		if (this.getAttribute('mode') == 'selection')
+			this._root.querySelector('table').classList.add('selection');
+		else
+			this._root.querySelector('table').classList.remove('selection');
 	}
 
 	deselectAll() {
