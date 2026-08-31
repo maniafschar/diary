@@ -154,6 +154,7 @@ images {
 		this.markers = [];
 		if (!locations) {
 			this.currentIndex = 0;
+			this.map.setView([48.137154, 11.576124], 4);
 			return;
 		}
 		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
