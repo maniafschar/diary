@@ -379,5 +379,6 @@ button.confirmed::after {
 		inputDate.setAttribute('minuteStep', 15);
 		dialog.createButton(popup, 'action.contactPatch()');
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+		document.addEventListener('popup', () => document.querySelector('event view-table').removeAttribute('mode'), { once: true });
 	}
 }
