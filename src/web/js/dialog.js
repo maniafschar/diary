@@ -375,7 +375,7 @@ button.confirmed::after {
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('type', 'date');
-		dialog.createButton(popup, 'action.export()').innerText = 'Export';
+		dialog.createButton(popup, 'action.export()').querySelector('button').innerText = 'Export';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => document.querySelector('event view-table').removeAttribute('mode'), { once: true });
 	}
