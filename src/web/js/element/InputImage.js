@@ -36,7 +36,7 @@ input {
 		var element = document.createElement('input');
 		element.setAttribute('type', 'file');
 		element.setAttribute('onchange', 'this.getRootNode().host.load(this)');
-		element.setAttribute('accept', '.gif, .png, .jpg, .mov, .mp4');
+		element.setAttribute('accept', '.gif, .png, .jpg, .jpeg, .mov, .mp4');
 		this._root.appendChild(element);
 		this._root.appendChild(document.createTextNode('+'));
 	}
