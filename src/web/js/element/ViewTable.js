@@ -188,6 +188,12 @@ filter count {
 		this.addEventListener('filter', event => this.filterTable(event.detail));
 	}
 
+	static get observedAttributes() { return ['mode']; }
+
+	attributeChangedCallback() {
+		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
+	}
+
 	setConvert(convert) {
 		this.convert = convert;
 	}
