@@ -216,7 +216,7 @@ class action {
 		api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event view-table, user view-table').forEach(e => e.table().querySelector('tbody').textContent = '');
-		document.querySelectorAll('event view-map').setLocations(null);
+		document.querySelector('element view-map').setLocations(null);
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('element.calendar').style.display = '';
