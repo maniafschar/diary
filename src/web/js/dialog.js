@@ -374,7 +374,7 @@ button.confirmed::after {
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
 		var date = new Date();
 		date.setMonth(date.getMonth() - 2);
-		inputDate.setAttribute('minuteStep', 15);
+		inputDate.setAttribute('type', 'date');
 		dialog.createButton(popup, 'action.export()').innerText = 'Export';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => document.querySelector('event view-table').removeAttribute('mode'), { once: true });
