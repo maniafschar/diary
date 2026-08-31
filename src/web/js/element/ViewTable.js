@@ -25,6 +25,10 @@ class ViewTable extends HTMLElement {
 	height: 100%;
 }
 
+:host(mode="selection") tbody tr:hover {
+	background-color: none;
+}
+
 *::-webkit-scrollbar {
 	display: none;
 }
