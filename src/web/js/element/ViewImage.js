@@ -103,7 +103,8 @@ data {
 data description {
 	border: solid 2vw transparent;
 	position: relative;
-	display: block;
+	display: grid;
+	grid-template-rows: 1fr;
 	overflow-x: hidden;
 	transition: all 0.4s ease-out;
 }
@@ -442,9 +443,9 @@ autoplay hint {
 		var description = this._root.querySelector('description');
 		description.addEventListener('transitionend', () => {
 			description.innerHTML = this.list[this.index].description;
-			description.style.opacity = 1;
+			description.style.gridTemplateRows = '';
 		}, { once: true });
-		setTimeout(() => description.style.opacity = 0, 50);
+		setTimeout(() => description.style.gridTemplateRows = '0fr', 50);
 		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
 			if (this.index > i)
