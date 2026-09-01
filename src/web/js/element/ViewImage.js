@@ -454,13 +454,12 @@ autoplay hint {
 	}
 
 	updateImage(index) {
-		var img = this._root.querySelector('imageContainer img');
-		var video = this._root.querySelector('imageContainer video');
+		var imageContainer = data.querySelector('imageContainer');
+		var img = imageContainer.querySelector('img');
+		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
 		var data = this._root.querySelector('data');
-		var image = new Image();
-		var imageContainer = data.querySelector('imageContainer');
 		imageContainer.addEventListener('transitionend', () => {
 			img.src = '';
 			img.style.display = 'none';
@@ -483,7 +482,8 @@ autoplay hint {
 		}, { once: true });
 		imageContainer.style.gridTemplateRows = '0fr';
 		if (src) {
-			document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } }));
+			setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
+			var image = new Image();
 			image.onload = () => {
 				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
