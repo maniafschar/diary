@@ -439,7 +439,7 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
 		this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
-		var description = data.querySelector('description');
+		var description = this._root.querySelector.querySelector('description');
 		description.addEventListener('transitionend', () => {
 			description.innerHTML = this.list[this.index].description;
 			description.style.opacity = 1;
