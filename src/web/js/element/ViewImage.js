@@ -455,7 +455,8 @@ autoplay hint {
 		var src = this.list[this.index].src[index];
 		var data = this._root.querySelector('data');
 		var image = new Image();
-		data.addEventListener('transitionend', () => {
+		var description = data.querySelector('description');
+		description.addEventListener('transitionend', () => {
 			img.src = '';
 			img.style.display = 'none';
 			video.querySelector('source').src = '';
@@ -479,7 +480,7 @@ autoplay hint {
 					video.style.display = '';
 					video.querySelector('source').src = '/med/' + src;
 					video.load();
-					data.style.opacity = 1;
+					description.style.opacity = 1;
 					setTimeout(video.play, 400);
 					data.querySelector('imageContainer').style.gridTemplateRows = '';
 				} else {
@@ -488,7 +489,7 @@ autoplay hint {
 						if (image.ready) {
 							img.src = '/med/' + src;
 							img.style.display = '';
-							data.style.opacity = 1;
+							description.style.opacity = 1;
 							data.querySelector('imageContainer').style.gridTemplateRows = '';
 							if (!progressBar)
 								document.dispatchEvent(new CustomEvent('progressbar'));
@@ -504,9 +505,9 @@ autoplay hint {
 				}
 				setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
 			} else
-				data.style.opacity = 1;
+				description.style.opacity = 1;
 		}, { once: true });
-		setTimeout(() => data.style.opacity = 0, 50);
+		setTimeout(() => description.style.opacity = 0, 50);
 		data.querySelector('imageContainer').style.gridTemplateRows = '0fr';
 		if (src && !(src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)) {
 			image.onload = () => image.ready = true;
