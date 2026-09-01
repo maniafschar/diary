@@ -297,7 +297,7 @@ autoplay hint {
 		this.indexProcessed = {};
 		var isVideo = src => src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
 		var utter = (resolve, index, indexImage) => {
-			if (!document.querySelector('image-carousel').style.transform) {
+			if (!document.querySelector('view-image').style.transform) {
 				if (resolve)
 					resolve();
 				return;
