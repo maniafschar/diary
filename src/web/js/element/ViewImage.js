@@ -45,26 +45,8 @@ imageContainer {
 }
 imageContainer img,
 imageContainer autoplay img {
-	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	object-position: center;
-	opacity: 0;
-	transform: translateX(110%) scale(0.9);
-	transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
-	pointer-events: none;
-}
-imageContainer img.active,
-imageContainer autoplay img.active {
-	opacity: 1;
-	transform: translateX(0) scale(1);
-}
-imageContainer img.old,
-imageContainer autoplay img.old {
-	opacity: 0;
-	transform: translateX(-110%) scale(0.9);
+	min-width: 100%;
+	min-height: 100%;
 }
 imageContainer video,
 imageContainer autoplay video {
@@ -277,9 +259,7 @@ autoplay hint {
 		var data = div.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('nav'));
 		var imageContainer = data.appendChild(document.createElement('imageContainer'));
-		var currentImage = imageContainer.appendChild(document.createElement('img'));
-		currentImage.classList.add('active');
-		var nextImage = imageContainer.appendChild(document.createElement('img'));
+		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.controls = true;
 		video.autoplay = true;
@@ -406,14 +386,9 @@ autoplay hint {
 	}
 
 	open(list, index, autoplay, style) {
-		var images = this._root.querySelectorAll('imageContainer img');
-		images.forEach(img => {
-			img.src = '';
-			img.style.display = 'none';
-			img.classList.remove('active', 'old');
-			img.style.opacity = '0';
-			img.style.transform = 'translateX(110%) scale(0.9)';
-		});
+		var img = this._root.querySelector('imageContainer img');
+		img.src = '';
+		img.style.display = 'none';
 		var video = this._root.querySelector('imageContainer video');
 		video.querySelector('source').src = '';
 		video.style.display = 'none';
@@ -482,9 +457,7 @@ autoplay hint {
 	updateImage(index) {
 		var data = this._root.querySelector('data');
 		var imageContainer = data.querySelector('imageContainer');
-		var images = imageContainer.querySelectorAll('img');
-		var currentImage = Array.from(images).find(img => img.classList.contains('active')) || images[0];
-		var nextImage = Array.from(images).find(img => img !== currentImage) || images[0];
+		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
@@ -511,12 +484,8 @@ autoplay hint {
 			image.onload = () => {
 				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-					currentImage.classList.remove('active');
-					currentImage.classList.add('old');
-					currentImage.style.opacity = '0';
-					currentImage.style.transform = 'translateX(-110%) scale(0.9)';
-					nextImage.src = '';
-					nextImage.style.display = 'none';
+					img.src = '';
+					img.style.display = 'none';
 					video.style.display = '';
 					video.querySelector('source').src = '/med/' + src;
 					video.load();
@@ -524,27 +493,9 @@ autoplay hint {
 				} else {
 					video.querySelector('source').src = '';
 					video.style.display = 'none';
-					currentImage.classList.remove('active');
-					currentImage.classList.add('old');
-					currentImage.style.opacity = '1';
-					currentImage.style.transform = 'translateX(-110%) scale(0.9)';
-					nextImage.style.display = '';
-					nextImage.style.opacity = '0';
-					nextImage.style.transform = 'translateX(110%) scale(0.9)';
-					nextImage.classList.remove('active', 'old');
-					nextImage.src = '/med/' + src;
-					requestAnimationFrame(() => {
-						nextImage.style.opacity = '1';
-						nextImage.style.transform = 'translateX(0) scale(1)';
-						nextImage.classList.add('active');
-					});
-					setTimeout(() => {
-						currentImage.src = '';
-						currentImage.classList.remove('old');
-						currentImage.style.opacity = '0';
-						currentImage.style.transform = 'translateX(110%) scale(0.9)';
-					}, 550);
-					setTimeout(() => imageContainer.scrollTo({ left: (nextImage.clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
+					img.src = '/med/' + src;
+					img.style.display = '';
+					setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
 				}
 				imageContainer.style.gridTemplateRows = '';
 			};
