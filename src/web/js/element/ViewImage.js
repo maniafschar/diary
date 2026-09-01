@@ -330,7 +330,7 @@ autoplay hint {
 			if (!this.indexProcessed[index] && this.list[index].text) {
 				this.indexProcessed[index] = true;
 				setTimeout(() => {
-					if (document.querySelector('image-carousel').style.transform) {
+					if (this.style.transform) {
 						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
 						utterance.lang = 'de-DE';
 						utterance.addEventListener('end', resolve, true);
@@ -413,13 +413,13 @@ autoplay hint {
 	navigate(next) {
 		if (this.list[this.index].src.length > 1) {
 			if (next) {
-				var e = document.querySelector('image-carousel')._root.querySelector('nav dot.selected').nextElementSibling;
+				var e = this._root.querySelector('nav dot.selected').nextElementSibling;
 				if (e) {
 					e.click();
 					return;
 				}
 			} else {
-				var e = document.querySelector('image-carousel')._root.querySelector('nav dot.selected').previousElementSibling;
+				var e = this._root.querySelector('nav dot.selected').previousElementSibling;
 				if (e) {
 					e.click();
 					return;
