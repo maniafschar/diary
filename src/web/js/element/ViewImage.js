@@ -461,10 +461,6 @@ autoplay hint {
 		video.pause();
 		var src = this.list[this.index].src[index];
 		imageContainer.addEventListener('transitionend', () => {
-			img.src = '';
-			img.style.display = 'none';
-			video.querySelector('source').src = '';
-			video.style.display = 'none';
 			this._root.querySelector('nav').textContent = '';
 			if (this.list[this.index].src.length > 1) {
 				var nav = this._root.querySelector('nav');
@@ -487,11 +483,15 @@ autoplay hint {
 			image.onload = () => {
 				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+					img.src = '';
+					img.style.display = 'none';
 					video.style.display = '';
 					video.querySelector('source').src = '/med/' + src;
 					video.load();
 					setTimeout(video.play, 400);
 				} else {
+					video.querySelector('source').src = '';
+					video.style.display = 'none';
 					img.src = '/med/' + src;
 					img.style.display = '';
 					setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
