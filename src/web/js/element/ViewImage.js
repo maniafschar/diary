@@ -454,12 +454,12 @@ autoplay hint {
 	}
 
 	updateImage(index) {
+		var data = this._root.querySelector('data');
 		var imageContainer = data.querySelector('imageContainer');
 		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
-		var data = this._root.querySelector('data');
 		imageContainer.addEventListener('transitionend', () => {
 			img.src = '';
 			img.style.display = 'none';
