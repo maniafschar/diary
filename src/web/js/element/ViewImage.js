@@ -99,13 +99,13 @@ button img {
 data {
 	position: relative;
 	display: block;
-	transition: all 0.4s ease-out;
 }
 data description {
 	border: solid 2vw transparent;
 	position: relative;
 	display: block;
 	overflow-x: hidden;
+	transition: all 0.4s ease-out;
 }
 data>nav {
 	position: fixed;
