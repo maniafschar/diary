@@ -85,7 +85,7 @@ class listener {
 		var contacts = document.querySelector('user view-table').list;
 		var pseudonyms = ui.extractPseudonyms(contacts);
 		var listParticipants = function (event) {
-			var p = {}, participantList = [], s = '';
+			var p = {}, participantList = [], s = '<participants>';
 			for (var i = 0; i < event.contactEvents.length; i++) {
 				p[event.contactEvents[i].contact.id] = event.contactEvents[i];
 				participantList.push({
@@ -100,7 +100,7 @@ class listener {
 					(p[contacts[i].id] ? ' contactEventId="' + p[contacts[i].id].id + '" class="selected"' : '') +
 					'>' + contacts[i].pseudonym + '</item>';
 			}
-			return s;
+			return s + '</participants>';
 		};
 		for (var i = events.length - 1; i >= 0; i--) {
 			list.push({
@@ -181,6 +181,48 @@ thumbnail delete {
 	border-radius: 0 0.5em;
 	background: rgba(100, 150, 200, 0.2) !important;
 	font-size: 1.3em !important;
+}
+field item {
+	display: inline-block;
+	position: relative;
+	padding: 0.5em;
+	margin: 0.25em;
+	border-radius: 0.5em;
+	cursor: pointer;
+	padding-right: 2em;
+}
+field item.selected {
+	background-color: rgba(255, 255, 255, 0.6);
+}
+field item.selected::after {
+	content: '✓';
+	position: absolute;
+	right: 0.5em;
+	top: 0.5em;
+}
+field.participants.history item.selected {
+	display: none;
+}
+field.participants {
+	max-height: initial;
+	text-align: center;
+	width: 100%;
+	min-width: 15em;
+}
+participant {
+	position: relative;
+	display: block;
+	margin: 0.5em;
+	text-align: left;
+}
+participant remove {
+	position: absolute;
+	right: 0;
+	width: 2em;
+	background-color: rgba(255, 0, 0, 0.4);
+	text-align: center;
+	margin-left: 0.5em;
+	border-radius: 1em;
 }`);
 	}
 
