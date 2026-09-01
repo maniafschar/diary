@@ -372,7 +372,7 @@ button.confirmed::after {
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = ``;
 		var element = popup.appendChild(document.createElement('element'));
-		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
+		var inputDate = dialog.createField(element, 'Ab', 'date', 'input-date');
 		inputDate.addEventListener('changed', e => {
 			table.deselectAll();
 			var date = inputDate.getAttribute('value');
