@@ -439,7 +439,12 @@ autoplay hint {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
 		this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
-		this._root.querySelector('description').innerHTML = this.list[this.index].description;
+		var description = data.querySelector('description');
+		description.addEventListener('transitionend', () => {
+			description.innerHTML = this.list[this.index].description;
+			description.style.opacity = 1;
+		}, { once: true });
+		setTimeout(() => description.style.opacity = 0, 50);
 		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
 			if (this.index > i)
@@ -455,8 +460,8 @@ autoplay hint {
 		var src = this.list[this.index].src[index];
 		var data = this._root.querySelector('data');
 		var image = new Image();
-		var description = data.querySelector('description');
-		description.addEventListener('transitionend', () => {
+		var imageContainer = data.querySelector('imageContainer');
+		imageContainer.addEventListener('transitionend', () => {
 			img.src = '';
 			img.style.display = 'none';
 			video.querySelector('source').src = '';
@@ -475,42 +480,24 @@ autoplay hint {
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
-			if (src) {
+		}, { once: true });
+		imageContainer.style.gridTemplateRows = '0fr';
+		if (src) {
+			document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } }));
+			image.onload = () => {
+				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
 					video.style.display = '';
 					video.querySelector('source').src = '/med/' + src;
 					video.load();
-					description.style.opacity = 1;
 					setTimeout(video.play, 400);
-					data.querySelector('imageContainer').style.gridTemplateRows = '';
 				} else {
-					var progressBar = true;
-					var call = function () {
-						if (image.ready) {
-							img.src = '/med/' + src;
-							img.style.display = '';
-							description.style.opacity = 1;
-							data.querySelector('imageContainer').style.gridTemplateRows = '';
-							if (!progressBar)
-								document.dispatchEvent(new CustomEvent('progressbar'));
-						} else {
-							setTimeout(call, 50);
-							if (progressBar) {
-								progressBar = false;
-								document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } }));
-							}
-						}
-					};
-					call();
+					img.src = '/med/' + src;
+					img.style.display = '';
+					setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
 				}
-				setTimeout(() => this._root.querySelector('imageContainer').scrollTo({ left: (this._root.querySelector('imageContainer img').clientWidth - this._root.querySelector('imageContainer').clientWidth) / 2, behavior: 'smooth' }), 50);
-			} else
-				description.style.opacity = 1;
-		}, { once: true });
-		setTimeout(() => description.style.opacity = 0, 50);
-		data.querySelector('imageContainer').style.gridTemplateRows = '0fr';
-		if (src && !(src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0)) {
-			image.onload = () => image.ready = true;
+				imageContainer.style.gridTemplateRows = '';
+			};
 			image.src = '/med/' + src;
 		}
 	}
