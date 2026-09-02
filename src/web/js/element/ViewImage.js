@@ -427,12 +427,12 @@ autoplay hint {
 		this._root.host.style.transform = 'scale(1)';
 	}
 
-	navigate(next) {
+	navigate(forward) {
 		if (this.loading)
 			return;
 		this.loading = true;
 		if (this.list[this.index].src.length > 1) {
-			if (next) {
+			if (forward) {
 				var e = this._root.querySelector('nav dot.selected').nextElementSibling;
 				if (e) {
 					e.click();
@@ -446,15 +446,15 @@ autoplay hint {
 				}
 			}
 		}
-		this.index = this.index + (next ? 1 : -1);
+		this.index = this.index + (forward ? 1 : -1);
 		if (this.index >= this.list.length)
 			this.index = 0;
 		else if (this.index < 0)
 			this.index = this.list.length - 1;
-		this.update(next);
+		this.update(forward);
 	}
 
-	update(next) {
+	update(forward) {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
 		var description = this._root.querySelector('description');
@@ -473,7 +473,7 @@ autoplay hint {
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
-			this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
+			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1);
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
 		next.classList.add('next');
