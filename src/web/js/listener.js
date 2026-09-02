@@ -190,9 +190,10 @@ field item {
 	border-radius: 0.5em;
 	cursor: pointer;
 	padding-right: 2em;
+	background-color: rgba(255, 255, 255, 0.4);
 }
 field item.selected {
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(255, 255, 255, 0.8);
 }
 field item.selected::after {
 	content: '✓';
@@ -214,15 +215,6 @@ participant {
 	display: block;
 	margin: 0.5em;
 	text-align: left;
-}
-participant remove {
-	position: absolute;
-	right: 0;
-	width: 2em;
-	background-color: rgba(255, 0, 0, 0.4);
-	text-align: center;
-	margin-left: 0.5em;
-	border-radius: 1em;
 }`);
 	}
 
