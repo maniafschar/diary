@@ -453,14 +453,9 @@ autoplay hint {
 			description.remove();
 			nav.textContent = '';
 			if (this.list[this.index].src.length > 1) {
-				for (var i = 0; i < this.list[this.index].src.length; i++) {
-					var dot = nav.appendChild(document.createElement('dot'));
-					dot.innerText = i + 1;
-					if (i == index)
-						dot.classList.add('selected');
-					else
-						dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				}
+				for (var i = 0; i < this.list[this.index].src.length; i++)
+					nav.appendChild(document.createElement('dot')).innerText = i + 1;
+				nav.querySelector('dot').classList.add('selected');
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
@@ -484,11 +479,16 @@ autoplay hint {
 		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
+		var nav = this._root.querySelector('nav');
 		imageContainer.style.gridTemplateRows = '0fr';
 		if (src) {
 			setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
 			var image = new Image();
 			image.onload = () => {
+				if (nav.querySelector('dot')) {
+					nav.querySelector('dot.selected').classList.remove('selected');
+					nav.querySelectorAll('dot')[index|.classList.add('selected');
+				}
 				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
 					img.src = '';
