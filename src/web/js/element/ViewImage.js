@@ -42,6 +42,7 @@ imageContainer {
 	display: block;
 	width: 100%;
 	transition: all .4s ease-out;
+	overflow: hidden;
 }
 imageContainer img,
 imageContainer autoplay img {
@@ -509,7 +510,10 @@ autoplay hint {
 					next.previousSibling.remove();
 					selectDot();
 					this.loading = false;
-					setTimeout(next.play, 50);
+					setTimeout(() => {
+						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
+						next.play();
+					}, 50);
 				}, { once: true });
 				var next = video.parentElement.appendChild(document.createElement('video'));
 				next.controls = true;
