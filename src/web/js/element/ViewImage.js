@@ -103,10 +103,16 @@ data {
 data description {
 	border: solid 2vw transparent;
 	position: relative;
-	display: grid;
-	grid-template-rows: 1fr;
+	display: block;
 	overflow-x: hidden;
 	transition: all 0.4s ease-out;
+	width: 100%;
+}
+data description.next {
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0;
 }
 data>nav {
 	position: fixed;
@@ -441,11 +447,28 @@ autoplay hint {
 		this._root.querySelector('div').style.display = '';
 		this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
 		var description = this._root.querySelector('description');
+		var nav = this._root.querySelector('nav');
 		description.addEventListener('transitionend', () => {
-			description.innerHTML = this.list[this.index].description;
-			description.style.gridTemplateRows = '';
+			description.previousSibling.classList.remove('next');
+			description.remove();
+			nav.textContent = '';
+			if (this.list[this.index].src.length > 1) {
+				for (var i = 0; i < this.list[this.index].src.length; i++) {
+					var dot = nav.appendChild(document.createElement('dot'));
+					dot.innerText = i + 1;
+					if (i == index)
+						dot.classList.add('selected');
+					else
+						dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+				}
+				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
+				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
+			}
 		}, { once: true });
-		setTimeout(() => description.style.gridTemplateRows = '0fr', 50);
+		var next = description.parentElement.insertBefore(document.createElement('description'), description);
+		next.classList.add('next');
+		next.innerHTML = this.list[this.index].description;
+		setTimeout(() => { description.style.opacity = 0; next.style.opacity = 1; }, 50);
 		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
 			if (this.index > i)
@@ -461,22 +484,6 @@ autoplay hint {
 		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
-		imageContainer.addEventListener('transitionend', () => {
-			this._root.querySelector('nav').textContent = '';
-			if (this.list[this.index].src.length > 1) {
-				var nav = this._root.querySelector('nav');
-				for (var i = 0; i < this.list[this.index].src.length; i++) {
-					var dot = nav.appendChild(document.createElement('dot'));
-					dot.innerText = i + 1;
-					if (i == index)
-						dot.classList.add('selected');
-					else
-						dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
-				}
-				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
-				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
-			}
-		}, { once: true });
 		imageContainer.style.gridTemplateRows = '0fr';
 		if (src) {
 			setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
