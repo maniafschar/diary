@@ -500,7 +500,7 @@ autoplay hint {
 				var image = new Image();
 				image.onload = () => {
 					document.dispatchEvent(new CustomEvent('progressbar'));
-					var next = img.parentElement.insertBefore(image, img);
+					var next = img.parentElement.insert(image, img);
 					next.classList.add('next');
 					if (nav.querySelector('dot')) {
 						nav.querySelector('dot.selected').classList.remove('selected');
