@@ -47,11 +47,13 @@ imageContainer autoplay img {
 	min-width: 100%;
 	min-height: 100%;
 	transition: all .4s ease-out;
+	position: relative;
 }
 imageContainer video,
 imageContainer autoplay video {
 	width: 100%;
 	transition: all .4s ease-out;
+	position: relative;
 }
 imageContainer img.next,
 imageContainer video.next {
