@@ -44,8 +44,7 @@ imageContainer {
 }
 imageContainer img,
 imageContainer autoplay img {
-	min-width: 100%;
-	min-height: 100%;
+	width: 100%;
 	transition: all .4s ease-out;
 	position: relative;
 }
