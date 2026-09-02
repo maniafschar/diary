@@ -53,6 +53,12 @@ imageContainer autoplay video {
 	width: 100%;
 	transition: all .4s ease-out;
 }
+imageContainer img.next,
+imageContainer video.next {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
 hint {
 	font-size: 1.3em;
 	position: absolute;
