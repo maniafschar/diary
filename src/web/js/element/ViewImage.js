@@ -39,19 +39,19 @@ div {
 imageContainer {
 	overflow: auto;
 	position: relative;
-	display: grid;
+	display: block;
 	width: 100%;
-	transition: all .4s ease-out;
-	grid-template-rows: 1fr;
 }
 imageContainer img,
 imageContainer autoplay img {
 	min-width: 100%;
 	min-height: 100%;
+	transition: all .4s ease-out;
 }
 imageContainer video,
 imageContainer autoplay video {
 	width: 100%;
+	transition: all .4s ease-out;
 }
 hint {
 	font-size: 1.3em;
