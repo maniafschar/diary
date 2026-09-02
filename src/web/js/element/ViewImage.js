@@ -474,22 +474,21 @@ autoplay hint {
 
 	updateImage(index) {
 		var data = this._root.querySelector('data');
+		var nav = data.querySelector('nav');
 		var imageContainer = data.querySelector('imageContainer');
 		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
 		video.pause();
 		var src = this.list[this.index].src[index];
-		var nav = this._root.querySelector('nav');
-		imageContainer.style.gridTemplateRows = '0fr';
 		if (src) {
 			setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
 			var image = new Image();
 			image.onload = () => {
+				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (nav.querySelector('dot')) {
 					nav.querySelector('dot.selected').classList.remove('selected');
-					nav.querySelectorAll('dot')[index|.classList.add('selected');
+					nav.querySelectorAll('dot')[index].classList.add('selected');
 				}
-				document.dispatchEvent(new CustomEvent('progressbar'));
 				if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
 					img.src = '';
 					img.style.display = 'none';
