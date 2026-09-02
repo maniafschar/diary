@@ -517,8 +517,8 @@ autoplay hint {
 					var current = video.style.display == 'none' ? img : video;
 					var cleanUp = first => {
 						if (first) {
-							next.style.oacity = 0;
-							setTimeout(() => next.style.oacity = 1, 50);
+							next.style.opacity = 0;
+							setTimeout(() => next.style.opacity = 1, 50);
 						}
 						next.classList.remove('next');
 						next.previousSibling.remove();
