@@ -457,8 +457,11 @@ autoplay hint {
 			description.remove();
 			nav.textContent = '';
 			if (this.list[this.index].src.length > 1) {
-				for (var i = 0; i < this.list[this.index].src.length; i++)
-					nav.appendChild(document.createElement('dot')).innerText = i + 1;
+				for (var i = 0; i < this.list[this.index].src.length; i++) {
+					var dot = nav.appendChild(document.createElement('dot'));
+					dot.innerText = i + 1;
+					dot.setAttribute('onclick', 'this.getRootNode().host.updateImage(' + i + ')');
+				}
 				nav.querySelector('dot').classList.add('selected');
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
