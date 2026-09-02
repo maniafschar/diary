@@ -343,26 +343,17 @@ class action {
 	}
 
 	static participate(contactId, eventId) {
-		var popup = document.querySelector('dialog-popup').content();
-		var fireEvent = type => {
-			var participants = [];
-			var selected = popup.querySelectorAll('value[i="' + eventId + '"] item.selected');
-			for (var i = 0; i < selected.length; i++)
-				participants.push({ id: selected[i].getAttribute('i'), pseudonym: selected[i].innerText });
-			document.dispatchEvent(new CustomEvent('event'));
-		};
-		var e = popup.querySelector('value[i="' + eventId + '"] item[i="' + contactId + '"]');
+		var data = document.querySelector('view-image').data();
+		var e = data.querySelector('participants item[i="' + contactId + '"]');
 		if (e.getAttribute('contactEventId')) {
 			api.contact.deleteEvent(e.getAttribute('contactEventId'), () => {
 				e.classList.remove('selected');
 				e.removeAttribute('contactEventId');
-				fireEvent('remove');
 			});
 		} else {
 			api.contact.postEvent(contactId, eventId, id => {
 				e.classList.add('selected');
 				e.setAttribute('contactEventId', id);
-				fireEvent('add');
 			});
 		}
 	}
