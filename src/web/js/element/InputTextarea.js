@@ -14,6 +14,7 @@ class InputTextarea extends HTMLElement {
 :host(*) {
 	display: block;
 	position: relative;
+	box-sizing: border-box;
 }
 
 textarea {
