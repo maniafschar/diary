@@ -27,6 +27,7 @@ class ViewImage extends HTMLElement {
 	align-items: center;
 	font-size: 1em;
 	z-index: 450;
+	box-sizing: border-box;
 }
 *::-webkit-scrollbar {
 	display: none;
