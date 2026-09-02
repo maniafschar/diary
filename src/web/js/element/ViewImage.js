@@ -27,7 +27,6 @@ class ViewImage extends HTMLElement {
 	align-items: center;
 	font-size: 1em;
 	z-index: 450;
-	box-sizing: border-box;
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -223,6 +222,7 @@ input {
 	width: 100%;
 	color: black;
 	user-select: text;
+	box-sizing: border-box;
 }
 
 input[type="file"] {
