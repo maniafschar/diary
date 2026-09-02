@@ -507,14 +507,18 @@ autoplay hint {
 						nav.querySelectorAll('dot')[index].classList.add('selected');
 					}
 					var current = video.style.display == 'none' ? img : video;
-					current.addEventListener('transitionend', () => {
+					var cleanUp = () => {
 						next.classList.remove('next');
 						next.nextSibling.remove();
 						video.querySelector('source').src = '';
 						video.style.display = 'none';
 						setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
 						this.loading = false;
-					}, { once: true });
+					};
+					if (current.src || current.querySelector('source')?.src)
+						current.addEventListener('transitionend', cleanUp, { once: true });
+					else
+						cleanUp();
 					setTimeout(() => { current.style.opacity = 0; next.style.opacity = 1; }, 50);
 				};
 				image.onerror = () => this.loading = false;
