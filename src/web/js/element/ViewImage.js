@@ -113,7 +113,6 @@ data description {
 data description.next {
 	position: absolute;
 	left: 0;
-	top: 0;
 	opacity: 0;
 }
 data>nav {
@@ -492,7 +491,7 @@ autoplay hint {
 				video.style.display = '';
 				video.querySelector('source').src = '/med/' + src;
 				video.load();
-				setTimeout(video.play, 400);
+				setTimeout(() => { video.play(); this.loading = false; }, 400);
 			} else {
 				setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
 				var image = new Image();
