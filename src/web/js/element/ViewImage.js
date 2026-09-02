@@ -41,6 +41,7 @@ imageContainer {
 	position: relative;
 	display: block;
 	width: 100%;
+	transition: all .4s ease-out;
 }
 imageContainer img,
 imageContainer autoplay img {
@@ -523,6 +524,7 @@ autoplay hint {
 				var image = new Image();
 				image.onload = () => {
 					document.dispatchEvent(new CustomEvent('progressbar'));
+					imageContainer.style.height = (image.height + image.width / window.innerWidth) + 'px';
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
@@ -546,7 +548,9 @@ autoplay hint {
 				image.onerror = () => this.loading = false;
 				image.src = '/med/' + src;
 			}
-		} else
+		} else {
+			imageContainer.style.height = 0;
 			this.loading = false;
+		}
 	}
 }
