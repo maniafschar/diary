@@ -277,9 +277,6 @@ autoplay hint {
 		var imageContainer = data.appendChild(document.createElement('imageContainer'));
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
-		video.controls = true;
-		video.autoplay = true;
-		video.setAttribute('playsinline', true);
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
 		var next = div.appendChild(document.createElement('button'));
@@ -514,6 +511,9 @@ autoplay hint {
 					setTimeout(next.play, 50);
 				}, { once: true });
 				var next = video.parentElement.appendChild(document.createElement('video'));
+				next.controls = true;
+				next.autoplay = true;
+				next.setAttribute('playsinline', true);
 				next.classList.add('next');
 				next.appendChild(document.createElement('source')).src = '/med/' + src;
 				next.load();
