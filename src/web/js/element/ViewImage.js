@@ -516,7 +516,7 @@ autoplay hint {
 					}
 					var current = video.style.display == 'none' ? img : video;
 					var cleanUp = first => {
-						if (first) {
+						if (first == true) {
 							next.style.opacity = 0;
 							setTimeout(() => next.style.opacity = 1, 50);
 						}
