@@ -60,6 +60,7 @@ imageContainer video.next {
 	position: absolute;
 	left: 0;
 	top: 0;
+	opacity: 0;
 }
 hint {
 	font-size: 1.3em;
