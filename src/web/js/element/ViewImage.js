@@ -515,7 +515,7 @@ autoplay hint {
 						setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
 						this.loading = false;
 					};
-					if (current.src || current.querySelector('source')?.src)
+					if (current.src?.indexOf('/med/') > 0 || current.querySelector('source')?.src)
 						current.addEventListener('transitionend', cleanUp, { once: true });
 					else
 						cleanUp();
