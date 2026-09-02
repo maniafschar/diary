@@ -515,18 +515,21 @@ autoplay hint {
 						nav.querySelectorAll('dot')[index].classList.add('selected');
 					}
 					var current = video.style.display == 'none' ? img : video;
-					var cleanUp = () => {
+					var cleanUp = first => {
+						if (first) {
+							next.style.oacity = 0;
+							setTimeout(() => next.style.oacity = 1, 50);
+						}
 						next.classList.remove('next');
 						next.previousSibling.remove();
 						video.querySelector('source').src = '';
 						video.style.display = 'none';
-						imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' });
 						this.loading = false;
 					};
 					if (current.src?.indexOf('/med/') > 0 || current.querySelector('source')?.src)
 						current.addEventListener('transitionend', cleanUp, { once: true });
 					else
-						cleanUp();
+						cleanUp(true);
 					setTimeout(() => { current.style.opacity = 0; next.style.opacity = 1; }, 50);
 				};
 				image.onerror = () => this.loading = false;
