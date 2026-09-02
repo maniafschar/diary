@@ -452,13 +452,11 @@ autoplay hint {
 		else if (this.index < 0)
 			this.index = this.list.length - 1;
 		this.update(next);
-		this._root.querySelector('div').scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
 	update(next) {
 		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
-		this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
 		var description = this._root.querySelector('description');
 		var nav = this._root.querySelector('nav');
 		description.addEventListener('transitionend', () => {
@@ -474,6 +472,7 @@ autoplay hint {
 				nav.querySelector('dot').classList.add('selected');
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
+				this.updateImage(next ? 0 : this.list[this.index].src.length - 1);
 			}
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
@@ -521,7 +520,7 @@ autoplay hint {
 						next.previousSibling.remove();
 						video.querySelector('source').src = '';
 						video.style.display = 'none';
-						setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
+						imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' });
 						this.loading = false;
 					};
 					if (current.src?.indexOf('/med/') > 0 || current.querySelector('source')?.src)
