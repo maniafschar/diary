@@ -509,7 +509,7 @@ autoplay hint {
 					var current = video.style.display == 'none' ? img : video;
 					var cleanUp = () => {
 						next.classList.remove('next');
-						next.nextSibling.remove();
+						next.previousSibling.remove();
 						video.querySelector('source').src = '';
 						video.style.display = 'none';
 						setTimeout(() => imageContainer.scrollTo({ left: (imageContainer.querySelector('img').clientWidth - imageContainer.clientWidth) / 2, behavior: 'smooth' }), 50);
