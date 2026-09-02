@@ -496,13 +496,27 @@ autoplay hint {
 		video.pause();
 		var src = this.list[this.index].src[index];
 		if (src) {
+			var selectDot = () => {
+				if (nav.querySelector('dot')) {
+					nav.querySelector('dot.selected').classList.remove('selected');
+					nav.querySelectorAll('dot')[index].classList.add('selected');
+				}
+			};
+			var current = video.style.display == 'none' ? img : video;
 			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
-				img.src = '';
-				img.style.display = 'none';
-				video.style.display = '';
-				video.querySelector('source').src = '/med/' + src;
-				video.load();
-				setTimeout(() => { video.play(); this.loading = false; }, 400);
+				current.addEventListener('transitionend', () => {
+					img.src = '';
+					img.style.display = 'none';
+					next.classList.remove('next');
+					next.previousSibling.remove();
+					selectDot();
+					setTimeout(() => { video.play(); this.loading = false; }, 50);
+				}, { once: true });
+				var next = video.parentElement.appendChild(document.createElement('video'));
+				next.classList.add('next');
+				next.appendChild(document.createElement('source')).src = '/med/' + src;
+				next.load();
+				setTimeout(() => current.style.opacity = 0, 50);
 			} else {
 				setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
 				var image = new Image();
@@ -510,11 +524,7 @@ autoplay hint {
 					document.dispatchEvent(new CustomEvent('progressbar'));
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
-					if (nav.querySelector('dot')) {
-						nav.querySelector('dot.selected').classList.remove('selected');
-						nav.querySelectorAll('dot')[index].classList.add('selected');
-					}
-					var current = video.style.display == 'none' ? img : video;
+					selectDot();
 					var cleanUp = first => {
 						if (first == true) {
 							next.style.opacity = 0;
