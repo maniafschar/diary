@@ -510,7 +510,8 @@ autoplay hint {
 					next.classList.remove('next');
 					next.previousSibling.remove();
 					selectDot();
-					setTimeout(() => { video.play(); this.loading = false; }, 50);
+					this.loading = false;
+					setTimeout(next.play, 50);
 				}, { once: true });
 				var next = video.parentElement.appendChild(document.createElement('video'));
 				next.classList.add('next');
