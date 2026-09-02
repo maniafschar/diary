@@ -524,7 +524,7 @@ autoplay hint {
 				var image = new Image();
 				image.onload = () => {
 					document.dispatchEvent(new CustomEvent('progressbar'));
-					imageContainer.style.height = (image.naturalHeight + image.naturalWidth / window.innerWidth) + 'px';
+					imageContainer.style.height = (image.naturalHeight * window.innerWidth / image.naturalWidth) + 'px';
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
