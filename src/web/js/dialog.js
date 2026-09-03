@@ -48,6 +48,7 @@ element {
 	width: 40em;
 	max-width: 100%;
 	display: block;
+	overflow-x: hidden;
 }
 
 button.location {
