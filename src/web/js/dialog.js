@@ -388,6 +388,7 @@ button.confirmed::after {
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
 		var button = dialog.createButton(popup, 'action.export()').querySelector('button');
+		button.innerText = '';
 		var count = button.appendChild(document.createElement('span'));
 		count.innertText = 0;
 		button.appendChild(document.createTextNode(' exportieren'));
