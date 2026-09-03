@@ -360,15 +360,14 @@ a {
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
-			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1);
+			var utterance = null;
 			if (this.read) {
-				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+				utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 				utterance.lang = 'de-DE';
-				if (this.list[this.index].src?.length && this.isVideo(this.list[this.index].src[0]))
-					this._root.querySelector('video').addEventListener('ended', () => window.speechSynthesis.speak(utterance));
-				else
+				if (!this.list[this.index].src?.length || !this.isVideo(this.list[this.index].src[0]))
 					window.speechSynthesis.speak(utterance);
 			}
+			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1, utterance);
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
 		next.classList.add('next');
@@ -382,7 +381,7 @@ a {
 		this._root.querySelector('hint').innerText = position + '/' + this.list.length;
 	}
 
-	updateImage(index) {
+	updateImage(index, speech) {
 		var data = this._root.querySelector('data');
 		var nav = data.querySelector('nav');
 		var imageContainer = data.querySelector('imageContainer');
@@ -408,6 +407,8 @@ a {
 					this.loading = false;
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
+						if (speech)
+							next.addEventListener('ended', () => window.speechSynthesis.speak(speech));
 						next.play();
 					}, 50);
 				}, { once: true });
