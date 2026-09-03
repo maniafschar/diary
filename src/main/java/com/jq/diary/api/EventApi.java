@@ -32,6 +32,7 @@ import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.LocationService;
+import com.jq.diary.service.PdfService;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -44,11 +45,14 @@ public class EventApi extends ApplicationApi {
 	private EventService eventService;
 
 	@Autowired
+	private PdfService pdfService;
+
+	@Autowired
 	private LocationService locationService;
 
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
-		return filter(
+		return this.filter(
 				this.eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
 	}
 
@@ -174,7 +178,13 @@ public class EventApi extends ApplicationApi {
 			this.eventService.delete(eventImage);
 	}
 
-	private List<Event> filter(List<Event> list) {
+	@PostMapping(path = "pdf")
+	public void postPdf(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@RequestBody final List<BigInteger> eventIds) throws IOException {
+		this.pdfService.create();
+	}
+
+	private List<Event> filter(final List<Event> list) {
 		final List<Event> filtered = new ArrayList<>();
 		for (final Event event : list) {
 			final Event filteredEvent = new Event();
