@@ -372,7 +372,6 @@ button.confirmed::after {
 		var popup = document.createElement('div');
 		popup.style.overflowX = 'hidden';
 		var element = popup.appendChild(document.createElement('element'));
-		var count = element.appendChild(document.createElement('span'));
 		var inputDate = dialog.createField(element, 'Ab', 'date', 'input-date');
 		inputDate.addEventListener('changed', e => {
 			table.deselectAll();
@@ -385,12 +384,15 @@ button.confirmed::after {
 			}
 		});
 		table.list.forEach(e => inputDate.addOccupied(new Date(e.date)));
-		var listener = () => count.innserText = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
-		table.addEventListener('select', listener);
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
-		dialog.createButton(popup, 'action.export()').querySelector('button').innerText = 'Export';
+		var button = dialog.createButton(popup, 'action.export()').querySelector('button');
+		var count = button.appendChild(document.createElement('span'));
+		count.innertText = 0;
+		button.innerText = ' exportieren';
+		var listener = () => count.innerText = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
+		table.addEventListener('select', listener);
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
 			document.querySelector('event view-table').removeAttribute('mode');
