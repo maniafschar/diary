@@ -97,6 +97,7 @@ th {
 	background: rgba(100, 150, 200, 0.2);
 	padding-top: 0.25em;
 	height: 2em;
+	overflow: hidden;
 }
 
 td.text {
