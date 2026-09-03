@@ -369,13 +369,13 @@ window.onresize = function () {
 	var imageWidth = 1536, imageHeight = 1024;
 	var imageStyle = document.querySelector('body element.intro>img').style;
 	if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
-		imageStyle.height = window.innerHeight;
+		imageStyle.height = window.innerHeight + 'px';
 		imageStyle.width = 'fit-content';
 		imageStyle.marginTop = 0;
 	} else {
-		imageStyle.width = window.innerWidth;
+		imageStyle.width = window.innerWidth + 'px';
 		imageStyle.height = 'fit-content';
-		imageStyle.marginTop = window.innerHeight - window.innerWidth / imageWidth * imageHeight;
+		imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
 	}
 }
 
