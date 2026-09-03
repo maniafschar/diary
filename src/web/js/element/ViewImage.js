@@ -421,7 +421,7 @@ a {
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
 						if (this.list[this.index].text)
-							next.addEventListener('ended', this.speakText);
+							next.addEventListener('ended', () => this.speakText);
 						next.play();
 					}, 50);
 				}, { once: true });
