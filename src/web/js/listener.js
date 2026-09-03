@@ -43,9 +43,6 @@ class listener {
 	}
 
 	static updateViewImage(index) {
-		var autoplay = !index;
-		if (!index)
-			index = 0;
 		var events = document.querySelector('event view-table').list;
 		var list = [];
 		var listImages = function (event) {
@@ -123,8 +120,8 @@ class listener {
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
-		document.querySelector('view-image').open(list, index, autoplay, `
-rating {
+		document.querySelector('view-image').open(list, index, 
+`rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;
 	display: inline-block;
