@@ -364,7 +364,6 @@ a {
 			if (this.read) {
 				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 				utterance.lang = 'de-DE';
-				utterance.addEventListener('end', resolve, true);
 				if (this.isVideo(src))
 					this._root.querySelector('autoplay video').addEventListener('ended', () => window.speechSynthesis.speak(utterance));
 				else
