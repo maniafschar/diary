@@ -397,7 +397,7 @@ button.confirmed::after {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
 			document.querySelector('event view-table').removeAttribute('mode');
-			this.removeEventListener(listener);
+			table.removeEventListener(listener);
 		}, { once: true });
 	}
 }
