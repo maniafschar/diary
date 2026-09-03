@@ -390,7 +390,7 @@ button.confirmed::after {
 		var button = dialog.createButton(popup, 'action.export()').querySelector('button');
 		var count = button.appendChild(document.createElement('span'));
 		count.innertText = 0;
-		button.innerText = ' exportieren';
+		button.appendChild(document.createTextNode(' exportieren'));
 		var listener = () => count.innerText = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
 		table.addEventListener('select', listener);
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
