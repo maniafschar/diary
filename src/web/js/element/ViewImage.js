@@ -379,7 +379,7 @@ a {
 			}
 			var utterance = null;
 			if (this.speak && (!this.list[this.index].src?.length || !this.isVideo(this.list[this.index].src[0])))
-				this.speak();
+				this.speakText();
 			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1, utterance);
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
@@ -421,7 +421,7 @@ a {
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
 						if (this.list[this.index].src[index].text)
-							next.addEventListener('ended', this.speak);
+							next.addEventListener('ended', this.speakText);
 						next.play();
 					}, 50);
 				}, { once: true });
