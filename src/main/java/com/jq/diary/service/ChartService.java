@@ -16,16 +16,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.hibernate.stat.Statistics;
 import org.springframework.stereotype.Service;
 
 @Service
 class ChartService {
+	public static class Statistics {
+		public final Map<Date, double> mood = new HashMap<>();
+	}
 	String createImage(final List<Statistics> data, final Path file, final Map<String, Color> colors,
 			final String dateFormat) throws IOException, ParseException {
 		final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -72,52 +75,6 @@ class ChartService {
 			final SimpleDateFormat formatter) {
 		final PlotData plotData = new PlotData();
 		for (final Statistics dataUser : data) {
-			if (plotData.chatsMax < dataUser.chats)
-				plotData.chatsMax = dataUser.chats;
-			if (plotData.wordsMax < dataUser.words)
-				plotData.wordsMax = dataUser.words;
-			if (plotData.lettersMax < dataUser.letters)
-				plotData.lettersMax = dataUser.letters;
-		}
-		for (final Statistics dataUser : data) {
-			final String date = xAxis.stream().filter(e -> {
-				try {
-					return formatter.parse(dataUser.period).equals(formatter.parse(e));
-				} catch (final ParseException ex) {
-					return false;
-				}
-			}).findFirst().orElse(null);
-			if (date == null)
-				plotData.error.append(dataUser.user + " " + dataUser.period + "\n");
-			else {
-				Plot plot = plotData.plots.stream().filter(e -> e.user.equals(dataUser.user)).findFirst()
-						.orElse(null);
-				if (plot == null) {
-					plot = new Plot(dataUser.user, colors.get(dataUser.user));
-					plotData.plots.add(plot);
-				}
-				final int index = xAxis.indexOf(date);
-				// add null values before, from beginning or between days
-				if (index > 0) {
-					for (int i = plot.lastIndex + 1; i < index; i++) {
-						final int x = marginLegend + marginX * (1 + i);
-						plot.chats.addPoint(x, heightPlot);
-						plot.words.addPoint(x, 2 * heightPlot + marginPlot);
-						plot.letters.addPoint(x, 3 * heightPlot + 2 * marginPlot);
-					}
-				}
-				// print entry
-				final int x = marginLegend + marginX * (1 + index);
-				if (plotData.chatsMax > 0)
-					plot.chats.addPoint(x, heightPlot - heightPlot * dataUser.chats / plotData.chatsMax);
-				if (plotData.wordsMax > 0)
-					plot.words.addPoint(x,
-							2 * heightPlot + marginPlot - heightPlot * dataUser.words / plotData.wordsMax);
-				if (plotData.lettersMax > 0)
-					plot.letters.addPoint(x,
-							3 * heightPlot + 2 * marginPlot - heightPlot * dataUser.letters / plotData.lettersMax);
-				plot.lastIndex = index;
-			}
 		}
 		// add null values after till end
 		plotData.plots.stream().forEach(e -> {
