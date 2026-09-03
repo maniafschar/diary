@@ -1,4 +1,3 @@
-import { api } from "../api";
 
 export { ViewImage };
 
@@ -6,7 +5,7 @@ class ViewImage extends HTMLElement {
 	loading = false;
 	list = null;
 	index = 0;
-	read = false;
+	speak = false;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -274,15 +273,17 @@ a {
 		close.classList.add('close');
 		close.classList.add('icon');
 		close.innerText = 'x';
-		this._root.appendChild(document.createElement('hint')).onclick = () => {
-			this.read = !this.read;
-			if (this.read) {
-				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
-				utterance.lang = 'de-DE';
-				window.speechSynthesis.speak(utterance);
-			} else
-				window.speechSynthesis.cancel();
-		};
+		this._root.appendChild(document.createElement('hint'));
+	}
+
+	toggleSpeak() {
+		this.speak = !this.speak;
+		if (this.speak) {
+			var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+			utterance.lang = 'de-DE';
+			window.speechSynthesis.speak(utterance);
+		} else
+			window.speechSynthesis.cancel();
 	}
 
 	isVideo(src) {
@@ -370,7 +371,7 @@ a {
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
 			var utterance = null;
-			if (this.read) {
+			if (this.speak) {
 				window.speechSynthesis.cancel();
 				utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 				utterance.lang = 'de-DE';

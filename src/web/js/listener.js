@@ -111,7 +111,7 @@ class listener {
 					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 					'<separator></separator>' +
 					(events[i].rating ? listRatings(events[i]) : '') +
-					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
+					(events[i].note ? '<button class="icon" onclick="this.getRootNode().host.toggleSpeak()"><img src="image/speaker.svg" /></button><<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
@@ -120,8 +120,8 @@ class listener {
 					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
 			});
 		}
-		document.querySelector('view-image').open(list, index, 
-`rating {
+		document.querySelector('view-image').open(list, index,
+			`rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;
 	display: inline-block;
