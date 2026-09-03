@@ -6,6 +6,7 @@ class ViewImage extends HTMLElement {
 	list = null;
 	index = 0;
 	speak = false;
+	speakJob = null;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -278,12 +279,18 @@ a {
 
 	toggleSpeak() {
 		this.speak = !this.speak;
-		if (this.speak) {
-			var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
-			utterance.lang = 'de-DE';
-			window.speechSynthesis.speak(utterance);
-		} else
+		if (this.speak)
+			this.speakText();
+		else
 			window.speechSynthesis.cancel();
+	}
+
+	speakText() {
+		window.speechSynthesis.cancel();
+		clearTimeout(this.speakJob);
+		var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+		utterance.lang = 'de-DE';
+		this.speakJob = setTimeout(() => window.speechSynthesis.speak(utterance), 400);
 	}
 
 	isVideo(src) {
@@ -371,13 +378,8 @@ a {
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
 			var utterance = null;
-			if (this.speak) {
-				window.speechSynthesis.cancel();
-				utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
-				utterance.lang = 'de-DE';
-				if (!this.list[this.index].src?.length || !this.isVideo(this.list[this.index].src[0]))
-					window.speechSynthesis.speak(utterance);
-			}
+			if (this.speak && (!this.list[this.index].src?.length || !this.isVideo(this.list[this.index].src[0])))
+				this.speak();
 			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1, utterance);
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
@@ -392,7 +394,7 @@ a {
 		this._root.querySelector('hint').innerText = (position + 1) + '/' + this.list.length;
 	}
 
-	updateImage(index, speech) {
+	updateImage(index) {
 		var data = this._root.querySelector('data');
 		var nav = data.querySelector('nav');
 		var imageContainer = data.querySelector('imageContainer');
@@ -418,8 +420,8 @@ a {
 					this.loading = false;
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
-						if (speech)
-							next.addEventListener('ended', () => window.speechSynthesis.speak(speech));
+						if (this.list[this.index].src[index].text)
+							next.addEventListener('ended', this.speak);
 						next.play();
 					}, 50);
 				}, { once: true });
