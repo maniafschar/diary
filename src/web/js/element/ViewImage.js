@@ -376,10 +376,9 @@ a {
 				nav.style.width = (3 * this.list[this.index].src.length) + 'em';
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
-			var utterance = null;
 			if (this.speak && (!this.list[this.index].src?.length || !this.isVideo(this.list[this.index].src[0])))
 				this.speakText();
-			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1, utterance);
+			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1, true);
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
 		next.classList.add('next');
@@ -393,7 +392,7 @@ a {
 		this._root.querySelector('hint').innerText = (position + 1) + '/' + this.list.length;
 	}
 
-	updateImage(index) {
+	updateImage(index, speak) {
 		var data = this._root.querySelector('data');
 		var nav = data.querySelector('nav');
 		var imageContainer = data.querySelector('imageContainer');
@@ -420,7 +419,7 @@ a {
 					this.loading = false;
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
-						if (this.list[this.index].text)
+						if (speak && this.list[this.index].text)
 							next.addEventListener('ended', () => this.speakText());
 						next.play();
 					}, 50);
