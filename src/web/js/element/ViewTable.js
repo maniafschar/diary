@@ -210,8 +210,10 @@ filter count {
 		if (index < 0)
 			return;
 		var trs = this._root.querySelectorAll('tbody tr');
-		if (index < trs.length)
+		if (index < trs.length) {
 			trs[index].classList.add('selected');
+			this.dispatchEvent(new CustomEvent('select'));
+		}
 	}
 
 	setConvert(convert) {
@@ -372,6 +374,7 @@ filter count {
 				tr.classList.remove('selected');
 			else
 				tr.classList.add('selected');
+			this.dispatchEvent(new CustomEvent('select'));
 			return;
 		}
 		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
