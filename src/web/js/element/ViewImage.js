@@ -67,6 +67,7 @@ hint {
 	color: rgba(255, 255, 255, 0.4);
 	width: 8em;
 	margin-left: -4em;
+	cursor: pointer;
 }
 button {
 	background: rgba(100, 150, 200, 0.2);
@@ -273,7 +274,14 @@ a {
 		close.classList.add('close');
 		close.classList.add('icon');
 		close.innerText = 'x';
-		this._root.appendChild(document.createElement('hint'));
+		this._root.appendChild(document.createElement('hint')).onclick = () => {
+			this.read = !this.read;
+			if (this.read) {
+				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+				utterance.lang = 'de-DE';
+				window.speechSynthesis.speak(utterance);
+			}
+		};
 	}
 
 	isVideo(src) {
@@ -378,7 +386,7 @@ a {
 			if (this.index > i)
 				position++;
 		}
-		this._root.querySelector('hint').innerText = position + '/' + this.list.length;
+		this._root.querySelector('hint').innerText = (position + 1) + '/' + this.list.length;
 	}
 
 	updateImage(index, speech) {
