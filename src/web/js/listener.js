@@ -216,7 +216,7 @@ participant {
 }
 img.speak {
 	right: 0;
-	background: rgba(255, 255, 255, 0.4);
+	cursor: pointer;
 	position: absolute;
 	right: 0;
 	width: 2em;
