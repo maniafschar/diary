@@ -110,8 +110,9 @@ class listener {
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
 					'<separator></separator>' +
+					(events[i].note ? '<button class="icon speak" onclick="this.getRootNode().host.toggleSpeak()"><img src="image/speaker.svg" /></button>' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
-					(events[i].note ? '<button class="icon" onclick="this.getRootNode().host.toggleSpeak()"><img src="image/speaker.svg" /></button><<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
+					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					'<separator></separator>' +
 					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
@@ -212,6 +213,11 @@ participant {
 	display: block;
 	margin: 0.5em;
 	text-align: left;
+}
+button.speak {
+	right: 0;
+	bottom: initial;
+	background: rgba(255, 255, 255, 0.4);
 }`);
 	}
 
