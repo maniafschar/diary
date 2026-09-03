@@ -312,7 +312,7 @@ participant {
 			document.querySelector('element.calendar').style.display = 'block';
 			document.querySelector('element.user').style.display = 'block';
 			if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
-				setTimeout(listener.updateViewImage, 100);
+				setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
 		});
 		if (!document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();
