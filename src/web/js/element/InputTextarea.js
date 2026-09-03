@@ -33,6 +33,7 @@ textarea {
 	width: 100%;
 	color: black;
 	user-select: text;
+	box-sizing: border-box;
 }
 
 button.speech {
