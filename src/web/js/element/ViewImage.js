@@ -286,7 +286,6 @@ a {
 	}
 
 	speakText() {
-		window.speechSynthesis.cancel();
 		clearTimeout(this.speakJob);
 		var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
 		utterance.lang = 'de-DE';
@@ -400,6 +399,7 @@ a {
 		var imageContainer = data.querySelector('imageContainer');
 		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
+		window.speechSynthesis.cancel();
 		video.pause();
 		var src = this.list[this.index].src[index];
 		if (src) {
@@ -421,7 +421,7 @@ a {
 					setTimeout(() => {
 						imageContainer.style.height = (next.videoHeight * window.innerWidth / next.videoWidth) + 'px';
 						if (this.list[this.index].text)
-							next.addEventListener('ended', () => this.speakText);
+							next.addEventListener('ended', () => this.speakText());
 						next.play();
 					}, 50);
 				}, { once: true });
