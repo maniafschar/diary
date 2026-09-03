@@ -33,7 +33,7 @@ class ChartService {
 	String createImage(final Statistics data, final Path file, final Map<String, Color> colors,
 			final String dateFormat) throws IOException, ParseException {
 		final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-		final List<String> xAxis = this.createXAxis(data.mood.keySet().first().toString(), formatter);
+		final List<String> xAxis = this.createXAxis(data.mood.keySet() + "", formatter);
 		final BufferedImage image = new BufferedImage(800, 350, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = image.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -123,7 +123,7 @@ class ChartService {
 		g.setFont(fontVertical);
 		g.setColor(new Color(0, 0, 0, 120));
 		final SimpleDateFormat parseDate = new SimpleDateFormat(dateFormat);
-		final SimpleDateFormat formatDate = new SimpleDateFormat(DateHandler.dateFormatWithoutYear(dateFormat));
+		final SimpleDateFormat formatDate = new SimpleDateFormat(dateFormat);
 
 		for (final String period : xAxis) {
 			final String s = formatDate.format(parseDate.parse(period));
