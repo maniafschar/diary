@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,12 @@ import org.springframework.stereotype.Service;
 @Service
 class ChartService {
 	public static class Statistics {
-		public final Map<Date, double> mood = new HashMap<>();
+		public final Map<Date, Double> mood = new HashMap<>();
 	}
-	String createImage(final List<Statistics> data, final Path file, final Map<String, Color> colors,
+	String createImage(final Statistics data, final Path file, final Map<String, Color> colors,
 			final String dateFormat) throws IOException, ParseException {
 		final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-		final List<String> xAxis = this.createXAxis(data.get(0).getPeriod(), formatter);
+		final List<String> xAxis = this.createXAxis(data.mood.keySet().first().toString(), formatter);
 		final BufferedImage image = new BufferedImage(800, 350, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = image.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -70,12 +71,10 @@ class ChartService {
 		return result;
 	}
 
-	private PlotData preparePlotData(final List<Statistics> data, final int marginLegend, final int marginPlot,
+	private PlotData preparePlotData(final Statistics data, final int marginLegend, final int marginPlot,
 			final int marginX, final int heightPlot, final List<String> xAxis, final Map<String, Color> colors,
 			final SimpleDateFormat formatter) {
 		final PlotData plotData = new PlotData();
-		for (final Statistics dataUser : data) {
-		}
 		// add null values after till end
 		plotData.plots.stream().forEach(e -> {
 			for (int i = 1; i < xAxis.size() - e.lastIndex; i++) {
@@ -115,7 +114,7 @@ class ChartService {
 		});
 	}
 
-	private void drawLegend(final Graphics2D g, final List<Statistics> data, final int width, final int height,
+	private void drawLegend(final Graphics2D g, final Statistics data, final int width, final int height,
 			final int marginLegend, final int marginPlot, final int marginX, final int heightPlot,
 			final List<String> xAxis, final String dateFormat) throws ParseException {
 		int x = marginLegend;
