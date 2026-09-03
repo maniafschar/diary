@@ -139,7 +139,7 @@ public class AiService {
 			for (final String user : users) {
 				final String u = user.trim().toLowerCase();
 				for (final JsonNode attribute : attributes) {
-					if (u.contains(Utilities.extractUser(attribute.get("name").asText(), null).toLowerCase())) {
+					if (u.contains(attribute.get("name").asText().toLowerCase())) {
 						response.adjectives.put(user, this.convertList((ArrayNode) attribute.get("adjectives")));
 						response.emojis.put(user, this.convertList((ArrayNode) attribute.get("emojis")));
 						break;
