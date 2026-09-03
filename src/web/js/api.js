@@ -230,6 +230,15 @@ class api {
 				method: 'DELETE',
 				success: success
 			});
+		},
+
+		postPdf(eventIds, success) {
+			api.ajax({
+				url: 'event/pdf',
+				method: 'POST',
+				body: eventIds,
+				success: success
+			});
 		}
 	}
 

@@ -357,6 +357,10 @@ class action {
 			});
 		}
 	}
+
+	static export() {
+		api.event.postPdf(null, null);
+	}
 }
 
 window.onresize = function () {
