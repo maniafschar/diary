@@ -64,7 +64,7 @@ content {
 	max-width: 50em;
 	overflow: auto;
 	text-align: left;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 error {
