@@ -370,7 +370,7 @@ button.confirmed::after {
 		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
-		popup.appendChild(document.createElement('style')).textContent = ``;
+		popup.style.overflowX = 'hidden';
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Ab', 'date', 'input-date');
 		inputDate.addEventListener('changed', e => {
