@@ -363,6 +363,7 @@ a {
 		var description = this._root.querySelector('description');
 		var nav = this._root.querySelector('nav');
 		description.addEventListener('transitionend', () => {
+			window.speechSynthesis.cancel();
 			description.previousSibling.classList.remove('next');
 			description.remove();
 			nav.textContent = '';
@@ -396,7 +397,6 @@ a {
 		var imageContainer = data.querySelector('imageContainer');
 		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
-		window.speechSynthesis.cancel();
 		video.pause();
 		var src = this.list[this.index].src[index];
 		if (src) {
