@@ -86,7 +86,6 @@ class action {
 				formData.append('file', file.file);
 				api.event.postImage(event.id, file.type, formData, true,
 					() => {
-						document.querySelector('view-image').indexImage++;
 						document.dispatchEvent(new CustomEvent('event'));
 						document.dispatchEvent(new CustomEvent('popup'));
 					})
