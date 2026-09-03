@@ -383,6 +383,7 @@ button.confirmed::after {
 					break;
 			}
 		});
+		table.list.forEach(e => inputDate.addOccupied(new Date(e.date)));
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
