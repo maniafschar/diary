@@ -6,8 +6,7 @@ class ViewImage extends HTMLElement {
 	loading = false;
 	list = null;
 	index = 0;
-	indexProcessed = {};
-	first = true;
+	read = false;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -43,14 +42,12 @@ imageContainer {
 	transition: all .4s ease-out;
 	overflow: hidden;
 }
-imageContainer img,
-imageContainer autoplay img {
+imageContainer img {
 	width: 100%;
 	transition: all .4s ease-out;
 	position: relative;
 }
-imageContainer video,
-imageContainer autoplay video {
+imageContainer video {
 	width: 100%;
 	transition: all .4s ease-out;
 	position: relative;
@@ -251,25 +248,6 @@ a {
 	cursor: pointer;
 	position: relative;
 	display: inline-block;
-}
-autoplay {
-	display: none;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	overflow: auto;
-}
-autoplay hint {
-	position: fixed;
-	left: 1em;
-	color: rgba(255, 255, 255, 0.8);
-	margin-left: 0;
-	text-align: left;
-	font-size: 1em;
-	width: initial;
-	bottom: 1em;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		var div = this._root.appendChild(document.createElement('div'));
@@ -295,95 +273,11 @@ autoplay hint {
 		close.classList.add('close');
 		close.classList.add('icon');
 		close.innerText = 'x';
-		var autoplay = this._root.appendChild(document.createElement('autoplay'));
-		autoplay.appendChild(document.createElement('img'));
-		autoplay.appendChild(document.createElement('hint'));
-		var video = autoplay.appendChild(document.createElement('video'));
-		video.controls = true;
-		video.autoplay = true;
-		video.setAttribute('playsinline', true);
-		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		this._root.appendChild(document.createElement('hint'));
 	}
 
-	autoplay() {
-		this._root.querySelector('autoplay').style.display = 'block';
-		this._root.querySelector('div').style.display = 'none';
-		this.indexProcessed = {};
-		var isVideo = src => src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
-		var utter = (resolve, index, indexImage) => {
-			if (!document.querySelector('view-image').style.transform) {
-				if (resolve)
-					resolve();
-				return;
-			}
-			this._root.querySelector('autoplay hint').innerHTML = this.list[index].hint;
-			var src = this.list[index].src[indexImage];
-			var img = this._root.querySelector('autoplay img');
-			var video = this._root.querySelector('autoplay video');
-			if (isVideo(src)) {
-				img.src = '';
-				img.style.display = 'none';
-				video.style.display = '';
-				video.controls = false;
-				video.autoplay = true;
-				video.querySelector('source').src = '/med/' + src;
-				video.load();
-				video.play();
-			} else {
-				img.src = '/med/' + src;
-				img.style.display = '';
-				video.querySelector('source').src = '';
-				video.style.display = 'none';
-				if (this.list[index].src.length - 1 > indexImage && !isVideo(this.list[index].src[indexImage + 1]))
-					setTimeout(() => img.src = '/med/' + this.list[index].src[indexImage + 1], 5000);
-			}
-			this._root.querySelector('autoplay').scrollTo({
-				top: (Math.max(img.naturalHeight, img.height) - this._root.querySelector('autoplay').clientHeight) / 2,
-				left: (Math.max(img.naturalWidth, img.width) - this._root.querySelector('autoplay').clientWidth) / 2, behavior: 'smooth'
-			});
-			if (!this.indexProcessed[index] && this.list[index].text) {
-				this.indexProcessed[index] = true;
-				setTimeout(() => {
-					if (this.style.transform) {
-						var utterance = new SpeechSynthesisUtterance(this.list[index].text);
-						utterance.lang = 'de-DE';
-						utterance.addEventListener('end', resolve, true);
-						if (isVideo(src))
-							video.addEventListener('ended', () => window.speechSynthesis.speak(utterance));
-						else
-							window.speechSynthesis.speak(utterance);
-					} else
-						resolve();
-				}, 1500);
-			} else if (isVideo(src))
-				video.addEventListener('ended', resolve);
-			else if (resolve)
-				resolve();
-		}
-		var all = new Promise(resolve => {
-			if (this.first) {
-				this._root.querySelector('autoplay img').src = '/image/start.png';
-				this.first = false;
-				var utterance = new SpeechSynthesisUtterance(api.clients[api.clientId].name);
-				utterance.lang = 'de-DE';
-				utterance.addEventListener('end', resolve, true);
-				window.speechSynthesis.speak(utterance);
-			} else
-				resolve();
-		});
-		var myIndex = this.index;
-		for (var i = 0; i < this.list.length; i++) {
-			for (var myIndexImage = 0; myIndexImage < this.list[myIndex].src.length; myIndexImage++) {
-				if (myIndexImage == 0 || isVideo(this.list[myIndex].src[myIndexImage]) || !isVideo(this.list[myIndex].src[myIndexImage - 1])) {
-					const i1 = myIndex, i2 = myIndexImage;
-					all = all.then(() => new Promise(resolve => setTimeout(() => utter(resolve, i1, i2), myIndexImage == 0 ? 1 : 2000)));
-				}
-			}
-			myIndex++;
-			if (myIndex >= this.list.length)
-				myIndex = 0;
-		}
+	isVideo(src) {
+		return src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0;
 	}
 
 	close() {
@@ -392,14 +286,13 @@ autoplay hint {
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
 		this._root.querySelector('div video').pause();
-		this._root.querySelector('autoplay video').pause();
 	}
 
 	data() {
 		return this._root.querySelector('data');
 	}
 
-	open(list, index, autoplay, style) {
+	open(list, index, style) {
 		var img = this._root.querySelector('imageContainer img');
 		img.src = '';
 		img.style.display = 'none';
@@ -417,10 +310,7 @@ autoplay hint {
 		if (style)
 			this._root.querySelector('style.custom').textContent = style;
 		this.list = list;
-		if (autoplay)
-			this.autoplay();
-		else
-			this.update(true);
+		this.update(true);
 		this._root.host.style.transition = 'all ease-out .4s';
 		this._root.host.style.transform = 'scale(1)';
 	}
@@ -453,7 +343,6 @@ autoplay hint {
 	}
 
 	update(forward) {
-		this._root.querySelector('autoplay').style.display = '';
 		this._root.querySelector('div').style.display = '';
 		var description = this._root.querySelector('description');
 		var nav = this._root.querySelector('nav');
@@ -472,6 +361,15 @@ autoplay hint {
 				nav.style.marginLeft = (-1.5 * this.list[this.index].src.length) + 'em';
 			}
 			this.updateImage(forward ? 0 : this.list[this.index].src.length - 1);
+			if (this.read) {
+				var utterance = new SpeechSynthesisUtterance(this.list[this.index].text);
+				utterance.lang = 'de-DE';
+				utterance.addEventListener('end', resolve, true);
+				if (this.isVideo(src))
+					this._root.querySelector('autoplay video').addEventListener('ended', () => window.speechSynthesis.speak(utterance));
+				else
+					window.speechSynthesis.speak(utterance);
+			}
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
 		next.classList.add('next');
@@ -501,7 +399,7 @@ autoplay hint {
 				}
 			};
 			var current = video.style.display == 'none' ? img : video;
-			if (src.indexOf('.mp4') > 0 || src.indexOf('.mov') > 0) {
+			if (this.isVideo(src)) {
 				current.addEventListener('transitionend', () => {
 					img.src = '';
 					img.style.display = 'none';
