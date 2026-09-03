@@ -37,7 +37,6 @@ div {
 	height: 100%;
 }
 imageContainer {
-	overflow: auto;
 	position: relative;
 	display: block;
 	width: 100%;
