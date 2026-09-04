@@ -396,7 +396,7 @@ button.confirmed::after {
 		count.style.paddingBottom = '1em';
 		var listener = () => {
 			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
-			count.innerText = x + (x == 1 ? ' Eintrag' : ' Einträge');
+			count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
 		};
 		table.addEventListener('select', listener);
 		var buttonDiv = dialog.createButton(popup, 'action.export(true)');
