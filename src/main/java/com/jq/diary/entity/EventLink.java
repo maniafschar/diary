@@ -15,7 +15,7 @@ public class EventLink extends BaseEntity {
 	private Contact contact;
 	private String email;
 	private String identifier;
-  private Date start;
+	private Date start;
 
 	public Contact getContact() {
 		return this.contact;
@@ -42,7 +42,7 @@ public class EventLink extends BaseEntity {
 	}
 
 	public Date getStart() {
-		return this.identifier;
+		return this.start;
 	}
 
 	public void setStart(final Date start) {
