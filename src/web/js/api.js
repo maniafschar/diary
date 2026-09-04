@@ -232,6 +232,15 @@ class api {
 			});
 		},
 
+		postEmail(eventIds, success) {
+			api.ajax({
+				url: 'event/email',
+				method: 'POST',
+				body: eventIds,
+				success: success
+			});
+		}
+
 		postPdf(eventIds, success) {
 			api.ajax({
 				url: 'event/pdf',
