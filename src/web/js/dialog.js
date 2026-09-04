@@ -387,12 +387,18 @@ button.confirmed::after {
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
-		var count = popup.appendChild(document.createElement('div'));
 		var buttonDiv = dialog.createButton(popup, 'action.export(true)');
 		buttonDiv.querySelector('button').innerText = 'PDF';
 		var button = buttonDiv.appendChild(document.createElement('button'));
 		button.innerText = 'Email';
 		button.setAttribute('onclick', 'action.export(false)');
+		var count = popup.appendChild(document.createElement('count'));
+		count.style.position = 'relative';
+		count.style.display = 'block';
+		count.style.textAlign = 'center';
+		count.style.opacity = 0.4;
+		count.style.fontSize = '0.8em';
+		count.style.paddingBottom = '1em';
 		var listener = () => {
 			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
 			count.innerText = x + (x == 1 ? ' Eintrag' : ' Einträge');
