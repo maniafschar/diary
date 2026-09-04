@@ -239,7 +239,7 @@ class api {
 				body: eventIds,
 				success: success
 			});
-		}
+		},
 
 		postPdf(eventIds, success) {
 			api.ajax({
