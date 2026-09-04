@@ -2,6 +2,7 @@ package com.jq.diary.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.Formula;
 
@@ -11,6 +12,7 @@ import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -36,6 +38,10 @@ public class Event extends BaseEntity {
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventFeedback> eventFeedbacks;
+	@ManyToMany
+	@JsonManagedReference
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<EventLink> eventLinks;
 	private Date date;
 	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Double rating;
@@ -88,6 +94,14 @@ public class Event extends BaseEntity {
 
 	public void setDate(final Date date) {
 		this.date = date;
+	}
+
+	public Set<EventLink> getEventLinks() {
+		return this.eventLinks;
+	}
+
+	public void setEventLinks(final Set<EventLink> eventLinks) {
+		this.eventLinks = eventLinks;
 	}
 
 	public List<ContactEvent> getContactEvents() {
