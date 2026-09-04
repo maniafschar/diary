@@ -184,6 +184,12 @@ public class EventApi extends ApplicationApi {
 		this.pdfService.create();
 	}
 
+	@PostMapping(path = "email")
+	public void postEmail(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
+			@RequestBody final List<BigInteger> eventIds) throws IOException {
+		this.pdfService.create();
+	}
+
 	private List<Event> filter(final List<Event> list) {
 		final List<Event> filtered = new ArrayList<>();
 		for (final Event event : list) {
