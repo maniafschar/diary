@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 public class EventLink extends BaseEntity {
+	@OneToMany(mappedBy = "event")
 	private List<Event> events;
 	@ManyToOne
 	private Contact contact;
