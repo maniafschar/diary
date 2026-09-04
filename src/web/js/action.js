@@ -357,11 +357,14 @@ class action {
 		}
 	}
 
-	static export() {
+	static export(pdf) {
 		var table = document.querySelector('view-table');
 		var ids = [];
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
-		api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
+		if (pdf)
+			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
+		else
+			api.event.postEmail(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 	}
 }
 
