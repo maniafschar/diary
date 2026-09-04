@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 public class EventLink extends BaseEntity {
-	@ManyToMany(mappedBy = "events")
+	@ManyToMany(mappedBy = "eventLinks")
 	private List<Event> events;
 	@ManyToOne
 	private Contact contact;
