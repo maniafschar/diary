@@ -387,12 +387,16 @@ button.confirmed::after {
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
-		var button = dialog.createButton(popup, 'action.export()').querySelector('button');
-		button.innerText = '';
-		var count = button.appendChild(document.createElement('span'));
-		count.innertText = 0;
-		button.appendChild(document.createTextNode(' exportieren'));
-		var listener = () => count.innerText = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
+		var count = popup.appendChild(document.createElement('div'));
+		var buttonDiv = dialog.createButton(popup, 'action.exportPdf()');
+		buttonDiv.querySelector('button').innerText = 'PDF';
+		var button = buttonDiv.appendChild(document.createElement('button'));
+		button.innerText = 'Email';
+		button.setAttribute('onclick', 'action.exportEmail()');
+		var listener = () => {
+			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
+			count.innerText = x + (x == 1 ? ' Eintrag' : ' Einträge');
+		};
 		table.addEventListener('select', listener);
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
