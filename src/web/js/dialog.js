@@ -409,6 +409,7 @@ button.confirmed::after {
 			count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
 		};
 		table.addEventListener('select', listener);
+		popup.appendChild(document.createElement('error'));
 		var buttonDiv = dialog.createButton(popup, 'action.export(true)');
 		buttonDiv.querySelector('button').innerText = 'PDF';
 		var button = buttonDiv.appendChild(document.createElement('button'));
