@@ -5,7 +5,7 @@ import { ui } from "./ui";
 export { listener };
 
 class listener {
-	static updateCotacts() {
+	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
 			var table = document.querySelector('user view-table');
@@ -325,8 +325,8 @@ img.speak {
 					setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
 			}
 		});
-		if (!document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
-			listener.updateCotacts();
+		if (!access && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
+			listener.updateContacts();
 		else
 			api.activateProgressbar();
 	}
@@ -334,7 +334,7 @@ img.speak {
 	static init() {
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
-				listener.updateCotacts();
+				listener.updateContacts();
 		});
 		document.addEventListener('location', event => {
 			var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
@@ -349,7 +349,7 @@ img.speak {
 				});
 			}
 		});
-		document.addEventListener('contact', listener.updateCotacts);
+		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('elementContainer>element.map').addEventListener('visible', () => document.querySelector('view-map').init());
 	}
