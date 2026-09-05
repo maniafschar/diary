@@ -93,7 +93,7 @@ class api {
 			url: api.url + 'build/' + type,
 			method: 'POST',
 			success: xhr =>
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre>' + ui.sanitizeText(xhr) + '</pre>' } }))
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre><b>' + new Date().toISOString().substring(0, 19) + '</b><br/>' + ui.sanitizeText(xhr) + '</pre>' } }))
 		});
 	}
 
