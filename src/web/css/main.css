@@ -132,6 +132,7 @@ body>container>element.login {
 
 body>container>element.event {
 	background: rgba(255, 220, 0, 0.1);
+	display: none;
 }
 
 body>container>element.user {
