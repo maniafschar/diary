@@ -387,6 +387,11 @@ button.confirmed::after {
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
+		var emailDiv = popup.appendChild(document.createElement('div'));
+		emailDiv.style.position = 'relative';
+		emailDiv.style.display = 'grid';
+		emailDiv.style.gridTemplateRows = '0fr';
+		dialog.createField(emailDiv.appendChild(document.createElement('element')), 'Emails', 'email');
 		var count = popup.appendChild(document.createElement('count'));
 		count.style.position = 'relative';
 		count.style.display = 'block';

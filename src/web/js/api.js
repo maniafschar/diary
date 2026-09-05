@@ -232,11 +232,14 @@ class api {
 			});
 		},
 
-		postEmail(eventIds, success) {
+		postEmail(eventIds, emails, success) {
+			var formData = new FormData();
+			formData.append('ids', eventIds);
+			formData.append('emails', emails);
 			api.ajax({
 				url: 'event/email',
 				method: 'POST',
-				body: eventIds,
+				body: formData,
 				success: success
 			});
 		},

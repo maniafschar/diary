@@ -111,4 +111,8 @@ public class EventService {
 	public void delete(final EventImage eventImage) {
 		this.repository.delete(eventImage);
 	}
+
+	public void exportEmail(final List<BigInteger> ids, final List<String> emails) {
+
+	}
 }

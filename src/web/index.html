@@ -55,6 +55,31 @@
 			<img src="/image/start.png" />
 			<img src="/image/text.png" class="text" />
 		</element>
+		<element class="event">
+			<buttons>
+				<button class="icon selected" onclick="ui.navigate(0)"><img src="image/list.svg" /></button>
+				<button class="icon" onclick="ui.navigate(1)"><img src="image/calendar.svg" /></button>
+				<button class="icon" onclick="ui.navigate(2)"><img src="image/location.svg" /></button>
+				<button class="icon export" onclick="dialog.export()"><img src="image/export.svg" /></button>
+				<button class="icon add" onclick="dialog.add()">+</button>
+			</buttons>
+			<elementContainer>
+				<element class="event">
+					<div class="title">
+						<b>Events<count></count></b>
+					</div>
+					<event>
+						<view-table></view-table>
+					</event>
+				</element>
+				<element class="calendar">
+					<view-calendar></view-calendar>
+				</element>
+				<element class="map">
+					<view-map></view-map>
+				</element>
+			</elementContainer>
+		</element>
 		<element class="login">
 			<div style="padding-bottom: 1em; margin-top: -0.5em;">
 				<ul style="margin-left: -0.5em;">
@@ -94,31 +119,6 @@
 			<div style="text-align: center;">
 				<button onclick=" action.createClient()">Erstellen</button>
 			</div>
-		</element>
-		<element class="event">
-			<buttons>
-				<button class="icon selected" onclick="ui.navigate(0)"><img src="image/list.svg" /></button>
-				<button class="icon" onclick="ui.navigate(1)"><img src="image/calendar.svg" /></button>
-				<button class="icon" onclick="ui.navigate(2)"><img src="image/location.svg" /></button>
-				<button class="icon" onclick="dialog.export()"><img src="image/export.svg" /></button>
-				<button class="icon" onclick="dialog.add()">+</button>
-			</buttons>
-			<elementContainer>
-				<element class="event">
-					<div class="title">
-						<b>Events<count></count></b>
-					</div>
-					<event>
-						<view-table></view-table>
-					</event>
-				</element>
-				<element class="calendar">
-					<view-calendar></view-calendar>
-				</element>
-				<element class="map">
-					<view-map></view-map>
-				</element>
-			</elementContainer>
 		</element>
 		<element class="user" style="padding-top: 2.3em; height: 13em;">
 			<div class="title">

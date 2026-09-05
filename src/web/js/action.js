@@ -363,8 +363,13 @@ class action {
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
 		if (pdf)
 			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
-		else
-			api.event.postEmail(ids, () => document.dispatchEvent(new CustomEvent('popup')));
+		else {
+			var emails = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]').value.trim();
+			emails = emails.replace(/,/g, ' ');
+			emails = emails.replace(/;/g, ' ');
+			emails = emails.replace(/  /g, ' ');
+			api.event.postEmail(ids, emails.split(' '), () => document.dispatchEvent(new CustomEvent('popup')));
+		}
 	}
 }
 

@@ -184,10 +184,10 @@ public class EventApi extends ApplicationApi {
 		this.pdfService.create();
 	}
 
-	@PostMapping(path = "email")
+	@PostMapping(path = "email", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void postEmail(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final List<BigInteger> eventIds) throws IOException {
-		this.pdfService.create();
+			@RequestBody final List<BigInteger> ids, @RequestBody final List<String> emails) throws IOException {
+		this.eventService.exportEmail(ids, emails);
 	}
 
 	private List<Event> filter(final List<Event> list) {
