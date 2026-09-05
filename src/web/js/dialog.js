@@ -391,7 +391,7 @@ button.confirmed::after {
 		emailDiv.style.position = 'relative';
 		emailDiv.style.display = 'grid';
 		emailDiv.style.gridTemplateRows = '0fr';
-		dialog.createField(emailDiv.appendChild(document.createElement('element')), 'Emails', 'email');
+		dialog.createField(emailDiv.appendChild(document.createElement('element')), 'Emails', 'emails');
 		var count = popup.appendChild(document.createElement('count'));
 		count.style.position = 'relative';
 		count.style.display = 'block';
