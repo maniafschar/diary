@@ -60,7 +60,7 @@ class ui {
 		buttons.forEach(e => e.classList.remove('selected'));
 		buttons[i].classList.add('selected');
 		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
-		document.querySelectorAll('elementContainer')[i].dispatchEvent(new CustomEvent('visible'));
+		document.querySelectorAll('elementContainer>element')[i].dispatchEvent(new CustomEvent('visible'));
 	}
 
 	static parents(e, nodeName) {
