@@ -60,8 +60,8 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("list/{access}")
 	public List<Event> getListAccess(@PathVariable final String access) {
-		final List<EventLink> links = this.repository.list("from EventLink where identifier=?1", EventLink.class,
-				access);
+		final List<EventLink> links = this.repository.list("from EventLink where identifier=?1",
+				EventLink.class, access);
 		if (links.size() == 1) {
 			final EventLink eventLink = links.get(0);
 			this.authorizationService.requireContact(eventLink.getContact().getId(),

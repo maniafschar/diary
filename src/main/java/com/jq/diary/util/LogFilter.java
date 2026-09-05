@@ -104,7 +104,8 @@ public class LogFilter implements Filter {
 
 	private void authenticate(final ContentCachingRequestWrapper req) {
 		if ("OPTIONS".equals(req.getMethod()) ||
-				"POST".equals(req.getMethod()) && req.getServletPath().contains("/ticket") ||
+				"POST".equals(req.getMethod()) && req.getServletPath().endsWith("/ticket") ||
+				"GET".equals(req.getMethod()) && req.getServletPath().contains("/event/list/") ||
 				req.getServletPath().contains("/authentication") &&
 						("GET".equals(req.getMethod()) || "POST".equals(req.getMethod())))
 			return;
