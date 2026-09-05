@@ -149,24 +149,20 @@ images {
 		prev.style.marginLeft = '-5em';
 		prev.innerText = '<';
 		prev.addEventListener('click', () => this.next(false));
+		this.initLocations();
 		this.flyToIndex(this.currentIndex);
 	}
 
-	setOpenDetail(openDetail) {
-		this.openDetail = openDetail;
-	}
-
-	setLocations(locations) {
+	initLocations() {
 		this.markers.forEach(marker => this.map.removeLayer(marker));
 		this.markers = [];
-		if (!locations) {
+		if (!this.locations) {
 			this.currentIndex = 0;
 			this.map.setView([48.137154, 11.576124], 4);
 			return;
 		}
-		if (this.currentIndex < 0 || this.currentIndex >= locations.length)
-			this.currentIndex = locations.length - 1;
-		this.locations = locations;
+		if (this.currentIndex < 0 || this.currentIndex >= this.locations.length)
+			this.currentIndex = this.locations.length - 1;
 		var images = e => {
 			var s = '<imageContainer><images style="grid-template-columns: repeat(' + e.length + ', 1fr); width: ' + e.length + '00%;">';
 			for (var i = 0; i < e.length; i++)
@@ -187,6 +183,16 @@ images {
 			this.markers.push(marker);
 			return marker;
 		});
+	}
+
+	setOpenDetail(openDetail) {
+		this.openDetail = openDetail;
+	}
+
+	setLocations(locations) {
+		this.locations = locations;
+		if (this._root.childElementCount)
+			this.initLocations();
 	}
 
 	escapeHtml(str) {
