@@ -52,13 +52,8 @@ public class LogFilter implements Filter {
 		try {
 			if (req.getHeader("clientId") != null)
 				log.setClientId(new BigInteger(req.getHeader("clientId")));
-			if (req.getHeader("contactId") != null && !req.getServletPath().contains("/sc/")) {
-				try {
-					log.setContactId(new BigInteger(req.getHeader("contactId")));
-				} catch (final Exception ex) {
-					// ignore
-				}
-			}
+			if (req.getHeader("contactId") != null && !req.getServletPath().contains("/sc/"))
+				log.setContactId(new BigInteger(req.getHeader("contactId")));
 			log.setUri(req.getRequestURI());
 			log.setMethod(req.getMethod());
 			if (req.getHeader("referer") != null)

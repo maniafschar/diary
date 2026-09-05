@@ -145,6 +145,8 @@ class api {
 		},
 
 		getList(access, success) {
+			if (access)
+				api.user = { id: 0 };
 			api.ajax({
 				url: 'event/list' + (access ? '/' + access : ''),
 				success: success
