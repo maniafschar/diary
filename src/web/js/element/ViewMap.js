@@ -109,7 +109,7 @@ images {
 	}
 
 	init() {
-		if (this._root.childElementCount > 0)
+		if (this._root.childElementCount > 1)
 			return;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
