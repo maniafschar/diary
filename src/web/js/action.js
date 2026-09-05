@@ -22,23 +22,28 @@ class action {
 		window.onresize();
 		listener.init();
 		if (document.location.search) {
-			var popup = document.createElement('div');
-			popup.appendChild(document.createElement('label')).innerText = 'Neues Passwort';
-			var field = popup.appendChild(document.createElement('field'));
-			var input = field.appendChild(document.createElement('input'));
-			input.setAttribute('type', 'password');
-			popup.appendChild(document.createElement('error'));
-			input = field.appendChild(document.createElement('input'));
-			input.setAttribute('type', 'hidden');
-			input.setAttribute('value', document.location.search.substring(1));
-			var div = popup.appendChild(document.createElement('div'));
-			div.style.textAlign = 'center';
-			var button = div.appendChild(document.createElement('button'));
-			button.innerText = 'Passwort setzen!';
-			button.onclick = action.loginResetPasswordPost;
-			document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+			var access = new URL(window.location.href).searchParams?.get('access');
+			if (access)
+				document.dispatchEvent(new CustomEvent('event', { detail: { access: access } }));
+			else {
+				var popup = document.createElement('div');
+				popup.appendChild(document.createElement('label')).innerText = 'Neues Passwort';
+				var field = popup.appendChild(document.createElement('field'));
+				var input = field.appendChild(document.createElement('input'));
+				input.setAttribute('type', 'password');
+				popup.appendChild(document.createElement('error'));
+				input = field.appendChild(document.createElement('input'));
+				input.setAttribute('type', 'hidden');
+				input.setAttribute('value', document.location.search.substring(1));
+				var div = popup.appendChild(document.createElement('div'));
+				div.style.textAlign = 'center';
+				var button = div.appendChild(document.createElement('button'));
+				button.innerText = 'Passwort setzen!';
+				button.onclick = action.loginResetPasswordPost;
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+				api.activateProgressbar();
+			}
 			history.pushState(null, null, window.location.origin);
-			api.activateProgressbar();
 		} else
 			api.authentication.getToken(success => {
 				if (success)

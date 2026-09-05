@@ -225,11 +225,11 @@ img.speak {
 }`);
 	}
 
-	static updateEvents() {
-		api.event.getList(events => {
+	static updateEvents(event) {
+		var access = !api.user?.id && event.detail?.access;
+		api.event.getList(access, events => {
 			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
-			document.querySelector('body>button[name="logoff"]').style.display = '';
 			var clientName = document.querySelector('body>[name="clientName"]');
 			clientName.innerText = api.clients[api.clientId].name;
 			clientName.style.display = '';
@@ -314,12 +314,16 @@ img.speak {
 			} else
 				document.querySelector('element.event div.title count').innerText = '';
 			document.querySelector('element.event').style.display = 'block';
-			document.querySelector('event').previousElementSibling.style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
-			document.querySelector('element.calendar').style.display = 'block';
-			document.querySelector('element.user').style.display = 'block';
-			if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
-				setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
+			if (access) {
+				document.querySelector("element.event button.add").style.display = 'none';
+				document.querySelector("element.event button.export").style.display = 'none';
+			} else {
+				document.querySelector('body>button[name="logoff"]').style.display = '';
+				document.querySelector('element.user').style.display = 'block';
+				if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
+					setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
+			}
 		});
 		if (!document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateCotacts();

@@ -144,9 +144,9 @@ class api {
 			});
 		},
 
-		getList(success) {
+		getList(access, success) {
 			api.ajax({
-				url: 'event/list',
+				url: 'event/list' + (access ? '/' + access : ''),
 				success: success
 			});
 		},

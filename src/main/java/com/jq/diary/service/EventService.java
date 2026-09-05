@@ -2,6 +2,7 @@ package com.jq.diary.service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.util.Strings;
@@ -14,6 +15,7 @@ import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
+import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
@@ -21,6 +23,9 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class EventService {
+	@Autowired
+	private EmailService emailService;
+
 	@Autowired
 	private Repository repository;
 
@@ -112,7 +117,16 @@ public class EventService {
 		this.repository.delete(eventImage);
 	}
 
-	public void exportEmail(final List<BigInteger> ids, final List<String> emails) {
-
+	public void exportEmail(final Contact contact, final List<Event> events, final List<String> emails)
+			throws EmailException {
+		for (final String email : emails) {
+			final EventLink eventLink = new EventLink();
+			eventLink.setContact(contact);
+			eventLink.setEmail(email);
+			eventLink.setIdentifier(UUID.randomUUID().toString());
+			eventLink.setEvents(events);
+			this.repository.save(eventLink);
+			this.emailService.send(email, "https://diary.cafe?access=" + eventLink.getIdentifier());
+		}
 	}
 }
