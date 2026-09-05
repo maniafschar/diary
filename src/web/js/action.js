@@ -373,7 +373,7 @@ class action {
 				emails = emails.replace(/  /g, ' ');
 				api.event.postEmail(ids, emails.split(' '), () => document.dispatchEvent(new CustomEvent('popup')));
 			} else
-				content.querySelector('div.email').style.gridTemplateRows == '1fr';
+				content.querySelector('div.email').style.gridTemplateRows = '1fr';
 		}
 	}
 }
