@@ -191,7 +191,7 @@ images {
 
 	setLocations(locations) {
 		this.locations = locations;
-		if (this._root.childElementCount)
+		if (this._root.childElementCount > 1)
 			this.initLocations();
 	}
 
