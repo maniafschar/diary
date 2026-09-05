@@ -106,6 +106,12 @@ images {
 .leaflet-bottom, .leaflet-top {
 	z-index: 400 !important;
 }`;
+		this.addEventListener('visible', this.init);
+	}
+
+	init() {
+		if (this._root.childElementCount > 0)
+			return;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
@@ -143,6 +149,7 @@ images {
 		prev.style.marginLeft = '-5em';
 		prev.innerText = '<';
 		prev.addEventListener('click', () => this.next(false));
+		this.flyToIndex(this.currentIndex);
 	}
 
 	setOpenDetail(openDetail) {
@@ -180,7 +187,6 @@ images {
 			this.markers.push(marker);
 			return marker;
 		});
-		this.flyToIndex(this.currentIndex);
 	}
 
 	escapeHtml(str) {
