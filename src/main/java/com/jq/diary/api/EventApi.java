@@ -186,7 +186,8 @@ public class EventApi extends ApplicationApi {
 
 	@PostMapping(path = "email", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void postEmail(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final List<BigInteger> ids, @RequestBody final List<String> emails) throws IOException {
+			@RequestParam("ids") final List<BigInteger> ids, @RequestParam("emails") final List<String> emails)
+			throws IOException {
 		this.eventService.exportEmail(ids, emails);
 	}
 
