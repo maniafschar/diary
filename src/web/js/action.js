@@ -361,14 +361,19 @@ class action {
 		var table = document.querySelector('view-table');
 		var ids = [];
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
-		if (pdf)
+		if (pdf) {
+			content.querySelector('div.email').style.gridTemplateRows == '0fr';
 			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
-		else {
-			var emails = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]').value.trim();
-			emails = emails.replace(/,/g, ' ');
-			emails = emails.replace(/;/g, ' ');
-			emails = emails.replace(/  /g, ' ');
-			api.event.postEmail(ids, emails.split(' '), () => document.dispatchEvent(new CustomEvent('popup')));
+		} else {
+			var content = document.querySelector('dialog-popup').content();
+			if (content.querySelector('div.email').style.gridTemplateRows == '1fr') {
+				var emails = content.querySelector('input[name="emails"]').value.trim();
+				emails = emails.replace(/,/g, ' ');
+				emails = emails.replace(/;/g, ' ');
+				emails = emails.replace(/  /g, ' ');
+				api.event.postEmail(ids, emails.split(' '), () => document.dispatchEvent(new CustomEvent('popup')));
+			} else
+				content.querySelector('div.email').style.gridTemplateRows == '1fr';
 		}
 	}
 }
