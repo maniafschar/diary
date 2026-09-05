@@ -230,12 +230,16 @@ img.speak {
 		api.event.getList(access, events => {
 			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
+			if (access && !events.length)
+				return;
 			var clientName = document.querySelector('body>[name="clientName"]');
-			clientName.innerText = api.clients[api.clientId].name;
 			clientName.style.display = '';
-			if (Object.keys(api.clients).length > 1) {
-				clientName.style.cursor = 'pointer';
-				clientName.onclick = dialog.client;
+			if (api.clientId) {
+				clientName.innerText = api.clients[api.clientId].name;
+				if (Object.keys(api.clients).length > 1) {
+					clientName.style.cursor = 'pointer';
+					clientName.onclick = dialog.client;
+				}
 			}
 
 			var table = document.querySelector('event view-table');
@@ -318,6 +322,7 @@ img.speak {
 			if (access) {
 				document.querySelector("element.event button.add").style.display = 'none';
 				document.querySelector("element.event button.export").style.display = 'none';
+				api.authentication.getClientName(events[0].contact.client.id, client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('body>button[name="logoff"]').style.display = '';
 				document.querySelector('element.user').style.display = 'block';
