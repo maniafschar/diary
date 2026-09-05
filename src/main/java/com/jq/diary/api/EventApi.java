@@ -3,6 +3,7 @@ package com.jq.diary.api;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
@@ -26,6 +27,7 @@ import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
+import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
@@ -54,6 +56,24 @@ public class EventApi extends ApplicationApi {
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		return this.filter(
 				this.eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
+	}
+
+	@GetMapping("list/{access}")
+	public List<Event> getListAccess(@PathVariable final String access) {
+		final List<EventLink> links = this.repository.list("from EventLink where identifier=?1", EventLink.class,
+				access);
+		if (links.size() == 1) {
+			final EventLink eventLink = links.get(0);
+			this.authorizationService.requireContact(eventLink.getContact().getId(),
+					eventLink.getContact().getClient().getId());
+			if (eventLink.getStart() == null) {
+				eventLink.setStart(new Date());
+				this.repository.save(eventLink);
+			}
+			if (eventLink.getStart().getTime() + 360000L < System.currentTimeMillis())
+				return this.filter(links.get(0).getEvents());
+		}
+		return null;
 	}
 
 	@GetMapping("{id}")
