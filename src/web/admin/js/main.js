@@ -93,7 +93,7 @@ class api {
 			url: api.url + 'build/' + type,
 			method: 'POST',
 			success: xhr =>
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre><b>' + new Date().toISOString().substring(0, 19) + '</b><br/>' + ui.sanitizeText(xhr) + '</pre>' } }))
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: api.prepareResponse(xhr) } }))
 		});
 	}
 
@@ -101,8 +101,12 @@ class api {
 		api.ajax({
 			url: api.url + 'execute',
 			success: xhr =>
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre>' + ui.sanitizeText(xhr) + '</pre>' } }))
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: api.prepareResponse(xhr) } }))
 		});
+	}
+
+	static prepareResponse(response) {
+		return '<pre><b>' + new Date().toISOString().substring(0, 19) + '</b><br/>' + ui.sanitizeText(response) + '</pre>';
 	}
 
 	static deleteTicket(id, index) {
@@ -148,7 +152,7 @@ class api {
 						xhr.param = param;
 						param.error(xhr);
 					} else
-						document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<pre>' + JSON.stringify(xhr) + '</pre>' } }));
+						document.dispatchEvent(new CustomEvent('popup', { detail: { body: api.prepareResponse(xhr) } }));
 				};
 				if (xhr.status >= 200 && xhr.status < 300) {
 					if (param.success) {
