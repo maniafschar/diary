@@ -106,7 +106,6 @@ images {
 .leaflet-bottom, .leaflet-top {
 	z-index: 400 !important;
 }`;
-		this.addEventListener('visible', this.init);
 	}
 
 	init() {
