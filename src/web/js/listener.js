@@ -322,7 +322,7 @@ img.speak {
 			if (access) {
 				document.querySelector("element.event button.add").style.display = 'none';
 				document.querySelector("element.event button.export").style.display = 'none';
-				api.authentication.getClientName(events[0].contact.client.id, client => clientName.innerText = client.name);
+				api.authentication.getClient(access, client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('body>button[name="logoff"]').style.display = '';
 				document.querySelector('element.user').style.display = 'block';

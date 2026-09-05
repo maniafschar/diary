@@ -1,6 +1,7 @@
 package com.jq.diary.api;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
+import com.jq.diary.entity.EventLink;
 import com.jq.diary.service.AuthenticationService;
 import com.jq.diary.util.Encryption;
 import com.jq.diary.util.Utilities;
@@ -64,8 +66,10 @@ public class AuthenticationApi extends ApplicationApi {
 		return this.authenticationService.recoverSendEmail(Encryption.decryptBrowser(email));
 	}
 
-	@GetMapping("client/{id}")
-	public Client getClientName(@PathVariable final BigInteger id) {
-		return Utilities.filter(this.repository.one(Client.class, id));
+	@GetMapping("client/{access}")
+	public Client getClient(@PathVariable final String access) {
+		final List<EventLink> eventLinks = this.repository.list(
+				"from EventLink where identifier=?1", EventLink.class, access);
+		return eventLinks.size() > 0 ? Utilities.filter(eventLinks.get(0).getContact().getClient()) : null;
 	}
 }

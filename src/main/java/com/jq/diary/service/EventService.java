@@ -46,6 +46,7 @@ public class EventService {
 		event.getEventImages().forEach(e -> this.repository.delete(e));
 		event.getEventRatings().forEach(e -> this.repository.delete(e));
 		event.getEventFeedbacks().forEach(e -> this.repository.delete(e));
+		event.getEventLinks().forEach(e -> this.repository.delete(e));
 		this.repository.delete(event);
 	}
 
@@ -124,8 +125,11 @@ public class EventService {
 			eventLink.setContact(contact);
 			eventLink.setEmail(email);
 			eventLink.setIdentifier(UUID.randomUUID().toString());
-			eventLink.setEvents(events);
 			this.repository.save(eventLink);
+			for (final Event event : events) {
+				event.getEventLinks().add(eventLink);
+				this.repository.save(event);
+			}
 			this.emailService.send(email, "https://diary.cafe?access=" + eventLink.getIdentifier());
 		}
 	}

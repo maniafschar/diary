@@ -75,6 +75,13 @@ class api {
 			});
 		},
 
+		getClient(access, success) {
+			api.ajax({
+				url: 'authentication/client/' + access,
+				success: success
+			});
+		},
+
 		getVerify(email, success) {
 			if (!api.user)
 				api.user = { id: 0 };

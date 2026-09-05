@@ -2,6 +2,7 @@ package com.jq.diary.api;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,7 +72,7 @@ public class EventApi extends ApplicationApi {
 				eventLink.setStart(new Date(Instant.now().toEpochMilli()));
 				this.repository.save(eventLink);
 			}
-			if (Instant.now().isAfter(Instant.ofEpochMilli(eventLink.getStart().getTime())))
+			if (Instant.now().minus(Duration.ofHours(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
 				return this.filter(links.get(0).getEvents());
 		}
 		return null;
