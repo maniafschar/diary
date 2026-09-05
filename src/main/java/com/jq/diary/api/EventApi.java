@@ -2,6 +2,7 @@ package com.jq.diary.api;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,10 +68,10 @@ public class EventApi extends ApplicationApi {
 			this.authorizationService.requireContact(eventLink.getContact().getId(),
 					eventLink.getContact().getClient().getId());
 			if (eventLink.getStart() == null) {
-				eventLink.setStart(new Date());
+				eventLink.setStart(new Date(Instant.now().toEpochMilli()));
 				this.repository.save(eventLink);
 			}
-			if (eventLink.getStart().getTime() + 360000L < System.currentTimeMillis())
+			if (Instant.now().isAfter(Instant.ofEpochMilli(eventLink.getStart().getTime())))
 				return this.filter(links.get(0).getEvents());
 		}
 		return null;
