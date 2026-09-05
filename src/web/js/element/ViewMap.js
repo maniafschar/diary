@@ -134,6 +134,8 @@ images {
 				attribution: '&copy; OpenStreetMap contributors',
 				maxZoom: 19
 			}).addTo(this.map);
+			this.initLocations();
+			this.flyToIndex(this.currentIndex);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 		var start = this._root.appendChild(document.createElement('button'));
@@ -149,8 +151,6 @@ images {
 		prev.style.marginLeft = '-5em';
 		prev.innerText = '<';
 		prev.addEventListener('click', () => this.next(false));
-		this.initLocations();
-		this.flyToIndex(this.currentIndex);
 	}
 
 	initLocations() {
