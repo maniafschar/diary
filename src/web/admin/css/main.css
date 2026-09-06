@@ -86,6 +86,11 @@ button {
 	font-size: 0.8em;
 }
 
+button.addUser {
+	right: 0.5em;
+	top: 0.5em;
+}
+
 msg {
 	font-size: 0.7em;
 	cursor: pointer;
