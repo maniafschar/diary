@@ -219,7 +219,7 @@ class action {
 	static logoff() {
 		api.authentication.deleteToken();
 		api.logoff();
-		document.querySelectorAll('event view-table, user view-table').forEach(e => e.table().querySelector('tbody').textContent = '');
+		document.querySelectorAll('event view-table, user view-table').forEach(e => e.table().querySelector('tbody')?.textContent = '');
 		document.querySelector('element view-map').setLocations(null);
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
