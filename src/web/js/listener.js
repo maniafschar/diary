@@ -324,12 +324,12 @@ img.speak {
 				document.querySelector('element.event div.title count').innerText = '';
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
+			document.querySelector('body>button[name="logoff"]').style.display = '';
 			if (access) {
 				document.querySelector("element.event button.add").style.display = 'none';
 				document.querySelector("element.event button.export").style.display = 'none';
 				api.authentication.getClient(access, client => clientName.innerText = client.name);
 			} else {
-				document.querySelector('body>button[name="logoff"]').style.display = '';
 				document.querySelector('element.user').style.display = 'block';
 				if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
 					setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
