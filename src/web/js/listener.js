@@ -60,7 +60,7 @@ class listener {
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
 			var pseudonyms = ui.extractPseudonyms();
-			if (pseudonyms)
+			if (api.user?.id)
 				for (var i = 0; i < event.eventRatings.length; i++)
 					s += '<rating>' + pseudonyms[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/><br/>';
