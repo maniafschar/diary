@@ -146,14 +146,15 @@ body>container>element.imprint {
 
 body>button {
 	background: transparent !important;
-	right: 0.2em;
-	top: 0.2em;
+	right: 0.5em;
+	top: 0.5em;
+	position: fixed;
 	filter: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
 	z-index: 4;
 }
 
 body>h2 {
-	position: absolute;
+	position: fixed;
 	white-space: nowrap;
 	overflow: hidden;
 	padding: 0.55em 2em 0 0.65em;
