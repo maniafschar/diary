@@ -61,7 +61,7 @@ public class Application {
 		final Contact contact = new Contact();
 		contact.setAdmin(true);
 		contact.setName("Mani");
-		contact.setEmail("sepp@diary.cafe");
+		contact.setEmail("aaron@diary.cafe");
 		contact.setPassword(Encryption.encryptDB("Test1234"));
 		contact.setClient(client);
 		contact.setVerified(true);

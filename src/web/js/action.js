@@ -183,7 +183,7 @@ class action {
 
 	static loginDemo() {
 		var input = document.querySelectorAll('element.login input');
-		input[0].value = 'sepp@diary.cafe';
+		input[0].value = 'aaron@diary.cafe';
 		input[1].value = 'Test1234';
 		document.querySelector('element.login input-checkbox').setAttribute('checked', 'false');
 		setTimeout(action.login, 500);
