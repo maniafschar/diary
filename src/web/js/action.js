@@ -369,31 +369,34 @@ class action {
 		var table = document.querySelector('view-table');
 		var ids = [];
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
-		if (ids.length == 0) {
-			error.innerText = 'Selektiere Einträge aus der Liste aus.';
-			return;
-		}
 		if (pdf) {
 			content.querySelector('div.email').style.gridTemplateRows == '0fr';
-			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
+			if (ids.length == 0)
+				error.innerText = 'Selektiere Einträge aus der Liste aus.';
+			else
+				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 		} else {
 			if (content.querySelector('div.email').style.gridTemplateRows == '1fr') {
-				var emails = content.querySelector('input[name="emails"]').value.trim();
-				emails = emails.replace(/,/g, ' ');
-				emails = emails.replace(/;/g, ' ');
-				while (emails.indexOf('  ') > -1)
-					emails = emails.replace(/  /g, ' ');
-				if (emails) {
-					emails = emails.split(' ');
-					for (var i = 0; i < emails.length; i++) {
-						if (emails[i].indexOf('@') < 1) {
-							error.innerText = 'Gib valide Emailadressen ein.';
-							return;
+				if (ids.length == 0)
+					error.innerText = 'Selektiere Einträge aus der Liste aus.';
+				else {
+					var emails = content.querySelector('input[name="emails"]').value.trim();
+					emails = emails.replace(/,/g, ' ');
+					emails = emails.replace(/;/g, ' ');
+					while (emails.indexOf('  ') > -1)
+						emails = emails.replace(/  /g, ' ');
+					if (emails) {
+						emails = emails.split(' ');
+						for (var i = 0; i < emails.length; i++) {
+							if (emails[i].indexOf('@') < 1) {
+								error.innerText = 'Gib valide Emailadressen ein.';
+								return;
+							}
 						}
-					}
-					api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
-				} else
-					error.innerText = 'Gib Emailadressen ein.';
+						api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
+					} else
+						error.innerText = 'Gib Emailadressen ein.';
+				}
 			} else
 				content.querySelector('div.email').style.gridTemplateRows = '1fr';
 		}

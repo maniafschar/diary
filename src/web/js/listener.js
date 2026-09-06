@@ -114,11 +114,14 @@ class listener {
 					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
 					listFeedbacks(events[i]) +
-					'<separator></separator>' +
-					'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
-					'<label>Bilder</label><field style="min-height: 3.2em; max-height: initial; text-align: left;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
-					'<label>Teinahmer</label><field style="min-height: 3.2em; max-height: initial;">' + listParticipants(events[i]) + '</field>' +
-					'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating><br/><br/>'
+					(api.user?.id ?
+						'<separator></separator>' +
+						'<label>Kommentar</label><field><textarea name="feedback"></textarea><button onclick="action.addFeedback(' + events[i].id + ')">Absenden</button></field>' +
+						'<label>Bilder</label><field style="min-height: 3.2em; max-height: initial; text-align: left;">' + listImageThumbnails(events[i]) + '<button onclick="action.addImage(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ')" class="addImage icon">+</button><input-image style="display: none;" max="1000"></input-image></field>' +
+						'<label>Teinahmer</label><field style="min-height: 3.2em; max-height: initial;">' + listParticipants(events[i]) + '</field>' +
+						'<input-rating type="edit" onclick="action.addRating(' + JSON.stringify(events[i]).replace(/"/g, '&quot;') + ', this.getAttribute(&quot;value&quot;))"></input-rating>'
+						: ''
+					) + '<br/><br/>'
 			});
 		}
 		document.querySelector('view-image').open(list, index,

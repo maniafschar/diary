@@ -407,6 +407,7 @@ button.confirmed::after {
 		var listener = () => {
 			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
 			count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
+			document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
 		};
 		table.addEventListener('select', listener);
 		popup.appendChild(document.createElement('error'));
