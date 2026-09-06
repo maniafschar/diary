@@ -196,6 +196,11 @@ button.icon svg {
 	height: 50%;
 }
 
+button.addUser {
+	right: 0.5em;
+	top: 0.5em;
+}
+
 button.participate {
 	right: 3em;
 	top: 0;
