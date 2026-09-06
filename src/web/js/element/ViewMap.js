@@ -3,7 +3,6 @@ export { ViewMap };
 class ViewMap extends HTMLElement {
 	map = null;
 	currentIndex = -1;
-	tourTimer = null;
 	locations = [];
 	markers = [];
 	openDetail = null;
@@ -137,11 +136,6 @@ images {
 			this.flyToIndex(this.currentIndex);
 		};
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
-		var start = this._root.appendChild(document.createElement('button'));
-		start.style.marginLeft = '-1em';
-		start.innerText = '▷';
-		start.classList.add('play');
-		start.addEventListener('click', this.startTour);
 		var next = this._root.appendChild(document.createElement('button'));
 		next.style.marginLeft = '3em';
 		next.innerText = '>';
@@ -201,7 +195,6 @@ images {
 	}
 
 	next(forward) {
-		this.stopTour();
 		this.flyToIndex((this.currentIndex + (forward ? 1 : -1) + this.locations.length) % this.locations.length);
 	}
 
@@ -235,30 +228,5 @@ images {
 
 	open(i) {
 		this.openDetail(this.locations[i]);
-	}
-
-	startTour() {
-		var host = this.getRootNode().host;
-		if (host.tourTimer) {
-			host.stopTour();
-			return;
-		}
-		this.innerText = '‖';
-		const step = () => {
-			host.flyToIndex(host.currentIndex + 1);
-			if (host.currentIndex < host.locations.length - 1)
-				host.tourTimer = setTimeout(step, (2 * 1000) + 3500);
-			else
-				host.stopTour();
-		};
-		step();
-	}
-
-	stopTour() {
-		this._root.querySelector('button.play').innerText = '▷';
-		if (this.tourTimer) {
-			clearTimeout(this.tourTimer);
-			this.tourTimer = null;
-		}
 	}
 }
