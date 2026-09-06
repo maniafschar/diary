@@ -59,8 +59,10 @@ class listener {
 		};
 		var listRatings = function (event) {
 			var s = '<input-rating class="event" i="' + event.id + '" value="' + (event.rating / event.ratingCount) + '"></input-rating><br/>';
-			for (var i = 0; i < event.eventRatings.length; i++)
-				s += '<rating>' + ui.extractPseudonyms()[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
+			var pseudonyms = ui.extractPseudonyms();
+			if (pseudonyms)
+				for (var i = 0; i < event.eventRatings.length; i++)
+					s += '<rating>' + pseudonyms[event.eventRatings[i].contact.id] + ' · ' + (event.eventRatings[i].rating / 20) + '</rating>';
 			return s + '<br/><br/>';
 		};
 		var addEdit = function () {
