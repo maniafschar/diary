@@ -72,8 +72,6 @@ error {
 	display: block;
 	text-align: center;
 	color: red;
-	font-style: italic;
-	font-weight: bold;
 	font-size: 0.8em;
 }
 
