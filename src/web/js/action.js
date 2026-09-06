@@ -19,7 +19,7 @@ export { action };
 
 class action {
 	static init() {
-		window.onresize();
+		action.resize();
 		listener.init();
 		if (document.location.search) {
 			var access = new URL(window.location.href).searchParams?.get('access');
@@ -362,6 +362,26 @@ class action {
 		}
 	}
 
+	static resize() {
+		var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 5;
+		var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
+		var fontSize = (Math.min(7 + diagonal / 160, 26) + mobile);
+		if (mobile && fontSize > 18)
+			fontSize = 18;
+		document.body.style.fontSize = fontSize + 'px';
+		var imageWidth = 1536, imageHeight = 1024;
+		var imageStyle = document.querySelector('body element.intro>img').style;
+		if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
+			imageStyle.height = window.innerHeight + 'px';
+			imageStyle.width = 'fit-content';
+			imageStyle.marginTop = 0;
+		} else {
+			imageStyle.width = window.innerWidth + 'px';
+			imageStyle.height = 'fit-content';
+			imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
+		}
+	}
+
 	static export(pdf) {
 		var content = document.querySelector('dialog-popup').content();
 		var error = content.querySelector('error');
@@ -403,25 +423,7 @@ class action {
 	}
 }
 
-window.addEventListener('resize', function () {
-	var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 5;
-	var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
-	var fontSize = (Math.min(7 + diagonal / 160, 26) + mobile);
-	if (mobile && fontSize > 18)
-		fontSize = 18;
-	document.body.style.fontSize = fontSize + 'px';
-	var imageWidth = 1536, imageHeight = 1024;
-	var imageStyle = document.querySelector('body element.intro>img').style;
-	if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
-		imageStyle.height = window.innerHeight + 'px';
-		imageStyle.width = 'fit-content';
-		imageStyle.marginTop = 0;
-	} else {
-		imageStyle.width = window.innerWidth + 'px';
-		imageStyle.height = 'fit-content';
-		imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
-	}
-});
+window.addEventListener('resize', action.resize);
 
 customElements.define('dialog-popup', DialogPopup);
 customElements.define('input-checkbox', InputCheckbox);
