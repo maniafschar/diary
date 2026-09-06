@@ -288,7 +288,7 @@ img.speak {
 
 			var viewCalendar = document.querySelector('view-calendar');
 			viewCalendar.reset();
-			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : dialog.add(event));
+			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : api.user?.id ? dialog.add(event) : null);
 			var map = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
