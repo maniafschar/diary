@@ -72,7 +72,7 @@ public class EventApi extends ApplicationApi {
 				eventLink.setStart(new Date(Instant.now().toEpochMilli()));
 				this.repository.save(eventLink);
 			}
-			if (Instant.now().minus(Duration.ofHours(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
+			if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
 				return this.filter(links.get(0).getEvents());
 		}
 		return null;
