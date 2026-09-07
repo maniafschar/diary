@@ -285,7 +285,7 @@ ${dialog.stylePictures}`;
 					item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
 					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
 					date.setDate(date.getDate() + 1);
-					if (date < new Date()) {
+					if (date >= new Date()) {
 						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
 						item.setAttribute('target', '_blank');
 					} else
