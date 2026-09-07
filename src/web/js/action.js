@@ -356,13 +356,14 @@ class action {
 		var contact = {
 			id: popup.querySelector('input[name="id"]')?.value || null,
 			name: popup.querySelector('input[name="name"]').value,
-			email: popup.querySelector('input[name="email"]').value,
-			client: {
-				name: popup.querySelector('input[name="clientName"]')?.value || null,
-				none: popup.querySelector('input[name="clientNote"]')?.value || null,
-				image: popup.querySelector('input[name="clientImage"]')?.value || null
-			}
+			email: popup.querySelector('input[name="email"]').value
 		};
+		if (api.user.admin && contact.id == api.user.id)
+			contact.client = {
+						name: popup.querySelector('input[name="clientName"]')?.value || null,
+						note: popup.querySelector('input[name="clientNote"]')?.value || null,
+						image: popup.querySelector('input[name="clientImage"]')?.value || null
+					};
 		api.contact.patch(
 			contact,
 			id => {
