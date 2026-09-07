@@ -40,8 +40,6 @@ public class Event extends BaseEntity {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventFeedback> eventFeedbacks;
 	@ManyToMany
-	@JsonManagedReference
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@JsonBackReference
 	private Set<EventLink> eventLinks;
 	private Date date;
