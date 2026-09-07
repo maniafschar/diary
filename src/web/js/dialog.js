@@ -282,7 +282,7 @@ ${dialog.stylePictures}`;
 			api.event.getLinkList(list => {
 				for (var i = 0; i < list.length; i++) {
 					var item = eventLinks.appendChild(document.createElement('a'));
-					item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
+					item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email;
 					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
 					date.setDate(date.getDate() + 1);
 					if (date >= new Date()) {

@@ -3,6 +3,8 @@ package com.jq.diary.entity;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -19,6 +21,16 @@ public class EventLink extends BaseEntity {
 	private String email;
 	private String identifier;
 	private Date start;
+	@Formula("(select count(distinct ip) from log where uri like concat('%/event/list/', identifier))")
+	private Integer count;
+
+	public Integer getCount() {
+		return this.count;
+	}
+
+	public void setCount(final Integer count) {
+		this.count = count;
+	}
 
 	public Contact getContact() {
 		return this.contact;
