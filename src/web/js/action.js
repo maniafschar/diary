@@ -216,7 +216,7 @@ class action {
 			});
 	}
 
-	static logoff() {
+	static logoff(access) {
 		if (api.access) {
 			api.authentication.getEmail(email => {
 				document.dispatchEvent(new CustomEvent('popup', {
@@ -225,11 +225,12 @@ class action {
 					}
 				}));
 				api.access = null;
-				action.logoff();
+				action.logoff(true);
 			});
 			return;
 		}
-		api.authentication.deleteToken();
+		if (!access)
+			api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event view-table, user view-table').forEach(e => {
 			if (e.table().querySelector('tbody'))
@@ -360,10 +361,10 @@ class action {
 		};
 		if (api.user.admin && contact.id == api.user.id)
 			contact.client = {
-						name: popup.querySelector('input[name="clientName"]')?.value || null,
-						note: popup.querySelector('input[name="clientNote"]')?.value || null,
-						image: popup.querySelector('input[name="clientImage"]')?.value || null
-					};
+				name: popup.querySelector('input[name="clientName"]')?.value || null,
+				note: popup.querySelector('input[name="clientNote"]')?.value || null,
+				image: popup.querySelector('input[name="clientImage"]')?.value || null
+			};
 		api.contact.patch(
 			contact,
 			id => {
