@@ -96,7 +96,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@GetMapping("link/list")
-	public List<EventLink> getLinkList(@PathVariable final BigInteger contactId,
+	public List<EventLink> getLinkList(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		return Utilities.filter(
 				this.eventService
