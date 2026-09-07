@@ -42,7 +42,7 @@ public class EventService {
 	}
 
 	public List<EventLink> listLink(final BigInteger contactId) {
-		return this.repository.list("from EventLink where contact.id=?1", EventLink.class, contactId);
+		return this.repository.list("from EventLink where contact.id=?1 order by id desc", EventLink.class, contactId);
 	}
 
 	public void delete(final Event event) {
