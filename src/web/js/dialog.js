@@ -303,8 +303,9 @@ ${dialog.stylePictures}`;
 						item.classList.add('outdated');
 						text += ' (abgelaufen)';
 					}
+					text += '<br/>' + list[i].events.length + ' Einträge';
 					if (list[i].count)
-						text += '<br/>' + list[i].count + ' Zugriffe';
+						text += ' · ' + list[i].count + ' Zugriffe';
 					item.innerHTML = text;
 				}
 			});
