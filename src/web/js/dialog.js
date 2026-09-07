@@ -231,6 +231,10 @@ eventLinks>a {
 	overflow-x: auto;
 	position: relative;
 	display: block;
+	color: darkblue;
+}
+eventLinks>a.outdated {
+	color: lightblue;
 }
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
@@ -279,8 +283,13 @@ ${dialog.stylePictures}`;
 				for (var i = 0; i < list.length; i++) {
 					var item = eventLinks.appendChild(document.createElement('a'));
 					item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
-					item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
-					item.setAttribute('target', '_blank');
+					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
+					date.setDate(date.getDate() + 1);
+					if (date < new Date()) {
+						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
+						item.setAttribute('target', '_blank');
+					} else
+						item.classList.add('outdated');
 				}
 			});
 		}
