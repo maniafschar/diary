@@ -259,7 +259,7 @@ ${dialog.stylePictures}`;
 				api.event.getLinkList(list => {
 					for (var i = 0; i < list.length; i++) {
 						var item = eventLinks.appendChild(document.createElement('div'));
-						item.innerText = ui.formatTime(list[i].createdAt) + ' · ' + ui.formatTime(list[i].start) + ' · ' + list[i].email;
+						item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
 					}
 				});
 			}
