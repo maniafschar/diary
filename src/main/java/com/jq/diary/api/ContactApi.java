@@ -40,12 +40,13 @@ public class ContactApi extends ApplicationApi {
 	@PatchMapping
 	public BigInteger patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Contact contact) throws EmailException {
-		final Contact original = this.authorizationService.requireContact(contactId, clientId);
+		final Contact user = this.authorizationService.requireContact(contactId, clientId);
 		if (contact.getId() == null) {
-			contact.setClient(original.getClient());
+			contact.setClient(user.getClient());
 			this.contactService.save(contact);
 			return contact.getId();
 		}
+		final Contact original = repository.one(Contact.class, contact.getId());
 		if (Utilities.isEmail(contact.getEmail()))
 			original.setEmail(contact.getEmail().toLowerCase().trim());
 		if (contact.getName() != null && contact.getName().trim().length() > 0)
@@ -55,7 +56,7 @@ public class ContactApi extends ApplicationApi {
 		if (contact.getNote() != null)
 			original.setNote(contact.getNote());
 		this.contactService.save(original);
-		if (contact.getClient() != null && original.getClient().getId().equals(clientId)) {
+		if (contact.getClient() != null && original.getClient().getId().equals(clientId) && user.getAdmin() != null && user.getAdmin()) {
 			final Client client = original.getClient();
 			client.setImage(contact.getClient().getImage());
 			client.setNote(contact.getClient().getNote());
