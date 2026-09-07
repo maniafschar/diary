@@ -21,7 +21,7 @@ public class EventLink extends BaseEntity {
 	private String email;
 	private String identifier;
 	private Date start;
-	@Formula("(select count(distinct ip) from log where uri like concat('%/event/list/', identifier))")
+	@Formula("(select count(distinct l.ip) from log l where l.uri like concat('%/event/list/', identifier))")
 	private Integer count;
 
 	public Integer getCount() {
