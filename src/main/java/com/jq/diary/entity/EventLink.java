@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class EventLink extends BaseEntity {
 	@ManyToMany(mappedBy = "eventLinks")
-	@JsonBackReference
 	private List<Event> events;
 	@ManyToOne
 	@JsonBackReference

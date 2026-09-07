@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.hibernate.annotations.Formula;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jq.diary.util.Utilities;
@@ -41,7 +42,8 @@ public class Event extends BaseEntity {
 	@ManyToMany
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Set<EventLink> eventLinks;
+	@JsonBackReference
+	private Set<EventLink> eventLinks;
 	private Date date;
 	@Formula("(select sum(er.rating) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Double rating;
@@ -77,7 +79,9 @@ public class Event extends BaseEntity {
 	}
 
 	public void setNote(final String note) {
-		this.note = note != null && note.length() > Utilities.MAX_TEXT_LENGTH ? note.substring(0, Utilities.MAX_TEXT_LENGTH) : note;
+		this.note = note != null && note.length() > Utilities.MAX_TEXT_LENGTH
+				? note.substring(0, Utilities.MAX_TEXT_LENGTH)
+				: note;
 	}
 
 	public Contact getContact() {
