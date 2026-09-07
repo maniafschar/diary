@@ -252,8 +252,9 @@ class action {
 			for (var i = 0; i < s.length; i++)
 				if (s[i])
 					name += s[i][0].toUpperCase() + s[i].slice(1) + ' ';
-			document.querySelector('element.login input[name="clientName"]').value = name + 'Tagebuch';
-			document.querySelector('element.login input[name="contactName"]').value = name.trim();
+			name = name.trim();
+			document.querySelector('element.login input[name="clientName"]').value = name + 's Tagebuch';
+			document.querySelector('element.login input[name="contactName"]').value = name;
 			document.querySelector('element.login input[name="contactEmail"]').value = email;
 		}
 		document.dispatchEvent(new CustomEvent('popup'));
