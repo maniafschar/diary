@@ -269,19 +269,21 @@ ${dialog.stylePictures}`;
 						pictures.querySelector('img').style.display = 'none';
 					}
 				});
-				var eventLinks = popup.appendChild(document.createElement('eventLinks'));
-				api.event.getLinkList(list => {
-					for (var i = 0; i < list.length; i++) {
-						var item = eventLinks.appendChild(document.createElement('a'));
-						item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
-						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
-						item.setAttribute('target', '_blank');
-					}
-				});
 			}
 		} else
 			popup.appendChild(document.createTextNode(contact.name));
 		dialog.createButton(popup, 'action.contactPatch()');
+		if (api.user.admin && contact.id == api.user.id) {
+			var eventLinks = popup.appendChild(document.createElement('eventLinks'));
+			api.event.getLinkList(list => {
+				for (var i = 0; i < list.length; i++) {
+					var item = eventLinks.appendChild(document.createElement('a'));
+					item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + (list[i].start ? ' · ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '') + ' · ' + list[i].email + ' · ' + list[i].identifier;
+					item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
+					item.setAttribute('target', '_blank');
+				}
+			});
+		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
