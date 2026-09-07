@@ -37,6 +37,7 @@ detailRating {
 	display: inline-block;
 	white-space: nowrap;
 	line-height: 0.5;
+	margin-top: -1px;
 }
 
 ratingSelection {
