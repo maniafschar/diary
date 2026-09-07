@@ -255,8 +255,12 @@ ${dialog.stylePictures}`;
 						pictures.querySelector('img').style.display = 'none';
 					}
 				});
+				var eventLinks = popup.appendChild(document.createElement('div'));
 				api.event.getLinkList(list => {
-					console.log(list);
+					for (var i = 0; i < list.length; i++) {
+						var item = eventLinks.appendChild(document.createElement('div'));
+						item.innerText = ui.formatTime(list[i].createdAt) + ' · ' + ui.formatTime(list[i].start) + ' · ' + list[i].email;
+					}
 				});
 			}
 		} else
