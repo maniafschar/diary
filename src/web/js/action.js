@@ -221,7 +221,7 @@ class action {
 			api.authentication.getEmail(email => {
 				document.dispatchEvent(new CustomEvent('popup', {
 					detail: {
-						body: 'Möchtest Du Dein eigenes Tagebuch erstellen?<br/><br/><button onclick="action.prefillRegistraation(&quot;' + email + '&quot;)">Ja</button>'
+						body: '<div style="text-align: center;">Möchtest Du Dein eigenes Tagebuch erstellen?<br/><br/><button onclick="action.prefillRegistraation(&quot;' + email + '&quot;)">Ja</button></div>'
 					}
 				}));
 				api.access = null;
@@ -256,6 +256,7 @@ class action {
 			document.querySelector('element.login input[name="contactName"]').value = name.trim();
 			document.querySelector('element.login input[name="contactEmail"]').value = email;
 		}
+		document.dispatchEvent(new CustomEvent('popup'));
 		document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top, behavior: 'smooth' });
 	}
 
