@@ -246,7 +246,16 @@ class action {
 	}
 
 	static prefillRegistraation(email) {
-
+		if (email) {
+			var s = email.substring(0, email.indexOf('@')).replace(/[.\-_]/g, ' ').split(' '), name = '';
+			for (var i = 0; i < s.length; i++)
+				if (s[i])
+					name += s[i][0].toUpperCase() + s[i].slice(1) + ' ';
+			document.querySelector('element.login input[name="clientName"]').value = name + 'Tagebuch';
+			document.querySelector('element.login input[name="contactName"]').value = name.trim();
+			document.querySelector('element.login input[name="contactEmail"]').value = email;
+		}
+		document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top, behavior: 'smooth' });
 	}
 
 	static eventDelete(id) {
