@@ -152,7 +152,7 @@ class api {
 						xhr.param = param;
 						param.error(xhr);
 					} else
-						document.dispatchEvent(new CustomEvent('popup', { detail: { body: api.prepareResponse(xhr) } }));
+						document.dispatchEvent(new CustomEvent('popup', { detail: { body: api.prepareResponse(xhr.responseText) } }));
 				};
 				if (xhr.status >= 200 && xhr.status < 300) {
 					if (param.success) {
