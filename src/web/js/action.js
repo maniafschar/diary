@@ -257,7 +257,8 @@ class action {
 			document.querySelector('element.login input[name="contactEmail"]').value = email;
 		}
 		document.dispatchEvent(new CustomEvent('popup'));
-		document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top, behavior: 'smooth' });
+		setTimeout(() =>
+			document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top, behavior: 'smooth' }), 50);
 	}
 
 	static eventDelete(id) {
