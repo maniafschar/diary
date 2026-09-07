@@ -3,6 +3,8 @@ package com.jq.diary.entity;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -10,8 +12,10 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class EventLink extends BaseEntity {
 	@ManyToMany(mappedBy = "eventLinks")
+	@JsonBackReference
 	private List<Event> events;
 	@ManyToOne
+	@JsonBackReference
 	private Contact contact;
 	private String email;
 	private String identifier;
