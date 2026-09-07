@@ -187,7 +187,7 @@ input {
 sql {
 	font-family: monospace;
 	overflow: auto;
-	margin-top: 2em;
+	border-top: solid 2em transparent;
 	text-align: left;
 }
 
