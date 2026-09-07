@@ -90,17 +90,15 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("contact/{contactId}")
 	public List<Event> getContact(@PathVariable final BigInteger contactId, @RequestHeader final BigInteger clientId) {
-		return Utilities.filter(
-				this.eventService
-						.listContact(this.authorizationService.requireContact(contactId, clientId).getId()));
+		return Utilities.filter(this.eventService
+				.listContact(this.authorizationService.requireContact(contactId, clientId).getId()));
 	}
 
 	@GetMapping("link/list")
 	public List<EventLink> getLinkList(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
-		return Utilities.filter(
-				this.eventService
-						.listLink(this.authorizationService.requireContact(contactId, clientId).getId()));
+		return Utilities.filter(this.eventService
+				.listLink(this.authorizationService.requireContact(contactId, clientId).getId()));
 	}
 
 	@PostMapping("exists")
