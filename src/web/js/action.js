@@ -258,7 +258,7 @@ class action {
 		}
 		document.dispatchEvent(new CustomEvent('popup'));
 		setTimeout(() =>
-			document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top, behavior: 'smooth' }), 50);
+			document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top + document.querySelector('html').scrollTop, behavior: 'smooth' }), 50);
 	}
 
 	static eventDelete(id) {
