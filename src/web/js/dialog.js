@@ -226,15 +226,23 @@ eventLinks {
 	display: block;
 	overflow-x: hidden;
 	padding: 1em 0;
+	font-size: 0.8em;
+}
+eventLinks>div {
+	padding-bottom: 1em;
+	font-weight: bold;
 }
 eventLinks>a {
 	overflow-x: auto;
 	position: relative;
 	display: block;
 	color: darkblue;
+	cursor: pointer;
+	padding: 0.5em;
 }
 eventLinks>a.outdated {
 	color: lightblue;
+	cursor: default;
 }
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
@@ -281,6 +289,8 @@ ${dialog.stylePictures}`;
 			var eventLinks = popup.appendChild(document.createElement('eventLinks'));
 			api.event.getLinkList(list => {
 				for (var i = 0; i < list.length; i++) {
+					if (i == 0)
+						eventLinks.appendChild(document.createElement('div')).innerText = 'Deine geteilten Links';
 					var item = eventLinks.appendChild(document.createElement('a'));
 					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' + list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
 					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
