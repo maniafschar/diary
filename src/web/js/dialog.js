@@ -292,7 +292,8 @@ ${dialog.stylePictures}`;
 					if (i == 0)
 						eventLinks.appendChild(document.createElement('div')).innerText = 'Deine geteilten Links';
 					var item = eventLinks.appendChild(document.createElement('a'));
-					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' + list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
+					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
+						list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
 					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
 					date.setDate(date.getDate() + 1);
 					if (date >= new Date()) {
@@ -302,6 +303,8 @@ ${dialog.stylePictures}`;
 						item.classList.add('outdated');
 						text += ' (abgelaufen)';
 					}
+					if (list[i].count)
+						text += '<br/>' + list[i].count + ' Zugriffe';
 					item.innerHTML = text;
 				}
 			});
