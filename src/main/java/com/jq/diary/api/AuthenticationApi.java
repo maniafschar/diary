@@ -72,4 +72,16 @@ public class AuthenticationApi extends ApplicationApi {
 				"from EventLink where identifier=?1", EventLink.class, access);
 		return eventLinks.size() > 0 ? Utilities.filter(eventLinks.get(0).getContact().getClient()) : null;
 	}
+
+	@GetMapping("email/{access}")
+	public String getEmail(@PathVariable final String access) {
+		final List<EventLink> eventLinks = this.repository.list(
+				"from EventLink where identifier=?1", EventLink.class, access);
+		if (eventLinks.size() == 0)
+			return null;
+		final String email = eventLinks.get(0).getEmail();
+		if (email.equals(eventLinks.get(0).getContact().getEmail()))
+			return null;
+		return email;
+	}
 }

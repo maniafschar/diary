@@ -47,7 +47,7 @@ public class ContactApi extends ApplicationApi {
 			return contact.getId();
 		}
 		if (Utilities.isEmail(contact.getEmail()))
-			original.setEmail(contact.getEmail());
+			original.setEmail(contact.getEmail().toLowerCase().trim());
 		if (contact.getName() != null && contact.getName().trim().length() > 0)
 			original.setName(contact.getName());
 		if (contact.getImage() != null)

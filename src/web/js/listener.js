@@ -230,12 +230,11 @@ img.speak {
 }`);
 	}
 
-	static updateEvents(event) {
-		var access = !api.user?.id && event.detail?.access;
-		api.event.getList(access, events => {
+	static updateEvents() {
+		api.event.getList(events => {
 			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
-			if (access && !events.length)
+			if (api.access && !events.length)
 				return;
 			var clientName = document.querySelector('body>[name="clientName"]');
 			clientName.style.display = '';
@@ -325,17 +324,17 @@ img.speak {
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
 			document.querySelector('body>button[name="logoff"]').style.display = '';
-			if (access) {
+			if (api.access) {
 				document.querySelector("element.event button.add").style.display = 'none';
 				document.querySelector("element.event button.export").style.display = 'none';
-				api.authentication.getClient(access, client => clientName.innerText = client.name);
+				api.authentication.getClient(client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('element.user').style.display = 'block';
 				if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
 					setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
 			}
 		});
-		if (!access && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
+		if (!api.access && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateContacts();
 		else
 			api.activateProgressbar();

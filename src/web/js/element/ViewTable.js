@@ -75,7 +75,7 @@ td,
 th {
 	vertical-align: top;
 	text-align: left;
-	padding: 0.5em 0;
+	padding: 0.2em 0;
 	position: relative;
 	font-size: 1em;
 	overflow: auto;
@@ -121,7 +121,7 @@ tbody tr:hover {
 
 th.asc::before {
 	content: '↓';
-	margin-right: 0.2em;
+	margin-right: 0.3em;
 	color: grey;
 }
 

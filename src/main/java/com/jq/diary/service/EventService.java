@@ -123,7 +123,7 @@ public class EventService {
 		for (final String email : emails) {
 			final EventLink eventLink = new EventLink();
 			eventLink.setContact(contact);
-			eventLink.setEmail(email);
+			eventLink.setEmail(email.toLowerCase().trim());
 			eventLink.setIdentifier(UUID.randomUUID().toString());
 			this.repository.save(eventLink);
 			for (final Event event : events) {

@@ -22,9 +22,9 @@ class action {
 		action.resize();
 		listener.init();
 		if (document.location.search) {
-			var access = new URL(window.location.href).searchParams?.get('access');
-			if (access)
-				document.dispatchEvent(new CustomEvent('event', { detail: { access: access } }));
+			api.access = new URL(window.location.href).searchParams?.get('access');
+			if (api.access)
+				document.dispatchEvent(new CustomEvent('event'));
 			else {
 				var popup = document.createElement('div');
 				popup.appendChild(document.createElement('label')).innerText = 'Neues Passwort';
@@ -217,6 +217,18 @@ class action {
 	}
 
 	static logoff() {
+		if (api.access) {
+			api.authentication.getEmail(email => {
+				document.dispatchEvent(new CustomEvent('popup', {
+					detail: {
+						body: 'Möchtest Du Dein eigenes Tagebuch erstellen?<br/><br/><button onclick="action.prefillRegistraation(&quot;' + email + '&quot;)">Ja</button>'
+					}
+				}));
+				api.access = null;
+				action.logoff();
+			});
+			return;
+		}
 		api.authentication.deleteToken();
 		api.logoff();
 		document.querySelectorAll('event view-table, user view-table').forEach(e => {
@@ -231,6 +243,10 @@ class action {
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="clientName"]').innerText = '';
 		ui.navigate(0);
+	}
+
+	static prefillRegistraation(email) {
+
 	}
 
 	static eventDelete(id) {

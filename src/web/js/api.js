@@ -7,6 +7,7 @@ class api {
 	static clients = {};
 	static clientId;
 	static user;
+	static access;
 	static progressbar = false;
 
 	static authentication = {
@@ -75,9 +76,16 @@ class api {
 			});
 		},
 
-		getClient(access, success) {
+		getClient(success) {
 			api.ajax({
-				url: 'authentication/client/' + access,
+				url: 'authentication/client/' + api.access,
+				success: success
+			});
+		},
+
+		getEmail(success) {
+			api.ajax({
+				url: 'authentication/email/' + api.access,
 				success: success
 			});
 		},
@@ -151,11 +159,11 @@ class api {
 			});
 		},
 
-		getList(access, success) {
-			if (access)
+		getList(success) {
+			if (api.access)
 				api.user = { id: 0 };
 			api.ajax({
-				url: 'event/list' + (access ? '/' + access : ''),
+				url: 'event/list' + (api.access ? '/' + api.access : ''),
 				success: success
 			});
 		},
@@ -338,6 +346,7 @@ class api {
 		api.user = null;
 		api.clients = {};
 		api.clientId = null;
+		api.access = null;
 	}
 
 	static ajax(param) {
