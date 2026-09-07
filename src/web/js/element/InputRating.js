@@ -36,6 +36,7 @@ detailRating {
 	text-align: center;
 	display: inline-block;
 	white-space: nowrap;
+	line-height: 0.5;
 }
 
 ratingSelection {
