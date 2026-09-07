@@ -229,6 +229,8 @@ eventLinks {
 }
 eventLinks>a {
 	overflow-x: auto;
+	position: relative;
+	display: block;
 }
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
