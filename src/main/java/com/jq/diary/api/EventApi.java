@@ -95,6 +95,14 @@ public class EventApi extends ApplicationApi {
 						.listContact(this.authorizationService.requireContact(contactId, clientId).getId()));
 	}
 
+	@GetMapping("link/list")
+	public List<EventLink> getLinkList(@PathVariable final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		return Utilities.filter(
+				this.eventService
+						.listLink(this.authorizationService.requireContact(contactId, clientId).getId()));
+	}
+
 	@PostMapping("exists")
 	public boolean postExists(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {

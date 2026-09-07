@@ -41,6 +41,10 @@ public class EventService {
 				Event.class, contactId);
 	}
 
+	public List<EventLink> listLink(final BigInteger contactId) {
+		return this.repository.list("from EventLink where contact.id=?1", EventLink.class, contactId);
+	}
+
 	public void delete(final Event event) {
 		event.getContactEvents().forEach(e -> this.repository.delete(e));
 		event.getEventImages().forEach(e -> this.repository.delete(e));

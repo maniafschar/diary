@@ -255,6 +255,9 @@ ${dialog.stylePictures}`;
 						pictures.querySelector('img').style.display = 'none';
 					}
 				});
+				api.event.getLinkList(list => {
+					console.log(list);
+				});
 			}
 		} else
 			popup.appendChild(document.createTextNode(contact.name));

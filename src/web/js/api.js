@@ -168,6 +168,13 @@ class api {
 			});
 		},
 
+		getLinkList(success) {
+			api.ajax({
+				url: 'event/link/list',
+				success: success
+			});
+		},
+
 		patch(event, success) {
 			api.ajax({
 				url: 'event',

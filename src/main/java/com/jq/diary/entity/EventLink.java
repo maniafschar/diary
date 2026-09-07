@@ -1,13 +1,11 @@
 package com.jq.diary.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
-
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class EventLink extends BaseEntity {
