@@ -246,7 +246,7 @@ eventLinks>a.outdated {
 }
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
-			popup.style.minWidth = '20em';
+			popup.style.minWidth = '16em';
 			var id = popup.appendChild(document.createElement('input'));
 			id.setAttribute('type', 'hidden');
 			id.setAttribute('name', 'id');
