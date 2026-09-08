@@ -447,7 +447,7 @@ button.confirmed::after {
 		emailDiv.classList.add('email');
 		element = emailDiv.appendChild(document.createElement('element'));
 		element.style.minHeight = 0;
-		dialog.createField(element, 'Emails', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
+		dialog.createField(element, 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
 			var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
 			if (e.value.indexOf(event.detail.label) < 0)
 				e.value = (e.value + ' ' + event.detail.label).trim();
