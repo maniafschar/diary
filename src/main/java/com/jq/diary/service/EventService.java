@@ -46,7 +46,7 @@ public class EventService {
 			this.repository.save(eventLink);
 		}
 		if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime()))) {
-			eventLink.getEvents().sort(Comparator.comparing(Event::getDate));
+			eventLink.getEvents().sort(Comparator.comparing(Event::getDate).reversed());
 			return eventLink.getEvents();
 		}
 		return null;
