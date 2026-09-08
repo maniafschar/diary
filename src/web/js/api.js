@@ -175,6 +175,13 @@ class api {
 			});
 		},
 
+		getEmailList(success) {
+			api.ajax({
+				url: 'event/email/list',
+				success: success
+			});
+		},
+
 		patch(event, success) {
 			api.ajax({
 				url: 'event',
