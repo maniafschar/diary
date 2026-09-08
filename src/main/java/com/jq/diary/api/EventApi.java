@@ -101,6 +101,12 @@ public class EventApi extends ApplicationApi {
 				.listLink(this.authorizationService.requireContact(contactId, clientId).getId()));
 	}
 
+	@GetMapping("email/list")
+	public List<String> getEmailList(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		return this.eventService.listEmail(this.authorizationService.requireContact(contactId, clientId).getId());
+	}
+
 	@PostMapping("exists")
 	public boolean postExists(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {
