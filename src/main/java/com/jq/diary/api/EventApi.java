@@ -68,12 +68,7 @@ public class EventApi extends ApplicationApi {
 			final EventLink eventLink = links.get(0);
 			this.authorizationService.requireContact(eventLink.getContact().getId(),
 					eventLink.getContact().getClient().getId());
-			if (eventLink.getStart() == null) {
-				eventLink.setStart(new Date(Instant.now().toEpochMilli()));
-				this.repository.save(eventLink);
-			}
-			if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
-				return this.filter(links.get(0).getEvents());
+			return this.filter(this.eventService.listAccess(eventLink));
 		}
 		return null;
 	}
