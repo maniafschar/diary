@@ -426,7 +426,7 @@ class action {
 		if (pdf) {
 			content.querySelector('div.email').style.gridTemplateRows == '0fr';
 			if (ids.length == 0)
-				error.innerText = 'Selektiere Einträge aus der Liste aus.';
+				error.innerText = 'Selektiere Einträge aus der Liste.';
 			else
 				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 		} else {
