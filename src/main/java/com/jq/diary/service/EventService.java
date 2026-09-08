@@ -45,6 +45,10 @@ public class EventService {
 		return this.repository.list("from EventLink where contact.id=?1 order by id desc", EventLink.class, contactId);
 	}
 
+	public List<String> listEmail(final BigInteger contactId) {
+		return this.repository.list("select distinct email from EventLink where contact.id=?1 order by email asc", String.class, contactId);
+	}
+
 	public void delete(final Event event) {
 		event.getContactEvents().forEach(e -> this.repository.delete(e));
 		event.getEventImages().forEach(e -> this.repository.delete(e));
