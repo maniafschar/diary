@@ -3,6 +3,7 @@ package com.jq.diary.service;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +46,7 @@ public class EventService {
 			this.repository.save(eventLink);
 		}
 		if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
-			return this.filter(links.get(0).getEvents().sort(Comparator.comparing(Event::getDate)));
+			return this.filter(eventLink.getEvents().sort(Comparator.comparing(Event::getDate)));
 		return null;
 	}
 
