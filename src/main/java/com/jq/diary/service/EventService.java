@@ -47,8 +47,8 @@ public class EventService {
 	}
 
 	public List<String> listEmail(final BigInteger contactId) {
-		return this.repository.list("distinct email from EventLink where contact.id=?1 order by email asc", EventLink.class, contactId)
-				.stream().map(e -> e.getEmail()).collect(Collectors.toList());
+		return this.repository.list("from EventLink where contact.id=?1 order by email asc", EventLink.class, contactId)
+				.stream().map(e -> e.getEmail()).distinct().collect(Collectors.toList());
 	}
 
 	public void delete(final Event event) {
