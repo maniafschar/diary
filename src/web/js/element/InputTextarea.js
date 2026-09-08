@@ -71,7 +71,9 @@ button svg {
 	display: none;
 }`;
 		var textarea = this._root.appendChild(document.createElement('textarea'));
-		textarea.onkeyup = e => this.value = this._root.querySelector('textarea').value;
+		var f = e => this.value = this._root.querySelector('textarea').value;
+		textarea.addEventListener('keyup', f);
+		textarea.addEventListener('paste', f);
 		if (this.getAttribute('value')) {
 			textarea.value = this.getAttribute('value');
 			this.value = textarea.value;
