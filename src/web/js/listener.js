@@ -251,7 +251,7 @@ img.speak {
 			table.style('tr.past td:first-child{opacity:0.5;}input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
-				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id + '.0'));
+				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true, style: 'overflow-y:hidden;' });
 				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
@@ -289,7 +289,7 @@ img.speak {
 
 			var viewCalendar = document.querySelector('view-calendar');
 			viewCalendar.reset();
-			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id + '.0') : api.user?.id ? dialog.add(event) : null);
+			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id) : api.user?.id ? dialog.add(event) : null);
 			var map = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -315,7 +315,7 @@ img.speak {
 			viewCalendar.render();
 			var viewMap = document.querySelector('view-map');
 			viewMap.setLocations(map);
-			viewMap.setOpenDetail(event => event.id && listener.updateViewImage(event.id + '.0'));
+			viewMap.setOpenDetail(event => event.id && listener.updateViewImage(event.id));
 			if (events.length) {
 				var pastEvents = document.querySelector('view-table')._root.querySelectorAll('tr.past').length;
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
@@ -330,8 +330,9 @@ img.speak {
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('element.user').style.display = 'block';
-				if (document.querySelector("view-image").style.transform?.indexOf('1') > 0)
-					setTimeout(() => listener.updateViewImage(document.querySelector("view-image").index), 100);
+				var viewImage=document.querySelector("view-image");
+				if (viewImage.style.transform?.indexOf('1') > 0)
+					setTimeout(() => listener.updateViewImage(viewImage.list[viewImage.index].index), 100);
 			}
 		});
 		if (!api.access && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
