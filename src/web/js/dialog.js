@@ -479,7 +479,8 @@ button.confirmed::after {
 		api.event.getEmailList(list => {
 			var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
 			list.forEach(e => s.add(e, e));
-			
+			if (list.length)
+				s.open();
 		});
 	}
 }
