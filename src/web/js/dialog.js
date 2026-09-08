@@ -305,7 +305,7 @@ ${dialog.stylePictures}`;
 					}
 					text += '<br/>' + list[i].events.length + ' Einträge';
 					if (list[i].count)
-						text += ' · ' + list[i].count + ' Zugriffe';
+						text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
 					item.innerHTML = text;
 				}
 			});
