@@ -447,10 +447,10 @@ button.confirmed::after {
 		emailDiv.classList.add('email');
 		element = emailDiv.appendChild(document.createElement('element'));
 		element.style.minHeight = 0;
-		dialog.createField(element, 'Emails', 'emails');
-		element.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
+		dialog.createField(element, 'Emails', 'emails').appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
 			var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
-			e.value = (e.value + ' ' + event.detail.label).trim();
+			if (e.value.indexOf(event.detail.key) < 0)
+				e.value = (e.value + ' ' + event.detail.key).trim();
 		});
 		var count = popup.appendChild(document.createElement('count'));
 		count.style.position = 'relative';
@@ -478,7 +478,7 @@ button.confirmed::after {
 		}, { once: true });
 		api.event.getEmailList(list => {
 			var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
-			list.forEach(e => s.add(e));
+			list.forEach(e => s.add(e, e));
 		});
 	}
 }
