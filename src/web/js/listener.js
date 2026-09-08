@@ -260,7 +260,7 @@ img.speak {
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
-						var text = list[i].note ? list[i].note.split('\n')[0] : '', textSort = text;
+						var text = list[i].note ? list[i].note.replace(/\n/g, ' ').trim() : '', textSort = text;
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
