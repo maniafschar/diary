@@ -89,6 +89,8 @@ input {
 		} else
 			items.appendChild(item);
 		this._root.querySelector('input').style.display = this._root.querySelectorAll('item').length > 10 ? 'block' : '';
+	}
+	open() {
 		this._root.querySelector('selection').style.gridTemplateRows = '1fr';
 	}
 	onclick(event) {
