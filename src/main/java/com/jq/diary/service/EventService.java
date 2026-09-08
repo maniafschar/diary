@@ -36,6 +36,16 @@ public class EventService {
 				Event.class, client.getId());
 	}
 
+	public List<Event> listAccess(final EventLink eventLink) {
+		if (eventLink.getStart() == null) {
+			eventLink.setStart(new Date(Instant.now().toEpochMilli()));
+			this.repository.save(eventLink);
+		}
+		if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime())))
+			return this.filter(links.get(0).getEvents().sort(Comparator.comparing(Event::getDate)));
+		return null;
+	}
+
 	public List<Event> listContact(final BigInteger contactId) {
 		return this.repository.list(
 				"select e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id",
