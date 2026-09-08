@@ -3,6 +3,7 @@ package com.jq.diary.service;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.util.Strings;
