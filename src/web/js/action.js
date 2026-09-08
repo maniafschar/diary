@@ -305,7 +305,6 @@ class action {
 				note: popup.querySelector('element input-textarea[name="note"]').value,
 				location: {
 					id: popup.querySelector('element input-selection[name="locationId"]').getAttribute('value')
-
 				}
 			}, () => {
 				document.dispatchEvent(new CustomEvent('event'));
