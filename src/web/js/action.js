@@ -190,25 +190,37 @@ class action {
 	}
 
 	static createClient() {
+		var blogname = document.querySelector('element.login input[name="clientName"]');
+		var name = document.querySelector('element.login input[name="contactName"]');
+		var email = document.querySelector('element.login input[name="contactEmail"]');
 		var legalCheck = document.querySelector('element.login input-checkbox[name="legal"]');
-		legalCheck.style.color = '';
+		var colorError = 'rgba(255, 0, 0, 0.4)';
+		blogname.style.backgroundColor = '';
+		name.style.backgroundColor = '';
+		email.style.backgroundColor = '';
+		legalCheck.style.backgroundColor = '';
 		var client = {
-			name: document.querySelector('element.login input[name="clientName"]').value,
+			name: blogname.value,
 			contacts: [
 				{
-					name: document.querySelector('element.login input[name="contactName"]').value,
-					email: document.querySelector('element.login input[name="contactEmail"]').value
+					name: name.value,
+					email: email.value
 				}
 			]
 		};
 		if (client.contacts[0].email?.indexOf('@') < 1)
+			email.style.backgroundColor = colorError;
+		if (!client.name)
+			blogname.style.backgroundColor = 'red';
+		if (!client.contacts[0].name)
+			name.style.backgroundColor = 'red';
+		if (client.contacts[0].email?.indexOf('@') < 1)
 			document.querySelector('element.login error.createClient').innerText = 'Gib bitte Deine Email ein.';
 		else if (!client.name || !client.contacts[0].name)
 			document.querySelector('element.login error.createClient').innerText = 'Vervollständige bitte die Daten.';
-		else if (legalCheck.getAttribute('checked') != 'true') {
+		else if (legalCheck.getAttribute('checked') != 'true')
 			document.querySelector('element.login error.createClient').innerText = 'Akzeptiere unsere ABGs.';
-			legalCheck.style.color = 'red';
-		} else
+		else
 			api.authentication.postCreate(client, () => {
 				document.querySelectorAll('element.login [i="create"]').forEach(e => e.value = '');
 				document.querySelector('element.login input-checkbox[name="legal"]').setAttribute('checked', 'false');
