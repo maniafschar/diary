@@ -198,7 +198,7 @@ class action {
 		blogname.style.backgroundColor = '';
 		name.style.backgroundColor = '';
 		email.style.backgroundColor = '';
-		legalCheck.style.backgroundColor = '';
+		legalCheck.style.color = '';
 		var client = {
 			name: blogname.value,
 			contacts: [
@@ -222,7 +222,7 @@ class action {
 			error += '<li>Gib bitte Deine Email ein.</li>';
 		}
 		if (legalCheck.getAttribute('checked') != 'true') {
-			legalCheck.style.backgroundColor = colorError;
+			legalCheck.style.color = 'red';
 			error += '<li>Akzeptiere unsere ABGs.</li>';
 		}
 		if (error)
