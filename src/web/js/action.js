@@ -208,20 +208,25 @@ class action {
 				}
 			]
 		};
-		if (client.contacts[0].email?.indexOf('@') < 1)
-			email.style.backgroundColor = colorError;
-		if (!client.name)
+		var error = '';
+		if (!client.name) {
 			blogname.style.backgroundColor = colorError;
-		if (!client.contacts[0].name)
+			error += '<li>Gib den Namen Deines Tagebuchs ein.</li>';
+		}
+		if (!client.contacts[0].name) {
 			name.style.backgroundColor = colorError;
-		if (legalCheck.getAttribute('checked') != 'true')
+			error += '<li>Gib bitte Deinen Namen ein.</li>';
+		}
+		if (client.contacts[0].email?.indexOf('@') < 1) {
+			email.style.backgroundColor = colorError;
+			error += '<li>Gib bitte Deine Email ein.</li>';
+		}
+		if (legalCheck.getAttribute('checked') != 'true') {
 			legalCheck.style.backgroundColor = colorError;
-		if (client.contacts[0].email?.indexOf('@') < 1)
-			document.querySelector('element.login error.createClient').innerText = 'Gib bitte Deine Email ein.';
-		else if (!client.name || !client.contacts[0].name)
-			document.querySelector('element.login error.createClient').innerText = 'Vervollständige bitte die Daten.';
-		else if (legalCheck.getAttribute('checked') != 'true')
-			document.querySelector('element.login error.createClient').innerText = 'Akzeptiere unsere ABGs.';
+			error += '<li>Akzeptiere unsere ABGs.</li>';
+		}
+		if (error)
+			document.querySelector('element.login error.createClient').innerHTML = '<ul>' + error + '</ul>';
 		else
 			api.authentication.postCreate(client, () => {
 				document.querySelectorAll('element.login [i="create"]').forEach(e => e.value = '');
