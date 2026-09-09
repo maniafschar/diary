@@ -211,9 +211,11 @@ class action {
 		if (client.contacts[0].email?.indexOf('@') < 1)
 			email.style.backgroundColor = colorError;
 		if (!client.name)
-			blogname.style.backgroundColor = 'red';
+			blogname.style.backgroundColor = colorError;
 		if (!client.contacts[0].name)
-			name.style.backgroundColor = 'red';
+			name.style.backgroundColor = colorError;
+		if (legalCheck.getAttribute('checked') != 'true')
+			legalCheck.style.backgroundColor = colorError;
 		if (client.contacts[0].email?.indexOf('@') < 1)
 			document.querySelector('element.login error.createClient').innerText = 'Gib bitte Deine Email ein.';
 		else if (!client.name || !client.contacts[0].name)
