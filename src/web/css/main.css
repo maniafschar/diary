@@ -69,9 +69,6 @@ body>container buttons>button {
 	transition: ease .4s all;
 }
 
-button.selected {
-	background: rgb(255, 200, 50);
-}
 
 body>container buttons>button>img {
 	padding: 0.4em;
