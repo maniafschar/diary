@@ -161,10 +161,11 @@ a {
 }
 
 button {
+	border-radius: 2em;
+	border: solid 1px rgba(255, 200, 50, 0.7);
 	background: rgba(100, 150, 200, 0.2);
-	border: none;
+	255, 200, 50, 0.
 	padding: 0.5em 1em;
-	border-radius: 1em;
 	outline: none;
 	cursor: pointer;
 	font: inherit;
