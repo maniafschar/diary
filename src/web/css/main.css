@@ -179,7 +179,7 @@ button {
 	border: solid 1px rgba(255, 200, 50, 0.7);
 	font-weight: bold;
 	padding: 0.5em 1em;
-	border-radius: 1em;
+	border-radius: 2em;
 	outline: none;
 	cursor: pointer;
 	margin: 0 0.5em 0.5em 0.5em;
