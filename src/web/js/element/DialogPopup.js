@@ -174,6 +174,10 @@ button {
 	color: white;
 }
 
+button:hover {
+	rgba(255, 200, 50);
+}
+
 button.icon {
 	font-size: 1.3em;
 	width: 2em;
