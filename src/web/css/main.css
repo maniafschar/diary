@@ -69,8 +69,8 @@ body>container buttons>button {
 	transition: ease .4s all;
 }
 
-body>container buttons>button.selected {
-	background: rgba(220, 220, 100, 0.4);
+button.selected {
+	background: rgb(255, 200, 50);
 }
 
 body>container buttons>button>img {
@@ -187,7 +187,6 @@ button {
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	z-index: 2;
 	color: white;
-	border: none;
 }
 
 button.icon {
