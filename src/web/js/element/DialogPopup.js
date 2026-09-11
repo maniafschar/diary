@@ -170,6 +170,7 @@ button {
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin: 0 0.5em;
 	color: white;
+	font-size: 1em;
 }
 
 button:hover {
