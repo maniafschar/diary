@@ -71,7 +71,6 @@ body>container buttons {
 body>container buttons>button {
 	position: relative !important;
 	margin: 0 0.5em !important;
-	transition: ease .4s all;
 }
 
 
@@ -177,7 +176,7 @@ body>h2 {
 }
 
 button {
-	background: rgba(0, 0, 120, 0.4);
+	background: var(--background-clickable);
 	border: none;
 	font-weight: bold;
 	padding: 0.75em 1.5em;
@@ -189,11 +188,12 @@ button {
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	z-index: 2;
 	color: white;
+	transition: ease .4s all;
 }
 
 button.selected,
 button:hover {
-	background: rgba(0, 0, 120, 0.7);
+	background: var(--background-clickable-highlight);
 }
 
 button.icon {
