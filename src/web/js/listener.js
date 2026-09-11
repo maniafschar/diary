@@ -182,7 +182,7 @@ thumbnail delete {
 	right: 0;
 	top: 0;
 	border-radius: 0 0.5em;
-	background: rgba(0, 0, 120, 0.4) !important;
+	background: var(--background-clickable) !important;
 	font-size: 1.3em !important;
 }
 field item {
