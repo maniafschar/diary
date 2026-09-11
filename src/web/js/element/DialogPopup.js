@@ -163,7 +163,7 @@ a {
 button {
 	border-radius: 2em;
 	border: none;
-	background: rgba(0, 0, 120, 0.4);
+	background: var(--background-clickable);
 	padding: 0.75em 1.5em;
 	outline: none;
 	cursor: pointer;
@@ -174,7 +174,7 @@ button {
 }
 
 button:hover {
-	background: rgba(0, 0, 120, 0.7);
+	background: var(--background-clickable-highlight);
 }
 
 button.icon {
