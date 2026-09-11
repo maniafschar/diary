@@ -162,9 +162,8 @@ a {
 
 button {
 	border-radius: 2em;
-	border: solid 1px rgba(255, 200, 50, 0.7);
-	background: rgba(100, 150, 200, 0.2);
-	255, 200, 50, 0.
+	border: none;
+	background: rgba(0, 0, 120, 0.4);
 	padding: 0.5em 1em;
 	outline: none;
 	cursor: pointer;
@@ -175,7 +174,7 @@ button {
 }
 
 button:hover {
-	rgba(255, 200, 50);
+	background: rgba(0, 0, 120, 0.7);
 }
 
 button.icon {
