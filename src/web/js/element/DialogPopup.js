@@ -164,11 +164,10 @@ button {
 	border-radius: 2em;
 	border: none;
 	background: rgba(0, 0, 120, 0.4);
-	padding: 0.5em 1em;
+	padding: 0.75em 1.5em;
 	outline: none;
 	cursor: pointer;
-	font: inherit;
-	font-size: 0.8em;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin: 0 0.5em;
 	color: white;
 }
