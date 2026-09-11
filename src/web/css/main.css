@@ -1,4 +1,5 @@
 :root {
+	--transition-clickable: transition: ease .4s all;
 	--background-clickable: rgba(0, 0, 120, 0.4);
 	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
 }
