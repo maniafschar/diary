@@ -1,3 +1,8 @@
+:root {
+	--background-clickable: rgba(0, 0, 120, 0.4);
+	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
+}
+
 @font-face {
 	font-family: 'Comfortaa';
 	font-style: regular;
