@@ -95,9 +95,10 @@ th:last-child {
 th {
 	font-weight: bold;
 	background-color: var(--background-clickable);
-	line-height: 1.5;
+	line-height: 1.7;
 	height: 2em;
 	overflow: hidden;
+	color: white;
 }
 
 td.text {
