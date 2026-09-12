@@ -123,13 +123,13 @@ tbody tr:hover {
 th.asc::before {
 	content: '↓';
 	margin-right: 0.3em;
-	color: grey;
+	color: white;
 }
 
 th.desc::before {
 	content: '↑';
 	margin-right: 0.2em;
-	color: grey;
+	color: white;
 }
 
 .clickable {
