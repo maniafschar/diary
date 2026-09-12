@@ -45,7 +45,8 @@ class ViewCalendar extends HTMLElement {
 }
 
 button {
-	background: rgba(100, 150, 200, 0.2);
+	background: var(--background-clickable);
+	transition: var(--transition-clickable);
 	border: none;
 	padding: 0.5em 1em;
 	border-radius: 1em;
@@ -59,7 +60,11 @@ button {
 	line-height: 1;
 	z-index: 2;
 }
-	
+
+button:hover {
+	background: var(--background-clickable-highlight);
+}
+
 button.icon {
 	position: absolute;
 	font-size: 1.3em;

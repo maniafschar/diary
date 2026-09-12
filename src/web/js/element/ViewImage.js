@@ -70,6 +70,8 @@ hint {
 	cursor: pointer;
 }
 button {
+	background: var(--background-clickable);
+	transition: var(--transition-clickable);
 	background: rgba(100, 150, 200, 0.2);
 	padding: 0.5em 1em;
 	border-radius: 1em;
@@ -82,6 +84,9 @@ button {
 	color: white;
 	border: none;
 	z-index: 6;
+}
+button:hover {
+	background: var(--background-clickable-highlight);
 }
 button.icon {
 	background: transparent;

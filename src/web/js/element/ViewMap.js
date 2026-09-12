@@ -31,7 +31,8 @@ input-rating {
 	transform: scale(2.5);
 }
 button {
-	background: rgba(100, 150, 200, 0.2);
+	background: var(--background-clickable);
+	transition: var(--transition-clickable);
 	border: none;
 	border-radius: 1em;
 	outline: none;
@@ -48,6 +49,9 @@ button {
 	padding: 0;
 	bottom: 0.5em;
 	left: 50%;
+}
+button:hover {
+	background: var(--background-clickable-highlight);
 }
 imageContainer {
 	width: 100%;

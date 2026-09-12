@@ -171,6 +171,7 @@ button {
 	margin: 0 0.5em;
 	color: white;
 	font-size: 1em;
+	transition: var(--transition-clickable)
 }
 
 button:hover {
