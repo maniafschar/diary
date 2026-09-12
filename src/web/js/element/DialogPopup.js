@@ -183,7 +183,6 @@ button.icon {
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	background: rgba(255, 0, 0, 0.2);
 	margin: 0;
 	padding: 0;
 }
