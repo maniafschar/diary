@@ -72,7 +72,6 @@ hint {
 button {
 	background: var(--background-clickable);
 	transition: var(--transition-clickable);
-	background: rgba(100, 150, 200, 0.2);
 	padding: 0.5em 1em;
 	border-radius: 1em;
 	outline: none;
@@ -139,7 +138,8 @@ data>nav {
 data>nav dot {
 	position: relative;
 	display: inline-block;
-	background: rgba(100, 150, 200, 0.4);
+	background-color: var(--background-clickable);
+	transition: var(--transition-clickable);
 	border-radius: 1em;
 	width: 2em;
 	height: 2em;

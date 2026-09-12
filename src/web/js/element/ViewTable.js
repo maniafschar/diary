@@ -94,7 +94,7 @@ th:last-child {
 
 th {
 	font-weight: bold;
-	background: rgba(100, 150, 200, 0.2);
+	background-color: var(--background-clickable);
 	line-height: 1.5;
 	height: 2em;
 	overflow: hidden;

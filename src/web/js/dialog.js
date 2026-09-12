@@ -321,7 +321,7 @@ element {
 	display: block;
 }
 button.confirmed {
-	background: rgba(255,100,100,0.6);
+	background: rgba(255, 100, 100, 0.6);
 }
 button.confirmed::before {
 	content: 'endgültig ';

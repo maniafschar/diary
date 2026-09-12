@@ -13,7 +13,8 @@ class InputImage extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	position: absolute;
-	background-color: rgba(100, 150, 200, 0.2);
+	background-color: var(--background-clickable);
+	transition: var(--transition-clickable);
 	border-radius: 1em;
 	color: white;
 	width: 2em;
@@ -23,6 +24,9 @@ class InputImage extends HTMLElement {
 	line-height: 2;
 	font-size: 1.3em;
 	z-index: 3;
+}
+:host(*):hover {
+	background: var(--background-clickable-highlight);
 }
 input {
 	opacity: 0;

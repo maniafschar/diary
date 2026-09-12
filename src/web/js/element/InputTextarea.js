@@ -43,7 +43,8 @@ button.speech {
 	background-repeat: no-repeat;
 	background-position-x: 0.3em;
 	background-position-y: 0.3em;
-	background-color: rgba(100, 150, 200, 0.2);
+	background: var(--background-clickable);
+	transition: var(--transition-clickable);
 	border: none;
 	padding: 0.5em 1em;
 	outline: none;
@@ -56,6 +57,10 @@ button.speech {
 	height: 2em;
 	margin: 0;
 	color: white;
+}
+
+button:hover {
+	background: var(--background-clickable-highlight);
 }
 
 button svg {
