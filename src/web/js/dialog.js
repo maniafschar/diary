@@ -110,7 +110,7 @@ ${dialog.stylePictures}`;
 		var location = dialog.createField(element, 'Ortname', 'locationName', 'input').parentElement;
 		var buttonToggle = location.appendChild(document.createElement('button'));
 		buttonToggle.innerText = '+';
-		buttonToggle.setAttribute('style', 'position: absolute; top: 0.5em; right: 0; border-radius: 0 0.5em 0.5em 0; width: 2.5em; height: 2em; font-size: 1.3em; text-align: center; padding: 0;');
+		buttonToggle.setAttribute('style', 'position: absolute; right: -0.11em; border-radius: 0 0.4em 0.4em 0; width: 2em; height: 1.53em; font-size: 1.3em; text-align: center; padding: 0;');
 		buttonToggle.onclick = () => {
 			var classList = document.querySelector('dialog-popup').content().querySelector('input-selection').classList;
 			if (classList.contains('open'))
