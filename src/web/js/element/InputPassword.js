@@ -17,7 +17,7 @@ class InputPassword extends HTMLElement {
 }	
 
 input {
-	margin-bottom: 0.5em;
+	display: block;
 	appearance: none;
 	position: relative;
 	font-size: 1em;
@@ -39,7 +39,6 @@ input {
 }
 input.display {
 	position: absolute;
-	display: block;
 }
 button {
 	border: none;
@@ -49,9 +48,10 @@ button {
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: white;
 	font-size: 1em;
-	transition: var(--transition-clickable)
+	transition: var(--transition-clickable);
 	position: absolute;
-	right: -0.11em;
+	right: 0;
+	top: 0;
 	border-radius: 0 0.4em 0.4em 0;
 	width: 2em;
 	height: 1.53em;
