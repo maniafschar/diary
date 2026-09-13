@@ -61,8 +61,6 @@ button {
 button:hover {
 	background: var(--background-clickable-highlight);
 }`;
-		var password = this._root.appendChild(document.createElement('input'));
-		password.type = 'password';
 		var display = this._root.appendChild(document.createElement('input'));
 		display.classList.add('display');
 		var button = this._root.appendChild(document.createElement('button'));
@@ -78,6 +76,7 @@ button:hover {
 					display.style.zIndex = 2;
 				}, { capture: false, passive: true, once: true });
 			}
+			this._root.appendChild(document.createElement('input')).type = 'password';
 		};
 	}
 
