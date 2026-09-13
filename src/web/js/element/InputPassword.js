@@ -18,7 +18,6 @@ class InputPassword extends HTMLElement {
 
 input {
 	margin-bottom: 0.5em;
-	display: none;
 	appearance: none;
 	position: relative;
 	font-size: 1em;
@@ -34,12 +33,12 @@ input {
 	width: 100%;
 	color: black;
 	user-select: text;
-	opacity: 0.5;
 	transition: all .4s ease-out;
 }
 input.display {
 	position: absolute;
 	display: block;
+	top: 0;
 }
 button {
 	border: none;
@@ -58,6 +57,9 @@ button {
 	height: 1.53em;
 	font-size: 1.3em;
 	text-align: center;
+}
+button:hover {
+	background: var(--background-clickable-highlight);
 }`;
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
