@@ -77,12 +77,18 @@ button>img {
 			if (parseInt(password.style.opacity) == 0) {
 				password.value = display.value;
 				password.style.zIndex = 3;
-				password.addEventListener('transitionend', () => display.style.zIndex = '', { capture: false, passive: true, once: true });
+				password.addEventListener('transitionend', () => {
+					display.style.zIndex = 1;
+					password.style.zIndex = 2;
+				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 1;
 				display.style.opacity = 0;
 			} else {
 				display.value = password.value;
-				password.addEventListener('transitionend', () => display.style.zIndex = 2, { capture: false, passive: true, once: true });
+				password.addEventListener('transitionend', () => {
+					display.style.zIndex = 2;
+					password.style.zIndex = 1;
+				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 0;
 				display.style.opacity = 1;
 			}
