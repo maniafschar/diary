@@ -60,6 +60,9 @@ button {
 	box-sizing: border-box;
 	z-index: 4;
 }
+button:hover {
+	background: var(--background-clickable-highlight);
+}
 button>img {
 	box-sizing: border-box;
 	padding: 0.1em;
