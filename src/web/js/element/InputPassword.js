@@ -60,6 +60,11 @@ button {
 	text-align: center;
 	box-sizing: border-box;
 	z-index: 4;
+}
+button>img {
+	padding: 0.4em;
+	width: 100%;
+	height: 100%;
 }`;
 		var display = this._root.appendChild(document.createElement('input'));
 		display.classList.add('display');
@@ -67,7 +72,7 @@ button {
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
 		var button = this._root.appendChild(document.createElement('button'));
-		button.appendChild(document.createElement('img')).src = 'image/eve.svg';
+		button.appendChild(document.createElement('img')).src = 'image/eye.svg';
 		button.onclick = () => {
 			if (parseInt(password.style.opacity) == 0) {
 				password.value = display.value;
