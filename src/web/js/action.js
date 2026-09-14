@@ -30,8 +30,7 @@ class action {
 				var popup = document.createElement('div');
 				popup.appendChild(document.createElement('label')).innerText = 'Neues Passwort';
 				var field = popup.appendChild(document.createElement('field'));
-				var input = field.appendChild(document.createElement('input'));
-				input.setAttribute('type', 'password');
+				var input = field.appendChild(document.createElement('input-password'));
 				popup.appendChild(document.createElement('error'));
 				input = field.appendChild(document.createElement('input'));
 				input.setAttribute('type', 'hidden');
@@ -163,9 +162,9 @@ class action {
 
 	static loginResetPasswordPost() {
 		var popup = document.querySelector('dialog-popup').content();
-		if (popup.querySelector('input[type="password"]').value.length > 5)
+		if (popup.querySelector('input-password').value.length > 5)
 			api.authentication.postVerify(popup.querySelector('input[type="hidden"]').value,
-				popup.querySelector('input[type="password"]').value, () => document.dispatchEvent(new CustomEvent('popup')));
+				popup.querySelector('input-password').value, () => document.dispatchEvent(new CustomEvent('popup')));
 		else
 			popup.querySelector('error').innerText = 'Gib Bitte ein Passwort ein.';
 	}
