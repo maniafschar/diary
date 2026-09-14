@@ -69,15 +69,15 @@ button>img {
 		var display = this._root.appendChild(document.createElement('input'));
 		display.classList.add('display');
 		display.style.opacity = 0;
-		display.addEventListener('change', e => password.value = display.value);
+		display.addEventListener('keyup', e => this.value = display.value);
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
-		password.addEventListener('change', e => this.value = password.value);
+		password.addEventListener('keyup', e => this.value = password.value);
 		var button = this._root.appendChild(document.createElement('button'));
 		button.appendChild(document.createElement('img')).src = 'image/eye.svg';
 		button.onclick = () => {
 			if (parseInt(password.style.opacity) == 0) {
-				password.value = display.value;
+				password.value = this.value;
 				password.style.zIndex = 3;
 				password.addEventListener('transitionend', () => {
 					display.style.zIndex = 1;
@@ -86,7 +86,7 @@ button>img {
 				password.style.opacity = 1;
 				display.style.opacity = 0;
 			} else {
-				display.value = password.value;
+				display.value = this.value;
 				password.addEventListener('transitionend', () => {
 					display.style.zIndex = 2;
 					password.style.zIndex = 1;
