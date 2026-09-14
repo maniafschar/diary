@@ -98,7 +98,7 @@ th {
 	line-height: 1.7;
 	height: 2em;
 	overflow: hidden;
-	color: white;
+	color: var(--color-clickable);
 }
 
 td.text {
