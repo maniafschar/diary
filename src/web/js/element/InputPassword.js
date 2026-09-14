@@ -1,4 +1,4 @@
-komm export { InputPassword };
+export { InputPassword };
 
 class InputPassword extends HTMLElement {
 	constructor() {
