@@ -1,4 +1,4 @@
-export { InputPassword };
+komm export { InputPassword };
 
 class InputPassword extends HTMLElement {
 	constructor() {
@@ -80,7 +80,7 @@ button>img {
 		button.appendChild(document.createElement('img')).src = 'image/eye.svg';
 		button.onclick = () => {
 			if (parseInt(password.style.opacity) == 0) {
-				password.value = this.value;
+				password.value = this.value || '';
 				password.style.zIndex = 3;
 				password.addEventListener('transitionend', () => {
 					display.style.zIndex = 1;
@@ -89,7 +89,7 @@ button>img {
 				password.style.opacity = 1;
 				display.style.opacity = 0;
 			} else {
-				display.value = this.value;
+				display.value = this.value || '';
 				password.addEventListener('transitionend', () => {
 					display.style.zIndex = 2;
 					password.style.zIndex = 1;
