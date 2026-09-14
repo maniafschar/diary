@@ -39,6 +39,7 @@ input {
 }
 input.display {
 	position: absolute;
+	top: 0;
 }
 button {
 	border: none;
@@ -58,6 +59,7 @@ button {
 	font-size: 1.3em;
 	text-align: center;
 	box-sizing: border-box;
+	z-index: 4;
 }`;
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
@@ -65,16 +67,18 @@ button {
 		display.classList.add('display');
 		var button = this._root.appendChild(document.createElement('button'));
 		button.onclick = () => {
-			var password = this._root.querySelector('input[type="password"]');
 			if (password.style.opacity == 0) {
-				display.style.zIndex = '';
+				password.value = display.value;
+				password.addEventListener('transitionend', () => {
+					display.style.zIndex = '';
+				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 1;
 			} else {
-				password.style.opacity = 0;
-				this._root.querySelector('input.display').value = password.value;
+				display.value = password.value;
 				password.addEventListener('transitionend', () => {
-					display.style.zIndex = 2;
+					password.style.display = 'none';
 				}, { capture: false, passive: true, once: true });
+				password.style.opacity = 0;
 			}
 		};
 	}
