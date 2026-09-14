@@ -48,7 +48,6 @@ button {
 	cursor: pointer;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: white;
-	font-size: 1em;
 	transition: var(--transition-clickable);
 	position: absolute;
 	right: 0;
@@ -62,7 +61,8 @@ button {
 	z-index: 4;
 }
 button>img {
-	padding: 0.4em;
+	box-sizing: border-box;
+	padding: 0.1em;
 	width: 100%;
 	height: 100%;
 }`;
