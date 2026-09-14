@@ -72,7 +72,7 @@ button>img {
 		display.addEventListener('change', e => password.value = display.value);
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
-		password.addEventListener('change', e => this.value = passsword.value);
+		password.addEventListener('change', e => this.value = password.value);
 		var button = this._root.appendChild(document.createElement('button'));
 		button.appendChild(document.createElement('img')).src = 'image/eye.svg';
 		button.onclick = () => {
