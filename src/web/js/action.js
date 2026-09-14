@@ -132,13 +132,14 @@ class action {
 	}
 
 	static login() {
-		var input = document.querySelectorAll('element.login input');
-		if (input[0].value?.indexOf('@') < 1)
+		var email = document.querySelector('element.login input');
+		var password = document.querySelector('element.login input-password');
+		if (email.value?.indexOf('@') < 1)
 			document.querySelector('element.login error').innerText = 'Gib bitte Deine Email ein.';
-		else if (!input[1].value)
+		else if (!password.value)
 			document.querySelector('element.login error').innerText = 'Ein Passwort wird benötigt.';
 		else
-			api.authentication.getLogin(input[0].value, input[1].value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
+			api.authentication.getLogin(email.value, password.value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
 				if (success) {
 					document.querySelector('body button.add').style.display = api.user.admin ? 'block' : 'none';
 					document.dispatchEvent(new CustomEvent('event'));
