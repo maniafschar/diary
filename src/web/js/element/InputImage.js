@@ -25,7 +25,7 @@ class InputImage extends HTMLElement {
 	font-size: 1.3em;
 	z-index: 3;
 }
-:host(*):hover {
+:host(:hover) {
 	background: var(--background-clickable-highlight);
 }
 input {
