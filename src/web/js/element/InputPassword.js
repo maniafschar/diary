@@ -67,8 +67,9 @@ button {
 		password.type = 'password';
 		var button = this._root.appendChild(document.createElement('button'));
 		button.onclick = () => {
-			if (password.style.opacity === 0) {
+			if (parseInt(password.style.opacity) == 0) {
 				password.value = display.value;
+				password.style.zIndex = 3;
 				password.addEventListener('transitionend', () => {
 					display.style.zIndex = '';
 				}, { capture: false, passive: true, once: true });
