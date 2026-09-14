@@ -63,6 +63,7 @@ button {
 }`;
 		var display = this._root.appendChild(document.createElement('input'));
 		display.classList.add('display');
+		display.style.opacity = 0;
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
 		var button = this._root.appendChild(document.createElement('button'));
@@ -74,12 +75,14 @@ button {
 					display.style.zIndex = '';
 				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 1;
+				display.style.opacity = 0;
 			} else {
 				display.value = password.value;
 				password.addEventListener('transitionend', () => {
 					password.style.zIndex = 1;
 				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 0;
+				display.style.opacity = 1;
 			}
 		};
 	}
