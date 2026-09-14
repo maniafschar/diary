@@ -61,10 +61,10 @@ button {
 	box-sizing: border-box;
 	z-index: 4;
 }`;
-		var password = this._root.appendChild(document.createElement('input'));
-		password.type = 'password';
 		var display = this._root.appendChild(document.createElement('input'));
 		display.classList.add('display');
+		var password = this._root.appendChild(document.createElement('input'));
+		password.type = 'password';
 		var button = this._root.appendChild(document.createElement('button'));
 		button.onclick = () => {
 			if (password.style.opacity == 0) {
@@ -76,7 +76,7 @@ button {
 			} else {
 				display.value = password.value;
 				password.addEventListener('transitionend', () => {
-					password.style.display = 'none';
+					password.style.zIndex = 1;
 				}, { capture: false, passive: true, once: true });
 				password.style.opacity = 0;
 			}
