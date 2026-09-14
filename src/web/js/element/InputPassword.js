@@ -67,7 +67,7 @@ button {
 		var password = this._root.appendChild(document.createElement('input'));
 		password.type = 'password';
 		var button = this._root.appendChild(document.createElement('button'));
-		button.appendChild('img').src = 'image/eve.svg';
+		button.appendChild(document.createElement('img')).src = 'image/eve.svg';
 		button.onclick = () => {
 			if (parseInt(password.style.opacity) == 0) {
 				password.value = display.value;
