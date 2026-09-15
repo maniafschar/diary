@@ -459,7 +459,6 @@ button.confirmed::after {
 		count.style.textAlign = 'center';
 		count.style.opacity = 0.4;
 		count.style.fontSize = '0.8em';
-		count.style.paddingBottom = '1em';
 		var listener = () => {
 			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
 			count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
