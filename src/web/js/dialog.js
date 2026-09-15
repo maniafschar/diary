@@ -415,7 +415,15 @@ button.confirmed::after {
 		});
 	}
 
-	static export() {
+	static pdf() {
+		dialog.export(false);
+	}
+
+	static email() {
+		dialog.export(true);
+	}
+
+	static export(email) {
 		ui.navigate(0);
 		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
@@ -437,20 +445,14 @@ button.confirmed::after {
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
-		var emailDiv = popup.appendChild(document.createElement('div'));
-		emailDiv.style.position = 'relative';
-		emailDiv.style.display = 'grid';
-		emailDiv.style.gridTemplateRows = '0fr';
-		emailDiv.style.transition = 'all .4s ease-out';
-		emailDiv.style.overflow = 'hidden';
-		emailDiv.classList.add('email');
-		element = emailDiv.appendChild(document.createElement('element'));
-		element.style.minHeight = 0;
-		dialog.createField(element, 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
-			var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
-			if (e.value.indexOf(event.detail.label) < 0)
-				e.value = (e.value + ' ' + event.detail.label).trim();
-		});
+		if (email) {
+			element = popup.appendChild(document.createElement('element'));
+			dialog.createField(element, 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
+				var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
+				if (e.value.indexOf(event.detail.label) < 0)
+					e.value = (e.value + ' ' + event.detail.label).trim();
+			});
+		}
 		var count = popup.appendChild(document.createElement('count'));
 		count.style.position = 'relative';
 		count.style.display = 'block';
@@ -465,21 +467,19 @@ button.confirmed::after {
 		};
 		table.addEventListener('select', listener);
 		popup.appendChild(document.createElement('error'));
-		var buttonDiv = dialog.createButton(popup, 'action.export(true)');
-		buttonDiv.querySelector('button').innerText = 'PDF';
-		var button = buttonDiv.appendChild(document.createElement('button'));
-		button.innerText = 'Email';
-		button.setAttribute('onclick', 'action.export(false)');
+		var buttonDiv = dialog.createButton(popup, 'action.export(' + email + ')');
+		buttonDiv.querySelector('button').innerText = email ? 'Email senden' : 'PDF erzeugen';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
 			document.querySelector('event view-table').removeAttribute('mode');
 			table.removeEventListener('select', listener);
 		}, { once: true });
-		api.event.getEmailList(list => {
-			var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
-			list.forEach(e => s.add(e, e));
-			if (list.length)
-				s.open();
-		});
+		if (email)
+			api.event.getEmailList(list => {
+				var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
+				list.forEach(e => s.add(e, e));
+				if (list.length)
+					s.open();
+			});
 	}
 }
