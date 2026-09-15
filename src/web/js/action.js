@@ -436,43 +436,35 @@ class action {
 		}
 	}
 
-	static export(pdf) {
+	static export(email) {
 		var content = document.querySelector('dialog-popup').content();
 		var error = content.querySelector('error');
 		error.innerText = '';
 		var table = document.querySelector('view-table');
 		var ids = [];
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
-		if (pdf) {
-			content.querySelector('div.email').style.gridTemplateRows == '0fr';
-			if (ids.length == 0)
-				error.innerText = 'Selektiere Einträge aus der Liste.';
-			else
-				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
-		} else {
-			if (content.querySelector('div.email').style.gridTemplateRows == '1fr') {
-				if (ids.length == 0)
-					error.innerText = 'Selektiere Einträge aus der Liste aus.';
-				else {
-					var emails = content.querySelector('input[name="emails"]').value.trim();
-					emails = emails.replace(/,/g, ' ');
-					emails = emails.replace(/;/g, ' ');
-					while (emails.indexOf('  ') > -1)
-						emails = emails.replace(/  /g, ' ');
-					if (emails) {
-						emails = emails.split(' ');
-						for (var i = 0; i < emails.length; i++) {
-							if (emails[i].indexOf('@') < 1) {
-								error.innerText = 'Gib valide Emailadressen ein.';
-								return;
-							}
+		if (ids.length == 0)
+			error.innerText = 'Selektiere Einträge aus der Liste aus.';
+		else {
+			if (email) {
+				var emails = content.querySelector('input[name="emails"]').value.trim();
+				emails = emails.replace(/,/g, ' ');
+				emails = emails.replace(/;/g, ' ');
+				while (emails.indexOf('  ') > -1)
+					emails = emails.replace(/  /g, ' ');
+				if (emails) {
+					emails = emails.split(' ');
+					for (var i = 0; i < emails.length; i++) {
+						if (emails[i].indexOf('@') < 1) {
+							error.innerText = 'Gib eine valide Emailadresse ein.';
+							return;
 						}
-						api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
-					} else
-						error.innerText = 'Gib Emailadressen ein.';
-				}
+					}
+					api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
+				} else
+					error.innerText = 'Gib eine Emailadresse ein.';
 			} else
-				content.querySelector('div.email').style.gridTemplateRows = '1fr';
+				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 		}
 	}
 }
