@@ -94,12 +94,17 @@ body>container element.intro {
 	padding: 0;
 }
 
-body>container element.intro img.text {
+body>container element.intro img.text,
+body>container element.intro img.textSub {
 	position: absolute;
 	width: 90%;
 	margin-top: 8vh;
 	max-width: 40em;
 	filter: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
+}
+
+body>container element.intro img.textSub {
+	bottom: 1vh;
 }
 
 body>container element.intro description {
