@@ -328,10 +328,7 @@ button.confirmed::after {
 }`;
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Datum', 'date', 'input-date', event.date);
-		var date = new Date();
-		date.setMonth(date.getMonth() - 2);
 		inputDate.setAttribute('minuteStep', 15);
-		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event view-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event.note);
 		dialog.createField(element, 'Ort', 'locationId', 'input-selection').classList.add('open');
