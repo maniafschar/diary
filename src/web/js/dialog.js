@@ -240,7 +240,7 @@ eventLinks>a {
 	padding-bottom: 0.5em;
 }
 eventLinks>a.outdated {
-	color: lightblue;
+	color: grey;
 	cursor: default;
 }
 ${dialog.stylePictures}`;
