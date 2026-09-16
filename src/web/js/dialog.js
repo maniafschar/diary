@@ -228,7 +228,7 @@ eventLinks {
 	font-size: 0.8em;
 }
 eventLinks>div {
-	padding: 1em 0;
+	padding-top: 1em;
 	font-weight: bold;
 }
 eventLinks>a {
@@ -237,7 +237,7 @@ eventLinks>a {
 	display: block;
 	color: darkblue;
 	cursor: pointer;
-	padding-bottom: 0.5em;
+	padding-top: 1em;
 }
 eventLinks>a.outdated {
 	color: grey;
