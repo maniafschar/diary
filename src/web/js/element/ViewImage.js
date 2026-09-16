@@ -134,6 +134,7 @@ data>nav {
 	z-index: 1;
 	white-space: nowrap;
 	overflow-x: auto;
+	overflow-y: hidden;
 }
 data>nav dot {
 	position: relative;
