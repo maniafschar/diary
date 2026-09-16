@@ -261,6 +261,8 @@ class action {
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
+		document.querySelector("element.event button.add").style.display = '';
+		document.querySelectorAll("element.event button.export").forEach(e => e.style.display = '' });
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="clientName"]').innerText = '';
 		ui.navigate(0);
