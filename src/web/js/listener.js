@@ -248,7 +248,7 @@ img.speak {
 
 			var table = document.querySelector('event view-table');
 			table.list = events;
-			table.style('tr.past td:first-child{opacity:0.5;}input-rating{margin-right:0.5em;}');
+			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
@@ -330,7 +330,7 @@ img.speak {
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('element.user').style.display = 'block';
-				var viewImage=document.querySelector("view-image");
+				var viewImage = document.querySelector("view-image");
 				if (viewImage.style.transform?.indexOf('1') > 0)
 					setTimeout(() => listener.updateViewImage(viewImage.list[viewImage.index].index), 100);
 			}
