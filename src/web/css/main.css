@@ -53,7 +53,7 @@ body>container {
 }
 
 body>container elementContainer {
-	width: 300%;
+	width: 400%;
 	position: relative;
 	display: flex;
 	transition: ease .4s all;
@@ -61,7 +61,7 @@ body>container elementContainer {
 }
 
 body>container elementContainer>element {
-	width: 33.3333%;
+	width: 25%;
 }
 
 body>container buttons {
