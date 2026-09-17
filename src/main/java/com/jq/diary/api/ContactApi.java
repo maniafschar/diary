@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
+import com.jq.diary.service.AuthenticationService;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.ContactService;
 import com.jq.diary.util.Utilities;
