@@ -14,23 +14,12 @@ class listener {
 				table.setOpenDetail(dialog.contact);
 				table.columns.push({ label: 'Name', sort: true, width: 30, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 60, detail: true });
-				table.columns.push({ label: 'Verifiziert', sort: true, width: 10, style: 'text-align: center;', detail: true });
 				table.setConvert(list => {
 					var d = [];
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
-						row.push(list[i].name);
+						row.push((list[i].verified ? '✓ ' : '') + list[i].name);
 						row.push({ text: list[i].participations ? list[i].participations : '', attributes: { value: list[i].participations } });
-						row.push(list[i].verified ? '✓' : {
-							text: '+',
-							attributes: {
-								onopen: 'dialog.verifyEmail',
-								contact: JSON.stringify({
-									id: list[i].id,
-									name: list[i].name
-								})
-							}
-						});
 						d.push(row);
 					}
 					return d;
