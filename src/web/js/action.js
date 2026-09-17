@@ -20,6 +20,7 @@ import { ui } from './ui';
 export { action };
 
 class action {
+	var resize;
 	static init() {
 		action.resize();
 		listener.init();
@@ -418,25 +419,28 @@ class action {
 	}
 
 	static resize() {
-		var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 3;
-		var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
-		var fontSize = parseInt(Math.min(7 + diagonal / 160, 26) + mobile);
-		if (mobile && fontSize > 18)
-			fontSize = 18;
-		if (fontSize == parseInt(document.body.style.fontSize))
-			return;
-		document.body.style.fontSize = fontSize + 'px';
-		var imageWidth = 1536, imageHeight = 1024;
-		var imageStyle = document.querySelector('body element.intro>img').style;
-		if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
-			imageStyle.height = window.innerHeight + 'px';
-			imageStyle.width = 'fit-content';
-			imageStyle.marginTop = 0;
-		} else {
-			imageStyle.width = window.innerWidth + 'px';
-			imageStyle.height = 'fit-content';
-			imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
-		}
+		clearTimeout(this.resize);
+		this.resize = setTimeout(() => {
+			var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 3;
+			var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
+			var fontSize = parseInt(Math.min(7 + diagonal / 160, 26) + mobile);
+			if (mobile && fontSize > 18)
+				fontSize = 18;
+			if (fontSize == parseInt(document.body.style.fontSize))
+				return;
+			document.body.style.fontSize = fontSize + 'px';
+			var imageWidth = 1536, imageHeight = 1024;
+			var imageStyle = document.querySelector('body element.intro>img').style;
+			if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
+				imageStyle.height = window.innerHeight + 'px';
+				imageStyle.width = 'fit-content';
+				imageStyle.marginTop = 0;
+			} else {
+				imageStyle.width = window.innerWidth + 'px';
+				imageStyle.height = 'fit-content';
+				imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
+			}
+		}, 500);
 	}
 
 	static export(email) {
