@@ -56,7 +56,7 @@ class ui {
 	}
 
 	static navigate(i) {
-		var buttons = document.querySelectorAll('element>buttons>button');
+		var buttons = document.querySelectorAll('element>buttons button');
 		buttons.forEach(e => e.classList.remove('selected'));
 		buttons[i].classList.add('selected');
 		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
