@@ -20,7 +20,7 @@ import { ui } from './ui';
 export { action };
 
 class action {
-	var resize;
+	static resize;
 	static init() {
 		action.resize();
 		listener.init();
