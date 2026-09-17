@@ -253,8 +253,13 @@ ${dialog.stylePictures}`;
 			}
 		} else
 			popup.appendChild(document.createTextNode(contact.name));
-		if (!contact.verified)
-			popup.appendChild(document.createElement('div')).innerText = 'Teilnehmer ist noch nicht verifiziert. Du kannst ihm erneut die Email senden, damit er sich verifizieren kann.';
+		if (!contact.verified) {
+			var hint = popup.appendChild(document.createElement('div'));
+			hint.style.textAlign = 'center';
+			hint.style.fontSize = '0.8em';
+			hint.style.paddingBottom = '1.5em';
+			hint.innerText = 'Teilnehmer ist noch nicht verifiziert. Du kannst ihm erneut die Email senden, damit er sich verifizieren kann.';
+		}
 		var button = dialog.createButton(popup, 'action.contactPatch()').querySelector('button');
 		if (!contact.verified)
 			button.innerText = 'Email senden';
