@@ -217,6 +217,7 @@ eventLinks>a.outdated {
 ${dialog.stylePictures}`;
 		if (api.user.admin || contact.id == api.user.id) {
 			popup.style.minWidth = '16em';
+			popup.style.maxWidth = '25em';
 			var id = popup.appendChild(document.createElement('input'));
 			id.setAttribute('type', 'hidden');
 			id.setAttribute('name', 'id');
