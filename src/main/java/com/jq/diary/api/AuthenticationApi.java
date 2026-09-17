@@ -61,11 +61,6 @@ public class AuthenticationApi extends ApplicationApi {
 				Encryption.decryptBrowser(password));
 	}
 
-	@GetMapping("verify")
-	public String getVerify(final String email) throws EmailException {
-		return this.authenticationService.recoverSendEmail(Encryption.decryptBrowser(email));
-	}
-
 	@GetMapping("client/{access}")
 	public Client getClient(@PathVariable final String access) {
 		final List<EventLink> eventLinks = this.repository.list(
