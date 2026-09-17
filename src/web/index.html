@@ -61,9 +61,10 @@
 				<button class="icon selected" onclick="ui.navigate(0)"><img src="image/list.svg" /></button>
 				<button class="icon" onclick="ui.navigate(1)"><img src="image/calendar.svg" /></button>
 				<button class="icon" onclick="ui.navigate(2)"><img src="image/location.svg" /></button>
-				<button class="icon export" onclick="dialog.pdf()"><img src="image/pdf.svg" /></button>
-				<button class="icon export" onclick="dialog.email()">@</button>
+				<button class="icon" onclick="ui.navigate(3)"><img src="image/statistics.svg" /></button>
 				<button class="icon add" onclick="dialog.add()">+</button>
+				<button class="icon export" onclick="dialog.email()">@</button>
+				<button class="icon export" onclick="dialog.pdf()"><img src="image/pdf.svg" /></button>
 			</buttons>
 			<elementContainer>
 				<element class="event">
@@ -79,6 +80,9 @@
 				</element>
 				<element class="map">
 					<view-map></view-map>
+				</element>
+				<element class="statistics">
+					<view-statistics></view-statistics>
 				</element>
 			</elementContainer>
 		</element>
