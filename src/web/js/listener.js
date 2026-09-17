@@ -10,6 +10,7 @@ class listener {
 			ui.extractPseudonyms(contacts);
 			var table = document.querySelector('user view-table');
 			table.list = contacts;
+			table.style('.pending{color:grey;}');
 			if (!table.columns.length) {
 				table.setOpenDetail(dialog.contact);
 				table.columns.push({ label: 'Name', sort: true, width: 30, detail: true });
@@ -18,7 +19,7 @@ class listener {
 					var d = [];
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
-						row.push((list[i].verified ? '✓ ' : '') + list[i].name);
+						row.push(list[i].verified ? list[i].name : { attributes: { class: 'pending' }, text: list[i].name });
 						row.push({ text: list[i].participations ? list[i].participations : '', attributes: { value: list[i].participations } });
 						d.push(row);
 					}
