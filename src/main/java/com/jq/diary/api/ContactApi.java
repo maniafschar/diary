@@ -27,6 +27,9 @@ import com.jq.diary.util.Utilities;
 @RequestMapping("api/contact")
 public class ContactApi extends ApplicationApi {
 	@Autowired
+	private AuthenticationService authenticationService;
+
+	@Autowired
 	private AuthorizationService authorizationService;
 
 	@Autowired
@@ -62,7 +65,8 @@ public class ContactApi extends ApplicationApi {
 			client.setNote(contact.getClient().getNote());
 			client.setName(contact.getClient().getName());
 			this.repository.save(client);
-		}
+		} else if (original.getVerified() == null || !original.getVerified())
+			this.authenticationService.recoverSendEmail(original.getEmail());
 		return original.getId();
 	}
 
