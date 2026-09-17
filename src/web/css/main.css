@@ -65,15 +65,17 @@ body>container elementContainer>element {
 }
 
 body>container buttons {
-	display: flex;
-	justify-content: space-between;
-	padding: 0.5em 0;
+	position: relative;
+	display: block;
 	width: 100%;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
 
 body>container buttons>div {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5em 0;
 	min-width: 40em;
 	width: 100%;
 }
