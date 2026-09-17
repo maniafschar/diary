@@ -223,7 +223,6 @@ ${dialog.stylePictures}`;
 			id.value = contact.id;
 			dialog.createField(popup, 'Name', 'name', null, contact.name);
 			dialog.createField(popup, 'Email', 'email');
-			dialog.createField(popup, null, 'notification', 'input-checkbox', contact.notification).setAttribute('label', 'Benachrichtigung');
 			if (api.user.admin && contact.id == api.user.id) {
 				dialog.createField(popup, 'Blogname', 'clientName', null, api.user.client.name);
 				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.user.client.note);
