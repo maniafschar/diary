@@ -420,8 +420,10 @@ class action {
 
 	static resize() {
 		clearTimeout(this.resizeTimeout);
+		var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 3;
+		if (mobile && this.resizeTimeout)
+			return;
 		this.resizeTimeout = setTimeout(() => {
-			var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 3;
 			var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
 			var fontSize = parseInt(Math.min(7 + diagonal / 160, 26) + mobile);
 			if (mobile && fontSize > 18)
