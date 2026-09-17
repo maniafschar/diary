@@ -20,7 +20,7 @@ import { ui } from './ui';
 export { action };
 
 class action {
-	static resize;
+	static resizeTimeout;
 	static init() {
 		action.resize();
 		listener.init();
@@ -419,8 +419,8 @@ class action {
 	}
 
 	static resize() {
-		clearTimeout(this.resize);
-		this.resize = setTimeout(() => {
+		clearTimeout(this.resizeTimeout);
+		this.resizeTimeout = setTimeout(() => {
 			var mobile = parseFloat(getComputedStyle(document.body).fontSize) * 50 < window.innerWidth ? 0 : 3;
 			var diagonal = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
 			var fontSize = parseInt(Math.min(7 + diagonal / 160, 26) + mobile);
