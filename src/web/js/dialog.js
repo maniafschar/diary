@@ -174,35 +174,6 @@ ${dialog.stylePictures}`;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
-	static verifyEmail(event) {
-		var popup = document.createElement('div');
-		popup.appendChild(document.createElement('label')).innerText = 'Email';
-		var field = popup.appendChild(document.createElement('field'));
-		var input = field.appendChild(document.createElement('input'));
-		input.setAttribute('type', 'email');
-		input = field.appendChild(document.createElement('input'));
-		input.setAttribute('type', 'hidden');
-		input.value = event.target.getAttribute('contact');
-		popup.appendChild(document.createElement('error'));
-		var div = popup.appendChild(document.createElement('div'));
-		div.style.textAlign = 'center';
-		var button = div.appendChild(document.createElement('button'));
-		button.innerText = 'Benutzer verifizieren';
-		button.style.zIndex = 2;
-		button.onclick = event => {
-			event.preventDefault();
-			event.stopPropagation();
-			var popup = document.querySelector('dialog-popup').content();
-			var contact = JSON.parse(popup.querySelector('input[type="hidden"]').value);
-			contact.email = popup.querySelector('input[type="email"]').value;
-			if (contact.email.indexOf('@') > 0)
-				action.loginVerify(contact);
-			else
-				document.querySelector('dialog-popup').content().querySelector('error').innerText = 'Gib bitte die Email ein.';
-		};
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-	}
-
 	static contact(event) {
 		var contact = document.querySelector('user view-table').list[ui.parents(event.target, 'tr').getAttribute('i')];
 		var popup = document.createElement('div');
