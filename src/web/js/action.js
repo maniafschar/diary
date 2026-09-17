@@ -12,6 +12,7 @@ import { ProgressBar } from './element/ProgressBar';
 import { ViewCalendar } from './element/ViewCalendar';
 import { ViewImage } from './element/ViewImage';
 import { ViewMap } from './element/ViewMap';
+import { ViewStatistics } from './element/ViewStatistics';
 import { ViewTable } from './element/ViewTable';
 import { listener } from './listener';
 import { ui } from './ui';
@@ -485,6 +486,7 @@ customElements.define('progress-bar', ProgressBar);
 customElements.define('view-calendar', ViewCalendar);
 customElements.define('view-image', ViewImage);
 customElements.define('view-map', ViewMap);
+customElements.define('view-statistics', ViewStatistics);
 customElements.define('view-table', ViewTable);
 
 window.api = api;
