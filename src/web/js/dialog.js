@@ -253,7 +253,11 @@ ${dialog.stylePictures}`;
 			}
 		} else
 			popup.appendChild(document.createTextNode(contact.name));
-		dialog.createButton(popup, 'action.contactPatch()');
+		if (!contact.verified)
+			popup.appendChild(document.createElement('div')).innerText = 'Teilnehmer ist noch nicht verifiziert. Du kannst ihm erneut die Email senden, damit er sich verifizieren kann.';
+		var button = dialog.createButton(popup, 'action.contactPatch()').querySelector('button');
+		if (!contact.verified)
+			button.innerText = 'Email senden';
 		if (api.user.admin && contact.id == api.user.id) {
 			var eventLinks = popup.appendChild(document.createElement('eventLinks'));
 			api.event.getLinkList(list => {
