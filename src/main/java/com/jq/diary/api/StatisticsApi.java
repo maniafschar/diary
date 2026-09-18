@@ -18,6 +18,7 @@ import com.jq.diary.entity.Event;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.WordCloudService;
+import com.jq.diary.service.WordCloudService.Token;
 import com.jq.diary.util.Utilities;
 
 @RestController
