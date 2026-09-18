@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -57,7 +57,7 @@ public class WordCloudService {
 		}
 	}
 
-	List<Token> extract(final String text) {
+	public List<Token> extract(final String text) {
 		final StringBuilder s = new StringBuilder(this.sanatize.matcher(text).replaceAll(" "));
 		s.trimToSize();
 		final List<String> emojis = EmojiParser.extractEmojis(s.toString());
@@ -78,8 +78,7 @@ public class WordCloudService {
 		return list;
 	}
 
-	void createImage(final List<Token> tokens, final int max, final int min, final Path file)
-			throws IOException {
+	public byte[] createImage(final List<Token> tokens, final int max, final int min) throws IOException {
 		final BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = image.createGraphics();
 		final List<Position> positions = this.createPositions(tokens, min, max, image, 28.0f);
@@ -97,8 +96,9 @@ public class WordCloudService {
 		}
 		g.dispose();
 		image.flush();
-		final File f = file.toAbsolutePath().toFile();
-		ImageIO.write(image, f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf('.') + 1), f);
+		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ImageIO.write(image, "png", out);
+		return out.toByteArray();
 	}
 
 	private Color createColor(final double percent) {
