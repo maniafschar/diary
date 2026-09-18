@@ -73,8 +73,9 @@ module.exports = (env) => {
 						const fs = require('fs');
 						const files = ['dist/js/main.js', 'dist/admin/js/main.js'];
 						files.forEach(file =>
-							fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
-								.replace('{placeholderServer}', env.server))
+							if (fs.existsSync(file))
+								fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
+									.replace('{placeholderServer}', env.server))
 						);
 					})
 				}
