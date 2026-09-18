@@ -351,6 +351,5 @@ img.speak {
 		});
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
-		document.querySelector('elementContainer>element.map').addEventListener('visible', () => document.querySelector('view-map').init());
 	}
 }
