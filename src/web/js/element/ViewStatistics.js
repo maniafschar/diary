@@ -1,4 +1,4 @@
-import { api } from './api';
+import { api } from '../api';
 
 export { ViewStatistics };
 
@@ -8,7 +8,7 @@ class ViewStatistics extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 	}
 	connectedCallback() {
-		//this.addEventListener('visible', () => this.init(), { once: true });
+		this.addEventListener('visible', () => this.init(), { once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
 `;
 	}
