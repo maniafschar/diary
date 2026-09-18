@@ -2,6 +2,7 @@ package com.jq.diary.api;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Base64;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class StatisticsApi extends ApplicationApi {
 	private WordCloudService wordCloudService;
 
 	@GetMapping("wordcloud")
-	public byte[] getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+	public String getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		final List<Event> events = eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient());
 		final StringBuilder text = new StringBuilder();
 		events.forEach(e -> {
@@ -44,6 +45,6 @@ public class StatisticsApi extends ApplicationApi {
 		final List<Token> token = this.wordCloudService.extract(text.toString());
 		while (token.size() > 50)
 			token.remove(50);
-		return this.wordCloudService.createImage(token);
+		return Base64.getEncoder().encodeToString(this.wordCloudService.createImage(token));
     }
 }
