@@ -40,7 +40,7 @@ public class WordCloudService {
 		}
 	}
 
-	static class Token {
+	public static class Token {
 		int count = 1;
 		private final String text;
 
