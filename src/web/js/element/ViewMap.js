@@ -12,7 +12,7 @@ class ViewMap extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 	}
 	connectedCallback() {
-		this.addEventListener('visible', () => this.init(), { once: true });
+		//this.addEventListener('visible', () => this.init(), { once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	position: relative;
