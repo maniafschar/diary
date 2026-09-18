@@ -15,7 +15,7 @@ class ViewStatistics extends HTMLElement {
 
 	init() {
 		api.statistics.getWordcloud(e => {
-			this._root.appendChild(document.createElement('img')).src = btoa(e);
+			this._root.appendChild(document.createElement('img')).src = 'data:image/png;base64,' + e;
 		});
 	}
 }
