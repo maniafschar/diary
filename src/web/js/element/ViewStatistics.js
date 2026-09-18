@@ -8,13 +8,12 @@ class ViewStatistics extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 	}
 	connectedCallback() {
+		this.addEventListener('visible', () => this.init(), { capture: false, passive: true, once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
 `;
 	}
 
 	init() {
-		if (this._root.childElementCount > 1)
-			return;
 		api.statistics.getWordcloud(e => {
 			this._root.appendChild(document.createElement('img')).src = btoa(e);
 		});
