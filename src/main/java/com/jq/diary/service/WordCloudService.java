@@ -78,7 +78,7 @@ public class WordCloudService {
 		return list;
 	}
 
-	public byte[] createImage(final List<Token> tokens) throws IOException {
+	public byte[] createImage(final List<Token> tokens) {
 		final BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = image.createGraphics();
 		final List<Position> positions = this.createPositions(tokens, image, 28.0f);
@@ -96,9 +96,13 @@ public class WordCloudService {
 		}
 		g.dispose();
 		image.flush();
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ImageIO.write(image, "png", out);
-		return out.toByteArray();
+		try {
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ImageIO.write(image, "png", out);
+			return out.toByteArray();
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private Color createColor(final double percent) {
