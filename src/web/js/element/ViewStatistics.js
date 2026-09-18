@@ -7,10 +7,13 @@ class ViewStatistics extends HTMLElement {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
 	}
+
 	connectedCallback() {
 		this.parentElement.addEventListener('visible', () => this.init(), { once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
-`;
+img {
+	max-height: 100%;
+}`;
 	}
 
 	init() {
