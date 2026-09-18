@@ -11,6 +11,12 @@ class ViewStatistics extends HTMLElement {
 	connectedCallback() {
 		this.parentElement.addEventListener('visible', () => this.init(), { once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
+:host(*) {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: block;
+}
 img {
 	max-height: 100%;
 }`;
