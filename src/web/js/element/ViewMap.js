@@ -12,6 +12,7 @@ class ViewMap extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 	}
 	connectedCallback() {
+		this.addEventListener('visible', () => document.querySelector('view-map').init(), { capture: false, passive: true, once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	position: relative;
@@ -112,8 +113,6 @@ images {
 	}
 
 	init() {
-		if (this._root.childElementCount > 1)
-			return;
 		var link = this._root.appendChild(document.createElement('link'));
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
