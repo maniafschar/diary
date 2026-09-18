@@ -352,6 +352,16 @@ class api {
 			});
 		}
 	}
+
+	static statistics = {
+		getWordcloud(success) {
+			api.ajax({
+				url: 'statistics/wordcloud',
+				success: success
+			});
+		}
+	}
+
 	static activateProgressbar() {
 		setTimeout(() => api.progressbar = true, 200);
 	}
