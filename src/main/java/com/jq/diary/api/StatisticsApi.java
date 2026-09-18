@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jq.diary.entity.Contact;
-import com.jq.diary.entity.Location;
+import com.jq.diary.entity.Event;
 import com.jq.diary.service.AuthorizationService;
-import com.jq.diary.service.ExternalService;
+import com.jq.diary.service.EventService;
 import com.jq.diary.service.WordCloudService;
 import com.jq.diary.util.Utilities;
 
@@ -27,11 +27,19 @@ public class StatisticsApi extends ApplicationApi {
 	private AuthorizationService authorizationService;
 
 	@Autowired
+	private EventService eventService;
+
+	@Autowired
 	private WordCloudService wordCloudService;
 
-	@GetMapping
-	public void get(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId) {
-        this.authorizationService.requireContact(contactId, clientId);
+	@GetMapping("wordcloud")
+	public byte[] getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		final List<Event> events = eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient());
+		final StringBuilder text = new StringBuilder();
+		events.forEach(e -> if (e.getNote() != null) text.append(e.getNote() + " "));
+		final List<Token> token = this.wordCloudService.extract(text.toString());
+		while (token.size() > 50)
+			token.remove(50);
+		return this.wordCloudService.createImage(token);
     }
 }
