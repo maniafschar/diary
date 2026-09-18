@@ -1,4 +1,3 @@
-
 export { ViewImage };
 
 class ViewImage extends HTMLElement {
