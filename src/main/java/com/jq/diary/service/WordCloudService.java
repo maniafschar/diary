@@ -78,10 +78,10 @@ public class WordCloudService {
 		return list;
 	}
 
-	public byte[] createImage(final List<Token> tokens, final int max, final int min) throws IOException {
+	public byte[] createImage(final List<Token> tokens) throws IOException {
 		final BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = image.createGraphics();
-		final List<Position> positions = this.createPositions(tokens, min, max, image, 28.0f);
+		final List<Position> positions = this.createPositions(tokens, image, 28.0f);
 		for (final Position position : positions) {
 			g.setFont(position.font);
 			g.setColor(this.createColor(position.percent));
@@ -109,8 +109,9 @@ public class WordCloudService {
 		return new Color(255 - (int) (percent * 150), 0, 0);
 	}
 
-	private List<Position> createPositions(final List<Token> tokens, final int min, final int max,
-			final BufferedImage image, final float fontSize) {
+	private List<Position> createPositions(final List<Token> tokens, final BufferedImage image, final float fontSize) {
+		final int min = tokens.get(tokens.size() - 1).getCount();
+		final int max = tokens.get(0).getCount();
 		final List<Position> positions = new ArrayList<>();
 		if (tokens.size() == 0)
 			return positions;
