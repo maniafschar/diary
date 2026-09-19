@@ -28,11 +28,11 @@ public class LocationService {
 		return this.repository.one(Location.class, id);
 	}
 
-	public Location find(final Location location) {
+	public Location find(final Location location, final BigInteger clientId) {
 		location.getLongitude();
 		final List<Object> values = new ArrayList<>();
 		String search = "from Location where contact.client.id=?1 and lower(name) like ?2";
-		values.add(location.getContact().getClient().getId());
+		values.add(clientId);
 		values.add("%" + location.getName().trim().toLowerCase() + "%");
 		if (location.getLongitude() == null) {
 			search += " and lower(address) like ?3";
