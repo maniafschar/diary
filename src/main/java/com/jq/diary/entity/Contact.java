@@ -4,15 +4,15 @@ import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "client_id", "email" }) })
 public class Contact extends BaseEntity {
-	@ManyToOne
-	private Client client;
+	@OneToMany
+	private List<Client> clients;
 	@Column(columnDefinition = "TEXT")
 	private String note;
 	private String name;
@@ -26,12 +26,12 @@ public class Contact extends BaseEntity {
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
 
-	public Client getClient() {
+	public List<Client> getClients() {
 		return this.client;
 	}
 
-	public void setClient(final Client client) {
-		this.client = client;
+	public void setClients(final List<Client> clients) {
+		this.clients = clients;
 	}
 
 	public String getNote() {
