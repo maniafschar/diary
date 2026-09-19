@@ -55,6 +55,11 @@ public class AuthenticationApi extends ApplicationApi {
 		this.authenticationService.createClient(client);
 	}
 
+	@GetMapping("verify")
+	public String getVerify(final String email) throws EmailException {
+		return this.authenticationService.recoverSendEmail(Encryption.decryptBrowser(email));
+	}
+
 	@PostMapping("verify")
 	public void postVerify(final String token, final String password) {
 		this.authenticationService.recoverVerifyEmail(Encryption.decryptBrowser(token),
