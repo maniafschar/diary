@@ -3,6 +3,7 @@ import { api } from '../api';
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
+	list = [];
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
