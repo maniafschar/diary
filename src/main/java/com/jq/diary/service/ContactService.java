@@ -32,7 +32,7 @@ public class ContactService {
 				contact.getEmail());
 		final List<Map<String, Object>> result = new ArrayList<>();
 		final List<Client> clients = this.repository.list("from Client where id in ?1", Client.class,
-				list.stream().map(e -> "" + e.getClient().getId()).toArray());
+				list.stream().map(e -> "" + e.getClient().getId()).toList());
 		for (final Client client : clients) {
 			final Map<String, Object> entry = new HashMap<>();
 			entry.put("id", client.getId());
