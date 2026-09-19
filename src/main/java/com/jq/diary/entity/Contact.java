@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "client_id", "email" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class Contact extends BaseEntity {
 	@OneToMany
 	private List<Client> clients;
