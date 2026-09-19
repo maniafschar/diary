@@ -46,11 +46,11 @@ public class ContactApi extends ApplicationApi {
 			@RequestBody final Contact contact) throws EmailException {
 		final Contact user = this.authorizationService.requireContact(contactId, clientId);
 		if (contact.getId() == null) {
-			contact.setClient(user.getClient());
+			contact.getClients().add(this.repository.one(Client.class, clientId));
 			this.contactService.save(contact);
 			return contact.getId();
 		}
-		final Contact original = repository.one(Contact.class, contact.getId());
+		final Contact original = this.repository.one(Contact.class, contact.getId());
 		if (Utilities.isEmail(contact.getEmail()))
 			original.setEmail(contact.getEmail().toLowerCase().trim());
 		if (contact.getName() != null && contact.getName().trim().length() > 0)
@@ -60,11 +60,11 @@ public class ContactApi extends ApplicationApi {
 		if (contact.getNote() != null)
 			original.setNote(contact.getNote());
 		this.contactService.save(original);
-		if (contact.getClient() != null && original.getClient().getId().equals(clientId) && user.getAdmin() != null && user.getAdmin()) {
-			final Client client = original.getClient();
-			client.setImage(contact.getClient().getImage());
-			client.setNote(contact.getClient().getNote());
-			client.setName(contact.getClient().getName());
+		if (contact.getClients() != null && original.getClients().stream().anyMathch(e -> e.getId().equals(clientId)) && user.getAdmin() != null && user.getAdmin()) {
+			final Client client = this.repository.one(Client.class, clientId);
+			client.setImage(contact.getClients().get(0).getImage());
+			client.setNote(contact.getClients().get(0).getNote());
+			client.setName(contact.getClients().get(0).getName());
 			this.repository.save(client);
 		} else if (original.getVerified() == null || !original.getVerified())
 			this.authenticationService.recoverSendEmail(original.getEmail());
@@ -73,8 +73,8 @@ public class ContactApi extends ApplicationApi {
 
 	@GetMapping("list")
 	public List<Contact> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
-		return Utilities.filter(
-				this.contactService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
+		this.authorizationService.requireContact(contactId, clientId);
+		return Utilities.filter(this.contactService.list(this.repository.one(Client.class, clientId)));
 	}
 
 	@GetMapping("event/{eventId}")
