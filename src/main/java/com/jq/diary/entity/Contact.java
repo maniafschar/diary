@@ -1,5 +1,7 @@
 package com.jq.diary.entity;
 
+import java.util.List;
+
 import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
