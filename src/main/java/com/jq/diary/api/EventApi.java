@@ -104,7 +104,7 @@ public class EventApi extends ApplicationApi {
 			@RequestBody final Event event) {
 		event.setContact(this.authorizationService.requireContact(contactId, clientId));
 		event.getLocation().setContact(event.getContact());
-		return this.locationService.find(event.getLocation()) != null && this.eventService.exists(event);
+		return this.locationService.find(event.getLocation(), clientId) != null && this.eventService.exists(event);
 	}
 
 	@PostMapping
@@ -113,7 +113,7 @@ public class EventApi extends ApplicationApi {
 		final Double rating = event.getRating();
 		event.setContact(this.authorizationService.requireContact(contactId, clientId));
 		event.getLocation().setContact(event.getContact());
-		final Location storedLocation = this.locationService.find(event.getLocation());
+		final Location storedLocation = this.locationService.find(event.getLocation(), clientId);
 		if (storedLocation == null)
 			this.locationService.save(event.getLocation());
 		else
