@@ -214,7 +214,7 @@ public class AuthenticationService {
 			throw new RuntimeException("Invalid email");
 		client.setContacts(null);
 		this.repository.save(client);
-		contact.setClient(client);
+		contact.getClients.add(client);
 		contact.setAdmin(true);
 		try {
 			this.emailService.send(contact.getEmail(),
