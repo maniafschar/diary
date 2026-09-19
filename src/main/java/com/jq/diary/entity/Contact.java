@@ -29,7 +29,7 @@ public class Contact extends BaseEntity {
 	private Long passwordReset = Long.valueOf(0);
 
 	public List<Client> getClients() {
-		return this.client;
+		return this.clients;
 	}
 
 	public void setClients(final List<Client> clients) {
