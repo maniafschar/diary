@@ -36,8 +36,8 @@ public class LocationApi extends ApplicationApi {
 	public Location get(@PathVariable final BigInteger id, @RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		final Location location = this.locationService.one(id);
-		if (this.authorizationService.requireContact(contactId, clientId).getClient().getId()
-				.equals(location.getContact().getClient().getId()))
+		if (this.authorizationService.requireContact(contactId, clientId).getClients()
+				.stream().anyMatch(e -> e.getId().equals(location.getContact().getClient().getId())))
 			return Utilities.filter(location);
 		return null;
 	}
@@ -62,7 +62,8 @@ public class LocationApi extends ApplicationApi {
 	@GetMapping("list")
 	public List<Location> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		return Utilities.filter(this.locationService
-				.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
+				.list(this.authorizationService.requireContact(contactId, clientId).getClients()
+					  .stream().filter(e -> e.getId().equals(clientId)).findFirst()));
 	}
 
 	@GetMapping("nearby")
