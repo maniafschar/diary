@@ -24,13 +24,13 @@ class api {
 					if (contact) {
 						api.user = contact;
 						api.user.password = password;
-						api.clientId = api.user.client.id;
-						api.contact.getClient(() => {
-							if (refreshToken)
-								api.authentication.putToken(() => success(true));
-							else
-								success(true);
-						});
+						api.clientId = api.user.clients[0].id;
+						for (var i = 0; i < contact.clients.length; i++)
+							api.clients[contact.clients[i].id] = contact.clients[i];
+						if (refreshToken)
+							api.authentication.putToken(() => success(true));
+						else
+							success(true);
 					} else
 						document.querySelector('element.login error').innerText = 'Login fehlgeschlagen';
 				}
@@ -44,12 +44,14 @@ class api {
 				api.ajax({
 					url: 'authentication/token?token=' + encodeURIComponent(Encryption.encPUB(token)) + '&publicKey=' + encodeURIComponent(Encryption.jsEncrypt.getPublicKeyB64()),
 					error: success,
-					success(r) {
-						if (r) {
-							r.password = Encryption.jsEncrypt.decrypt(r.password);
-							api.user = r;
-							api.clientId = api.user.client.id;
-							api.contact.getClient(() => api.authentication.putToken(success));
+					success(contact) {
+						if (contact) {
+							contact.password = Encryption.jsEncrypt.decrypt(contact.password);
+							api.user = contact;
+							api.clientId = api.user.clients[0].id;
+							for (var i = 0; i < api.user.clients.length; i++)
+								api.clients[api.user.clients[i].id] = api.user.clients[i];
+							api.authentication.putToken(success);
 						} else {
 							window.localStorage.removeItem('login');
 							success();
@@ -313,17 +315,6 @@ class api {
 			api.ajax({
 				url: 'contact/list',
 				success: success
-			});
-		},
-
-		getClient(success) {
-			api.ajax({
-				url: 'contact/client',
-				success: clients => {
-					for (var i = 0; i < clients.length; i++)
-						api.clients[clients[i].id] = clients[i];
-					success();
-				}
 			});
 		},
 
