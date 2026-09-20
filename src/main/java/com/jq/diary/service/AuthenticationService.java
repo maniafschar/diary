@@ -201,15 +201,17 @@ public class AuthenticationService {
 		}
 	}
 
-	public void createClient(final Client client, final Contact contact) {
-		if (contact == null)
+	public void createClient(final Contact contact) {
+		if (contact == null || contact.getClients() == null || contact.getClients().size() == 0)
 			throw new RuntimeException("Missing data");
+		final Client client = contact.getClients().get(0);
 		if (client.getId() != null || contact.getId() != null)
 			throw new RuntimeException("Data contains id");
 		if (contact.getEmail() == null
 				|| !contact.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"))
 			throw new RuntimeException("Invalid email");
 		this.repository.save(client);
+		contact.getClients().clear();
 		contact.getClients().add(client);
 		contact.setAdmin(true);
 		try {
