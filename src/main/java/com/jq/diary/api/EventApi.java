@@ -54,7 +54,8 @@ public class EventApi extends ApplicationApi {
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		return this.filter(
-				this.eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient()));
+				this.eventService.list(this.authorizationService.requireContact(contactId, clientId)
+						.getClients().stream().filter(e -> e.getId().equals(clientId)).findFirst()));
 	}
 
 	@GetMapping("list/{access}")
@@ -64,7 +65,7 @@ public class EventApi extends ApplicationApi {
 		if (links.size() == 1) {
 			final EventLink eventLink = links.get(0);
 			this.authorizationService.requireContact(eventLink.getContact().getId(),
-					eventLink.getContact().getClient().getId());
+					eventLink.getEvents().get(0).getClient().getId());
 			return this.filter(this.eventService.listAccess(eventLink));
 		}
 		return null;
