@@ -7,14 +7,14 @@ import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class Contact extends BaseEntity {
-	@ManyToMany
+	@OneToMany
 	private List<Client> clients;
 	@Column(columnDefinition = "TEXT")
 	private String note;
