@@ -61,10 +61,11 @@ public class ContactApi extends ApplicationApi {
 			original.setNote(contact.getNote());
 		this.contactService.save(original);
 		if (contact.getClients() != null && original.getClients().stream().anyMatch(e -> e.getId().equals(clientId)) && user.getAdmin() != null && user.getAdmin()) {
+			final Client c = contact.getClients().iterator().next();
 			final Client client = this.repository.one(Client.class, clientId);
-			client.setImage(contact.getClients().get(0).getImage());
-			client.setNote(contact.getClients().get(0).getNote());
-			client.setName(contact.getClients().get(0).getName());
+			client.setImage(c.getImage());
+			client.setNote(c.getNote());
+			client.setName(c.getName());
 			this.repository.save(client);
 		} else if (original.getVerified() == null || !original.getVerified())
 			this.authenticationService.recoverSendEmail(original.getEmail());
