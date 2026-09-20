@@ -36,7 +36,8 @@ public class StatisticsApi extends ApplicationApi {
 
 	@GetMapping("wordcloud")
 	public String getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
-		final List<Event> events = eventService.list(this.authorizationService.requireContact(contactId, clientId).getClient());
+		final List<Event> events = eventService.list(this.authorizationService.requireContact(contactId, clientId)
+				.stream().filter(e -> e.getId().equals(clientId)).findFirst());
 		final StringBuilder text = new StringBuilder();
 		events.forEach(e -> {
 			if (e.getNote() != null)
