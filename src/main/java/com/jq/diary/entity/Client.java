@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Client extends BaseEntity {
@@ -14,7 +14,7 @@ public class Client extends BaseEntity {
 	private String note;
 	private String name;
 	private String image;
-	@OneToMany
+	@ManyToMany
 	@JsonBackReference
 	private List<Contact> contacts;
 
