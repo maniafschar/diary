@@ -20,7 +20,7 @@ public class ContactService {
 	private Repository repository;
 
 	public List<Contact> list(final Client client) {
-		return this.repository.list("select contact from Contact as contact inner join contact.clients as clients where clients.id=?1 order by name", Contact.class, client.getId());
+		return this.repository.list("from Contact as contact inner join contact.clients as clients where clients.id=?1 order by contact.name", Contact.class, client.getId());
 	}
 
 	public List<ContactEvent> listEvent(final BigInteger eventId) {
