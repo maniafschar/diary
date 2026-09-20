@@ -119,9 +119,7 @@ public class LogFilter implements Filter {
 		final Contact contact = this.authenticationService.verify(contactId,
 				req.getHeader("password"), req.getHeader("salt"));
 		if (!BigInteger.ZERO.equals(contactId)
-				&& !contact.getClients().stream().anyMatch(e -> new BigInteger(req.getHeader("clientId")).equals(e.getId()))
-				&& this.repository.list("from Contact where email=?1 and client.id=?2",
-						Contact.class, contact.getEmail(), req.getHeader("clientId")).size() == 0)
+				&& !contact.getClients().stream().anyMatch(e -> new BigInteger(req.getHeader("clientId")).equals(e.getId())))
 			throw new AuthenticationException(AuthenticationExceptionType.WrongClient);
 	}
 
