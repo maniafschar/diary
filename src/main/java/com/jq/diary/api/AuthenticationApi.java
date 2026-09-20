@@ -70,7 +70,7 @@ public class AuthenticationApi extends ApplicationApi {
 	public Client getClient(@PathVariable final String access) {
 		final List<EventLink> eventLinks = this.repository.list(
 				"from EventLink where identifier=?1", EventLink.class, access);
-		return eventLinks.size() > 0 ? Utilities.filter(eventLinks.get(0).getContact().getClient()) : null;
+		return eventLinks.size() > 0 ? Utilities.filter(eventLinks.get(0).getEvents().get(0).getClient()) : null;
 	}
 
 	@GetMapping("email/{access}")
