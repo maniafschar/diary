@@ -1,7 +1,7 @@
 package com.jq.diary.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jq.diary.util.Utilities;
 
@@ -15,7 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class Contact extends BaseEntity {
 	@ManyToMany
-	private List<Client> clients;
+	private Set<Client> clients;
 	@Column(columnDefinition = "TEXT")
 	private String note;
 	private String name;
@@ -29,13 +29,13 @@ public class Contact extends BaseEntity {
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
 
-	public List<Client> getClients() {
+	public Set<Client> getClients() {
 		if (this.clients == null)
-			this.clients = new ArrayList<>();
+			this.clients = new HashSet<>();
 		return this.clients;
 	}
 
-	public void setClients(final List<Client> clients) {
+	public void setClients(final Set<Client> clients) {
 		this.clients = clients;
 	}
 
