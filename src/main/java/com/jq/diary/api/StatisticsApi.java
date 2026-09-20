@@ -35,7 +35,7 @@ public class StatisticsApi extends ApplicationApi {
 	private WordCloudService wordCloudService;
 
 	@GetMapping("wordcloud")
-	public String getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+	public List<Token> getWordcloud(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		final List<Event> events = eventService.list(this.authorizationService.requireContact(contactId, clientId)
 				.getClients().stream().filter(e -> e.getId().equals(clientId)).findFirst().get());
 		final StringBuilder text = new StringBuilder();
@@ -43,9 +43,6 @@ public class StatisticsApi extends ApplicationApi {
 			if (e.getNote() != null)
 				text.append(e.getNote() + " ");
 		});
-		final List<Token> token = this.wordCloudService.extract(text.toString());
-		while (token.size() > 50)
-			token.remove(50);
-		return Base64.getEncoder().encodeToString(this.wordCloudService.createImage(token));
+		return this.wordCloudService.extract(text.toString());
     }
 }
