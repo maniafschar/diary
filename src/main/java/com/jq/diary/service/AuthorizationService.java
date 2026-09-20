@@ -29,7 +29,7 @@ public class AuthorizationService {
 
 	public Contact requireContact(final BigInteger contactId, final BigInteger clientId) {
 		final Contact contact = this.repository.one(Contact.class, contactId);
-		if (contact != null && contact.getClients().stream().anyMatch(e -> e.getId().equals(clientId))
+		if (contact != null && contact.getClients().stream().anyMatch(e -> e.getId().equals(clientId)))
 			return contact;
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
