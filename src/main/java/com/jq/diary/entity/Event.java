@@ -25,6 +25,8 @@ public class Event extends BaseEntity {
 	private Contact contact;
 	@ManyToOne
 	private Location location;
+	@ManyToOne
+	private Client client;
 	@OneToMany(mappedBy = "event")
 	@JsonManagedReference
 	private List<ContactEvent> contactEvents;
@@ -39,7 +41,6 @@ public class Event extends BaseEntity {
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventFeedback> eventFeedbacks;
-	private Client client;
 	@ManyToMany
 	@JsonBackReference
 	private Set<EventLink> eventLinks;
