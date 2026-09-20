@@ -37,7 +37,7 @@ public class LocationApi extends ApplicationApi {
 			@RequestHeader final BigInteger clientId) {
 		final Location location = this.locationService.one(id);
 		if (this.authorizationService.requireContact(contactId, clientId).getClients()
-				.stream().anyMatch(e -> e.getId().equals(location.getContact().getClient().getId())))
+				.stream().anyMatch(e -> e.getId().equals(location.getClient().getId())))
 			return Utilities.filter(location);
 		return null;
 	}
