@@ -55,7 +55,7 @@ public class EventApi extends ApplicationApi {
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		return this.filter(
 				this.eventService.list(this.authorizationService.requireContact(contactId, clientId)
-						.getClients().stream().filter(e -> e.getId().equals(clientId)).findFirst()));
+						.getClients().stream().filter(e -> e.getId().equals(clientId)).findFirst().get()));
 	}
 
 	@GetMapping("list/{access}")
