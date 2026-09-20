@@ -1,5 +1,6 @@
 package com.jq.diary.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jq.diary.util.Utilities;
@@ -29,6 +30,8 @@ public class Contact extends BaseEntity {
 	private Long passwordReset = Long.valueOf(0);
 
 	public List<Client> getClients() {
+		if (this.clients == null)
+			this.clients = new ArrayList<>();
 		return this.clients;
 	}
 
