@@ -60,7 +60,7 @@ public class ContactApi extends ApplicationApi {
 		if (contact.getNote() != null)
 			original.setNote(contact.getNote());
 		this.contactService.save(original);
-		if (contact.getClients() != null && original.getClients().stream().anyMathch(e -> e.getId().equals(clientId)) && user.getAdmin() != null && user.getAdmin()) {
+		if (contact.getClients() != null && original.getClients().stream().anyMatch(e -> e.getId().equals(clientId)) && user.getAdmin() != null && user.getAdmin()) {
 			final Client client = this.repository.one(Client.class, clientId);
 			client.setImage(contact.getClients().get(0).getImage());
 			client.setNote(contact.getClients().get(0).getNote());
@@ -94,17 +94,17 @@ public class ContactApi extends ApplicationApi {
 	public BigInteger postEvent(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @PathVariable(name = "contactId") final BigInteger contactIdEvent,
 			@PathVariable final BigInteger eventId) {
-		final Contact contact = this.authorizationService.requireContact(contactIdEvent, clientId);
 		final Contact verifiedContact = this.authorizationService.requireContact(contactId, clientId);
-		if (verifiedContact.getClient().getId().equals(contact.getClient().getId())) {
+		final Contact eventContact = this.authorizationService.requireContact(contactIdEvent, clientId);
+		if (verifiedContact.getClients().stream().anyMatch(e -> eventContact.getClients().stream().anyMatch(e2 -> e2.getId().equals(e.getId())))) {
 			final ContactEvent contactEvent = new ContactEvent();
-			contactEvent.setContact(contact);
+			contactEvent.setContact(eventContact);
 			contactEvent.setEvent(this.authorizationService.requireEvent(eventId, verifiedContact.getId()));
 			this.contactService.save(contactEvent);
 			return contactEvent.getId();
 		}
 		throw new IllegalArgumentException("Client mismatch\ncontactId: " + contactId + "\nclientId: " + clientId
-				+ "\nclient of event contact: " + contact.getClient().getId());
+				+ "\nclient of event contact: " + eventContact.getClients().stream().map(e -> e.getId()).toList());
 	}
 
 	@DeleteMapping("event/{contactEventId}")
