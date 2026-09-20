@@ -27,25 +27,6 @@ public class ContactService {
 		return this.repository.list("from ContactEvent where event.id=?1", ContactEvent.class, eventId);
 	}
 
-	public List<Map<String, Object>> listClient(final Contact contact) {
-		final List<Contact> list = this.repository.list("from Contact where email=?1", Contact.class,
-				contact.getEmail());
-		final List<Map<String, Object>> result = new ArrayList<>();
-		final List<Client> clients = this.repository.list("from Client where id in ?1", Client.class,
-				list.stream().map(e -> "" + e.getClient().getId()).toList());
-		for (final Client client : clients) {
-			final Map<String, Object> entry = new HashMap<>();
-			entry.put("id", client.getId());
-			entry.put("name", client.getName());
-			entry.put("note", client.getNote());
-			entry.put("image", client.getImage());
-			entry.put("contactId",
-					list.stream().filter(e -> e.getClient().getId().equals(client.getId())).findFirst().get().getId());
-			result.add(entry);
-		}
-		return result;
-	}
-
 	public Contact one(final BigInteger id) {
 		return this.repository.one(Contact.class, id);
 	}
