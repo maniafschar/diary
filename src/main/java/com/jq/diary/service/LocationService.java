@@ -52,7 +52,7 @@ public class LocationService {
 	public void save(final Location location) {
 		if (location.getName() == null || location.getName().isBlank())
 			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
-		final Location locationStored = this.find(location, location.getContact().getClient().getId());
+		final Location locationStored = this.find(location, location.getContact().getClients().get(0).getId());
 		if (locationStored == null) {
 			if (location.getLongitude() == null)
 				addGeoData(location);
