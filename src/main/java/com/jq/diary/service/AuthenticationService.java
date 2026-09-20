@@ -202,7 +202,7 @@ public class AuthenticationService {
 	}
 
 	public void createClient(final Contact contact) {
-		if (contact == null || contact.getClients() == null || contact.getClients().size() == 0)
+		if (contact == null || contact.getClients() == null || contact.getClients().size() == 0)
 			throw new RuntimeException("Missing data");
 		final Client client = contact.getClients().get(0);
 		if (client.getId() != null || contact.getId() != null)
