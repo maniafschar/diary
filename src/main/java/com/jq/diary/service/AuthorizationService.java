@@ -22,7 +22,7 @@ public class AuthorizationService {
 		if (event == null || event.getContact() == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		final Contact contact = this.repository.one(Contact.class, contactId);
-		if (contact == null || !contact.getClients().stream().anyMatch(e -> e.getId().equals(event.getContact().getClient().getId())))
+		if (contact == null || !contact.getClients().stream().anyMatch(e -> e.getId().equals(event.getClient().getId())))
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		return event;
 	}
