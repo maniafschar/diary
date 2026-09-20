@@ -39,6 +39,7 @@ public class Event extends BaseEntity {
 	@JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<EventFeedback> eventFeedbacks;
+	private Client client;
 	@ManyToMany
 	@JsonBackReference
 	private Set<EventLink> eventLinks;
@@ -47,6 +48,14 @@ public class Event extends BaseEntity {
 	private Double rating;
 	@Formula("(select count(1) from event_rating er where er.event_id=id and er.rating is not null and er.rating > 0)")
 	private Integer ratingCount;
+
+	public Client getClient() {
+		return this.client;
+	}
+
+	public void setClient(final Client client) {
+		this.client = client;
+	}
 
 	public Location getLocation() {
 		return this.location;
