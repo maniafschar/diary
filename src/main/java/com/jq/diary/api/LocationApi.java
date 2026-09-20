@@ -63,7 +63,7 @@ public class LocationApi extends ApplicationApi {
 	public List<Location> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		return Utilities.filter(this.locationService
 				.list(this.authorizationService.requireContact(contactId, clientId).getClients()
-					  .stream().filter(e -> e.getId().equals(clientId)).findFirst()));
+					  .stream().filter(e -> e.getId().equals(clientId)).findFirst().get()));
 	}
 
 	@GetMapping("nearby")
