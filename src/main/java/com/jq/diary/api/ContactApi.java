@@ -84,12 +84,6 @@ public class ContactApi extends ApplicationApi {
 				this.contactService.listEvent(this.authorizationService.requireEvent(eventId, contactId).getId()));
 	}
 
-	@GetMapping("client")
-	public List<Map<String, Object>> getClient(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId) {
-		return this.contactService.listClient(this.authorizationService.requireContact(contactId, clientId));
-	}
-
 	@PostMapping("event/{contactId}/{eventId}")
 	public BigInteger postEvent(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @PathVariable(name = "contactId") final BigInteger contactIdEvent,
