@@ -86,7 +86,7 @@ public class Location extends BaseEntity {
 		this.contact = contact;
 	}
 
-	public Contact getClient() {
+	public Client getClient() {
 		return this.client;
 	}
 
