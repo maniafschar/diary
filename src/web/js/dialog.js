@@ -225,8 +225,8 @@ ${dialog.stylePictures}`;
 			dialog.createField(popup, 'Name', 'name', null, contact.name);
 			dialog.createField(popup, 'Email', 'email');
 			if (api.user.admin && contact.id == api.user.id) {
-				dialog.createField(popup, 'Blogname', 'clientName', null, api.user.client.name);
-				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.user.client.note);
+				dialog.createField(popup, 'Blogname', 'clientName', null, api.clients[api.clientId].name);
+				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.clients[api.clientId].note);
 				popup.appendChild(document.createElement('label')).innerText = 'Bild';
 				var pictures = popup.appendChild(document.createElement('value'));
 				pictures.classList.add('pictures');
