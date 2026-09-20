@@ -36,7 +36,7 @@ public class EventService {
 
 	public List<Event> list(final Client client) {
 		return this.repository.list(
-				"from Event event where event.contact.client.id=?1 order by date desc",
+				"from Event event where event.client.id=?1 order by date desc",
 				Event.class, client.getId());
 	}
 
