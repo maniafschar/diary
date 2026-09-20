@@ -19,6 +19,8 @@ public class Location extends BaseEntity {
 	private Double altitude;
 	@ManyToOne
 	private Contact contact;
+	@ManyToOne
+	private Client client;
 
 	public String getNote() {
 		return this.note;
@@ -82,6 +84,14 @@ public class Location extends BaseEntity {
 
 	public void setContact(final Contact contact) {
 		this.contact = contact;
+	}
+
+	public Contact getClient() {
+		return this.client;
+	}
+
+	public void setClient(final Client client) {
+		this.client = client;
 	}
 
 	public Double getLongitude() {
