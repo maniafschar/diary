@@ -51,8 +51,8 @@ public class AuthenticationApi extends ApplicationApi {
 	}
 
 	@PostMapping("create")
-	public void postCreate(@RequestBody final Client client) {
-		this.authenticationService.createClient(client);
+	public void postCreate(@RequestBody final Contact contact) {
+		this.authenticationService.createClient(contact);
 	}
 
 	@GetMapping("verify")
