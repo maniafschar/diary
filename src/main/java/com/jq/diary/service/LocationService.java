@@ -21,7 +21,7 @@ public class LocationService {
 	private ExternalService externalService;
 
 	public List<Location> list(final Client client) {
-		return this.repository.list("from Location where contact.client.id=?1", Location.class, client.getId());
+		return this.repository.list("from Location where client.id=?1", Location.class, client.getId());
 	}
 
 	public Location one(final BigInteger id) {
@@ -31,7 +31,7 @@ public class LocationService {
 	public Location find(final Location location, final BigInteger clientId) {
 		location.getLongitude();
 		final List<Object> values = new ArrayList<>();
-		String search = "from Location where contact.client.id=?1 and lower(name) like ?2";
+		String search = "from Location where client.id=?1 and lower(name) like ?2";
 		values.add(clientId);
 		values.add("%" + location.getName().trim().toLowerCase() + "%");
 		if (location.getLongitude() == null) {
