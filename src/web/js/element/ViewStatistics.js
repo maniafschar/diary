@@ -161,19 +161,18 @@ word:hover {
 					return true;
 			}
 		}
-		return false;
 	}
 
 	positionFringe(position, positions, width, height) {
 		var offset = parseInt(Math.random() * positions.length);
-		for (int i = 0; i < positions.length; i++) {
+		for (var i = 0; i < positions.length; i++) {
 			if (!positions[i].fringe) {
 				var candidate = positions[(i + offset) % positions.length];
 				if (candidate.vertical) {
 					position.x = candidate.x - position.width;
 					position.y = candidate.y;
 					position.vertical = false;
-					for (int i2 = 0; i2 < 2; i2++) {
+					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
 							position.x = candidate.x + candidate.height;
 							position.y = candidate.y;
@@ -195,7 +194,7 @@ word:hover {
 					position.x = candidate.x;
 					position.y = candidate.y - position.width;
 					position.vertical = true;
-					for (int i2 = 0; i2 < 2; i2++) {
+					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
 							position.x = candidate.x;
 							position.y = candidate.y + candidate.height;
