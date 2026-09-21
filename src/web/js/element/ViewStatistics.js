@@ -4,6 +4,7 @@ export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
 	text = '';
+
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -105,7 +106,7 @@ class ViewStatistics extends HTMLElement {
 		return list;
 	}
 
-	const STOP_WORDS = [
+	STOP_WORDS = [
 		// English
 		'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', "aren't", 'as', 'at',
 		'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', "can't", 'cannot', 'could',
