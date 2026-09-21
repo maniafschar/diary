@@ -47,27 +47,15 @@ word:hover {
 		const cloud = document.createElement('wordcloud');
 		const max = tokens.length ? tokens[0].count : 1;
 		const min = tokens.length ? tokens[tokens.length - 1].count : 1;
-		tokens.forEach((token, index) => {
-			const ratio = (token.count - min) / (max - min || 1);
-			const angle = index * 2.399963229728653;
-			const radius = index === 0 ? 0 : 8 + index * 5;
-			const span = document.createElement('word');
-			span.textContent = token.text;
-			span.title = `${token.text}: ${token.count}`;
-			span.dataset.word = token.text;
-			span.dataset.count = token.count;
-			span.style.left = `${50 + Math.cos(angle) * radius}%`;
-			span.style.top = `${50 + Math.sin(angle) * radius}%`;
-			span.style.fontSize = `${12 + ratio * 42}px`;
-			span.style.color = this.createColor(ratio);
-			span.addEventListener('click', event => {
+		this.createPositions(tokens, 28).forEach(position => {
+			position.span.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('wordclick', {
 					detail: token,
 					bubbles: true,
 					composed: true
 				}));
 			});
-			cloud.appendChild(span);
+			cloud.appendChild(position.span);
 		});
 		this._root.appendChild(cloud);
 	}
@@ -108,13 +96,13 @@ word:hover {
 		var width = this.offsetWidth;
 		var height = this.offsetHeight;
 		var nextLoop = true;
-		var next;
 		for (var i = 0; i < tokens.length; i++) {
-			var token = tokens[i];
-			token.percent = (token.count - min) / (max - min);
+			var next = { span: document.createElement('span'), token: tokens[i] };
+			next.span.innerText = next.token.text;
+			next.span.style.fontSize = ((token.count - min) / (max - min) + 1) * fontSize;
 			if (i == 0) {
-				token.x = (width - token.width) / 2;
-				token.y = (height - token.height) / 2;
+				next.x = (width - token.width) / 2;
+				next.y = (height - token.height) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
@@ -219,7 +207,23 @@ word:hover {
 
 	intersects(position, positions) {
 		for (var i = 0; i < positions.length; i++) {
-			if (positions[i].intersects(position))
+			var w1, h1, w2, h2;
+			if (positions[i].vertical) {
+				w1 = positions[i].height;
+				h1 = positions[i].width;
+			} else {
+				w1 = positions[i].width;
+				h1 = positions[i].height;
+			}
+			if (position.vertical) {
+				w2 = position.height;
+				h2 = position.width;
+			} else {
+				w2 = position.width;
+				h2 = position.height;
+			}
+			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2 
+					&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
 				return positions[i];
 		}
 	}
