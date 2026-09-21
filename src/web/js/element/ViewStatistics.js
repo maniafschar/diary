@@ -80,7 +80,10 @@ word:hover {
 	}
 
 	extract() {
-		var s = this.text.replaceAll(/[ \t\r\n,\.\-\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ').trim().toLowerCase().split(' ');
+		var s = this.text.replaceAll(/[ \+\t\r\n,\.\-\_\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ')
+				.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
+				.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
+				.trim().toLowerCase().split(' ');
 		var list = [];
 		for (var i = 0; i < s.length; i++) {
 			if (s[i].trim().length > 1) {
