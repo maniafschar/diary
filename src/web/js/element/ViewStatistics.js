@@ -128,7 +128,7 @@ word:hover {
 	}
 
 	positionNext(position, positions, width, height) {
-		var offset = (int) (Math.random() * positions.length);
+		var offset = parseInt(Math.random() * positions.length);
 		for (var i = 0; i < positions.length; i++) {
 			var candidate = positions[(i + offset) % positions.length];
 			var x1, x2, x3, x4, y1, y2, y3, y4;
@@ -165,7 +165,7 @@ word:hover {
 	}
 
 	positionFringe(position, positions, width, height) {
-		var offset = (int) (Math.random() * positions.length);
+		var offset = parseInt(Math.random() * positions.length);
 		for (int i = 0; i < positions.length; i++) {
 			if (!positions[i].fringe) {
 				var candidate = positions[(i + offset) % positions.length];
