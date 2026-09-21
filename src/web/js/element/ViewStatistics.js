@@ -3,6 +3,7 @@ import { api } from '../api';
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
+	text = '';
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -39,12 +40,6 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	init() {
-		var list = document.querySelector('event view-table').list;
-		var text = '';
-		for (var i = 0; i < list.length; i++) {
-			if (list[i].note)
-				text += list[i].note + ' ';
-		}
 		this.render(this.extract(text));
 	}
 
@@ -106,7 +101,7 @@ class ViewStatistics extends HTMLElement {
 					list.push({ count: 1, text: s[i] });
 			}
 		}
-		list.sort((e, e2) -> e2.count - e.count);
+		list.sort((e, e2) => e2.count - e.count);
 		return list;
 	}
 }
