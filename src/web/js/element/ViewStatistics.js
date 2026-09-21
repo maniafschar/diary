@@ -117,7 +117,7 @@ word:hover {
 				token.y = (image.getHeight() - token.height) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
-			else if (i > tokens.size() / 3)
+			else if (i > tokens.length / 3)
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				next = null;
@@ -128,9 +128,9 @@ word:hover {
 	}
 
 	positionNext(position, positions, width, height) {
-		var offset = (int) (Math.random() * positions.size());
+		var offset = (int) (Math.random() * positions.length);
 		for (var i = 0; i < positions.length; i++) {
-			var candidate = positions[(i + offset) % positions.size()];
+			var candidate = positions[(i + offset) % positions.length];
 			var x1, x2, x3, x4, y1, y2, y3, y4;
 			if (candidate.vertical) {
 				position.vertical = false;
@@ -153,14 +153,11 @@ word:hover {
 				y3 = candidate.y + candidate.height - position.width;
 				y4 = candidate.y + candidate.height;
 			}
-			for (var xy in [
-					{ x1, y2 }, { x2, y1 },
-					{ x3, y1 }, { x4, y2 },
-					{ x1, y3 }, { x2, y4 },
-					{ x3, y4 }, { x4, y3 } ]) {
-				position.x = xy[0];
-				position.y = xy[1];
-				if (this.inside(position, width, height) && this.intersects(position, positions) == null)
+			var p = [ { x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 } ];
+			for (var i = 0; i < p.length; i++) {
+				position.x = p[i][0];
+				position.y = p[i][1];
+				if (this.inside(position, width, height) && !this.intersects(position, positions))
 					return true;
 			}
 		}
@@ -168,10 +165,10 @@ word:hover {
 	}
 
 	positionFringe(position, positions, width, height) {
-		var p = positions.stream().filter(e -> !e.fringe).collect(Collectors.toList());
-		var offset = (int) (Math.random() * p.size());
-		for (int i = 0; i < p.size(); i++) {
-			var candidate = p.get((i + offset) % p.size());
+		var p = positions;//.stream().filter(e -> !e.fringe).collect(Collectors.toList());
+		var offset = (int) (Math.random() * p.length);
+		for (int i = 0; i < p.length; i++) {
+			var candidate = p.get((i + offset) % p.length);
 			if (candidate.vertical) {
 				position.x = candidate.x - position.width;
 				position.y = candidate.y;
@@ -182,7 +179,7 @@ word:hover {
 						position.y = candidate.y;
 					}
 					while (position.y < candidate.y + candidate.width) {
-						final Position intersection = this.intersects(position, positions);
+						var intersection = this.intersects(position, positions);
 						if (intersection == null) {
 							if (this.inside(position, width, height)) {
 								position.fringe = true;
