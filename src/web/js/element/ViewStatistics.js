@@ -14,29 +14,27 @@ class ViewStatistics extends HTMLElement {
 		this.parentElement.addEventListener('visible', () => this.init(), { once: true });
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
-		width: 100%;
-		height: 100%;
-		position: relative;
-		display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: block;
 }
-.wordcloud {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		text-align: center;
+wordcloud {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	text-align: center;
 }
-.word {
-		position: absolute;
-		transform: translate(-50%, -50%);
-		cursor: pointer;
-		font-family: Arial, sans-serif;
-		font-weight: bold;
-		line-height: 1;
-		user-select: none;
+word {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+	user-select: none;
 }
-.word:hover {
-		text-decoration: underline;
+word:hover {
+	text-decoration: underline;
 }`;
 	}
 
@@ -45,20 +43,14 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	render(tokens) {
-		const cloud = document.createElement('div');
-		cloud.className = 'wordcloud';
-
+		const cloud = document.createElement('wordcloud');
 		const max = tokens.length ? tokens[0].count : 1;
 		const min = tokens.length ? tokens[tokens.length - 1].count : 1;
-
-		// Place the most frequent words near the center and the others progressively farther away.
 		tokens.forEach((token, index) => {
 			const ratio = (token.count - min) / (max - min || 1);
 			const angle = index * 2.399963229728653;
 			const radius = index === 0 ? 0 : 8 + index * 5;
-			const span = document.createElement('span');
-
-			span.className = 'word';
+			const span = document.createElement('word');
 			span.textContent = token.text;
 			span.title = `${token.text}: ${token.count}`;
 			span.dataset.word = token.text;
@@ -67,7 +59,6 @@ class ViewStatistics extends HTMLElement {
 			span.style.top = `${50 + Math.sin(angle) * radius}%`;
 			span.style.fontSize = `${12 + ratio * 42}px`;
 			span.style.color = this.createColor(ratio);
-
 			span.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('wordclick', {
 					detail: token,
@@ -75,11 +66,9 @@ class ViewStatistics extends HTMLElement {
 					composed: true
 				}));
 			});
-
 			cloud.appendChild(span);
 		});
-
-		this._root.replaceChildren(this._root.querySelector('style'), cloud);
+		this._root.appendChild(cloud);
 	}
 
 	createColor(ratio) {
