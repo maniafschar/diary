@@ -132,6 +132,7 @@ word:hover {
 				y4 = candidate.y + candidate.width;
 			} else {
 				position.vertical = true;
+				position.span.style.transform = ((position.span.style.transform || '') + ' rotate(-90deg)').trim();
 				x1 = candidate.x - position.height;
 				x2 = candidate.x;
 				x3 = candidate.x + candidate.width - position.height;
