@@ -38,12 +38,8 @@ class ViewStatistics extends HTMLElement {
 }`;
 	}
 
-	init() {
-		var list = document.querySelector('event view-table').list;
-		var s = '';
-		for (var i = 0; i < list.length; i++)
-			s += list[i].note + ' ';
-		this.render(this.extract(s));
+	init(text) {
+		this.render(this.extract(text));
 	}
 
 	render(tokens) {
