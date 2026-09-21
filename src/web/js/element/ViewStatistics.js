@@ -44,20 +44,8 @@ word:hover {
 	}
 
 	render(tokens) {
-		const cloud = document.createElement('wordcloud');
-		const max = tokens.length ? tokens[0].count : 1;
-		const min = tokens.length ? tokens[tokens.length - 1].count : 1;
-		this.createPositions(tokens, 28).forEach(position => {
-			position.span.addEventListener('click', event => {
-				this.dispatchEvent(new CustomEvent('wordclick', {
-					detail: token,
-					bubbles: true,
-					composed: true
-				}));
-			});
-			cloud.appendChild(position.span);
-		});
-		this._root.appendChild(cloud);
+		this._root.appendChild(document.createElement('wordcloud'));
+		this.createPositions(tokens, 28);
 	}
 
 	createColor(ratio) {
@@ -96,10 +84,19 @@ word:hover {
 		var width = this.offsetWidth;
 		var height = this.offsetHeight;
 		var nextLoop = true;
+		var wordcloud = this._root.querySelector('wordcloud');
 		for (var i = 0; i < tokens.length; i++) {
 			var next = { span: document.createElement('span'), token: tokens[i] };
 			next.span.innerText = next.token.text;
 			next.span.style.fontSize = ((next.token.count - min) / (max - min) + 1) * fontSize;
+			next.span.addEventListener('click', event => {
+				this.dispatchEvent(new CustomEvent('wordclick', {
+					detail: next.token,
+					bubbles: true,
+					composed: true
+				}));
+			});
+			wordcloud.appendChild(next.span);
 			if (i == 0) {
 				next.x = (width - next.span.offestWidth) / 2;
 				next.y = (height - next.span.offestHeight) / 2;
@@ -108,11 +105,8 @@ word:hover {
 			else if (i > tokens.length / 3)
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
-				next = null;
-			if (next)
-				positions.push(next);
+				wordcloud.removeChild(next.span);
 		}
-		return positions;
 	}
 
 	positionNext(position, positions, width, height) {
