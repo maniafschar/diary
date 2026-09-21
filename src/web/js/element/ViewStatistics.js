@@ -39,7 +39,11 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	init() {
-		api.statistics.getWordcloud(tokens => this.render(tokens));
+		var list = document.querySelector('event view-table').list;
+		var s = '';
+		for (var i = 0; i < list.length; i++)
+			s += list[i].note + ' ';
+		this.render(this.extract(s));
 	}
 
 	render(tokens) {
