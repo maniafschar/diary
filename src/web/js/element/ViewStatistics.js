@@ -32,6 +32,7 @@ word {
 	transform: translate(-50%, -50%);
 	cursor: pointer;
 	user-select: none;
+	white-space: nowrap;
 }
 word:hover {
 	text-decoration: underline;
@@ -96,6 +97,145 @@ word:hover {
 		}
 		list.sort((e, e2) => e2.count - e.count);
 		return list;
+	}
+
+	createPositions(tokens, fontSize) {
+		var positions = [];
+		if (tokens.length == 0)
+			return positions;
+		var min = tokens[tokens.length - 1].count;
+		var max = tokens[0].count;
+		var width = this.innerWidth;
+		var height = this.innerHeight;
+		var nextLoop = true;
+		var next;
+		for (var i = 0; i < tokens.length; i++) {
+			var token = tokens[i];
+			token.percent = (token.count - min) / (max - min);
+			if (i == 0) {
+				token.x = (image.getWidth() - token.width) / 2;
+				token.y = (image.getHeight() - token.height) / 2;
+			} else if (nextLoop)
+				nextLoop = this.positionNext(next, positions, width, height);
+			else if (i > tokens.size() / 3)
+				nextLoop = false;
+			if (!nextLoop && !this.positionFringe(next, positions, width, height))
+				next = null;
+			if (next != null)
+				positions.add(next);
+			else
+				System.out.println("Failed on " + token.text);
+		}
+		return positions;
+	}
+
+	positionNext(position, positions, width, height) {
+		var offset = (int) (Math.random() * positions.size());
+		for (int i = 0; i < positions.size(); i++) {
+			var candidate = positions.get((i + offset) % positions.size());
+			var x1, x2, x3, x4, y1, y2, y3, y4;
+			if (candidate.vertical) {
+				position.vertical = false;
+				x1 = candidate.x - position.width;
+				x2 = candidate.x - position.width + candidate.height;
+				x3 = candidate.x;
+				x4 = candidate.x + candidate.height;
+				y1 = candidate.y - position.height;
+				y2 = candidate.y;
+				y3 = candidate.y + candidate.width - position.height;
+				y4 = candidate.y + candidate.width;
+			} else {
+				position.vertical = true;
+				x1 = candidate.x - position.height;
+				x2 = candidate.x;
+				x3 = candidate.x + candidate.width - position.height;
+				x4 = candidate.x + candidate.width;
+				y1 = candidate.y - position.width;
+				y2 = candidate.y;
+				y3 = candidate.y + candidate.height - position.width;
+				y4 = candidate.y + candidate.height;
+			}
+			for (var xy in [
+					{ x1, y2 }, { x2, y1 },
+					{ x3, y1 }, { x4, y2 },
+					{ x1, y3 }, { x2, y4 },
+					{ x3, y4 }, { x4, y3 } ]) {
+				position.x = xy[0];
+				position.y = xy[1];
+				if (this.inside(position, width, height) && this.intersects(position, positions) == null)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	positionFringe(position, positions, width, height) {
+		var p = positions.stream().filter(e -> !e.fringe).collect(Collectors.toList());
+		var offset = (int) (Math.random() * p.size());
+		for (int i = 0; i < p.size(); i++) {
+			var candidate = p.get((i + offset) % p.size());
+			if (candidate.vertical) {
+				position.x = candidate.x - position.width;
+				position.y = candidate.y;
+				position.vertical = false;
+				for (int i2 = 0; i2 < 2; i2++) {
+					if (i2 == 1) {
+						position.x = candidate.x + candidate.height;
+						position.y = candidate.y;
+					}
+					while (position.y < candidate.y + candidate.width) {
+						final Position intersection = this.intersects(position, positions);
+						if (intersection == null) {
+							if (this.inside(position, width, height)) {
+								position.fringe = true;
+								return true;
+							}
+							position.y += position.width;
+						} else
+							position.y = intersection.y
+									+ (intersection.vertical ? intersection.width : intersection.height);
+					}
+				}
+			} else {
+				position.x = candidate.x;
+				position.y = candidate.y - position.width;
+				position.vertical = true;
+				for (int i2 = 0; i2 < 2; i2++) {
+					if (i2 == 1) {
+						position.x = candidate.x;
+						position.y = candidate.y + candidate.height;
+					}
+					while (position.x < candidate.x + candidate.width) {
+						var intersection = this.intersects(position, positions);
+						if (intersection == null) {
+							if (this.inside(position, width, height)) {
+								position.fringe = true;
+								return true;
+							}
+							position.x += position.height;
+						} else
+							position.x = intersection.x
+									+ (intersection.vertical ? intersection.height : intersection.width);
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	intersects(position, positions) {
+		for (var i = 0; i < positions.length; i++) {
+			if (positions[i].intersects(position))
+				return positions[i];
+		}
+	}
+
+	inside(position, width, height) {
+		if (position.x < 0 || position.y < 0)
+			return false;
+		if (position.vertical)
+			return position.x + position.height < width && position.y + position.width < height;
+		return position.x + position.width < width && position.y + position.height < height;
 	}
 
 	STOP_WORDS = [
