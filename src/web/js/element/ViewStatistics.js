@@ -99,10 +99,10 @@ word:hover {
 		for (var i = 0; i < tokens.length; i++) {
 			var next = { span: document.createElement('span'), token: tokens[i] };
 			next.span.innerText = next.token.text;
-			next.span.style.fontSize = ((token.count - min) / (max - min) + 1) * fontSize;
+			next.span.style.fontSize = ((next.token.count - min) / (max - min) + 1) * fontSize;
 			if (i == 0) {
-				next.x = (width - token.width) / 2;
-				next.y = (height - token.height) / 2;
+				next.x = (width - next.span.offestWidth) / 2;
+				next.y = (height - next.span.offestHeight) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
