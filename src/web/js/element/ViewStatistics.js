@@ -40,7 +40,7 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	init() {
-		this.render(this.extract(text));
+		this.render(this.extract());
 	}
 
 	render(tokens) {
@@ -89,8 +89,8 @@ class ViewStatistics extends HTMLElement {
 		return `rgb(${255 - Math.round(ratio * 150)}, 0, 0)`;
 	}
 
-	extract(text) {
-		var s = text.replaceAll(/[ \t\r\n\\,\\.\\-\\!\\?\\[\\]\\{\\}';:/\\(\\)…0-9]/g, " ").trim().toLowerCase().split(' ');
+	extract() {
+		var s = this.text.replaceAll(/[ \t\r\n\\,\\.\\-\\!\\?\\[\\]\\{\\}';:/\\(\\)…0-9]/g, " ").trim().toLowerCase().split(' ');
 		var list = [];
 		for (var i = 0; i < s.length; i++) {
 			if (s[i].trim().length > 1) {
