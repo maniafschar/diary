@@ -111,7 +111,7 @@ class ViewStatistics extends HTMLElement {
 	}
 }
 
-const STOP_WORDS = [
+static STOP_WORDS = [
 	// English
 	'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', "aren't", 'as', 'at',
 	'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', "can't", 'cannot', 'could',
