@@ -38,7 +38,13 @@ class ViewStatistics extends HTMLElement {
 }`;
 	}
 
-	init(text) {
+	init() {
+		var list = document.querySelector('event view-table').list;
+		var text = '';
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].note)
+				text += list[i].note + ' ';
+		}
 		this.render(this.extract(text));
 	}
 
@@ -93,7 +99,7 @@ class ViewStatistics extends HTMLElement {
 		var list = [];
 		for (var i = 0; i < s.length; i++) {
 			if (s[i].trim().length > 1) {
-				var token = list.;
+				var token = list.find(e => e.text == s[i]);
 				if (token)
 					token.count++;
 				else if (!STOP_WORDS.includes(s[i]))
