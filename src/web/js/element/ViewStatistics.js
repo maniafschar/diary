@@ -110,7 +110,7 @@ word:hover {
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				next = null;
 			if (next != null)
-				positions.add(next);
+				positions.push(next);
 		}
 		return positions;
 	}
