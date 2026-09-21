@@ -123,16 +123,14 @@ word:hover {
 				next = null;
 			if (next != null)
 				positions.add(next);
-			else
-				System.out.println("Failed on " + token.text);
 		}
 		return positions;
 	}
 
 	positionNext(position, positions, width, height) {
 		var offset = (int) (Math.random() * positions.size());
-		for (int i = 0; i < positions.size(); i++) {
-			var candidate = positions.get((i + offset) % positions.size());
+		for (var i = 0; i < positions.length; i++) {
+			var candidate = positions[(i + offset) % positions.size()];
 			var x1, x2, x3, x4, y1, y2, y3, y4;
 			if (candidate.vertical) {
 				position.vertical = false;
