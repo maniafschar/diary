@@ -105,16 +105,16 @@ word:hover {
 			return positions;
 		var min = tokens[tokens.length - 1].count;
 		var max = tokens[0].count;
-		var width = this.innerWidth;
-		var height = this.innerHeight;
+		var width = this.offsetWidth;
+		var height = this.offsetHeight;
 		var nextLoop = true;
 		var next;
 		for (var i = 0; i < tokens.length; i++) {
 			var token = tokens[i];
 			token.percent = (token.count - min) / (max - min);
 			if (i == 0) {
-				token.x = (image.getWidth() - token.width) / 2;
-				token.y = (image.getHeight() - token.height) / 2;
+				token.x = (width - token.width) / 2;
+				token.y = (height - token.height) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
@@ -165,57 +165,57 @@ word:hover {
 	}
 
 	positionFringe(position, positions, width, height) {
-		var p = positions;//.stream().filter(e -> !e.fringe).collect(Collectors.toList());
-		var offset = (int) (Math.random() * p.length);
-		for (int i = 0; i < p.length; i++) {
-			var candidate = p.get((i + offset) % p.length);
-			if (candidate.vertical) {
-				position.x = candidate.x - position.width;
-				position.y = candidate.y;
-				position.vertical = false;
-				for (int i2 = 0; i2 < 2; i2++) {
-					if (i2 == 1) {
-						position.x = candidate.x + candidate.height;
-						position.y = candidate.y;
+		var offset = (int) (Math.random() * positions.length);
+		for (int i = 0; i < positions.length; i++) {
+			if (!positions[i].fringe) {
+				var candidate = positions[(i + offset) % positions.length];
+				if (candidate.vertical) {
+					position.x = candidate.x - position.width;
+					position.y = candidate.y;
+					position.vertical = false;
+					for (int i2 = 0; i2 < 2; i2++) {
+						if (i2 == 1) {
+							position.x = candidate.x + candidate.height;
+							position.y = candidate.y;
+						}
+						while (position.y < candidate.y + candidate.width) {
+							var intersection = this.intersects(position, positions);
+							if (intersection == null) {
+								if (this.inside(position, width, height)) {
+									position.fringe = true;
+									return true;
+								}
+								position.y += position.width;
+							} else
+								position.y = intersection.y
+										+ (intersection.vertical ? intersection.width : intersection.height);
+						}
 					}
-					while (position.y < candidate.y + candidate.width) {
-						var intersection = this.intersects(position, positions);
-						if (intersection == null) {
-							if (this.inside(position, width, height)) {
-								position.fringe = true;
-								return true;
-							}
-							position.y += position.width;
-						} else
-							position.y = intersection.y
-									+ (intersection.vertical ? intersection.width : intersection.height);
-					}
-				}
-			} else {
-				position.x = candidate.x;
-				position.y = candidate.y - position.width;
-				position.vertical = true;
-				for (int i2 = 0; i2 < 2; i2++) {
-					if (i2 == 1) {
-						position.x = candidate.x;
-						position.y = candidate.y + candidate.height;
-					}
-					while (position.x < candidate.x + candidate.width) {
-						var intersection = this.intersects(position, positions);
-						if (intersection == null) {
-							if (this.inside(position, width, height)) {
-								position.fringe = true;
-								return true;
-							}
-							position.x += position.height;
-						} else
-							position.x = intersection.x
-									+ (intersection.vertical ? intersection.height : intersection.width);
+				} else {
+					position.x = candidate.x;
+					position.y = candidate.y - position.width;
+					position.vertical = true;
+					for (int i2 = 0; i2 < 2; i2++) {
+						if (i2 == 1) {
+							position.x = candidate.x;
+							position.y = candidate.y + candidate.height;
+						}
+						while (position.x < candidate.x + candidate.width) {
+							var intersection = this.intersects(position, positions);
+							if (intersection == null) {
+								if (this.inside(position, width, height)) {
+									position.fringe = true;
+									return true;
+								}
+								position.x += position.height;
+							} else
+								position.x = intersection.x
+										+ (intersection.vertical ? intersection.height : intersection.width);
+						}
 					}
 				}
 			}
 		}
-		return false;
 	}
 
 	intersects(position, positions) {
