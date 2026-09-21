@@ -109,7 +109,7 @@ word:hover {
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				next = null;
-			if (next != null)
+			if (next)
 				positions.push(next);
 		}
 		return positions;
