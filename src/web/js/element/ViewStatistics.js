@@ -90,7 +90,7 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	extract() {
-		var s = this.text.replaceAll(/[ \t\r\n\\,\\.\\-\\!\\?\\[\\]\\{\\}';:/\\(\\)…0-9]/g, " ").trim().toLowerCase().split(' ');
+		var s = this.text.replaceAll(/[ \t\r\n\\,\\.\\-\\!\\?\\[\\]\\{\\}';:\/\\(\\)…0-9]/g, ' ').trim().toLowerCase().split(' ');
 		var list = [];
 		for (var i = 0; i < s.length; i++) {
 			if (s[i].trim().length > 1) {
