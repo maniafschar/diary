@@ -124,9 +124,9 @@ word {
 				x2 = candidate.x - position.word.offsetWidth + candidate.word.offsetHeight;
 				x3 = candidate.x;
 				x4 = candidate.x + candidate.word.offsetHeight;
-				y1 = candidate.y - position.word.offsetHeight;
+				y1 = candidate.y - position.word.offsetWidth;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.word.offsetWidth - position.word.offsetHeight;
+				y3 = candidate.y + candidate.word.offsetWidth - position.word.offsetWidth;
 				y4 = candidate.y + candidate.word.offsetWidth;
 			} else {
 				position.vertical = true;
@@ -134,9 +134,9 @@ word {
 				x2 = candidate.x;
 				x3 = candidate.x + candidate.word.offsetWidth - position.word.offsetHeight;
 				x4 = candidate.x + candidate.word.offsetWidth;
-				y1 = candidate.y - position.word.offsetWidth;
+				y1 = candidate.y - position.word.offsetHeight;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.word.offsetHeight - position.word.offsetWidth;
+				y3 = candidate.y + candidate.word.offsetHeight - position.word.offsetHeight;
 				y4 = candidate.y + candidate.word.offsetHeight;
 			}
 			var p = [[x1, y2], [x2, y1], [x3, y1], [x4, y2], [x1, y3], [x2, y4], [x3, y4], [x4, y3]];
