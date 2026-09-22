@@ -108,8 +108,12 @@ word:hover {
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				wordcloud.removeChild(next.word);
-			else
+			else {
 				positions.push(next);
+				next.style.left = next.x + 'px';
+				next.style.top = next.y + 'px';
+				next.style.color = this.createColor((next.token.count - min) / (max - min));
+			}
 		}
 	}
 
