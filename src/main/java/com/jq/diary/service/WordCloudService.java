@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +99,7 @@ public class WordCloudService {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ImageIO.write(image, "png", out);
 			return out.toByteArray();
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
