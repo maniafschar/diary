@@ -88,26 +88,26 @@ word:hover {
 		var nextLoop = true;
 		var wordcloud = this._root.querySelector('wordcloud');
 		for (var i = 0; i < tokens.length; i++) {
-			var next = { span: document.createElement('span'), token: tokens[i] };
-			next.span.innerText = next.token.text;
-			next.span.style.fontSize = ((next.token.count - min) / (max - min) + 1) * fontSize;
-			next.span.addEventListener('click', event => {
+			var next = { word: document.createElement('word'), token: tokens[i] };
+			next.word.innerText = next.token.text;
+			next.word.style.fontSize = ((next.token.count - min) / (max - min) + 1) * fontSize;
+			next.word.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('wordclick', {
 					detail: next.token,
 					bubbles: true,
 					composed: true
 				}));
 			});
-			wordcloud.appendChild(next.span);
+			wordcloud.appendChild(next.word);
 			if (i == 0) {
-				next.x = (width - next.span.offsetWidth) / 2;
-				next.y = (height - next.span.offsetHeight) / 2;
+				next.x = (width - next.word.offsetWidth) / 2;
+				next.y = (height - next.word.offsetHeight) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
-				wordcloud.removeChild(next.span);
+				wordcloud.removeChild(next.word);
 			else
 				positions.push(next);
 		}
@@ -120,25 +120,25 @@ word:hover {
 			var x1, x2, x3, x4, y1, y2, y3, y4;
 			if (candidate.vertical) {
 				position.vertical = false;
-				x1 = candidate.x - position.span.offsetWidth;
-				x2 = candidate.x - position.span.offsetWidth + candidate.span.offsetHeight;
+				x1 = candidate.x - position.word.offsetWidth;
+				x2 = candidate.x - position.word.offsetWidth + candidate.word.offsetHeight;
 				x3 = candidate.x;
-				x4 = candidate.x + candidate.span.offsetHeight;
-				y1 = candidate.y - position.span.offsetHeight;
+				x4 = candidate.x + candidate.word.offsetHeight;
+				y1 = candidate.y - position.word.offsetHeight;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.span.offsetWidth - position.span.offsetHeight;
-				y4 = candidate.y + candidate.span.offsetWidth;
+				y3 = candidate.y + candidate.word.offsetWidth - position.word.offsetHeight;
+				y4 = candidate.y + candidate.word.offsetWidth;
 			} else {
 				position.vertical = true;
-				position.span.style.transform = ((position.span.style.transform || '') + ' rotate(-90deg)').trim();
-				x1 = candidate.x - position.span.offsetHeight;
+				position.word.style.transform = ((position.word.style.transform || '') + ' rotate(-90deg)').trim();
+				x1 = candidate.x - position.word.offsetHeight;
 				x2 = candidate.x;
-				x3 = candidate.x + candidate.span.offsetWidth - position.span.offsetHeight;
-				x4 = candidate.x + candidate.span.offsetWidth;
-				y1 = candidate.y - position.span.offsetWidth;
+				x3 = candidate.x + candidate.word.offsetWidth - position.word.offsetHeight;
+				x4 = candidate.x + candidate.word.offsetWidth;
+				y1 = candidate.y - position.word.offsetWidth;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.span.offsetHeight - position.span.offsetWidth;
-				y4 = candidate.y + candidate.span.offsetHeight;
+				y3 = candidate.y + candidate.word.offsetHeight - position.word.offsetWidth;
+				y4 = candidate.y + candidate.word.offsetHeight;
 			}
 			var p = [[x1, y2], [x2, y1], [x3, y1], [x4, y2], [x1, y3], [x2, y4], [x3, y4], [x4, y3]];
 			for (var i = 0; i < p.length; i++) {
@@ -156,22 +156,22 @@ word:hover {
 			if (!positions[i].fringe) {
 				var candidate = positions[(i + offset) % positions.length];
 				if (candidate.vertical) {
-					position.x = candidate.x - position.span.offsetWidth;
+					position.x = candidate.x - position.word.offsetWidth;
 					position.y = candidate.y;
 					position.vertical = false;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
-							position.x = candidate.x + candidate.span.offsetHeight;
+							position.x = candidate.x + candidate.word.offsetHeight;
 							position.y = candidate.y;
 						}
-						while (position.y < candidate.y + candidate.span.offsetWidth) {
+						while (position.y < candidate.y + candidate.word.offsetWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.y += position.span.offsetWidth;
+								position.y += position.word.offsetWidth;
 							} else
 								position.y = intersection.y
 									+ (intersection.vertical ? intersection.width : intersection.height);
@@ -179,21 +179,21 @@ word:hover {
 					}
 				} else {
 					position.x = candidate.x;
-					position.y = candidate.y - position.span.offsetWidth;
+					position.y = candidate.y - position.word.offsetWidth;
 					position.vertical = true;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
 							position.x = candidate.x;
-							position.y = candidate.y + candidate.span.offsetHeight;
+							position.y = candidate.y + candidate.word.offsetHeight;
 						}
-						while (position.x < candidate.x + candidate.span.offsetWidth) {
+						while (position.x < candidate.x + candidate.word.offsetWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.x += position.span.offsetHeight;
+								position.x += position.word.offsetHeight;
 							} else
 								position.x = intersection.x
 									+ (intersection.vertical ? intersection.height : intersection.width);
@@ -208,18 +208,18 @@ word:hover {
 		for (var i = 0; i < positions.length; i++) {
 			var w1, h1, w2, h2;
 			if (positions[i].vertical) {
-				w1 = positions[i].span.offsetHeight;
-				h1 = positions[i].span.offsetWidth;
+				w1 = positions[i].word.offsetHeight;
+				h1 = positions[i].word.offsetWidth;
 			} else {
-				w1 = positions[i].span.offsetWidth;
-				h1 = positions[i].span.offsetHeight;
+				w1 = positions[i].word.offsetWidth;
+				h1 = positions[i].word.offsetHeight;
 			}
 			if (position.vertical) {
-				w2 = position.span.offsetHeight;
-				h2 = position.span.offsetWidth;
+				w2 = position.word.offsetHeight;
+				h2 = position.word.offsetWidth;
 			} else {
-				w2 = position.span.offsetWidth;
-				h2 = position.span.offsetHeight;
+				w2 = position.word.offsetWidth;
+				h2 = position.word.offsetHeight;
 			}
 			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
 				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
@@ -231,8 +231,8 @@ word:hover {
 		if (position.x < 0 || position.y < 0)
 			return false;
 		if (position.vertical)
-			return position.x + position.span.offsetHeight < width && position.y + position.span.offsetWidth < height;
-		return position.x + position.span.offsetWidth < width && position.y + position.span.offsetHeight < height;
+			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth < height;
+		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
 	}
 
 	STOP_WORDS = [
