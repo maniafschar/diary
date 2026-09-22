@@ -137,7 +137,7 @@ word:hover {
 				y3 = candidate.y + candidate.span.offsetHeight - position.span.offsetWidth;
 				y4 = candidate.y + candidate.span.offsetHeight;
 			}
-			var p = [{ x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 }];
+			var p = [[x1, y2], [x2, y1], [x3, y1], [x4, y2], [x1, y3], [x2, y4], [x3, y4], [x4, y3]];
 			for (var i = 0; i < p.length; i++) {
 				position.x = p[i][0];
 				position.y = p[i][1];
