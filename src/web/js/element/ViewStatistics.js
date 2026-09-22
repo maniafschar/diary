@@ -107,7 +107,7 @@ word {
 			else {
 				positions.push(next);
 				next.word.style.left = next.x + 'px';
-				next.word.style.top = (next.y + (next.vertical ? (next.style.offsetWidth - next.style.offsetHeight) / 2 : 0)) + 'px';
+				next.word.style.top = (next.y + (next.vertical ? (next.word.style.offsetWidth - next.word.style.offsetHeight) / 2 : 0)) + 'px';
 				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
 			}
 		}
