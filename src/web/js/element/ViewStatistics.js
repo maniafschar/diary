@@ -97,8 +97,8 @@ word:hover {
 			});
 			wordcloud.appendChild(next.span);
 			if (i == 0) {
-				next.x = (width - next.span.offestWidth) / 2;
-				next.y = (height - next.span.offestHeight) / 2;
+				next.x = (width - next.span.offsetWidth) / 2;
+				next.y = (height - next.span.offsetHeight) / 2;
 			} else if (nextLoop)
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
@@ -117,25 +117,25 @@ word:hover {
 			var x1, x2, x3, x4, y1, y2, y3, y4;
 			if (candidate.vertical) {
 				position.vertical = false;
-				x1 = candidate.x - position.span.offestWidth;
-				x2 = candidate.x - position.span.offestWidth + candidate.span.offestHeight;
+				x1 = candidate.x - position.span.offsetWidth;
+				x2 = candidate.x - position.span.offsetWidth + candidate.span.offsetHeight;
 				x3 = candidate.x;
-				x4 = candidate.x + candidate.span.offestHeight;
-				y1 = candidate.y - position.span.offestHeight;
+				x4 = candidate.x + candidate.span.offsetHeight;
+				y1 = candidate.y - position.span.offsetHeight;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.span.offestWidth - position.span.offestHeight;
-				y4 = candidate.y + candidate.span.offestWidth;
+				y3 = candidate.y + candidate.span.offsetWidth - position.span.offsetHeight;
+				y4 = candidate.y + candidate.span.offsetWidth;
 			} else {
 				position.vertical = true;
 				position.span.style.transform = ((position.span.style.transform || '') + ' rotate(-90deg)').trim();
-				x1 = candidate.x - position.span.offestHeight;
+				x1 = candidate.x - position.span.offsetHeight;
 				x2 = candidate.x;
-				x3 = candidate.x + candidate.span.offestWidth - position.span.offestHeight;
-				x4 = candidate.x + candidate.span.offestWidth;
-				y1 = candidate.y - position.span.offestWidth;
+				x3 = candidate.x + candidate.span.offsetWidth - position.span.offsetHeight;
+				x4 = candidate.x + candidate.span.offsetWidth;
+				y1 = candidate.y - position.span.offsetWidth;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.span.offestHeight - position.span.offestWidth;
-				y4 = candidate.y + candidate.span.offestHeight;
+				y3 = candidate.y + candidate.span.offsetHeight - position.span.offsetWidth;
+				y4 = candidate.y + candidate.span.offsetHeight;
 			}
 			var p = [{ x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 }];
 			for (var i = 0; i < p.length; i++) {
@@ -153,22 +153,22 @@ word:hover {
 			if (!positions[i].fringe) {
 				var candidate = positions[(i + offset) % positions.length];
 				if (candidate.vertical) {
-					position.x = candidate.x - position.span.offestWidth;
+					position.x = candidate.x - position.span.offsetWidth;
 					position.y = candidate.y;
 					position.vertical = false;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
-							position.x = candidate.x + candidate.span.offestHeight;
+							position.x = candidate.x + candidate.span.offsetHeight;
 							position.y = candidate.y;
 						}
-						while (position.y < candidate.y + candidate.span.offestWidth) {
+						while (position.y < candidate.y + candidate.span.offsetWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.y += position.span.offestWidth;
+								position.y += position.span.offsetWidth;
 							} else
 								position.y = intersection.y
 									+ (intersection.vertical ? intersection.width : intersection.height);
@@ -176,21 +176,21 @@ word:hover {
 					}
 				} else {
 					position.x = candidate.x;
-					position.y = candidate.y - position.span.offestWidth;
+					position.y = candidate.y - position.span.offsetWidth;
 					position.vertical = true;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
 							position.x = candidate.x;
-							position.y = candidate.y + candidate.span.offestHeight;
+							position.y = candidate.y + candidate.span.offsetHeight;
 						}
-						while (position.x < candidate.x + candidate.span.offestWidth) {
+						while (position.x < candidate.x + candidate.span.offsetWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.x += position.span.offestHeight;
+								position.x += position.span.offsetHeight;
 							} else
 								position.x = intersection.x
 									+ (intersection.vertical ? intersection.height : intersection.width);
@@ -205,18 +205,18 @@ word:hover {
 		for (var i = 0; i < positions.length; i++) {
 			var w1, h1, w2, h2;
 			if (positions[i].vertical) {
-				w1 = positions[i].span.offestHeight;
-				h1 = positions[i].span.offestWidth;
+				w1 = positions[i].span.offsetHeight;
+				h1 = positions[i].span.offsetWidth;
 			} else {
-				w1 = positions[i].span.offestWidth;
-				h1 = positions[i].span.offestHeight;
+				w1 = positions[i].span.offsetWidth;
+				h1 = positions[i].span.offsetHeight;
 			}
 			if (position.vertical) {
-				w2 = position.span.offestHeight;
-				h2 = position.span.offestWidth;
+				w2 = position.span.offsetHeight;
+				h2 = position.span.offsetWidth;
 			} else {
-				w2 = position.span.offestWidth;
-				h2 = position.span.offestHeight;
+				w2 = position.span.offsetWidth;
+				h2 = position.span.offsetHeight;
 			}
 			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
 				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
@@ -228,8 +228,8 @@ word:hover {
 		if (position.x < 0 || position.y < 0)
 			return false;
 		if (position.vertical)
-			return position.x + position.span.offestHeight < width && position.y + position.span.offestWidth < height;
-		return position.x + position.span.offestWidth < width && position.y + position.span.offestHeight < height;
+			return position.x + position.span.offsetHeight < width && position.y + position.span.offsetWidth < height;
+		return position.x + position.span.offsetWidth < width && position.y + position.span.offsetHeight < height;
 	}
 
 	STOP_WORDS = [
