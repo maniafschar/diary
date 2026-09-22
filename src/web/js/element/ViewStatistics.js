@@ -1,4 +1,3 @@
-import { api } from '../api';
 
 export { ViewStatistics };
 
@@ -58,9 +57,9 @@ word:hover {
 
 	extract() {
 		var s = this.text.replaceAll(/[ \+\t\r\n,\.\-\_\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ')
-				.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
-				.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
-				.trim().toLowerCase().split(' ');
+			.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
+			.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
+			.trim().toLowerCase().split(' ');
 		var list = [];
 		for (var i = 0; i < s.length; i++) {
 			if (s[i].trim().length > 1) {
@@ -106,6 +105,8 @@ word:hover {
 				nextLoop = false;
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				wordcloud.removeChild(next.span);
+			else
+				positions.add(next);
 		}
 	}
 
@@ -136,7 +137,7 @@ word:hover {
 				y3 = candidate.y + candidate.height - position.width;
 				y4 = candidate.y + candidate.height;
 			}
-			var p = [ { x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 } ];
+			var p = [{ x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 }];
 			for (var i = 0; i < p.length; i++) {
 				position.x = p[i][0];
 				position.y = p[i][1];
@@ -170,7 +171,7 @@ word:hover {
 								position.y += position.width;
 							} else
 								position.y = intersection.y
-										+ (intersection.vertical ? intersection.width : intersection.height);
+									+ (intersection.vertical ? intersection.width : intersection.height);
 						}
 					}
 				} else {
@@ -192,7 +193,7 @@ word:hover {
 								position.x += position.height;
 							} else
 								position.x = intersection.x
-										+ (intersection.vertical ? intersection.height : intersection.width);
+									+ (intersection.vertical ? intersection.height : intersection.width);
 						}
 					}
 				}
@@ -217,8 +218,8 @@ word:hover {
 				w2 = position.width;
 				h2 = position.height;
 			}
-			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2 
-					&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
+			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
+				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
 				return positions[i];
 		}
 	}
