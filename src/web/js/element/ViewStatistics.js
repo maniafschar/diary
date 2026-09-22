@@ -205,18 +205,18 @@ word:hover {
 		for (var i = 0; i < positions.length; i++) {
 			var w1, h1, w2, h2;
 			if (positions[i].vertical) {
-				w1 = positions[i].height;
-				h1 = positions[i].width;
+				w1 = positions[i].span.offestHeight;
+				h1 = positions[i].span.offestWidth;
 			} else {
-				w1 = positions[i].width;
-				h1 = positions[i].height;
+				w1 = positions[i].span.offestWidth;
+				h1 = positions[i].span.offestHeight;
 			}
 			if (position.vertical) {
-				w2 = position.height;
-				h2 = position.width;
+				w2 = position.span.offestHeight;
+				h2 = position.span.offestWidth;
 			} else {
-				w2 = position.width;
-				h2 = position.height;
+				w2 = position.span.offestWidth;
+				h2 = position.span.offestHeight;
 			}
 			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
 				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
@@ -228,8 +228,8 @@ word:hover {
 		if (position.x < 0 || position.y < 0)
 			return false;
 		if (position.vertical)
-			return position.x + position.height < width && position.y + position.width < height;
-		return position.x + position.width < width && position.y + position.height < height;
+			return position.x + position.span.offestHeight < width && position.y + position.span.offestWidth < height;
+		return position.x + position.span.offestWidth < width && position.y + position.span.offestHeight < height;
 	}
 
 	STOP_WORDS = [
