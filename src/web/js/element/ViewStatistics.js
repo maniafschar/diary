@@ -209,24 +209,27 @@ word {
 	}
 
 	intersects(position, positions) {
-		var w1, h1, w2, h2;
+		var w1, h1, w2, h2, y1, y2;
 		if (position.vertical) {
 			w2 = position.word.offsetHeight;
-			h2 = position.word.offsetWidth + (position.vertical ? (position.word.offsetWidth - position.word.offsetHeight) / 2 : 0);
+			h2 = position.word.offsetWidth;
+			y2 = position.y + (position.word.offsetWidth - position.word.offsetHeight) / 2;
 		} else {
 			w2 = position.word.offsetWidth;
 			h2 = position.word.offsetHeight;
+			y2 = position.y;
 		}
 		for (var i = 0; i < positions.length; i++) {
 			if (positions[i].vertical) {
 				w1 = positions[i].word.offsetHeight;
-				h1 = positions[i].word.offsetWidth + (positions[i].vertical ? (positions[i].word.offsetWidth - positions[i].word.offsetHeight) / 2 : 0);
+				h1 = positions[i].word.offsetWidth;
+				y1 = positions[i].y + (positions[i].word.offsetWidth - positions[i].word.offsetHeight) / 2;
 			} else {
 				w1 = positions[i].word.offsetWidth;
 				h1 = positions[i].word.offsetHeight;
+				y1 = positions[i].y;
 			}
-			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
-				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
+			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2 && y1 + h1 > y2 && y1 < y2 + h2)
 				return positions[i];
 		}
 	}
