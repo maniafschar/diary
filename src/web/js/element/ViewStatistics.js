@@ -90,7 +90,7 @@ word:hover {
 		for (var i = 0; i < tokens.length; i++) {
 			var next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
-			next.word.style.fontSize = ((next.token.count - min) / (max - min) + 1) * fontSize;
+			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('wordclick', {
 					detail: next.token,
