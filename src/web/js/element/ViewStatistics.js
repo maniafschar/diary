@@ -28,13 +28,9 @@ wordcloud {
 }
 word {
 	position: absolute;
-	transform: translate(-50%, -50%);
 	cursor: pointer;
 	user-select: none;
 	white-space: nowrap;
-}
-word:hover {
-	text-decoration: underline;
 }`;
 	}
 
@@ -134,7 +130,6 @@ word:hover {
 				y4 = candidate.y + candidate.word.offsetWidth;
 			} else {
 				position.vertical = true;
-				position.word.style.transform = ((position.word.style.transform || '') + ' rotate(-90deg)').trim();
 				x1 = candidate.x - position.word.offsetHeight;
 				x2 = candidate.x;
 				x3 = candidate.x + candidate.word.offsetWidth - position.word.offsetHeight;
@@ -148,8 +143,11 @@ word:hover {
 			for (var i2 = 0; i2 < p.length; i2++) {
 				position.x = p[i2][0];
 				position.y = p[i2][1];
-				if (this.inside(position, width, height) && !this.intersects(position, positions))
+				if (this.inside(position, width, height) && !this.intersects(position, positions)) {
+					if (position.vertical)
+						position.word.style.transform = 'rotate(-90deg)';
 					return true;
+				}
 			}
 		}
 	}
