@@ -168,15 +168,16 @@ word {
 						}
 						while (position.y < candidate.y + candidate.word.offsetWidth) {
 							var intersection = this.intersects(position, positions);
-							if (intersection == null) {
+							if (intersection)
+								position.y = intersection.y
+									+ (intersection.vertical ? intersection.width : intersection.height);
+							else {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
 								position.y += position.word.offsetWidth;
-							} else
-								position.y = intersection.y
-									+ (intersection.vertical ? intersection.width : intersection.height);
+							}
 						}
 					}
 				} else {
@@ -190,15 +191,16 @@ word {
 						}
 						while (position.x < candidate.x + candidate.word.offsetWidth) {
 							var intersection = this.intersects(position, positions);
-							if (intersection == null) {
+							if (intersection)
+								position.x = intersection.x
+									+ (intersection.vertical ? intersection.height : intersection.width);
+							else {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
 								position.x += position.word.offsetHeight;
-							} else
-								position.x = intersection.x
-									+ (intersection.vertical ? intersection.height : intersection.width);
+							}
 						}
 					}
 				}
@@ -207,21 +209,21 @@ word {
 	}
 
 	intersects(position, positions) {
+		var w1, h1, w2, h2;
+		if (position.vertical) {
+			w2 = position.word.offsetHeight;
+			h2 = position.word.offsetWidth;
+		} else {
+			w2 = position.word.offsetWidth;
+			h2 = position.word.offsetHeight;
+		}
 		for (var i = 0; i < positions.length; i++) {
-			var w1, h1, w2, h2;
 			if (positions[i].vertical) {
 				w1 = positions[i].word.offsetHeight;
 				h1 = positions[i].word.offsetWidth;
 			} else {
 				w1 = positions[i].word.offsetWidth;
 				h1 = positions[i].word.offsetHeight;
-			}
-			if (position.vertical) {
-				w2 = position.word.offsetHeight;
-				h2 = position.word.offsetWidth;
-			} else {
-				w2 = position.word.offsetWidth;
-				h2 = position.word.offsetHeight;
 			}
 			if (positions[i].x + w1 > position.x && positions[i].x < position.x + w2
 				&& positions[i].y + h1 > position.y && positions[i].y < position.y + h2)
