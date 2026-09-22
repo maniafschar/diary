@@ -106,7 +106,7 @@ word:hover {
 			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				wordcloud.removeChild(next.span);
 			else
-				positions.add(next);
+				positions.push(next);
 		}
 	}
 
