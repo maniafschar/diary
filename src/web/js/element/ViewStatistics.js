@@ -212,7 +212,7 @@ word {
 		var w1, h1, w2, h2;
 		if (position.vertical) {
 			w2 = position.word.offsetHeight;
-			h2 = position.word.offsetWidth;
+			h2 = position.word.offsetWidth + (position.vertical ? (position.word.offsetWidth - position.word.offsetHeight) / 2 : 0);
 		} else {
 			w2 = position.word.offsetWidth;
 			h2 = position.word.offsetHeight;
@@ -220,7 +220,7 @@ word {
 		for (var i = 0; i < positions.length; i++) {
 			if (positions[i].vertical) {
 				w1 = positions[i].word.offsetHeight;
-				h1 = positions[i].word.offsetWidth;
+				h1 = positions[i].word.offsetWidth + (position.vertical ? (position.word.offsetWidth - position.word.offsetHeight) / 2 : 0);
 			} else {
 				w1 = positions[i].word.offsetWidth;
 				h1 = positions[i].word.offsetHeight;
