@@ -107,7 +107,7 @@ word {
 			else {
 				positions.push(next);
 				next.word.style.left = next.x + 'px';
-				next.word.style.top = next.y + 'px';
+				next.word.style.top = (next.y + (next.vertical ? (next.style.offsetWidth - next.style.offsetHeight) / 2 : 0)) + 'px';
 				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
 			}
 		}
@@ -232,7 +232,7 @@ word {
 	}
 
 	inside(position, width, height) {
-		if (position.x < 0 || position.y < 0)
+		if (position.x < 0 || position.y () < 0)
 			return false;
 		if (position.vertical)
 			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth < height;
