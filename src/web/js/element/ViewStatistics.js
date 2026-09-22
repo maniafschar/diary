@@ -39,7 +39,10 @@ word:hover {
 	}
 
 	init() {
-		this.render(this.extract());
+		var tokens = this.extract();
+		if (tokens.length > 50)
+			tokens.slice(50, tokens.length);
+		this.render(tokens);
 	}
 
 	render(tokens) {
