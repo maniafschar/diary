@@ -110,9 +110,9 @@ word:hover {
 				wordcloud.removeChild(next.word);
 			else {
 				positions.push(next);
-				next.style.left = next.x + 'px';
-				next.style.top = next.y + 'px';
-				next.style.color = this.createColor((next.token.count - min) / (max - min));
+				next.word.style.left = next.x + 'px';
+				next.word.style.top = next.y + 'px';
+				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
 			}
 		}
 	}
