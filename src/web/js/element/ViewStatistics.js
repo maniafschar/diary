@@ -141,9 +141,9 @@ word:hover {
 				y4 = candidate.y + candidate.word.offsetHeight;
 			}
 			var p = [[x1, y2], [x2, y1], [x3, y1], [x4, y2], [x1, y3], [x2, y4], [x3, y4], [x4, y3]];
-			for (var i = 0; i < p.length; i++) {
-				position.x = p[i][0];
-				position.y = p[i][1];
+			for (var i2 = 0; i2 < p.length; i2++) {
+				position.x = p[i2][0];
+				position.y = p[i2][1];
 				if (this.inside(position, width, height) && !this.intersects(position, positions))
 					return true;
 			}
