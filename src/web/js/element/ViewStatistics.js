@@ -106,7 +106,7 @@ word {
 				wordcloud.removeChild(next.word);
 			else {
 				positions.push(next);
-				next.word.style.left = (next.x - (next.vertical ? next.word.offsetHeight : 0)) + 'px';
+				next.word.style.left = next.x + 'px';
 				next.word.style.top = (next.y + (next.vertical ? (next.word.offsetWidth - next.word.offsetHeight) / 2 : 0)) + 'px';
 				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
 			}
