@@ -220,7 +220,7 @@ word {
 		for (var i = 0; i < positions.length; i++) {
 			if (positions[i].vertical) {
 				w1 = positions[i].word.offsetHeight;
-				h1 = positions[i].word.offsetWidth + (position.vertical ? (position.word.offsetWidth - position.word.offsetHeight) / 2 : 0);
+				h1 = positions[i].word.offsetWidth + (positions[i].vertical ? (positions[i].word.offsetWidth - positions[i].word.offsetHeight) / 2 : 0);
 			} else {
 				w1 = positions[i].word.offsetWidth;
 				h1 = positions[i].word.offsetHeight;
