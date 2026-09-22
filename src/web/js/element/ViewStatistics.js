@@ -117,25 +117,25 @@ word:hover {
 			var x1, x2, x3, x4, y1, y2, y3, y4;
 			if (candidate.vertical) {
 				position.vertical = false;
-				x1 = candidate.x - position.width;
-				x2 = candidate.x - position.width + candidate.height;
+				x1 = candidate.x - position.span.offestWidth;
+				x2 = candidate.x - position.span.offestWidth + candidate.span.offestHeight;
 				x3 = candidate.x;
-				x4 = candidate.x + candidate.height;
-				y1 = candidate.y - position.height;
+				x4 = candidate.x + candidate.span.offestHeight;
+				y1 = candidate.y - position.span.offestHeight;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.width - position.height;
-				y4 = candidate.y + candidate.width;
+				y3 = candidate.y + candidate.span.offestWidth - position.span.offestHeight;
+				y4 = candidate.y + candidate.span.offestWidth;
 			} else {
 				position.vertical = true;
 				position.span.style.transform = ((position.span.style.transform || '') + ' rotate(-90deg)').trim();
-				x1 = candidate.x - position.height;
+				x1 = candidate.x - position.span.offestHeight;
 				x2 = candidate.x;
-				x3 = candidate.x + candidate.width - position.height;
-				x4 = candidate.x + candidate.width;
-				y1 = candidate.y - position.width;
+				x3 = candidate.x + candidate.span.offestWidth - position.span.offestHeight;
+				x4 = candidate.x + candidate.span.offestWidth;
+				y1 = candidate.y - position.span.offestWidth;
 				y2 = candidate.y;
-				y3 = candidate.y + candidate.height - position.width;
-				y4 = candidate.y + candidate.height;
+				y3 = candidate.y + candidate.span.offestHeight - position.span.offestWidth;
+				y4 = candidate.y + candidate.span.offestHeight;
 			}
 			var p = [{ x1, y2 }, { x2, y1 }, { x3, y1 }, { x4, y2 }, { x1, y3 }, { x2, y4 }, { x3, y4 }, { x4, y3 }];
 			for (var i = 0; i < p.length; i++) {
@@ -153,22 +153,22 @@ word:hover {
 			if (!positions[i].fringe) {
 				var candidate = positions[(i + offset) % positions.length];
 				if (candidate.vertical) {
-					position.x = candidate.x - position.width;
+					position.x = candidate.x - position.span.offestWidth;
 					position.y = candidate.y;
 					position.vertical = false;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
-							position.x = candidate.x + candidate.height;
+							position.x = candidate.x + candidate.span.offestHeight;
 							position.y = candidate.y;
 						}
-						while (position.y < candidate.y + candidate.width) {
+						while (position.y < candidate.y + candidate.span.offestWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.y += position.width;
+								position.y += position.span.offestWidth;
 							} else
 								position.y = intersection.y
 									+ (intersection.vertical ? intersection.width : intersection.height);
@@ -176,21 +176,21 @@ word:hover {
 					}
 				} else {
 					position.x = candidate.x;
-					position.y = candidate.y - position.width;
+					position.y = candidate.y - position.span.offestWidth;
 					position.vertical = true;
 					for (var i2 = 0; i2 < 2; i2++) {
 						if (i2 == 1) {
 							position.x = candidate.x;
-							position.y = candidate.y + candidate.height;
+							position.y = candidate.y + candidate.span.offestHeight;
 						}
-						while (position.x < candidate.x + candidate.width) {
+						while (position.x < candidate.x + candidate.span.offestWidth) {
 							var intersection = this.intersects(position, positions);
 							if (intersection == null) {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
 									return true;
 								}
-								position.x += position.height;
+								position.x += position.span.offestHeight;
 							} else
 								position.x = intersection.x
 									+ (intersection.vertical ? intersection.height : intersection.width);
