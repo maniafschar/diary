@@ -41,7 +41,7 @@ word:hover {
 	init() {
 		var tokens = this.extract();
 		if (tokens.length > 50)
-			tokens.slice(50, tokens.length);
+			tokens = tokens.slice(0, 50);
 		this.render(tokens);
 	}
 
