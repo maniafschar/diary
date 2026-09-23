@@ -339,7 +339,7 @@ img.speak {
 		var list = document.querySelectorAll('event view-table').list;
 		var e = document.createElement('div');
 		for (var i = 0; i < event.detail.ids.length; i++) {
-			var item = e.appendChild('item');
+			var item = e.appendChild(document.createElement('item'));
 			item.appendChild(document.createElement('count')).innerText = event.detail.text + ' · ' + event.detail.count;
 			item.appendChild(document.createElement('date')).innerText = ui.formatTime(list[i].date);
 			item.appendChild(document.createElement('note')).innerText = list[i].note;
