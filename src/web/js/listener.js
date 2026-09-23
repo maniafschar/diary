@@ -336,7 +336,7 @@ img.speak {
 	}
 
 	static wordclick(event) {
-		var list = document.querySelectorAll('event view-table').list;
+		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
