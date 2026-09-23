@@ -420,8 +420,12 @@ images img {
 		document.querySelector('elementContainer').addEventListener("touchstart", e => listener.touchStart = e.touches[0].clientX, { passive: true });
 		document.querySelector('elementContainer').addEventListener("touchend", e => {
 			var diff = e.changedTouches[0].clientX - listener.touchStart;
-			if (Math.abs(diff) > 10)
-				document.querySelector('elementContainer').dispatchEvent(new CustomEvent('swipe', { detail: { distance: Math.abs(diff), direction: diff > 0 ? 'left' : 'right' } }));
+			if (Math.abs(diff) > 50) {
+				var button = document.querySelector('buttons button.selected');
+				button = diff < 0 ? button.nextElementSibling : button.previousElementSibling;
+				if (button && button.getAttribute('onclick').indexOf('ui.navigate') == 0)
+					button.click();
+			}
 		} , { passive: true });
 	}
 }
