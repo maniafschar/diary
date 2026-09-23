@@ -242,7 +242,7 @@ word.vertical {
 		if (position.x < 0 || position.y + (position.vertical ? (position.word.offsetWidth - position.word.offsetHeight) / 2 : 0) < 0)
 			return false;
 		if (position.vertical)
-			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth < height;
+			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth + (position.word.offsetWidth - position.word.offsetHeight) / 2 < height;
 		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
 	}
 
