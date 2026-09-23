@@ -335,6 +335,8 @@ img.speak {
 	static wordclick(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
+		e.style.maxHeight = '70vh';
+		e.style.overflowY = 'auto';
 		e.appendChild(document.createElement('style')).textContent = `
 value {
 	width: 100%;
