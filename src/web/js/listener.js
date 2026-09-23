@@ -353,7 +353,6 @@ item {
 date {
 	position: relative;
 	font-size: 0.8em;
-	margin-right: 2em;
 }
 note {
 	position: relative;
@@ -368,11 +367,11 @@ images {
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
 			var item = e.appendChild(document.createElement('item'));
-			item.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
-			item.appendChild(document.createElement('note')).innerText = l.note;
 			var rating = item.appendChild(document.createElement('input-rating'));
 			rating.classList.add('minimal');
 			rating.setAttribute('value', l.rating);
+			item.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
+			item.appendChild(document.createElement('note')).innerText = l.note;
 			var images = item.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
 				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
