@@ -289,7 +289,7 @@ img.speak {
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
-					text.push({ id: events[i].id, text: events[i].note });
+					text.push({ id: i, text: events[i].note });
 				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
@@ -336,7 +336,19 @@ img.speak {
 	}
 
 	static wordclick(event) {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: event.detail.text + ' - ' + event.detail.count } }));
+		var list = document.querySelectorAll('event view-table').list;
+		var e = document.createElement('div');
+		for (var i = 0; i < event.detail.ids.length; i++) {
+			var item = e.appendChild('item');
+			item.appendChild(document.createElement('count')).innerText = event.detail.text + ' · ' + event.detail.count;
+			item.appendChild(document.createElement('date')).innerText = ui.formatTime(list[i].date);
+			item.appendChild(document.createElement('note')).innerText = list[i].note;
+			item.appendChild(document.createElement('rating')).innerText = list[i].rating;
+			var images = item.appendChild(document.createElement('images'));
+			for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
+				images.appendChild(document.createElement('img')).src = list[i].eventImages[i2].imageThumbnail;
+		}
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
 	}
 
 	static init() {
