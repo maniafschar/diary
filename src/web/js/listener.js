@@ -336,7 +336,7 @@ img.speak {
 	}
 
 	static wordclick(event) {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: event.deatail.text + ' - ' + event.deatail.count } }));
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: event.detail.text + ' - ' + event.detail.count } }));
 	}
 
 	static init() {
