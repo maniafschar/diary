@@ -348,7 +348,6 @@ word {
 }
 date {
 	position: relative;
-	font-size: 0.8em;
 }
 note {
 	position: relative;
