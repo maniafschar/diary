@@ -273,9 +273,6 @@ img.speak {
 				});
 			}
 			table.renderTable();
-			var trs = table.table().querySelectorAll('tbody tr');
-			for (var i = 0; i < trs.length; i++)
-				document.dispatchEvent(new CustomEvent('eventParticipation', { detail: { eventId: events[i].id, participants: events[i].contactEvents, type: 'read' } }));
 
 			var viewCalendar = document.querySelector('view-calendar');
 			viewCalendar.reset();
@@ -379,6 +376,7 @@ images img {
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = e.appendChild(document.createElement('value'));
 			value.appendChild(document.createElement('note')).innerHTML = l.note.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
+			value.setAttribute('onclick', 'listener.updateViewImage(' + l.id + ')');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
 				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
