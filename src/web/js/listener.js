@@ -5,7 +5,8 @@ import { ui } from "./ui";
 export { listener };
 
 class listener {
-	static touchStart;
+	static touchStartX;
+	static touchStartY;
 	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
@@ -417,12 +418,15 @@ images img {
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-statistics').addEventListener('wordclick', listener.wordclick);
-		document.querySelector('elementContainer').addEventListener("touchstart", e => listener.touchStart = e.touches[0].clientX, { passive: true });
+		document.querySelector('elementContainer').addEventListener("touchstart", e => {
+			listener.touchStartX = e.touches[0].clientX;
+			listener.touchStartY = e.touches[0].clientY;
+		}, { passive: true });
 		document.querySelector('elementContainer').addEventListener("touchend", e => {
-			if (e.changedTouches.length > 1)
+			if (e.changedTouches.length > 1 || Math.abs(e.changedTouches[0].clientY - listener.touchStartY) > 20)
 				return;
-			var diff = e.changedTouches[0].clientX - listener.touchStart;
-			if (Math.abs(diff) > 50) {
+			var diffX = e.changedTouches[0].clientX - listener.touchStartX;
+			if (Math.abs(diff) > 90) {
 				var button = document.querySelector('buttons button.selected');
 				button = diff < 0 ? button.nextElementSibling : button.previousElementSibling;
 				if (button && button.getAttribute('onclick').indexOf('ui.navigate') == 0)
