@@ -423,7 +423,7 @@ images img {
 			listener.touchStartY = e.touches[0].clientY;
 		}, { passive: true });
 		document.querySelector('elementContainer').addEventListener("touchend", e => {
-			if (e.changedTouches.length > 1 || Math.abs(e.changedTouches[0].clientY - listener.touchStartY) > 20)
+			if (e.changedTouches.length > 1 || Math.abs(e.changedTouches[0].clientY - listener.touchStartY) > 40)
 				return;
 			var diffX = e.changedTouches[0].clientX - listener.touchStartX;
 			if (Math.abs(diff) > 90) {
