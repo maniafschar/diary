@@ -70,7 +70,8 @@ word.vertical {
 					var token = list.find(e => e.text == s[i2]);
 					if (token) {
 						token.count++;
-						token.ids.push(this.text[i].id);
+						if (!token.ids.includes(this.text[i].id))
+							token.ids.push(this.text[i].id);
 					} else if (!this.STOP_WORDS.includes(s[i2]))
 						list.push({ count: 1, text: s[i2], ids: [this.text[i].id] });
 				}
