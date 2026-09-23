@@ -419,6 +419,8 @@ images img {
 		document.querySelector('view-statistics').addEventListener('wordclick', listener.wordclick);
 		document.querySelector('elementContainer').addEventListener("touchstart", e => listener.touchStart = e.touches[0].clientX, { passive: true });
 		document.querySelector('elementContainer').addEventListener("touchend", e => {
+			if (e.changedTouches.length > 1)
+				return;
 			var diff = e.changedTouches[0].clientX - listener.touchStart;
 			if (Math.abs(diff) > 50) {
 				var button = document.querySelector('buttons button.selected');
