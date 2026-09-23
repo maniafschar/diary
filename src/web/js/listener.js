@@ -320,7 +320,7 @@ img.speak {
 			document.querySelector('body>button[name="logoff"]').style.display = '';
 			if (api.access) {
 				document.querySelector("element.event button.add").style.display = 'none';
-				document.querySelectorAll("element.event button.export").forEach(e => e.style.display = 'none' );
+				document.querySelectorAll("element.event button.export").forEach(e => e.style.display = 'none');
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('element.user').style.display = 'block';
@@ -333,6 +333,10 @@ img.speak {
 			listener.updateContacts();
 		else
 			api.activateProgressbar();
+	}
+
+	static wordclick(event) {
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: event.deatail.text + ' - ' + event.deatail.count } }));
 	}
 
 	static init() {
@@ -355,5 +359,6 @@ img.speak {
 		});
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
+		document.querySelector('view-statistics').addEventListener('wordclick', listener.wordclick);
 	}
 }
