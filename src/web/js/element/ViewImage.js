@@ -284,7 +284,7 @@ a {
 		this.addEventListener("touchstart", e => this.touchStart = e.touches[0].clientX, { passive: true });
 		document.querySelector('view-image').addEventListener("touchend", e => {
 			var diff = e.changedTouches[0].clientX - this.touchStart;
-			if (Math.abs(diff) > 10)
+			if (Math.abs(diff) > 50)
 				this.navigate(diff < 0);
 		} , { passive: true });
 	}
