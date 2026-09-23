@@ -377,15 +377,15 @@ images img {
 	margin: 0.5em;
 }`;
 		e.appendChild(document.createElement('word')).innerText = event.detail.text + ' · ' + event.detail.count;
-		var list = e.appendChild(document.createElement('list'));
+		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
-			var label = list.appendChild(document.createElement('label'));
+			var label = items.appendChild(document.createElement('label'));
 			var rating = label.appendChild(document.createElement('input-rating'));
 			rating.classList.add('minimal');
 			rating.setAttribute('value', l.rating);
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
-			var value = list.appendChild(document.createElement('value'));
+			var value = items.appendChild(document.createElement('value'));
 			value.appendChild(document.createElement('note')).innerHTML = l.note.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
 			value.setAttribute('onclick', 'listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
