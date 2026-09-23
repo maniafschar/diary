@@ -353,6 +353,9 @@ note {
 	position: relative;
 	display: block;
 }
+note b {
+	color: darkblue;
+}
 images {
 	position: relative;
 	display: block;
