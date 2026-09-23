@@ -362,6 +362,14 @@ images {
 	position: relative;
 	display: block;
 	text-align: center;
+	white-space: nowrap;
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+images img {
+	border-radius: 0.5em;
+	margin: 0.5em;
 }`;
 		e.appendChild(document.createElement('word')).innerText = event.detail.text + ' · ' + event.detail.count;
 		for (var i = 0; i < event.detail.ids.length; i++) {
