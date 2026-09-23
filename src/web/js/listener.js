@@ -342,7 +342,7 @@ img.speak {
 			var l = list[event.detail.ids[i]];
 			var item = e.appendChild(document.createElement('item'));
 			item.appendChild(document.createElement('count')).innerText = event.detail.text + ' · ' + event.detail.count;
-			item.appendChild(document.createElement('date')).innerText = ui.formatTime(l.date);
+			item.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			item.appendChild(document.createElement('note')).innerText = l.note;
 			item.appendChild(document.createElement('rating')).innerText = l.rating;
 			var images = item.appendChild(document.createElement('images'));
