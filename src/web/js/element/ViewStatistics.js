@@ -88,7 +88,7 @@ word.vertical {
 		var nextLoop = true;
 		var wordcloud = this._root.querySelector('wordcloud');
 		for (var i = 0; i < tokens.length; i++) {
-			var next = { word: document.createElement('word'), token: tokens[i] };
+			const next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
 			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
