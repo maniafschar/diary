@@ -31,6 +31,11 @@ word {
 	cursor: pointer;
 	user-select: none;
 	white-space: nowrap;
+}
+word.vertical {
+	transform: rotate(-90deg);
+	margin-top: 0.2em;
+	margin-left: -0.2em;
 }`;
 	}
 
@@ -145,7 +150,7 @@ word {
 				position.y = p[i2][1];
 				if (this.inside(position, width, height) && !this.intersects(position, positions)) {
 					if (position.vertical)
-						position.word.style.transform = 'rotate(-90deg)';
+						position.word.classList.add('vertical');
 					return true;
 				}
 			}
