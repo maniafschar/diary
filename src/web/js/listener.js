@@ -354,7 +354,7 @@ note {
 	display: block;
 }
 note b {
-	color: darkblue;
+	color: blue;
 }
 images {
 	position: relative;
