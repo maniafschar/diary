@@ -5,6 +5,7 @@ import { ui } from "./ui";
 export { listener };
 
 class listener {
+	static touchStart;
 	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
@@ -416,5 +417,17 @@ images img {
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-statistics').addEventListener('wordclick', listener.wordclick);
+		document.querySelector('elementContainer').addEventListener("touchstart", e => listener.touchStart = e.touches[0].clientX, { passive: true });
+		document.querySelector('elementContainer').addEventListener("touchend", e => {
+			var diff = e.changedTouches[0].clientX - listener.touchStart;
+			if (Math.abs(diff) > 10)
+				document.querySelector('elementContainer').dispatchEvent(new CustomEvent('swipe', { detail: { distance: Math.abs(diff), direction: diff > 0 ? 'left' : 'right' } }));
+		} , { passive: true });
+		document.querySelector('view-image').addEventListener("touchstart", e => listener.touchStart = e.touches[0].clientX, { passive: true });
+		document.querySelector('view-image').addEventListener("touchend", e => {
+			var diff = e.changedTouches[0].clientX - listener.touchStart;
+			if (Math.abs(diff) > 10)
+				document.querySelector('view-image').dispatchEvent(new CustomEvent('swipe', { detail: { distance: Math.abs(diff), direction: diff > 0 ? 'left' : 'right' } }));
+		} , { passive: true });
 	}
 }
