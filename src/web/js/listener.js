@@ -344,6 +344,7 @@ word {
 	display: block;
 	position: relative;
 	text-align: center;
+	padding-bottom: 1em;
 }
 item {
 	display: block;
