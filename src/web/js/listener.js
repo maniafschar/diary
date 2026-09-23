@@ -349,6 +349,9 @@ item {
 	display: block;
 	position: relative;
 	margin-bottom: 2em;
+	background: rgba(255,255,255,0.3);
+	border-radius: 0.5em;
+	padding: 0.5em;
 }
 date {
 	position: relative;
