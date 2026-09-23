@@ -33,9 +33,8 @@ word {
 	white-space: nowrap;
 }
 word.vertical {
-	transform: rotate(-90deg);
-	margin-top: 0.2em;
-	margin-left: -0.2em;
+	transform: translate(-100%, 0) rotate(-90deg);
+	transform-origin: 100% 0;
 }`;
 	}
 
@@ -107,7 +106,7 @@ word.vertical {
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
 				nextLoop = false;
-			if (!nextLoop)
+			if (!nextLoop && !this.positionFringe(next, positions, width, height))
 				wordcloud.removeChild(next.word);
 			else {
 				positions.push(next);
