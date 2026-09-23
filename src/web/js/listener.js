@@ -338,16 +338,44 @@ img.speak {
 	static wordclick(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
+		e.appendChild(document.createElement('style')).textContent = `
+word {
+	font-weight: bold;
+	display: block;
+	position: relative;
+	text-align: center;
+}
+item {
+	display: block;
+	position: relative;
+	margin-bottom: 2em;
+}
+date {
+	position: relative;
+	font-size: 0.8em;
+	margin-right: 2em;
+}
+note {
+	position: relative;
+	display: block;
+}
+images {
+	position: relative;
+	display: block;
+	text-align: center;
+}`;
+		e.appendChild(document.createElement('word')).innerText = event.detail.text + ' · ' + event.detail.count;
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
 			var item = e.appendChild(document.createElement('item'));
-			item.appendChild(document.createElement('count')).innerText = event.detail.text + ' · ' + event.detail.count;
 			item.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			item.appendChild(document.createElement('note')).innerText = l.note;
-			item.appendChild(document.createElement('rating')).innerText = l.rating;
+			var rating = item.appendChild(document.createElement('input-rating'));
+			rating.classList.add('minimal');
+			rating.setAttribute('value', l.rating);
 			var images = item.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
-				images.appendChild(document.createElement('img')).src = l.eventImages[i2].imageThumbnail;
+				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
 	}
