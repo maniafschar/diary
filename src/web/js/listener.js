@@ -336,6 +336,10 @@ img.speak {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
 		e.appendChild(document.createElement('style')).textContent = `
+value {
+	width: 100%;
+	cursor: pointer;
+}
 word {
 	font-weight: bold;
 	display: block;
