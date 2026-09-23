@@ -47,7 +47,7 @@ word.vertical {
 
 	render(tokens) {
 		this._root.appendChild(document.createElement('wordcloud'));
-		this.createPositions(tokens, 28);
+		this.createPositions(tokens, 20);
 	}
 
 	createColor(ratio) {
