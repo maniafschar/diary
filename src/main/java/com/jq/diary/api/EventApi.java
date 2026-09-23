@@ -114,8 +114,9 @@ public class EventApi extends ApplicationApi {
 			@RequestBody final Event event) {
 		final Double rating = event.getRating();
 		event.setContact(this.authorizationService.requireContact(contactId, clientId));
-		event.getLocation().setContact(event.getContact());
 		event.setClient(this.repository.one(Client.class, clientId));
+		event.getLocation().setContact(event.getContact());
+		event.getLocation().setClient(event.getClient());
 		final Location storedLocation = this.locationService.find(event.getLocation(), clientId);
 		if (storedLocation == null)
 			this.locationService.save(event.getLocation());
