@@ -346,14 +346,6 @@ word {
 	text-align: center;
 	padding-bottom: 1em;
 }
-item {
-	display: block;
-	position: relative;
-	margin-bottom: 2em;
-	background: rgba(255,255,255,0.3);
-	border-radius: 0.5em;
-	padding: 0.5em;
-}
 date {
 	position: relative;
 	font-size: 0.8em;
@@ -378,13 +370,14 @@ images img {
 		e.appendChild(document.createElement('word')).innerText = event.detail.text + ' · ' + event.detail.count;
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
-			var item = e.appendChild(document.createElement('item'));
-			var rating = item.appendChild(document.createElement('input-rating'));
+			var label = e.appendChild(document.createElement('label'));
+			var rating = label.appendChild(document.createElement('input-rating'));
 			rating.classList.add('minimal');
 			rating.setAttribute('value', l.rating);
-			item.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
-			item.appendChild(document.createElement('note')).innerText = l.note;
-			var images = item.appendChild(document.createElement('images'));
+			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
+			var value = e.appendChild(document.createElement('value'));
+			value.appendChild(document.createElement('note')).innerText = l.note;
+			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
 				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
 		}
