@@ -107,7 +107,7 @@ word.vertical {
 				nextLoop = this.positionNext(next, positions, width, height);
 			else if (i > tokens.length / 3)
 				nextLoop = false;
-			if (!nextLoop && !this.positionFringe(next, positions, width, height))
+			if (!nextLoop)
 				wordcloud.removeChild(next.word);
 			else {
 				positions.push(next);
@@ -179,7 +179,7 @@ word.vertical {
 							else {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
-									return false;
+									return true;
 								}
 								position.y += position.word.offsetWidth;
 							}
@@ -202,7 +202,7 @@ word.vertical {
 							else {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
-									return false;
+									return true;
 								}
 								position.x += position.word.offsetHeight;
 							}
