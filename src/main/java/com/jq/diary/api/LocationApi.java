@@ -55,6 +55,7 @@ public class LocationApi extends ApplicationApi {
 								+ " rejected");
 			location.setContact(contact);
 		}
+		location.setClient(this.repository.one(Client.class, clientId));
 		this.locationService.save(location);
 		return location.getId();
 	}
