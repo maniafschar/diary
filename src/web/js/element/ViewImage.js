@@ -6,6 +6,7 @@ class ViewImage extends HTMLElement {
 	index = 0;
 	speak = false;
 	speakJob = null;
+	touchStart;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -280,6 +281,12 @@ a {
 		close.classList.add('icon');
 		close.innerText = 'x';
 		this._root.appendChild(document.createElement('hint'));
+		this.addEventListener("touchstart", e => this.touchStart = e.touches[0].clientX, { passive: true });
+		document.querySelector('view-image').addEventListener("touchend", e => {
+			var diff = e.changedTouches[0].clientX - this.touchStart;
+			if (Math.abs(diff) > 10)
+				this.navigate(diff < 0);
+		} , { passive: true });
 	}
 
 	toggleSpeak() {
