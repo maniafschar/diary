@@ -178,10 +178,8 @@ word.vertical {
 									+ (intersection.vertical ? intersection.width : intersection.height);
 							else {
 								if (this.inside(position, width, height)) {
-									if (position.vertical)
-										position.word.classList.add('vertical');
 									position.fringe = true;
-									return true;
+									return false;
 								}
 								position.y += position.word.offsetWidth;
 							}
@@ -204,7 +202,7 @@ word.vertical {
 							else {
 								if (this.inside(position, width, height)) {
 									position.fringe = true;
-									return true;
+									return false;
 								}
 								position.x += position.word.offsetHeight;
 							}
