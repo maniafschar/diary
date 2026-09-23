@@ -378,7 +378,7 @@ images img {
 			rating.setAttribute('value', l.rating);
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = e.appendChild(document.createElement('value'));
-			value.appendChild(document.createElement('note')).innerHTML = l.note.replaceAll(new RegExp('\\b(' + event.detail.text + ')\\b', 'gi'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
+			value.appendChild(document.createElement('note')).innerHTML = l.note.replaceAll(new RegExp('\\W(' + event.detail.text + ')\\W', 'gi'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
 				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
