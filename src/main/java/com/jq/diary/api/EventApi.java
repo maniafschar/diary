@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
