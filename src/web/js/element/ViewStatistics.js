@@ -59,18 +59,21 @@ word.vertical {
 	}
 
 	extract() {
-		var s = this.text.replaceAll(/[ \+\t\r\n,\.\-\_\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ')
-			.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
-			.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
-			.trim().toLowerCase().split(' ');
 		var list = [];
-		for (var i = 0; i < s.length; i++) {
-			if (s[i].trim().length > 1) {
-				var token = list.find(e => e.text == s[i]);
-				if (token)
-					token.count++;
-				else if (!this.STOP_WORDS.includes(s[i]))
-					list.push({ count: 1, text: s[i] });
+		for (var i = 0; i < this.text.length; i++) {
+			var s = this.text[i].text.replaceAll(/[ \+\t\r\n,\.\-\_\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ')
+				.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
+				.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
+				.trim().toLowerCase().split(' ');
+			for (var i2 = 0; i2 < s.length; i2++) {
+				if (s[i2].trim().length > 1) {
+					var token = list.find(e => e.text == s[i2]);
+					if (token) {
+						token.count++;
+						token.ids.push(this.text[i].id);
+					} else if (!this.STOP_WORDS.includes(s[i2]))
+						list.push({ count: 1, text: s[i2], ids: [this.text[i].id] });
+				}
 			}
 		}
 		list.sort((e, e2) => e2.count - e.count);

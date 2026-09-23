@@ -281,7 +281,7 @@ img.speak {
 			viewCalendar.reset();
 			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id) : api.user?.id ? dialog.add(event) : null);
 			var map = [];
-			var text = '';
+			var text = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
 					address = address.substring(0, address.lastIndexOf('\n'));
@@ -289,7 +289,7 @@ img.speak {
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
-					text += events[i].note + ' ';
+					text.push({ id: events[i].id, text: events[i].note });
 				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
