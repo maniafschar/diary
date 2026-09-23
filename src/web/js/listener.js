@@ -339,14 +339,15 @@ img.speak {
 		var list = document.querySelectorAll('event view-table').list;
 		var e = document.createElement('div');
 		for (var i = 0; i < event.detail.ids.length; i++) {
+			var l = list[event.detail.ids[i]];
 			var item = e.appendChild(document.createElement('item'));
 			item.appendChild(document.createElement('count')).innerText = event.detail.text + ' · ' + event.detail.count;
-			item.appendChild(document.createElement('date')).innerText = ui.formatTime(list[i].date);
-			item.appendChild(document.createElement('note')).innerText = list[i].note;
-			item.appendChild(document.createElement('rating')).innerText = list[i].rating;
+			item.appendChild(document.createElement('date')).innerText = ui.formatTime(l.date);
+			item.appendChild(document.createElement('note')).innerText = l.note;
+			item.appendChild(document.createElement('rating')).innerText = l.rating;
 			var images = item.appendChild(document.createElement('images'));
-			for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
-				images.appendChild(document.createElement('img')).src = list[i].eventImages[i2].imageThumbnail;
+			for (var i2 = 0; i2 < l.eventImages.length; i2++)
+				images.appendChild(document.createElement('img')).src = l.eventImages[i2].imageThumbnail;
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
 	}
