@@ -393,7 +393,7 @@ images img {
 	border-radius: 0.5em;
 	margin: 0.5em;
 }`;
-		e.appendChild(document.createElement('word')).innerText = event.detail.text ? event.detail.text + ' · ' + event.detail.count : event.detail.rating;
+		e.appendChild(document.createElement('word')).innerText = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
