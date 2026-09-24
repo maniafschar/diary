@@ -295,8 +295,8 @@ img.speak {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
-					if (rating.length == 0 || rating[rating.length - 1].date.substring(0, 10) != events[i].date.substring(0, 10)) {
-						rating.push({ ids: ids, date: new Date(events[i].date), rating: Number(ratingSum / ratingCountSum) });
+					if (rating.length == 0 || rating[rating.length - 1].date != new Date(events[i].date.substring(0, 10))) {
+						rating.push({ ids: ids, date: new Date(events[i].date.substring(0, 10)), rating: Number(ratingSum / ratingCountSum) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
