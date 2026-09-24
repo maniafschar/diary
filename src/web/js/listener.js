@@ -282,7 +282,7 @@ img.speak {
 			var map = [];
 			var rating = [];
 			var text = [];
-			var ratingSum = 0, ratingCountSum = 0;
+			var ratingSum = 0, ratingCountSum = 0, ids = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
 					address = address.substring(0, address.lastIndexOf('\n'));
@@ -294,10 +294,12 @@ img.speak {
 				if (events[i].rating) {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
+					ids.push(i);
 					if (rating.length == 0 || rating[rating.length - 1].date.substring(0, 10) != events[i].date.substring(0, 10)) {
-						rating.push({ id: i, date: events[i].date, rating: ratingSum / ratingCountSum });
+						rating.push({ ids: ids, date: events[i].date, rating: ratingSum / ratingCountSum });
 						ratingSum = 0;
 						ratingCountSum = 0;
+						ids = [];
 					}
 				}
 				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
