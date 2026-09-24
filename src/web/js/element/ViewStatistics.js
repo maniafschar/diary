@@ -81,7 +81,7 @@ chart bar span {
 	text-align: center;
 	font-size: 0.8em;
 	bottom: 0;
-	opacity: 0.6;
+	opacity: 0.3;
 }
 chart bar.rating100 {
 	background: rgb(212, 175, 55);
