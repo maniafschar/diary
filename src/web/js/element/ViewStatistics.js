@@ -199,7 +199,7 @@ chart bar {
 						composed: true
 					}));
 				});
-				bar.appendChild(document.createElement('span')).innerText ? entry.ids.length;
+				bar.appendChild(document.createElement('span')).innerText = entry.ids.length;
 			} else
 				bar.style.visibility = 'hidden';
 			plot.appendChild(bar);
