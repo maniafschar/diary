@@ -2,7 +2,9 @@
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
-	text = '';
+	MAX = 100;
+	text;
+	mood;
 
 	constructor() {
 		super();
@@ -22,9 +24,43 @@ wordcloud {
 	position: relative;
 	display: block;
 	width: 100%;
-	height: 100%;
+	height: 70%;
 	overflow: hidden;
 	text-align: center;
+}
+chart {
+	position: absolute;
+	display: flex;
+	align-items: end;
+	gap: 0.25em;
+	left: 1em;
+	right: 1em;
+	bottom: 1em;
+	height: 25%;
+	padding: 0.5em 0.5em 1.5em;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+	overflow: hidden;
+}
+chart bar {
+	position: relative;
+	display: block;
+	flex: 1 1 0;
+	min-width: 0.35em;
+	max-width: 2em;
+	height: var(--height);
+	min-height: 0.2em;
+	background: rgba(0, 0, 160, 0.65);
+	border-radius: 0.2em 0.2em 0 0;
+}
+chart bar::after {
+	content: attr(data-date);
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	font-size: 0.55em;
+	white-space: nowrap;
+	transform: translateX(-50%) rotate(-45deg);
+	transform-origin: top left;
 }
 word {
 	position: absolute;
@@ -40,14 +76,35 @@ word.vertical {
 
 	init() {
 		var tokens = this.extract();
-		if (tokens.length > 50)
-			tokens = tokens.slice(0, 50);
+		if (tokens.length > this.MAX)
+			tokens = tokens.slice(0, this.MAX);
 		this.render(tokens);
+		this.renderMoodChart();
 	}
 
 	render(tokens) {
 		this._root.appendChild(document.createElement('wordcloud'));
 		this.createPositions(tokens, 20);
+	}
+
+	renderMoodChart() {
+		var chart = document.createElement('chart');
+		var mood = Array.isArray(this.mood) ? this.mood : [];
+		var entries = mood
+			.map(entry => ({ date: new Date(entry.date), rating: Number(entry.rating) }))
+			.filter(entry => !Number.isNaN(entry.date.getTime()) && Number.isFinite(entry.rating))
+			.sort((entry, next) => entry.date - next.date);
+		if (!entries.length)
+			return;
+		var maxRating = Math.max(5, ...entries.map(entry => entry.rating));
+		for (var entry of entries) {
+			var bar = document.createElement('bar');
+			bar.dataset.date = entry.date.toLocaleDateString();
+			bar.style.setProperty('--height', Math.max(4, entry.rating / maxRating * 100) + '%');
+			bar.title = `${bar.dataset.date}: ${entry.rating}`;
+			chart.appendChild(bar);
+		}
+		this._root.appendChild(chart);
 	}
 
 	createColor(ratio) {

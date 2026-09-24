@@ -280,6 +280,7 @@ img.speak {
 			viewCalendar.reset();
 			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id) : api.user?.id ? dialog.add(event) : null);
 			var map = [];
+			var mood = [];
 			var text = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -289,6 +290,10 @@ img.speak {
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
+				if (events[i].rating) {
+					text.push({ date: events[i].date, text: events[i].rating });
+					mood.push({ date: events[i].date, rating: events[i].rating / events[i].ratingCount });
+				}
 				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
@@ -305,6 +310,7 @@ img.speak {
 					});
 			}
 			viewCalendar.render();
+			document.querySelector('view-statistics').mood = mood;
 			document.querySelector('view-statistics').text = text;
 			var viewMap = document.querySelector('view-map');
 			viewMap.setLocations(map);
@@ -432,6 +438,6 @@ images img {
 				if (button && button.getAttribute('onclick').indexOf('ui.navigate') == 0)
 					button.click();
 			}
-		} , { passive: true });
+		}, { passive: true });
 	}
 }
