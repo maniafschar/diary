@@ -74,6 +74,15 @@ chart bar {
 	min-height: 0.2em;
 	border-radius: 0.2em;
 }
+chart bar span {
+	position: absolute;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 0.8em;
+	bottom: 0;
+	opacity: 0.6;
+}
 chart bar.rating100 {
 	background: rgb(212, 175, 55);
 }
@@ -190,6 +199,7 @@ chart bar {
 						composed: true
 					}));
 				});
+				bar.appendChild(document.createElement('span')).innerText ? entry.ids.length;
 			} else
 				bar.style.visibility = 'hidden';
 			plot.appendChild(bar);
