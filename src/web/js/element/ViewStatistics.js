@@ -47,6 +47,10 @@ chart {
 	display: block;
 	width: 100%;
 	overflow-x: auto;
+	overflow-y: hidden;
+	border-left: solid 0.5em transparent;
+	border-right: solid 0.5em transparent;
+	box-sizing: border-box;
 }
 chart plot,
 chart axis {
@@ -60,7 +64,7 @@ chart plot {
 	height: 70%;
 }
 chart axis {
-	height: 30%;
+	height: 20%;
 	align-items: start;
 }
 chart bar {
