@@ -133,7 +133,7 @@ chart bar {
 		var maxRating = Math.max(5, ...entries.map(entry => entry.rating));
 		var ratings = new Map(entries.map(entry => [this.dateKey(entry.date), entry]));
 		var firstDate = new Date(entries[0].date);
-		var lastDate = new Date(entries[entries.length - 1].date);
+		var lastDate = new Date();
 		firstDate.setHours(0, 0, 0, 0);
 		lastDate.setHours(0, 0, 0, 0);
 		var plot = document.createElement('plot');
