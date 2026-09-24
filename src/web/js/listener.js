@@ -282,7 +282,7 @@ img.speak {
 			var map = [];
 			var rating = [];
 			var text = [];
-			var ratingSum = 0, ratingCountSum = 0, ids = [0];
+			var ratingSum = 0, ratingCountSum = 0, ids = [events.length - 1];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
 					address = address.substring(0, address.lastIndexOf('\n'));
