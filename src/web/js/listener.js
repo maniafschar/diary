@@ -296,7 +296,7 @@ img.speak {
 					ratingCountSum += events[i].ratingCount;
 					var date = new Date(events[i].date.substring(0, 10));
 					if (rating.length == 0 || rating[rating.length - 1].date.getTime() != date.getTime()) {
-						rating.push({ ids: ids, date: date, rating: Number(ratingSum / ratingCountSum) });
+						rating.push({ ids: ids, date: date, rating: parseInt(ratingSum / ratingCountSum +0.5) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
@@ -393,7 +393,7 @@ images img {
 	border-radius: 0.5em;
 	margin: 0.5em;
 }`;
-		e.appendChild(document.createElement('word')).innerText = event.detail.text + ' · ' + event.detail.count;
+		e.appendChild(document.createElement('word')).innerText = event.detail.text ? event.detail.text + ' · ' + event.detail.count : event.detail.rating;
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
@@ -403,7 +403,7 @@ images img {
 			rating.setAttribute('value', l.rating);
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
-			value.appendChild(document.createElement('note')).innerHTML = l.note.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
+			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />');
 			value.setAttribute('onclick', 'listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
