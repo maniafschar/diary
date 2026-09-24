@@ -4,7 +4,7 @@ export { ViewStatistics };
 class ViewStatistics extends HTMLElement {
 	MAX = 100;
 	text;
-	mood;
+	rating;
 
 	constructor() {
 		super();
@@ -118,7 +118,7 @@ chart bar {
 		if (tokens.length > this.MAX)
 			tokens = tokens.slice(0, this.MAX);
 		this.renderWordcloud(tokens);
-		this.renderMoodChart();
+		this.renderRating();
 	}
 
 	renderWordcloud(tokens) {
@@ -129,7 +129,7 @@ chart bar {
 		var wordcloud = this._root.querySelector('wordcloud');
 		var min = tokens[tokens.length - 1].count;
 		var max = tokens[0].count;
-		var width = wordcloud.quoffsetWidth;
+		var width = wordcloud.offsetWidth;
 		var height = wordcloud.offsetHeight;
 		var nextLoop = true;
 		for (var i = 0; i < tokens.length; i++) {
@@ -162,10 +162,9 @@ chart bar {
 		}
 	}
 
-	renderMoodChart() {
+	renderRating() {
 		var chart = document.createElement('chart');
-		var mood = Array.isArray(this.mood) ? this.mood : [];
-		var entries = mood
+		var entries = this.rating
 			.map(entry => ({ date: new Date(entry.date), rating: Number(entry.rating) }))
 			.filter(entry => !Number.isNaN(entry.date.getTime()) && Number.isFinite(entry.rating))
 			.sort((entry, next) => entry.date - next.date);
