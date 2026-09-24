@@ -295,7 +295,7 @@ img.speak {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
 					if (rating.length == 0 || rating[rating.length - 1].date.substring(0, 10) != events[i].date.substring(0, 10)) {
-						rating.push({ date: events[i].date, rating: ratingSum / ratingCountSum });
+						rating.push({ id: i, date: events[i].date, rating: ratingSum / ratingCountSum });
 						ratingSum = 0;
 						ratingCountSum = 0;
 					}
@@ -346,7 +346,7 @@ img.speak {
 			api.activateProgressbar();
 	}
 
-	static wordclick(event) {
+	static statisticDetail(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
 		e.appendChild(document.createElement('style')).textContent = `
