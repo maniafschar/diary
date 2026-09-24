@@ -164,15 +164,11 @@ chart bar {
 
 	renderRating() {
 		var chart = document.createElement('chart');
-		var entries = this.rating
-			.map(entry => ({ date: new Date(entry.date), rating: Number(entry.rating), ids: ids }))
-			.filter(entry => !Number.isNaN(entry.date.getTime()) && Number.isFinite(entry.rating))
-			.sort((entry, next) => entry.date - next.date);
-		if (!entries.length)
+		if (!this.rating.length)
 			return;
 		var maxRating = 100;
-		var ratings = new Map(entries.map(entry => [this.dateKey(entry.date), entry]));
-		var firstDate = new Date(entries[0].date);
+		var ratings = new Map(this.rating.map(entry => [this.dateKey(entry.date), entry]));
+		var firstDate = new Date(this.rating[0].date);
 		var lastDate = new Date();
 		firstDate.setHours(0, 0, 0, 0);
 		lastDate.setHours(0, 0, 0, 0);
