@@ -110,6 +110,7 @@ chart bar {
 	justify-self: center;
 	width: 100%;
 }`;
+		this._root.appendChild(document.createElement('wordcloud'));
 	}
 
 	init() {
@@ -121,8 +122,44 @@ chart bar {
 	}
 
 	renderWordcloud(tokens) {
-		this._root.appendChild(document.createElement('wordcloud'));
-		this.createPositions(tokens, 20);
+		var fontSize = 20;
+		var positions = [];
+		if (tokens.length == 0)
+			return positions;
+		var wordcloud = this._root.querySelector('wordcloud');
+		var min = tokens[tokens.length - 1].count;
+		var max = tokens[0].count;
+		var width = wordcloud.quoffsetWidth;
+		var height = wordcloud.offsetHeight;
+		var nextLoop = true;
+		for (var i = 0; i < tokens.length; i++) {
+			const next = { word: document.createElement('word'), token: tokens[i] };
+			next.word.innerText = next.token.text;
+			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
+			next.word.addEventListener('click', event => {
+				this.dispatchEvent(new CustomEvent('wordclick', {
+					detail: next.token,
+					bubbles: true,
+					composed: true
+				}));
+			});
+			wordcloud.appendChild(next.word);
+			if (i == 0) {
+				next.x = (width - next.word.offsetWidth) / 2;
+				next.y = (height - next.word.offsetHeight) / 2;
+			} else if (nextLoop)
+				nextLoop = this.positionNext(next, positions, width, height);
+			else if (i > tokens.length / 3)
+				nextLoop = false;
+			if (!nextLoop && !this.positionFringe(next, positions, width, height))
+				wordcloud.removeChild(next.word);
+			else {
+				positions.push(next);
+				next.word.style.left = next.x + 'px';
+				next.word.style.top = (next.y + (next.vertical ? (next.word.offsetWidth - next.word.offsetHeight) / 2 : 0)) + 'px';
+				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
+			}
+		}
 	}
 
 	renderMoodChart() {
@@ -199,46 +236,6 @@ chart bar {
 		}
 		list.sort((e, e2) => e2.count - e.count);
 		return list;
-	}
-
-	createPositions(tokens, fontSize) {
-		var positions = [];
-		if (tokens.length == 0)
-			return positions;
-		var wordcloud = this._root.querySelector('wordcloud');
-		var min = tokens[tokens.length - 1].count;
-		var max = tokens[0].count;
-		var width = wordcloud.quoffsetWidth;
-		var height = wordcloud.offsetHeight;
-		var nextLoop = true;
-		for (var i = 0; i < tokens.length; i++) {
-			const next = { word: document.createElement('word'), token: tokens[i] };
-			next.word.innerText = next.token.text;
-			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
-			next.word.addEventListener('click', event => {
-				this.dispatchEvent(new CustomEvent('wordclick', {
-					detail: next.token,
-					bubbles: true,
-					composed: true
-				}));
-			});
-			wordcloud.appendChild(next.word);
-			if (i == 0) {
-				next.x = (width - next.word.offsetWidth) / 2;
-				next.y = (height - next.word.offsetHeight) / 2;
-			} else if (nextLoop)
-				nextLoop = this.positionNext(next, positions, width, height);
-			else if (i > tokens.length / 3)
-				nextLoop = false;
-			if (!nextLoop && !this.positionFringe(next, positions, width, height))
-				wordcloud.removeChild(next.word);
-			else {
-				positions.push(next);
-				next.word.style.left = next.x + 'px';
-				next.word.style.top = (next.y + (next.vertical ? (next.word.offsetWidth - next.word.offsetHeight) / 2 : 0)) + 'px';
-				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
-			}
-		}
 	}
 
 	positionNext(position, positions, width, height) {
