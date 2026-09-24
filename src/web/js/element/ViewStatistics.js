@@ -27,7 +27,7 @@ wordcloud {
 	position: relative;
 	display: block;
 	width: 100%;
-	height: 70%;
+	height: calc(100% - 6em);
 	overflow: hidden;
 	text-align: center;
 }
@@ -205,12 +205,12 @@ chart bar {
 		var positions = [];
 		if (tokens.length == 0)
 			return positions;
+		var wordcloud = this._root.querySelector('wordcloud');
 		var min = tokens[tokens.length - 1].count;
 		var max = tokens[0].count;
-		var width = this.offsetWidth;
-		var height = this.offsetHeight;
+		var width = wordcloud.quoffsetWidth;
+		var height = wordcloud.offsetHeight;
 		var nextLoop = true;
-		var wordcloud = this._root.querySelector('wordcloud');
 		for (var i = 0; i < tokens.length; i++) {
 			const next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
