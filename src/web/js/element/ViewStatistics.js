@@ -130,7 +130,7 @@ chart bar {
 			.sort((entry, next) => entry.date - next.date);
 		if (!entries.length)
 			return;
-		var maxRating = Math.max(5, ...entries.map(entry => entry.rating));
+		var maxRating = 5;
 		var ratings = new Map(entries.map(entry => [this.dateKey(entry.date), entry]));
 		var firstDate = new Date(entries[0].date);
 		var lastDate = new Date();
