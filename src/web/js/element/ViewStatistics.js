@@ -137,7 +137,7 @@ chart bar {
 			next.word.innerText = next.token.text;
 			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
-				this.dispatchEvent(new CustomEvent('wordclick', {
+				this.dispatchEvent(new CustomEvent('details', {
 					detail: next.token,
 					bubbles: true,
 					composed: true
@@ -179,7 +179,7 @@ chart bar {
 		var plot = document.createElement('plot');
 		var axis = document.createElement('axis');
 		for (var date = firstDate; date <= lastDate; date.setDate(date.getDate() + 1)) {
-			var entry = ratings.get(this.dateKey(date));
+			const entry = ratings.get(this.dateKey(date));
 			var bar = document.createElement('bar');
 			if (entry) {
 				var dateLabel = date.toLocaleDateString();
@@ -187,6 +187,13 @@ chart bar {
 				bar.style.setProperty('--height', rating + '%');
 				bar.classList.add(rating > 80 ? 'rating100' : rating > 60 ? 'rating80' : rating > 40 ? 'rating60' : rating > 20 ? 'rating40' : 'rating20');
 				bar.title = `${dateLabel}: ${entry.rating}`;
+				bar.addEventListener('click', event => {
+					this.dispatchEvent(new CustomEvent('details', {
+						detail: entry,
+						bubbles: true,
+						composed: true
+					}));
+				});
 			} else
 				bar.style.visibility = 'hidden';
 			plot.appendChild(bar);
