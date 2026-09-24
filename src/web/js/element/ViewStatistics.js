@@ -30,37 +30,73 @@ wordcloud {
 }
 chart {
 	position: absolute;
-	display: flex;
-	align-items: end;
-	gap: 0.25em;
 	left: 1em;
 	right: 1em;
 	bottom: 1em;
 	height: 25%;
-	padding: 0.5em 0.5em 1.5em;
+	padding: 0.5em 0.5em 0;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.35);
 	overflow: hidden;
+}
+
+chart plot,
+chart axis {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: minmax(1.5em, 1fr);
+	gap: 0.25em;
+}
+chart plot {
+	align-items: end;
+	height: calc(100% - 2.5em);
+}
+chart axis {
+	height: 2.5em;
+	align-items: start;
 }
 chart bar {
 	position: relative;
 	display: block;
-	flex: 1 1 0;
-	min-width: 0.35em;
-	max-width: 2em;
 	height: var(--height);
 	min-height: 0.2em;
 	background: rgba(0, 0, 160, 0.65);
 	border-radius: 0.2em 0.2em 0 0;
 }
-chart bar::after {
-	content: attr(data-date);
-	position: absolute;
-	top: 100%;
-	left: 50%;
+chart tick {
+	min-width: 0;
 	font-size: 0.55em;
 	white-space: nowrap;
-	transform: translateX(-50%) rotate(-45deg);
-	transform-origin: top left;
+	text-align: center;
+	overflow: visible;
+	transform: rotate(-45deg);
+	transform-origin: top center;
+	color: rgba(0, 0, 0, 0.7);
+}
+chart bar[title] {
+	cursor: pointer;
+}
+chart bar::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: inherit;
+	background: rgba(255, 255, 255, 0.12);
+}
+chart tick,
+chart bar {
+	box-sizing: border-box;
+	min-width: 0.35em;
+	max-width: 2em;
+	justify-self: center;
+	width: 100%;
+	}
+
+/* Keep the labels readable when the date range is short. */
+chart tick:not(.empty) {
+	font-size: 0.55em;
 }
 word {
 	position: absolute;
@@ -97,14 +133,36 @@ word.vertical {
 		if (!entries.length)
 			return;
 		var maxRating = Math.max(5, ...entries.map(entry => entry.rating));
-		for (var entry of entries) {
+		var ratings = new Map(entries.map(entry => [this.dateKey(entry.date), entry]));
+		var firstDate = new Date(entries[0].date);
+		var lastDate = new Date(entries[entries.length - 1].date);
+		firstDate.setHours(0, 0, 0, 0);
+		lastDate.setHours(0, 0, 0, 0);
+		var plot = document.createElement('plot');
+		var axis = document.createElement('axis');
+		for (var date = firstDate; date <= lastDate; date.setDate(date.getDate() + 1)) {
+			var entry = ratings.get(this.dateKey(date));
 			var bar = document.createElement('bar');
-			bar.dataset.date = entry.date.toLocaleDateString();
-			bar.style.setProperty('--height', Math.max(4, entry.rating / maxRating * 100) + '%');
-			bar.title = `${bar.dataset.date}: ${entry.rating}`;
-			chart.appendChild(bar);
+			if (entry) {
+				var dateLabel = date.toLocaleDateString();
+				bar.style.setProperty('--height', Math.max(4, entry.rating / maxRating * 100) + '%');
+				bar.title = `${dateLabel}: ${entry.rating}`;
+			} else
+				bar.style.visibility = 'hidden';
+			plot.appendChild(bar);
+
+			var tick = document.createElement('tick');
+			tick.innerText = date.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' });
+			if (!entry)
+				tick.classList.add('empty');
+			axis.appendChild(tick);
 		}
+		chart.append(plot, axis);
 		this._root.appendChild(chart);
+	}
+
+	dateKey(date) {
+		return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 	}
 
 	createColor(ratio) {
