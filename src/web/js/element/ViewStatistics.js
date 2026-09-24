@@ -165,7 +165,7 @@ chart bar {
 	renderRating() {
 		var chart = document.createElement('chart');
 		var entries = this.rating
-			.map(entry => ({ date: new Date(entry.date), rating: Number(entry.rating) }))
+			.map(entry => ({ date: new Date(entry.date), rating: Number(entry.rating), ids: ids }))
 			.filter(entry => !Number.isNaN(entry.date.getTime()) && Number.isFinite(entry.rating))
 			.sort((entry, next) => entry.date - next.date);
 		if (!entries.length)
