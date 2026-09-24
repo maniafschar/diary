@@ -290,10 +290,8 @@ img.speak {
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
-				if (events[i].rating) {
-					text.push({ date: events[i].date, text: events[i].rating });
+				if (events[i].rating)
 					mood.push({ date: events[i].date, rating: events[i].rating / events[i].ratingCount });
-				}
 				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
 				if (events[i].location.latitude)
 					map.push({
