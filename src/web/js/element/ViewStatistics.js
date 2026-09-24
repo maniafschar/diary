@@ -150,7 +150,7 @@ chart bar {
 		}
 		chart.append(plot, axis);
 		this._root.appendChild(chart);
-		setTimeout(() => this._root.querySelector('chart').scrollTo({ left: this._root.querySelector('chart').scrollWidth, behavior: 'smooth' }), 50);
+		setTimeout(() => this._root.querySelector('chart').scrollLeft = this._root.querySelector('chart').scrollWidth, 50);
 	}
 
 	dateKey(date) {
