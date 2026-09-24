@@ -429,6 +429,6 @@ images img {
 		});
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
-		document.querySelector('view-statistics').addEventListener('wordclick', listener.wordclick);
+		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
 	}
 }
