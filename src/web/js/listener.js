@@ -372,7 +372,9 @@ word {
 }
 word no {
 	font-size: 0.8em;
-	opacity: 0.6;
+	opacity: 0.3;
+	position: absolute;
+	padding: 0.5em 1em;
 }
 date {
 	position: relative;
