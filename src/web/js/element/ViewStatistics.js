@@ -72,8 +72,22 @@ chart bar {
 	display: block;
 	height: var(--height);
 	min-height: 0.2em;
-	background: rgba(0, 0, 160, 0.65);
-	border-radius: 0.2em 0.2em 0 0;
+	border-radius: 0.2em;
+}
+chart bar.rating100 {
+	background: rgb(212, 175, 55);
+}
+chart bar.rating80 {
+	background: rgb(192, 192, 192);
+}
+chart bar.rating60 {
+	background: rgb(205, 127, 50);
+}
+chart bar.rating40 {
+	background: rgb(204, 204, 204);
+}
+chart bar.rating20 {
+	background: rgb(221, 221, 221);
 }
 chart tick {
 	min-width: 0;
@@ -87,16 +101,6 @@ chart tick {
 }
 chart bar[title] {
 	cursor: pointer;
-}
-chart bar::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	border-radius: inherit;
-	background: rgba(255, 255, 255, 0.12);
 }
 chart tick,
 chart bar {
@@ -143,7 +147,9 @@ chart bar {
 			var bar = document.createElement('bar');
 			if (entry) {
 				var dateLabel = date.toLocaleDateString();
-				bar.style.setProperty('--height', Math.max(4, entry.rating / maxRating * 100) + '%');
+				var rating = Math.max(4, entry.rating / maxRating * 100);
+				bar.style.setProperty('--height', rating + '%');
+				bar.classList.add(rating > 80 ? 'rating100' : rating > 60 ? 'rating80' : rating > 40 ? 'rating60' : rating > 20 ? 'rating40' : 'rating20');
 				bar.title = `${dateLabel}: ${entry.rating}`;
 			} else
 				bar.style.visibility = 'hidden';
