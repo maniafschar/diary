@@ -296,7 +296,7 @@ img.speak {
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
 					var date = new Date(events[i].date.substring(0, 10));
-					if (rating.length == 0 || rating[rating.length - 1].date != date) {
+					if (rating.length == 0 || rating[rating.length - 1].date.getTime() != date.getTime()) {
 						rating.push({ ids: ids, date: date, rating: Number(ratingSum / ratingCountSum) });
 						ratingSum = 0;
 						ratingCountSum = 0;
