@@ -20,6 +20,9 @@ class ViewStatistics extends HTMLElement {
 	position: relative;
 	display: block;
 }
+*::-webkit-scrollbar {
+	display: none;
+}
 wordcloud {
 	position: relative;
 	display: block;
