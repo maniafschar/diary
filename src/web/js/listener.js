@@ -370,6 +370,10 @@ word {
 	text-align: center;
 	padding-bottom: 1em;
 }
+word no {
+	font-size: 0.8em;
+	opacity: 0.6;
+}
 date {
 	position: relative;
 }
@@ -393,7 +397,7 @@ images img {
 	border-radius: 0.5em;
 	margin: 0.5em;
 }`;
-		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating>';
+		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '</no>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
