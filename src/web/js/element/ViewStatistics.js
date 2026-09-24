@@ -54,10 +54,10 @@ chart axis {
 }
 chart plot {
 	align-items: end;
-	height: calc(100% - 2.5em);
+	height: 70%;
 }
 chart axis {
-	height: 2.5em;
+	height: 30%;
 	align-items: start;
 }
 chart bar {
@@ -70,11 +70,11 @@ chart bar {
 }
 chart tick {
 	min-width: 0;
-	font-size: 0.55em;
+	font-size: 0.8em;
 	white-space: nowrap;
 	text-align: center;
 	overflow: visible;
-	transform: rotate(-45deg);
+	transform: rotate(-45deg) translate(-15px, 0);
 	transform-origin: top center;
 	color: rgba(0, 0, 0, 0.7);
 }
@@ -98,9 +98,6 @@ chart bar {
 	max-width: 2em;
 	justify-self: center;
 	width: 100%;
-}
-chart tick:not(.empty) {
-	font-size: 0.8em;
 }`;
 	}
 
@@ -153,6 +150,7 @@ chart tick:not(.empty) {
 		}
 		chart.append(plot, axis);
 		this._root.appendChild(chart);
+		setTimeout(() => this._root.querySelector('chart').scrollTo({ left: this._root.querySelector('chart').offsetWidth, behavior: 'smooth' }), 50);
 	}
 
 	dateKey(date) {
