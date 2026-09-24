@@ -28,17 +28,23 @@ wordcloud {
 	overflow: hidden;
 	text-align: center;
 }
-chart {
+word {
 	position: absolute;
-	left: 1em;
-	right: 1em;
-	bottom: 1em;
-	height: 25%;
-	padding: 0.5em 0.5em 0;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.35);
-	overflow: hidden;
+	cursor: pointer;
+	user-select: none;
+	white-space: nowrap;
 }
-
+word.vertical {
+	transform: translate(-100%, 0) rotate(-90deg);
+	transform-origin: 100% 0;
+}
+chart {
+	position: relative;
+	height: 6em;
+	display: block;
+	width: 100%;
+	overflow-x: auto;
+}
 chart plot,
 chart axis {
 	display: grid;
@@ -92,21 +98,9 @@ chart bar {
 	max-width: 2em;
 	justify-self: center;
 	width: 100%;
-	}
-
-/* Keep the labels readable when the date range is short. */
+}
 chart tick:not(.empty) {
-	font-size: 0.55em;
-}
-word {
-	position: absolute;
-	cursor: pointer;
-	user-select: none;
-	white-space: nowrap;
-}
-word.vertical {
-	transform: translate(-100%, 0) rotate(-90deg);
-	transform-origin: 100% 0;
+	font-size: 0.8em;
 }`;
 	}
 
@@ -114,11 +108,11 @@ word.vertical {
 		var tokens = this.extract();
 		if (tokens.length > this.MAX)
 			tokens = tokens.slice(0, this.MAX);
-		this.render(tokens);
+		this.renderWordcloud(tokens);
 		this.renderMoodChart();
 	}
 
-	render(tokens) {
+	renderWordcloud(tokens) {
 		this._root.appendChild(document.createElement('wordcloud'));
 		this.createPositions(tokens, 20);
 	}
