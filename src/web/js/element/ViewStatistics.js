@@ -84,21 +84,6 @@ chart bar span {
 	opacity: 0.8;
 	color: white;
 }
-chart bar.rating100 {
-	background: rgb(212, 175, 55);
-}
-chart bar.rating80 {
-	background: rgb(192, 192, 192);
-}
-chart bar.rating60 {
-	background: rgb(205, 127, 50);
-}
-chart bar.rating40 {
-	background: rgb(204, 204, 204);
-}
-chart bar.rating20 {
-	background: rgb(221, 221, 221);
-}
 chart tick {
 	min-width: 0;
 	font-size: 0.8em;
@@ -189,9 +174,10 @@ chart bar {
 			var bar = document.createElement('bar');
 			if (entry) {
 				var dateLabel = date.toLocaleDateString();
-				var rating = Math.max(4, entry.rating / maxRating * 100);
-				bar.style.setProperty('--height', rating + '%');
-				bar.classList.add(rating > 80 ? 'rating100' : rating > 60 ? 'rating80' : rating > 40 ? 'rating60' : rating > 20 ? 'rating40' : 'rating20');
+				var rating = Math.max(0, Math.min(maxRating, entry.rating));
+				var height = Math.max(4, rating / maxRating * 100);
+				bar.style.setProperty('--height', height + '%');
+				bar.style.background = this.ratingColor(rating, maxRating);
 				bar.title = `${dateLabel}: ${entry.rating}`;
 				bar.addEventListener('click', event => {
 					this.dispatchEvent(new CustomEvent('details', {
@@ -214,6 +200,12 @@ chart bar {
 		chart.append(plot, axis);
 		this._root.appendChild(chart);
 		setTimeout(() => this._root.querySelector('chart').scrollLeft = this._root.querySelector('chart').scrollWidth, 50);
+	}
+
+	ratingColor(rating, maxRating) {
+		var ratio = Math.max(0, Math.min(1, rating / maxRating));
+		var hue = 8 + ratio * 132;
+		return `linear-gradient(180deg, hsl(${hue} 82% 62%), hsl(${hue} 78% 44%))`;
 	}
 
 	dateKey(date) {
