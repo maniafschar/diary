@@ -109,6 +109,8 @@ chart bar {
 	}
 
 	init() {
+		this._root.querySelector('wordcloud').textContent = '';
+		this._root.querySelector('chart')?.outerHTML = '';
 		var tokens = this.extract();
 		if (tokens.length > this.MAX)
 			tokens = tokens.slice(0, this.MAX);
