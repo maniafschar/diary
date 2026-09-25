@@ -405,7 +405,7 @@ images img {
 			var l = list[event.detail.ids[i]];
 			var label = items.appendChild(document.createElement('label'));
 			var rating = label.appendChild(document.createElement('input-rating'));
-			rating.classList.add('minimal');
+			rating.classList.add('line');
 			rating.setAttribute('value', l.rating);
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
