@@ -85,7 +85,7 @@ chart bar span {
 	color: white;
 }
 chart tick {
-	min-width: 0;
+    opacity: 0.5;
 	font-size: 0.8em;
 	white-space: nowrap;
 	text-align: center;
