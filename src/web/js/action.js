@@ -185,9 +185,8 @@ class action {
 	}
 
 	static loginDemo() {
-		var input = document.querySelectorAll('element.login input');
-		input[0].value = 'aaron@diary.cafe';
-		input[1].value = 'Test1234';
+		document.querySelector('element.login input').value = 'aaron@diary.cafe';
+		document.querySelector('element.login input-password').value = 'Test1234';
 		document.querySelector('element.login input-checkbox').setAttribute('checked', 'false');
 		setTimeout(action.login, 500);
 	}
@@ -264,7 +263,7 @@ class action {
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
 		document.querySelector("element.event button.add").style.display = '';
-		document.querySelectorAll("element.event button.export").forEach(e => e.style.display = '' );
+		document.querySelectorAll("element.event button.export").forEach(e => e.style.display = '');
 		document.querySelector('body>[name="logoff"]').style.display = 'none';
 		document.querySelector('body>[name="clientName"]').innerText = '';
 		ui.navigate(0);

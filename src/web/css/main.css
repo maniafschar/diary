@@ -76,7 +76,7 @@ body>container buttons>div {
 	display: flex;
 	justify-content: space-between;
 	padding: 0.5em 0;
-	min-width: 30em;
+	min-width: 24em;
 	width: 100%;
 }
 
