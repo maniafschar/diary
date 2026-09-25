@@ -406,9 +406,11 @@ images img {
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
 			var label = items.appendChild(document.createElement('label'));
-			var rating = label.appendChild(document.createElement('input-rating'));
-			rating.classList.add('line');
-			rating.setAttribute('value', l.rating);
+			if (l.rating) {
+				var rating = label.appendChild(document.createElement('input-rating'));
+				rating.classList.add('line');
+				rating.setAttribute('value', l.rating);
+			}
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
 			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
