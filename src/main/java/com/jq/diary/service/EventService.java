@@ -1,5 +1,7 @@
 package com.jq.diary.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +135,10 @@ public class EventService {
 	public void save(final EventImage eventImage) {
 		byte[] img;
 		try {
-			img = Utilities.createVideoThumbnail(Attachment.fullPath(eventImage.getImage()));
+			final File tempFile = File.createTempFile("video_thumbnail_", ".mov");
+			tempFile.deleteOnExit();
+			IOUtils.write(Attachment.image(eventImage.getImage()), new FileOutputStream(tempFile));
+			img = Utilities.createVideoThumbnail(tempFile.getAbsolutePath());
 		} catch (final Exception ex) {
 			img = Attachment.image(eventImage.getImage());
 		}
