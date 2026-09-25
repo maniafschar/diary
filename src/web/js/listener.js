@@ -376,7 +376,7 @@ word no {
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 1.6em;
+	top: 1.7em;
 }
 date {
 	position: relative;
