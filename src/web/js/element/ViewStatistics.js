@@ -2,7 +2,7 @@
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
-	MAX_WORDS = 150;
+	MAX_WORDS = 100;
 	text;
 	rating;
 
