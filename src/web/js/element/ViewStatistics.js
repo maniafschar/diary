@@ -2,7 +2,7 @@
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
-	MAX = 100;
+	MAX_WORDS = 300;
 	text;
 	rating;
 
@@ -113,8 +113,8 @@ chart bar {
 		this._root.querySelector('wordcloud').textContent = '';
 		this._root.querySelector('chart').textContent = '';
 		var tokens = this.extract();
-		if (tokens.length > this.MAX)
-			tokens = tokens.slice(0, this.MAX);
+		if (tokens.length > this.MAX_WORDS)
+			tokens = tokens.slice(0, this.MAX_WORDS);
 		this.renderWordcloud(tokens);
 		this.renderRating();
 	}
