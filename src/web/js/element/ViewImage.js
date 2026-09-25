@@ -320,6 +320,7 @@ a {
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
 		this._root.querySelector('div video').pause();
+		document.body.style.overflow = '';
 	}
 
 	data() {
@@ -347,6 +348,7 @@ a {
 		this.update(true);
 		this._root.host.style.transition = 'all ease-out .4s';
 		this._root.host.style.transform = 'scale(1)';
+		document.body.style.overflow = 'hidden';
 	}
 
 	navigate(forward) {
