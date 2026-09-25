@@ -12,7 +12,7 @@ class ViewStatistics extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.parentElement.addEventListener('visible', () => this.init(), { once: true });
+		this.parentElement.addEventListener('visible', () => this.init());
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	width: 100%;
