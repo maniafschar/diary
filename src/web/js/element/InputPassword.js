@@ -99,4 +99,9 @@ button>img {
 			}
 		};
 	}
+	static get observedAttributes() { return ['value']; }
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (!newValue)
+			this._root.querySelectorAll('input').forEach(e => e.value = '');
+	}
 }
