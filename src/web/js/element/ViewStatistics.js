@@ -275,8 +275,10 @@ chart bar {
 			for (let i2 = p.length - 1; i2 > 0; i2--) {
 				const j = Math.floor(Math.random() * (i2 + 1));
 				var temp = p[i];
-				p[i] = p[j];
-				p[j] = temp;
+				if (temp) {
+					p[i] = p[j];
+					p[j] = temp;
+				}
 			}
 			for (let i2 = 0; i2 < p.length; i2++) {
 				position.x = p[i2][0];
