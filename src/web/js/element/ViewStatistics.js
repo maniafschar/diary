@@ -106,11 +106,12 @@ chart bar {
 	width: 100%;
 }`;
 		this._root.appendChild(document.createElement('wordcloud'));
+		this._root.appendChild(document.createElement('chart'));
 	}
 
 	init() {
 		this._root.querySelector('wordcloud').textContent = '';
-		this._root.querySelector('chart')?.outerHTML = '';
+		this._root.querySelector('chart').textContent = '';
 		var tokens = this.extract();
 		if (tokens.length > this.MAX)
 			tokens = tokens.slice(0, this.MAX);
@@ -199,8 +200,7 @@ chart bar {
 				tick.classList.add('empty');
 			axis.appendChild(tick);
 		}
-		chart.append(plot, axis);
-		this._root.appendChild(chart);
+		this._root.querySelector('chart').append(plot, axis);
 		setTimeout(() => this._root.querySelector('chart').scrollLeft = this._root.querySelector('chart').scrollWidth, 50);
 	}
 
