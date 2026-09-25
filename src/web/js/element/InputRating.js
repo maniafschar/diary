@@ -20,7 +20,8 @@ class InputRating extends HTMLElement {
 	line-height: 1;
 }
 
-:host(.minimal) {
+:host(.minimal),
+:host(.line) {
 	margin-right: 0.5em;
 	float: left;
 	padding-top: 0.1em;
@@ -31,15 +32,9 @@ class InputRating extends HTMLElement {
 	height: 0.45em;
 }
 
-:host(.line) {
-	margin-right: 0.5em;
-	float: left;
-	padding-top: 0.1em;
-}
-
 :host(.line) svg {
-	width: 0.9em;
-	height: 0.9em;
+	width: 1em;
+	height: 1em;
 }
 
 detailRating {
