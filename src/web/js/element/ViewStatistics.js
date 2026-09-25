@@ -195,7 +195,7 @@ chart bar {
 			plot.appendChild(bar);
 
 			var tick = document.createElement('tick');
-			tick.innerText = date.getDate() + '.' + date.getMonth();
+			tick.innerText = date.getDate() + '.' + (date.getMonth() + 1);
 			if (!entry)
 				tick.classList.add('empty');
 			axis.appendChild(tick);
