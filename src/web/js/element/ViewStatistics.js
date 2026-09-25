@@ -178,7 +178,7 @@ chart bar {
 				var height = Math.max(4, rating / maxRating * 100);
 				bar.style.setProperty('--height', height + '%');
 				bar.style.background = this.ratingColor(rating, maxRating);
-				bar.title = `${dateLabel}: ${entry.rating}`;
+				bar.title = `${dateLabel}: ${entry.rating}%`;
 				bar.addEventListener('click', event => {
 					this.dispatchEvent(new CustomEvent('details', {
 						detail: entry,

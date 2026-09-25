@@ -296,7 +296,7 @@ img.speak {
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
 					if (i == 0 || events[i - 1].date.substring(0, 10) != events[i].date.substring(0, 10)) {
-						rating.push({ ids: ids, date: new Date(events[i].date.substring(0, 10)), rating: parseInt(ratingSum / ratingCountSum +0.5) });
+						rating.push({ ids: ids, date: new Date(events[i].date.substring(0, 10)), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
@@ -398,7 +398,7 @@ images img {
 	border-radius: 0.5em;
 	margin: 0.5em;
 }`;
-		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '</no>';
+		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
