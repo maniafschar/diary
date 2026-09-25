@@ -224,7 +224,8 @@ img.speak {
 
 	static updateEvents() {
 		api.event.getList(events => {
-			document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
+			document.querySelector('element.login input').value = '';
+			document.querySelector('element.login input-password').reset();
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			if (api.access && !events.length)
 				return;

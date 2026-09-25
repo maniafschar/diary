@@ -155,7 +155,8 @@ class action {
 		else
 			api.authentication.getVerify(email, e => {
 				if (e == 'ok') {
-					document.querySelectorAll('element.login [i="login"]').forEach(e => e.value = '');
+					document.querySelector('element.login input').value = '';
+					document.querySelector('element.login input-password').reset();
 					document.dispatchEvent(new CustomEvent('popup', { detail: { body: 'Eine Email wurde Dir zugesendet. Klicke auf den Link in der Email, um Dein Passwort neu zu setzen.' } }));
 				} else
 					document.querySelector('element.login error').innerText = e;
