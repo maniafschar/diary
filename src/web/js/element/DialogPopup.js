@@ -234,12 +234,14 @@ pre {
 		var right = event.detail.align == 'right';
 		popup.style.left = right ? 'initial' : '';
 		popup.style.right = right ? '1em' : '';
+		document.body.style.overflow = 'hidden';
 	}
 
 	close(popup) {
 		popup.addEventListener('transitionend', () => popup.querySelector('content').textContent = '', { capture: false, passive: true, once: true });
 		popup.style.transform = '';
 		popup.removeAttribute('i');
+		document.body.style.overflow = '';
 	}
 
 	content() {
