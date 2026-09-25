@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -13,7 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.jq.diary.entity.Client;
+import com.jq.diary.entity.BaseEntity;
+import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Log;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
@@ -77,7 +79,7 @@ public class AdminService {
 		this.validateSql(sql);
 		if (sql.startsWith("update ") || sql.startsWith("insert ") || sql.startsWith("delete "))
 			return List.of(this.repository.executeUpdate(sql));
-		return this.repository.list(sql);
+		return this.repository.list(sql, BaseEntity.class);
 	}
 
 	public String build(final String type) throws IOException {
@@ -134,6 +136,10 @@ public class AdminService {
 
 	@Scheduled(cron = "0 0 * * * *")
 	private void demoData() {
-		this.repository.one(Client.class, BigInteger.valueOf(2l));
+		final List<Event> list = this.repository.list("from Event where clientId=2", Event.class);
+		for (final Event event : list) {
+			event.setDate(new Date(event.getDate().getTime() + 1000L * 60 * 60 * 24));
+			this.repository.save(event);
+		}
 	}
 }
