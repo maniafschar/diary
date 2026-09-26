@@ -80,7 +80,7 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("summary")
 	public AiSummary getSummary(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId, final Prompt prompt) {
+			@RequestHeader final BigInteger clientId, @PathVariable final Prompt prompt) {
 		final List<Event> events = this.getList(contactId, clientId);
 		final StringBuilder text = new StringBuilder();
 		for (final Event event : events) {
