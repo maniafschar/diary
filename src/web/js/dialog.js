@@ -403,7 +403,7 @@ div.toggle>div {
 }`;
 		var toggle = popup.appendChild(document.createElement('toggle'));
 		toggle.setAttribute('onclick', 'ui.toggle(event)');
-		toggle.innerText = 'Deine bereits erzeugten Dokumente';
+		toggle.innerText = 'Bereits erzeugte Dokumente';
 		toggle.style.display = 'none';
 		var eventLinks = popup.appendChild(document.createElement('div'));
 		eventLinks.classList.add('toggle');
@@ -498,7 +498,7 @@ div.toggle>div {
 }`;
 			var toggle = popup.appendChild(document.createElement('toggle'));
 			toggle.setAttribute('onclick', 'ui.toggle(event)');
-			toggle.innerText = 'Deine bereits geteilten Links';
+			toggle.innerText = 'Bereits geteilte Links';
 			toggle.style.display = 'none';
 			var eventLinks = popup.appendChild(document.createElement('div'));
 			eventLinks.classList.add('toggle');
