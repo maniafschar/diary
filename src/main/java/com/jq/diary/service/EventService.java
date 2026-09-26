@@ -27,12 +27,17 @@ import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
+import com.jq.diary.service.AiService.AiSummary;
+import com.jq.diary.service.AiService.Prompt;
 import com.jq.diary.util.Utilities;
 
 @Service
 public class EventService {
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private AiService aiService;
 
 	@Autowired
 	private Repository repository;
@@ -148,6 +153,19 @@ public class EventService {
 
 	public void delete(final EventImage eventImage) {
 		this.repository.delete(eventImage);
+	}
+
+	public AiSummary summary(final Prompt prompt, final List<Event> events) {
+		final StringBuilder text = new StringBuilder();
+		for (final Event event : events) {
+			text.append("Date: " + event.getDate().toString() + "\n");
+			if (event.getRating() != null)
+				text.append("Mood: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
+			text.append("Location: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
+			text.append("Remark: " + event.getNote());
+			text.append("\n\n--\n\n");
+		}
+		return this.aiService.summary(prompt, text.toString());
 	}
 
 	public void exportEmail(final Contact contact, final List<Event> events, final List<String> emails)
