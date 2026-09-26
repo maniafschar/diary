@@ -120,7 +120,7 @@ chart bar {
 	}
 
 	renderWordcloud(tokens) {
-		var fontSize = 20;
+		var fontSize = parseInt(document.body.style.fontSize) + 3;
 		var positions = [];
 		if (tokens.length == 0)
 			return positions;
