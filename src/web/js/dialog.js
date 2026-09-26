@@ -407,26 +407,12 @@ div.toggle>div {
 		var eventLinks = popup.appendChild(document.createElement('div'));
 		eventLinks.classList.add('toggle');
 		eventLinks = eventLinks.appendChild(document.createElement('div'));
-		api.event.getLinkList(list => {
+		api.event.getSummary(list => {
 			if (list.length > 0)
 				toggle.style.display = '';
 			for (var i = 0; i < list.length; i++) {
 				var item = eventLinks.appendChild(document.createElement('a'));
-				var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
-					list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
-				var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
-				date.setDate(date.getDate() + 1);
-				if (date >= new Date()) {
-					item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
-					item.setAttribute('target', '_blank');
-				} else {
-					item.classList.add('outdated');
-					text += ' (abgelaufen)';
-				}
-				text += '<br/>' + list[i].events.length + ' Einträge';
-				if (list[i].count)
-					text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
-				item.innerHTML = text;
+				item.innerHTML = JSON.stringify(list[i]);
 			}
 		});
 	}

@@ -75,7 +75,14 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@GetMapping("summary")
-	public Summary getSummary(@RequestHeader final BigInteger contactId,
+	public List<Summary> getSummary(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		this.authorizationService.requireContact(contactId, clientId);
+		return this.repository.list("from Summary where cliebt.id=?1", Summary.class, clientId);
+	}
+
+	@PutMapping("summary")
+	public Summary putSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt,
 			@RequestParam("ids") final List<BigInteger> ids) {
 		return this.eventService.summary(prompt, this.getList(contactId, clientId), clientId);

@@ -479,7 +479,7 @@ class action {
 	}
 
 	static summary() {
-		api.event.getSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary =>
+		api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary =>
 			document.dispatchEvent(new CustomEvent('popup', {
 				detail: {
 					body:

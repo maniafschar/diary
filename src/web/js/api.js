@@ -184,9 +184,17 @@ class api {
 			});
 		},
 
-		getSummary(propmt, success) {
+		getSummary(success) {
 			api.ajax({
 				url: 'event/summary?prompt=' + encodeURIComponent(propmt),
+				success: success
+			});
+		},
+
+		postSummary(propmt, success) {
+			api.ajax({
+				url: 'event/summary?prompt=' + encodeURIComponent(propmt),
+				method: 'POST',
 				success: success
 			});
 		},
