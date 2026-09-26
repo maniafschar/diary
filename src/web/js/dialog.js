@@ -414,7 +414,7 @@ div.toggle>div {
 				var item = eventLinks.appendChild(document.createElement('a'));
 				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + list[i].prompt;
 				const summary = list[i];
-				item.onclick = () => dialog.openSummayr(summary);
+				item.onclick = () => dialog.openSummary(summary);
 			}
 		});
 	}
