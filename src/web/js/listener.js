@@ -334,7 +334,8 @@ img.speak {
 			document.querySelector('body>button[name="logoff"]').style.display = '';
 			if (api.access) {
 				document.querySelector("element.event button.add").style.display = 'none';
-				document.querySelectorAll("element.event button.export").forEach(e => e.style.display = 'none');
+				document.querySelector("element.event button.export").style.display = 'none';
+				document.querySelector("element.event button.summary").style.display = 'none';
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			} else {
 				document.querySelector('element.user').style.display = 'block';

@@ -1,4 +1,3 @@
-import { action } from "./action";
 import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
@@ -401,6 +400,16 @@ button.confirmed::after {
 
 	static email() {
 		dialog.export(true);
+	}
+
+	static summary() {
+		ui.navigate(0);
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection value="Summary"></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="action.summary()">KI fragen</button></div>' } }));
+		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
+		selection.add('Summary', 'Zusammenfassung');
+		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
+		selection.add('AdviceRoute', 'Routen-Empfehlung');
+		selection.open();
 	}
 
 	static export(email) {

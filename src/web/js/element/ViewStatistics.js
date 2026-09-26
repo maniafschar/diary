@@ -1,4 +1,3 @@
-import { api } from "../api";
 
 export { ViewStatistics };
 
@@ -111,7 +110,6 @@ chart bar {
 	}
 
 	init() {
-		this._root.querySelector('button').style.display = api.user?.admin ? 'inline-block' : '';
 		this._root.querySelector('wordcloud').textContent = '';
 		this._root.querySelector('chart').textContent = '';
 		var tokens = this.extract();

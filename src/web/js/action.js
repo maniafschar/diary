@@ -142,7 +142,7 @@ class action {
 		else
 			api.authentication.getLogin(email.value, password.value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
 				if (success) {
-					document.querySelector('body button.add').style.display = api.user.admin ? 'block' : 'none';
+					document.querySelector('body buttons button.add, body buttons button.export, body buttons button.summary').style.display = api.user.admin ? 'block' : 'none';
 					document.dispatchEvent(new CustomEvent('event'));
 				}
 			});
@@ -476,15 +476,6 @@ class action {
 			} else
 				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 		}
-	}
-
-	static summaryDialog() {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection value="Summary"></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="action.summary()">KI fragen</button></div>' } }));
-		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
-		selection.add('Summary', 'Zusammenfassung');
-		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
-		selection.add('AdviceRoute', 'Routen-Empfehlung');
-		selection.open();
 	}
 
 	static summary() {
