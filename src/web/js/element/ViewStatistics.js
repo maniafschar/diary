@@ -1,3 +1,4 @@
+import { api } from "../api";
 
 export { ViewStatistics };
 
@@ -380,6 +381,13 @@ chart bar {
 		if (position.vertical)
 			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth + (position.word.offsetWidth - position.word.offsetHeight) / 2 < height;
 		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
+	}
+
+	sumary() {
+		api.event.getSummarize(sumary => {
+			var s = '<img src="data:image/jpg;base64,' + sumary.image + '"/>' + sumary.text.replace(/\n/g, '<br/>') + '<div style="text-align: center; margin-top: 2em; display: block;"><div style="font-size: 3em; padding-bottom: 0.5em;">' + sumary.emojis.join('&nbsp; &nbsp;') + '</div>' + sumary.adjectives.join(' · ') + '</div>';
+			document.dispatchEvent(new CustomEvent('popup', { detail: { body: s } }));
+		});
 	}
 
 	STOP_WORDS = [

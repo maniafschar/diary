@@ -77,8 +77,8 @@ public class EventApi extends ApplicationApi {
 		return null;
 	}
 
-	@GetMapping("summarize/text")
-	public AiSummary getListSummarize(@RequestHeader final BigInteger contactId,
+	@GetMapping("summary")
+	public AiSummary getSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		final List<Event> events = this.getList(contactId, clientId);
 		final StringBuilder text = new StringBuilder();
@@ -89,7 +89,7 @@ public class EventApi extends ApplicationApi {
 			text.append(event.getNote());
 			text.append("\n\n--------------------\n\n");
 		}
-		return this.aiService.summerize(text.toString());
+		return this.aiService.summary(text.toString());
 	}
 
 	@GetMapping("{id}")

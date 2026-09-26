@@ -35,8 +35,8 @@ import com.jq.diary.util.Utilities;
 @Service
 public class AiService {
 	private static AiType type = AiType.Gemini;
-	private static final String promptSummerize = "Summarize this diary in about 300 words "
-			+ "in its language and at the end of the summary add "
+	private static final String promptSummary = "Summarize this diary in about {0} characters "
+			+ "in its language, emphasis the dates with the most feelings, and at the end of the summary add "
 			+ "in one line 3 comma separated adjectives and 3 emojis mainly discribing "
 			+ "mood mood within the period in his life:";
 	private static final String promptImage = "Create an image expressing the feelings of the people in this text:";
@@ -55,23 +55,31 @@ public class AiService {
 	}
 
 	public static class AiSummary {
+		public int textLength;
+		public int textSummary;
 		public String text;
 		public byte[] image;
 		public final List<String> adjectives = new ArrayList<>();
 		public final List<String> emojis = new ArrayList<>();
 	}
 
-	public AiSummary summerize(final String text) {
+	public AiSummary summary(final String text) {
 		if (text.length() < 900)
 			return null;
-		return type == AiType.Gemini ? this.summerizeGemini(text)
-				: type == AiType.GPT ? this.summerizeGPT(text) : null;
+		return type == AiType.Gemini ? this.summaryGemini(text)
+				: type == AiType.GPT ? this.summaryGPT(text) : null;
 	}
 
 	@SuppressWarnings("null")
-	protected AiSummary summerizeGemini(final String text) {
+	protected AiSummary summaryGemini(final String text) {
+		int chars = text.length() / 10;
+		if (chars < 300)
+			chars = 300;
+		else if (chars > 3000)
+			chars = 3000;
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
-				.parts(ImmutableList.<Part>of(Part.fromText(promptSummerize + "\n" + text))).build());
+				.parts(ImmutableList.<Part>of(Part.fromText(promptSummary.replace("{0}", "" + words) + "\n" + text)))
+				.build());
 		final Map<String, Schema> attributes = new HashMap<>();
 		attributes.put("name", Schema.builder().type(Type.Known.STRING).build());
 		attributes.put("adjectives", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
@@ -105,6 +113,8 @@ public class AiService {
 			}
 			final AiSummary aiSummary = this.convert(s.toString());
 			aiSummary.image = this.imageGemini(aiSummary.text);
+			aiSummary.textSummary = words;
+			aiSummary.textLength = text.length();
 			return aiSummary;
 		}
 	}
@@ -156,7 +166,7 @@ public class AiService {
 		return list;
 	}
 
-	private AiSummary summerizeGPT(final String text) {
+	private AiSummary summaryGPT(final String text) {
 		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
 			final String s = WebClient
 					.create("https://api.openai.com/v1/completions")

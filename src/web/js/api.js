@@ -184,9 +184,9 @@ class api {
 			});
 		},
 
-		getSummarizeText(success) {
+		getSummary(success) {
 			api.ajax({
-				url: 'event/summarize/text',
+				url: 'event/summary',
 				success: success
 			});
 		},
