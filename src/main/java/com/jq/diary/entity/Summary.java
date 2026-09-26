@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Summary extends BaseEntity {
@@ -14,6 +15,7 @@ public class Summary extends BaseEntity {
 	private String note;
 	private String image;
 	private String imageThumbnail;
+	@ManyToOne
 	private Client client;
 	private final List<String> adjectives = new ArrayList<>();
 	private final List<String> emojis = new ArrayList<>();
