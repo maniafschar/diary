@@ -486,7 +486,7 @@ class action {
 		document.dispatchEvent(new CustomEvent('popup', {
 			detail: {
 				body:
-					(summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
+					(summary.image ? (summary.image.indexOf('.') > 0 ? '/med/' + summary.image : '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>') : '') +
 					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
 					summary.note.replace(/\n/g, '<br/>')
 			}
