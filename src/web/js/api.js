@@ -186,7 +186,7 @@ class api {
 
 		getSummary(success) {
 			api.ajax({
-				url: 'event/summary?prompt=' + encodeURIComponent(propmt),
+				url: 'event/summary',
 				success: success
 			});
 		},
