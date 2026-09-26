@@ -112,7 +112,7 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final AiSummary aiSummary = this.convert(s.toString());
-			aiSummary.image = this.imageGemini(aiSummary.text);
+			// aiSummary.image = this.imageGemini(aiSummary.text);
 			aiSummary.textSummary = chars;
 			aiSummary.textLength = text.length();
 			return aiSummary;
