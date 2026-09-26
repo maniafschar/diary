@@ -78,7 +78,7 @@ public class AiService {
 		else if (chars > 3000)
 			chars = 3000;
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
-				.parts(ImmutableList.<Part>of(Part.fromText(promptSummary.replace("{0}", "" + words) + "\n" + text)))
+				.parts(ImmutableList.<Part>of(Part.fromText(promptSummary.replace("{0}", "" + chars) + "\n" + text)))
 				.build());
 		final Map<String, Schema> attributes = new HashMap<>();
 		attributes.put("name", Schema.builder().type(Type.Known.STRING).build());
@@ -113,7 +113,7 @@ public class AiService {
 			}
 			final AiSummary aiSummary = this.convert(s.toString());
 			aiSummary.image = this.imageGemini(aiSummary.text);
-			aiSummary.textSummary = words;
+			aiSummary.textSummary = chars;
 			aiSummary.textLength = text.length();
 			return aiSummary;
 		}
