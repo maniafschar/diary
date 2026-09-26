@@ -460,7 +460,7 @@ toggle {
 			eventLinks.innerText = 'Deine geteilten Links';
 			eventLinks = popup.appendChild(document.createElement('div'));
 			eventLinks.classList.add('toggle');
-			eventLinks = popup.appendChild(document.createElement('div'));
+			eventLinks = eventLinks.appendChild(document.createElement('div'));
 			api.event.getLinkList(list => {
 				for (var i = 0; i < list.length; i++) {
 					var item = eventLinks.appendChild(document.createElement('a'));
