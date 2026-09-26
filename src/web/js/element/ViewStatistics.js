@@ -418,12 +418,16 @@ button:hover {
 	}
 
 	summary() {
-		api.event.getSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary => {
-			var s = (summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
-				'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-				summary.text.replace(/\n/g, '<br/>');
-			document.dispatchEvent(new CustomEvent('popup', { detail: { body: s } }));
-		});
+		api.event.getSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary =>
+			document.dispatchEvent(new CustomEvent('popup', {
+				detail: {
+					body:
+						(summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
+						'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
+						summary.note.replace(/\n/g, '<br/>')
+				}
+			}))
+		);
 	}
 
 	STOP_WORDS = [
