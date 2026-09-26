@@ -409,12 +409,13 @@ button:hover {
 	}
 
 	summaryDialog() {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="this.getRootNode().host.summary()">KI fragen</button></div>' } }));
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection></input-selection><div style="text-align: center; padding-top: 1.5em;"><button>KI fragen</button></div>' } }));
 		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
 		selection.add('Summary', 'Zusammenfassung');
 		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
 		selection.add('AdviceRoute', 'Routen-Empfehlung');
 		selection.open();
+		document.querySelector('dialog-popup').content().querySelector('button').onclick = this.summary;
 	}
 
 	summary() {
