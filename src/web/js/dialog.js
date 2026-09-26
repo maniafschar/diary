@@ -263,31 +263,6 @@ ${dialog.stylePictures}`;
 		var button = dialog.createButton(popup, 'action.contactPatch()').querySelector('button');
 		if (!contact.verified)
 			button.innerText = 'Email senden';
-		if (api.user.admin && contact.id == api.user.id) {
-			var eventLinks = popup.appendChild(document.createElement('eventLinks'));
-			api.event.getLinkList(list => {
-				for (var i = 0; i < list.length; i++) {
-					if (i == 0)
-						eventLinks.appendChild(document.createElement('div')).innerText = 'Deine geteilten Links';
-					var item = eventLinks.appendChild(document.createElement('a'));
-					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
-						list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
-					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
-					date.setDate(date.getDate() + 1);
-					if (date >= new Date()) {
-						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
-						item.setAttribute('target', '_blank');
-					} else {
-						item.classList.add('outdated');
-						text += ' (abgelaufen)';
-					}
-					text += '<br/>' + list[i].events.length + ' Einträge';
-					if (list[i].count)
-						text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
-					item.innerHTML = text;
-				}
-			});
-		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
@@ -454,6 +429,7 @@ button.confirmed::after {
 			document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
 		};
 		table.addEventListener('select', listener);
+
 		popup.appendChild(document.createElement('error'));
 		var buttonDiv = dialog.createButton(popup, 'action.export(' + email + ')');
 		buttonDiv.querySelector('button').innerText = email ? 'Email senden' : 'PDF erzeugen';
@@ -462,12 +438,39 @@ button.confirmed::after {
 			document.querySelector('event view-table').removeAttribute('mode');
 			table.removeEventListener('select', listener);
 		}, { once: true });
-		if (email)
+		if (email) {
 			api.event.getEmailList(list => {
 				var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
 				list.forEach(e => s.add(e, e));
 				if (list.length)
 					s.open();
 			});
+			var eventLinks = popup.appendChild(document.createElement('toggle'));
+			eventLinks.setAttribute('onclick', 'ui.toggle(event)');
+			eventLinks = popup.appendChild(document.createElement('div'));
+			eventLinks.classList.add('toggle');
+			api.event.getLinkList(list => {
+				for (var i = 0; i < list.length; i++) {
+					if (i == 0)
+						eventLinks.appendChild(document.createElement('div')).innerText = 'Deine geteilten Links';
+					var item = eventLinks.appendChild(document.createElement('a'));
+					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
+						list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
+					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
+					date.setDate(date.getDate() + 1);
+					if (date >= new Date()) {
+						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
+						item.setAttribute('target', '_blank');
+					} else {
+						item.classList.add('outdated');
+						text += ' (abgelaufen)';
+					}
+					text += '<br/>' + list[i].events.length + ' Einträge';
+					if (list[i].count)
+						text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
+					item.innerHTML = text;
+				}
+			});
+		}
 	}
 }
