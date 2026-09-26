@@ -120,7 +120,8 @@ button {
 	margin: 0 0.5em;
 	color: white;
 	font-size: 1em;
-	transition: var(--transition-clickable)
+	transition: var(--transition-clickable);
+	z-index: 2;
 }
 button:hover {
 	background: var(--background-clickable-highlight);
