@@ -126,7 +126,7 @@ button {
 button:hover {
 	background: var(--background-clickable-highlight);
 }`;
-		if (api.user.admin) {
+		if (api.user?.admin) {
 			var summary = this._root.appendChild(document.createElement('button'));
 			summary.onclick = ViewStatistics.summary;
 			summary.innerText = 'AI';
