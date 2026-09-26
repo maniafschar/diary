@@ -1,4 +1,3 @@
-import { action } from "./action";
 import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
@@ -7,6 +6,11 @@ export { dialog };
 
 class dialog {
 	static files;
+	static summaryPrompts = [
+		['Summary', 'Zusammenfassung'],
+		['AdvicePsychology', 'Psychologische Empfehlung'],
+		['AdviceRoute', 'Routen-Empfehlung']
+	];
 	static stylePictures = `
 value.pictures {
 	width: 100%;
@@ -382,9 +386,8 @@ button.confirmed::after {
 		ui.navigate(0);
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection value="Summary"></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="action.summary()">KI fragen</button></div>' } }));
 		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
-		selection.add('Summary', 'Zusammenfassung');
-		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
-		selection.add('AdviceRoute', 'Routen-Empfehlung');
+		for (var i = 0; i < this.summaryPrompts.length; i++)
+			selection.add(this.summaryPrompts[i][0], this.summaryPrompts[i][1]);
 		selection.open();
 		var popup = document.querySelector('dialog-popup').content();
 		popup.appendChild(document.createElement('style')).textContent = `
@@ -413,11 +416,22 @@ div.toggle>div {
 				toggle.style.display = '';
 			for (var i = 0; i < list.length; i++) {
 				var item = eventLinks.appendChild(document.createElement('a'));
-				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + list[i].prompt;
+				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + this.summaryPrompts.find(e => e[0] == list[i].prompt)[1];
 				const summary = list[i];
-				item.onclick = () => action.summaryDisplay(summary);
+				item.onclick = () => dialog.summaryDisplay(summary);
 			}
 		});
+	}
+
+	static summaryDisplay(summary) {
+		document.dispatchEvent(new CustomEvent('popup', {
+			detail: {
+				body:
+					(summary.image ? '<img src="' + (summary.image.indexOf('.') > 0 ? '/med/' + summary.image : 'data:image/jpg;base64,' + summary.image) + '" style="max-width: 100%; border-radius: 0.5em;"/>' : '') +
+					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
+					summary.note.replace(/\n/g, '<br/>')
+			}
+		}));
 	}
 
 	static openSummary(summary) {
