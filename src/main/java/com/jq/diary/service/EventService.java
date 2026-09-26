@@ -27,9 +27,9 @@ import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Summary;
+import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
-import com.jq.diary.service.AiService.Prompt;
 import com.jq.diary.util.Utilities;
 
 @Service
@@ -55,7 +55,7 @@ public class EventService {
 			this.repository.save(eventLink);
 		}
 		if (Instant.now().minus(Duration.ofDays(1)).isBefore(Instant.ofEpochMilli(eventLink.getStart().getTime()))) {
-			eventLink.getEvents().sort(Comparator.comparing(Event::getDate).reversed());
+			eventLink.getEvents().sort(Comparator.comparing((final Event event) -> event.getDate()).reversed());
 			return eventLink.getEvents();
 		}
 		return null;
