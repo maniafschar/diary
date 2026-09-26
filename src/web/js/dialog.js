@@ -385,6 +385,7 @@ button.confirmed::after {
 		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
 		selection.add('AdviceRoute', 'Routen-Empfehlung');
 		selection.open();
+		var popup = document.querySelector('dialog-popup').content();
 		var toggle = popup.appendChild(document.createElement('toggle'));
 		toggle.setAttribute('onclick', 'ui.toggle(event)');
 		toggle.innerText = 'Deine bereits erzeugten Dokumente';
