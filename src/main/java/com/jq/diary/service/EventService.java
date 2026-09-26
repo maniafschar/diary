@@ -169,7 +169,9 @@ public class EventService {
 		final Summary summary = this.aiService.summary(prompt, text.toString());
 		summary.setClient(this.repository.one(Client.class, clientId));
 		final String image = summary.getImage();
-		summary.setImage(Attachment.createImage("jpg", Base64.getDecoder().decode(summary.getImage())));
+		final byte[] imageBytes = Base64.getDecoder().decode(summary.getImage());
+		summary.setImage(Attachment.createImage("jpg", imageBytes));
+		summary.setImageThumbnail(Attachment.createImage("jpg", Utilities.scaleImage(imageBytes, 150)));
 		this.repository.save(summary);
 		summary.setImage(image);
 		return summary;

@@ -11,6 +11,7 @@ public class Summary extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String note;
 	private String image;
+	private String imageThumbnail;
 	private Client client;
 	private final List<String> adjectives = new ArrayList<>();
 	private final List<String> emojis = new ArrayList<>();
@@ -61,5 +62,13 @@ public class Summary extends BaseEntity {
 
 	public void setClient(final Client client) {
 		this.client = client;
+	}
+
+	public String getImageThumbnail() {
+		return this.imageThumbnail;
+	}
+
+	public void setImageThumbnail(final String imageThumbnail) {
+		this.imageThumbnail = imageThumbnail;
 	}
 }
