@@ -5,6 +5,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -13,6 +15,8 @@ public class Summary extends BaseEntity {
 	private int textSummary;
 	@Column(columnDefinition = "TEXT")
 	private String note;
+	@Enumerated(EnumType.STRING)
+	private Prompt prompt;
 	private String image;
 	private String imageThumbnail;
 	@ManyToOne
@@ -104,5 +108,13 @@ public class Summary extends BaseEntity {
 
 	public void setImageThumbnail(final String imageThumbnail) {
 		this.imageThumbnail = imageThumbnail;
+	}
+
+	public Prompt getPrompt() {
+		return this.prompt;
+	}
+
+	public void setPrompt(final Prompt prompt) {
+		this.prompt = prompt;
 	}
 }
