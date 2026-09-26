@@ -386,6 +386,20 @@ button.confirmed::after {
 		selection.add('AdviceRoute', 'Routen-Empfehlung');
 		selection.open();
 		var popup = document.querySelector('dialog-popup').content();
+		popup.appendChild(document.createElement('style')).textContent = `
+a {
+	display: block;
+	font-size: 0.8em;
+	padding: 0.5em;
+}
+toggle {
+	text-align: center;
+	margin-top: 1em;
+}
+div.toggle>div {
+	max-height: 15em;
+	overflow: auto;
+}`;
 		var toggle = popup.appendChild(document.createElement('toggle'));
 		toggle.setAttribute('onclick', 'ui.toggle(event)');
 		toggle.innerText = 'Deine bereits erzeugten Dokumente';
