@@ -126,9 +126,11 @@ button {
 button:hover {
 	background: var(--background-clickable-highlight);
 }`;
-		var summary = this._root.appendChild(document.createElement('button'));
-		summary.onclick = ViewStatistics.summary;
-		summary.innerText = 'AI';
+		if (api.user.admin) {
+			var summary = this._root.appendChild(document.createElement('button'));
+			summary.onclick = ViewStatistics.summary;
+			summary.innerText = 'AI';
+		}
 		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('chart'));
 	}
