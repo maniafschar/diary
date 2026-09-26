@@ -490,6 +490,14 @@ class action {
 			}))
 		);
 	}
+
+	static summaryDisplay(summary) {
+		document.dispatchEvent(new CustomEvent('popup', {
+			detail: {
+				body: JSON.stringify(summary)
+			}
+		}));
+	}
 }
 
 window.addEventListener('resize', action.resize);
