@@ -105,31 +105,7 @@ chart bar {
 	max-width: 2em;
 	justify-self: center;
 	width: 100%;
-}
-button {
-	position: absolute;
-	right: 1em;
-	bottom: 7em;
-	border-radius: 2em;
-	border: none;
-	background: var(--background-clickable);
-	padding: 0.75em 1.5em;
-	outline: none;
-	cursor: pointer;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
-	margin: 0 0.5em;
-	color: white;
-	font-size: 1em;
-	transition: var(--transition-clickable);
-	z-index: 2;
-	display: none;
-}
-button:hover {
-	background: var(--background-clickable-highlight);
 }`;
-		var summary = this._root.appendChild(document.createElement('button'));
-		summary.onclick = this.summaryDialog;
-		summary.innerText = 'AI';
 		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('chart'));
 	}
@@ -406,28 +382,6 @@ button:hover {
 		if (position.vertical)
 			return position.x + position.word.offsetHeight < width && position.y + position.word.offsetWidth + (position.word.offsetWidth - position.word.offsetHeight) / 2 < height;
 		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
-	}
-
-	summaryDialog() {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection value="Summary"></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="document.querySelector(&quot;view-statistics&quot;).summary()">KI fragen</button></div>' } }));
-		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
-		selection.add('Summary', 'Zusammenfassung');
-		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
-		selection.add('AdviceRoute', 'Routen-Empfehlung');
-		selection.open();
-	}
-
-	summary() {
-		api.event.getSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary =>
-			document.dispatchEvent(new CustomEvent('popup', {
-				detail: {
-					body:
-						(summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
-						'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-						summary.note.replace(/\n/g, '<br/>')
-				}
-			}))
-		);
 	}
 
 	STOP_WORDS = [
