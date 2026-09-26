@@ -78,7 +78,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@GetMapping("summarize/text")
-	public AiSummary getListSummarize(@PathVariable final BigInteger contactId,
+	public AiSummary getListSummarize(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		final List<Event> events = this.getList(contactId, clientId);
 		final StringBuilder text = new StringBuilder();
