@@ -479,22 +479,16 @@ class action {
 	}
 
 	static summary() {
-		api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary =>
-			document.dispatchEvent(new CustomEvent('popup', {
-				detail: {
-					body:
-						(summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
-						'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-						summary.note.replace(/\n/g, '<br/>')
-				}
-			}))
-		);
+		api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), action.summaryDisplay);
 	}
 
 	static summaryDisplay(summary) {
 		document.dispatchEvent(new CustomEvent('popup', {
 			detail: {
-				body: JSON.stringify(summary)
+				body:
+					(summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
+					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
+					summary.note.replace(/\n/g, '<br/>')
 			}
 		}));
 	}
