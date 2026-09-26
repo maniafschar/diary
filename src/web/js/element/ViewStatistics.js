@@ -128,7 +128,7 @@ button:hover {
 	background: var(--background-clickable-highlight);
 }`;
 		var summary = this._root.appendChild(document.createElement('button'));
-		summary.onclick = this.summary;
+		summary.onclick = this.summaryDialog;
 		summary.innerText = 'AI';
 		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('chart'));
@@ -409,11 +409,12 @@ button:hover {
 	}
 
 	summaryDialog() {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection></input-selection><button>KI fragen</button>' } }));
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection></input-selection><div style="text-align: center;"><button>KI fragen</button></div>' } }));
 		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
 		selection.add('Summary', 'Zusammenfassung');
 		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
 		selection.add('AdviceRoute', 'Routen-Empfehlung');
+		selection.open();
 	}
 
 	summary() {
