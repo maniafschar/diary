@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +35,10 @@ import com.jq.diary.util.Utilities;
 @Service
 public class AiService {
 	private static AiType type = AiType.Gemini;
-	private static final String promptSummerize = "Summarize this WhatsApp chat in about 300 words "
-			+ "in the language they speak and at the end of the summary add for each user "
+	private static final String promptSummerize = "Summarize this diary in about 300 words "
+			+ "in its language and at the end of the summary add "
 			+ "in one line 3 comma separated adjectives and 3 emojis mainly discribing "
-			+ "their mood during conversation:";
+			+ "mood mood within the period in his life:";
 	private static final String promptImage = "Create an image expressing the feelings of the people in this text:";
 
 	@Autowired
@@ -58,18 +57,19 @@ public class AiService {
 	public static class AiSummary {
 		public String text;
 		public byte[] image;
-		public final Map<String, List<String>> adjectives = new HashMap<>();
-		public final Map<String, List<String>> emojis = new HashMap<>();
+		public final List<String> adjectives = new ArrayList<>();
+		public final List<String> emojis = new ArrayList<>();
 	}
 
-	public AiSummary summerize(final String text, final Set<String> users) {
+	public AiSummary summerize(final String text) {
 		if (text.length() < 900)
 			return null;
-		return type == AiType.Gemini ? this.summerizeGemini(text, users)
-				: type == AiType.GPT ? this.summerizeGPT(text, users) : null;
+		return type == AiType.Gemini ? this.summerizeGemini(text)
+				: type == AiType.GPT ? this.summerizeGPT(text) : null;
 	}
 
-	protected AiSummary summerizeGemini(final String text, final Set<String> users) {
+	@SuppressWarnings("null")
+	protected AiSummary summerizeGemini(final String text) {
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList.<Part>of(Part.fromText(promptSummerize + "\n" + text))).build());
 		final Map<String, Schema> attributes = new HashMap<>();
@@ -103,7 +103,7 @@ public class AiService {
 				for (final Part part : parts)
 					s.append(part.text().orElse(""));
 			}
-			final AiSummary aiSummary = this.convert(s.toString(), users);
+			final AiSummary aiSummary = this.convert(s.toString());
 			aiSummary.image = this.imageGemini(aiSummary.text);
 			return aiSummary;
 		}
@@ -129,24 +129,16 @@ public class AiService {
 		return null;
 	}
 
-	protected AiSummary convert(final String summary, final Set<String> users) {
-		String error = "";
+	protected AiSummary convert(final String summary) {
+		final String error = "";
 		try {
 			final JsonNode node = new ObjectMapper().readTree(summary);
 			final AiSummary response = new AiSummary();
 			response.text = node.get("summary").asText().trim();
 			final ArrayNode attributes = (ArrayNode) node.get("attributes");
-			for (final String user : users) {
-				final String u = user.trim().toLowerCase();
-				for (final JsonNode attribute : attributes) {
-					if (u.contains(attribute.get("name").asText().toLowerCase())) {
-						response.adjectives.put(user, this.convertList((ArrayNode) attribute.get("adjectives")));
-						response.emojis.put(user, this.convertList((ArrayNode) attribute.get("emojis")));
-						break;
-					}
-				}
-				if (!response.adjectives.containsKey(user))
-					error += user + " not found\n";
+			for (final JsonNode attribute : attributes) {
+				response.adjectives.addAll(this.convertList((ArrayNode) attribute.get("adjectives")));
+				response.emojis.addAll(this.convertList((ArrayNode) attribute.get("emojis")));
 			}
 			return response;
 		} catch (final JsonProcessingException ex) {
@@ -164,7 +156,7 @@ public class AiService {
 		return list;
 	}
 
-	private AiSummary summerizeGPT(final String text, final Set<String> users) {
+	private AiSummary summerizeGPT(final String text) {
 		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
 			final String s = WebClient
 					.create("https://api.openai.com/v1/completions")

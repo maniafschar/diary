@@ -184,6 +184,13 @@ class api {
 			});
 		},
 
+		getSummarizeText(success) {
+			api.ajax({
+				url: 'event/summarize/text',
+				success: success
+			});
+		},
+
 		patch(event, success) {
 			api.ajax({
 				url: 'event',

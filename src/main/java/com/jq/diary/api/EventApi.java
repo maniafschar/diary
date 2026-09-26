@@ -31,6 +31,8 @@ import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
+import com.jq.diary.service.AiService;
+import com.jq.diary.service.AiService.AiSummary;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.LocationService;
@@ -45,6 +47,9 @@ public class EventApi extends ApplicationApi {
 
 	@Autowired
 	private EventService eventService;
+
+	@Autowired
+	private AiService aiService;
 
 	@Autowired
 	private PdfService pdfService;
@@ -70,6 +75,21 @@ public class EventApi extends ApplicationApi {
 			return this.filter(this.eventService.listAccess(eventLink));
 		}
 		return null;
+	}
+
+	@GetMapping("summarize/text")
+	public AiSummary getListSummarize(@PathVariable final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		final List<Event> events = this.getList(contactId, clientId);
+		final StringBuilder text = new StringBuilder();
+		for (final Event event : events) {
+			text.append(event.getDate().toString() + "\n");
+			if (event.getRating() != null)
+				text.append("My mood: " + event.getRating() + "%\n");
+			text.append(event.getNote());
+			text.append("\n\n--------------------\n\n");
+		}
+		return this.aiService.summerize(text.toString());
 	}
 
 	@GetMapping("{id}")
