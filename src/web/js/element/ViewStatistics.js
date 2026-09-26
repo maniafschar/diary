@@ -122,20 +122,20 @@ button {
 	font-size: 1em;
 	transition: var(--transition-clickable);
 	z-index: 2;
+	display: none;
 }
 button:hover {
 	background: var(--background-clickable-highlight);
 }`;
-		if (api.user?.admin) {
-			var summary = this._root.appendChild(document.createElement('button'));
-			summary.onclick = ViewStatistics.summary;
-			summary.innerText = 'AI';
-		}
+		var summary = this._root.appendChild(document.createElement('button'));
+		summary.onclick = ViewStatistics.summary;
+		summary.innerText = 'AI';
 		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('chart'));
 	}
 
 	init() {
+		this._root.querySelector('button').style.display = api.user?.admin ? 'inline-block' : '';
 		this._root.querySelector('wordcloud').textContent = '';
 		this._root.querySelector('chart').textContent = '';
 		var tokens = this.extract();
