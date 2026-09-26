@@ -121,6 +121,9 @@ button {
 	color: white;
 	font-size: 1em;
 	transition: var(--transition-clickable)
+}
+button:hover {
+	background: var(--background-clickable-highlight);
 }`;
 		var summary = this._root.appendChild(document.createElement('button'));
 		summary.onclick = ViewStatistics.summary;
