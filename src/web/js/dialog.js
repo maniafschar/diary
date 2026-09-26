@@ -412,9 +412,15 @@ div.toggle>div {
 				toggle.style.display = '';
 			for (var i = 0; i < list.length; i++) {
 				var item = eventLinks.appendChild(document.createElement('a'));
-				item.innerHTML = JSON.stringify(list[i]);
+				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + list[i].prompt;
+				const summary = list[i];
+				item.onclick = () => dialog.openSummayr(summary);
 			}
 		});
+	}
+
+	static openSummary(summary) {
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: JSON.stringify(summary) } }))
 	}
 
 	static export(email) {

@@ -171,6 +171,7 @@ public class EventService {
 		final String image = summary.getImage();
 		final byte[] imageBytes = Base64.getDecoder().decode(summary.getImage());
 		summary.setImage(Attachment.createImage("jpg", imageBytes));
+		summary.setPrompt(prompt);
 		summary.setImageThumbnail(Attachment.createImage("jpg", Utilities.scaleImage(imageBytes, 150)));
 		this.repository.save(summary);
 		summary.setImage(image);
