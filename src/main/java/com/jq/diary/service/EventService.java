@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -167,7 +168,10 @@ public class EventService {
 		}
 		final Summary summary = this.aiService.summary(prompt, text.toString());
 		summary.setClient(this.repository.one(Client.class, clientId));
+		final String image = summary.getImage();
+		summary.setImage(Attachment.createImage("jpg", Base64.getDecoder().decode(summary.getImage())));
 		this.repository.save(summary);
+		summary.setImage(image);
 		return summary;
 	}
 
