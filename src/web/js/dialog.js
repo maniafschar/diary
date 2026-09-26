@@ -454,6 +454,10 @@ a {
 toggle {
 	text-align: center;
 	margin-top: 1em;
+}
+div.toggle>div {
+	max-height: 15em;
+	overflow: auto;
 }`;
 			var eventLinks = popup.appendChild(document.createElement('toggle'));
 			eventLinks.setAttribute('onclick', 'ui.toggle(event)');
