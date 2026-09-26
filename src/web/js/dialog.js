@@ -445,14 +445,24 @@ button.confirmed::after {
 				if (list.length)
 					s.open();
 			});
+			popup.appendChild(document.createElement('style')).textContent = `
+a {
+	display: block;
+	font-size: 0.8em;
+	padding: 0.5em;
+}
+toggle {
+	text-align: center;
+	margin-top: 1em;
+}`;
 			var eventLinks = popup.appendChild(document.createElement('toggle'));
 			eventLinks.setAttribute('onclick', 'ui.toggle(event)');
+			eventLinks.innerText = 'Deine geteilten Links';
 			eventLinks = popup.appendChild(document.createElement('div'));
 			eventLinks.classList.add('toggle');
+			eventLinks = popup.appendChild(document.createElement('div'));
 			api.event.getLinkList(list => {
 				for (var i = 0; i < list.length; i++) {
-					if (i == 0)
-						eventLinks.appendChild(document.createElement('div')).innerText = 'Deine geteilten Links';
 					var item = eventLinks.appendChild(document.createElement('a'));
 					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
 						list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
