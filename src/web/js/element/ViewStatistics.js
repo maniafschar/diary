@@ -415,7 +415,7 @@ button:hover {
 		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
 		selection.add('AdviceRoute', 'Routen-Empfehlung');
 		selection.open();
-		document.querySelector('dialog-popup').content().querySelector('button').onclick = this.summary;
+		document.querySelector('dialog-popup').content().querySelector('button').onclick = () => this.summary();
 	}
 
 	summary() {
