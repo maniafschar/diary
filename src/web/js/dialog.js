@@ -459,13 +459,16 @@ div.toggle>div {
 	max-height: 15em;
 	overflow: auto;
 }`;
-			var eventLinks = popup.appendChild(document.createElement('toggle'));
-			eventLinks.setAttribute('onclick', 'ui.toggle(event)');
-			eventLinks.innerText = 'Deine geteilten Links';
-			eventLinks = popup.appendChild(document.createElement('div'));
+			var toggle = popup.appendChild(document.createElement('toggle'));
+			toggle.setAttribute('onclick', 'ui.toggle(event)');
+			toggle.innerText = 'Deine geteilten Links';
+			toggle.style.display = 'none';
+			var eventLinks = popup.appendChild(document.createElement('div'));
 			eventLinks.classList.add('toggle');
 			eventLinks = eventLinks.appendChild(document.createElement('div'));
 			api.event.getLinkList(list => {
+				if (list.length > 0)
+					toggle.style.display = '';
 				for (var i = 0; i < list.length; i++) {
 					var item = eventLinks.appendChild(document.createElement('a'));
 					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
