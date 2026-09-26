@@ -209,6 +209,41 @@ pre {
 	position: relative;
 	margin: 0;
 	overflow: auto;
+}
+toggle {
+	position: relative;
+	display: block;
+	cursor: pointer;
+}
+
+toggle::before {
+	content: '>';
+	color: rgba(0, 0, 0, 0.3);
+	position: absolute;
+	margin-left: -1em;
+	transition: all 0.4s ease-out;
+}
+
+toggle.open {
+	font-weight: bold;
+}
+
+toggle.open::before {
+	transform: rotate(90deg);
+	color: black;
+}
+
+div.toggle {
+	text-align: left;
+	margin: 0.5em;
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.4s ease-out;
+}
+
+div.toggle>div {
+	position: relative;
+	overflow: hidden;
 }`;
 		var popup = this._root.appendChild(document.createElement('popup'));
 		popup.appendChild(document.createElement('close')).onclick = () => document.dispatchEvent(new CustomEvent('popup'));
