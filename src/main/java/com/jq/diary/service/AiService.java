@@ -38,17 +38,15 @@ public class AiService {
 
 	public enum Prompt {
 		Summary("Summarize this diary in about {0} characters "
-				+ ", emphasis the dates with the most feelings, and at the end of the summary add "
-				+ "in one line 3 comma separated adjectives and 3 emojis mainly discribing "
-				+ "mood mood within the period in his life",
+				+ ", emphasis the dates with the most feelings",
 				"Create an image expressing the feelings of the people in this text"),
-		AdvicePsychology("In about {0} characters give a psychological review and "
-				+ "give practical advices on how to improve his life",
+		AdvicePsychology("After analysing the diary, in about {0} characters give a psychological review and "
+				+ "describe in at least 3 practical advices, how to improve his life in future",
 				"Create an image describing the psychological past and showing a "
 						+ "bright future, based on the recomentations in the text"),
-		AdviceRoute("Analyse the destinations the person was and give " +
-				"meaningful suggestions, which other destinations could be of interest",
-				"Create an image with some nice pictures of past destinations and "
+		AdviceRoute("Analyse the locations and mood of the persons diary and " +
+				"suggest at least 3 new cities/destinations, which could be of interest",
+				"Create an image with some nice pictures of past locations and "
 						+ "new pictures of suggested destinations");
 
 		private final String image;
