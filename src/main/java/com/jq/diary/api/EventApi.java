@@ -30,8 +30,8 @@ import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
+import com.jq.diary.entity.Summary;
 import com.jq.diary.repository.Repository.Attachment;
-import com.jq.diary.service.AiService.AiSummary;
 import com.jq.diary.service.AiService.Prompt;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
@@ -75,9 +75,9 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@GetMapping("summary")
-	public AiSummary getSummary(@RequestHeader final BigInteger contactId,
+	public Summary getSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt) {
-		return this.eventService.summary(prompt, this.getList(contactId, clientId));
+		return this.eventService.summary(prompt, this.getList(contactId, clientId), clientId);
 	}
 
 	@GetMapping("{id}")

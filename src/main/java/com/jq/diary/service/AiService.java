@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.google.genai.types.Part;
 import com.google.genai.types.Schema;
 import com.google.genai.types.ThinkingConfig;
 import com.google.genai.types.Type;
+import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.util.Utilities;
 
@@ -71,16 +73,7 @@ public class AiService {
 		GPT, Gemini, None
 	}
 
-	public static class AiSummary {
-		public int textLength;
-		public int textSummary;
-		public String text;
-		public byte[] image;
-		public final List<String> adjectives = new ArrayList<>();
-		public final List<String> emojis = new ArrayList<>();
-	}
-
-	public AiSummary summary(final Prompt prompt, final String text) {
+	public Summary summary(final Prompt prompt, final String text) {
 		if (text.length() < 900)
 			return null;
 		return type == AiType.Gemini ? this.summaryGemini(prompt, text)
@@ -88,7 +81,7 @@ public class AiService {
 	}
 
 	@SuppressWarnings("null")
-	protected AiSummary summaryGemini(final Prompt prompt, final String text) {
+	protected Summary summaryGemini(final Prompt prompt, final String text) {
 		int chars = text.length() / 10;
 		if (chars < 300)
 			chars = 300;
@@ -127,10 +120,10 @@ public class AiService {
 				for (final Part part : parts)
 					s.append(part.text().orElse(""));
 			}
-			final AiSummary aiSummary = this.convert(s.toString());
-			aiSummary.image = this.imageGemini(prompt, aiSummary.text);
-			aiSummary.textSummary = chars;
-			aiSummary.textLength = text.length();
+			final Summary aiSummary = this.convert(s.toString());
+			aiSummary.setImage(Base64.getEncoder().encodeToString(this.imageGemini(prompt, aiSummary.getNote())));
+			aiSummary.setTextSummary(chars);
+			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
@@ -150,21 +143,19 @@ public class AiService {
 				}
 			}
 		}
-		this.adminService.createTicket(new Ticket(
-				Ticket.ERROR + "AI image not created: " + generateContentResponse.finishReason().knownEnum()));
 		return null;
 	}
 
-	protected AiSummary convert(final String summary) {
+	protected Summary convert(final String summary) {
 		final String error = "";
 		try {
 			final JsonNode node = new ObjectMapper().readTree(summary);
-			final AiSummary response = new AiSummary();
-			response.text = node.get("summary").asText().trim();
+			final Summary response = new Summary();
+			response.setNote(node.get("summary").asText().trim());
 			final ArrayNode attributes = (ArrayNode) node.get("attributes");
 			for (final JsonNode attribute : attributes) {
-				response.adjectives.addAll(this.convertList((ArrayNode) attribute.get("adjectives")));
-				response.emojis.addAll(this.convertList((ArrayNode) attribute.get("emojis")));
+				response.getAdjectives().addAll(this.convertList((ArrayNode) attribute.get("adjectives")));
+				response.getEmojis().addAll(this.convertList((ArrayNode) attribute.get("emojis")));
 			}
 			return response;
 		} catch (final JsonProcessingException ex) {
@@ -182,7 +173,7 @@ public class AiService {
 		return list;
 	}
 
-	private AiSummary summaryGPT(final Prompt prompt, final String text) {
+	private Summary summaryGPT(final Prompt prompt, final String text) {
 		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
 			final String s = WebClient
 					.create("https://api.openai.com/v1/completions")
@@ -192,8 +183,8 @@ public class AiService {
 					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
 							.replace("{chat}", text.replace("\"", "\\\"").replace("\n", "\\n")))
 					.retrieve().toEntity(String.class).block().getBody();
-			final AiSummary response = new AiSummary();
-			response.text = new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim();
+			final Summary response = new Summary();
+			response.setNote(new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim());
 			return response;
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));

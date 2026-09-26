@@ -25,9 +25,9 @@ import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
+import com.jq.diary.entity.Summary;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
-import com.jq.diary.service.AiService.AiSummary;
 import com.jq.diary.service.AiService.Prompt;
 import com.jq.diary.util.Utilities;
 
@@ -155,7 +155,7 @@ public class EventService {
 		this.repository.delete(eventImage);
 	}
 
-	public AiSummary summary(final Prompt prompt, final List<Event> events) {
+	public Summary summary(final Prompt prompt, final List<Event> events, final BigInteger clientId) {
 		final StringBuilder text = new StringBuilder();
 		for (final Event event : events) {
 			text.append("Date: " + event.getDate().toString() + "\n");
@@ -165,7 +165,10 @@ public class EventService {
 			text.append("Remark: " + event.getNote());
 			text.append("\n\n--\n\n");
 		}
-		return this.aiService.summary(prompt, text.toString());
+		final Summary summary = this.aiService.summary(prompt, text.toString());
+		summary.setClient(this.repository.one(Client.class, clientId));
+		this.repository.save(summary);
+		return summary;
 	}
 
 	public void exportEmail(final Contact contact, final List<Event> events, final List<String> emails)
