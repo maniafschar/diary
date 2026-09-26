@@ -33,6 +33,7 @@ import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AiService;
 import com.jq.diary.service.AiService.AiSummary;
+import com.jq.diary.service.AiService.Prompt;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.LocationService;
@@ -79,17 +80,18 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("summary")
 	public AiSummary getSummary(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId) {
+			@RequestHeader final BigInteger clientId, final Prompt prompt) {
 		final List<Event> events = this.getList(contactId, clientId);
 		final StringBuilder text = new StringBuilder();
 		for (final Event event : events) {
-			text.append(event.getDate().toString() + "\n");
+			text.append("Date: " + event.getDate().toString() + "\n");
 			if (event.getRating() != null)
-				text.append("My mood: " + event.getRating() + "%\n");
-			text.append(event.getNote());
+				text.append("Mood: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
+			text.append("Location: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
+			text.append("Remark: " + event.getNote());
 			text.append("\n\n--------------------\n\n");
 		}
-		return this.aiService.summary(text.toString());
+		return this.aiService.summary(prompt, text.toString());
 	}
 
 	@GetMapping("{id}")

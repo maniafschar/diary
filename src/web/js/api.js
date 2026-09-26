@@ -184,9 +184,9 @@ class api {
 			});
 		},
 
-		getSummary(success) {
+		getSummary(propmt, success) {
 			api.ajax({
-				url: 'event/summary',
+				url: 'event/summary?' + encodeURIComponent(propmt),
 				success: success
 			});
 		},

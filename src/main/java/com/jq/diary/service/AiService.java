@@ -35,11 +35,30 @@ import com.jq.diary.util.Utilities;
 @Service
 public class AiService {
 	private static AiType type = AiType.Gemini;
-	private static final String promptSummary = "Summarize this diary in about {0} characters "
-			+ "in its language, emphasis the dates with the most feelings, and at the end of the summary add "
-			+ "in one line 3 comma separated adjectives and 3 emojis mainly discribing "
-			+ "mood mood within the period in his life:";
-	private static final String promptImage = "Create an image expressing the feelings of the people in this text:";
+
+	public enum Prompt {
+		Summary("Summarize this diary in about {0} characters "
+				+ ", emphasis the dates with the most feelings, and at the end of the summary add "
+				+ "in one line 3 comma separated adjectives and 3 emojis mainly discribing "
+				+ "mood mood within the period in his life",
+				"Create an image expressing the feelings of the people in this text"),
+		AdvicePsychology("In about {0} characters give a psychological review and "
+				+ "give practical advices on how to improve his life",
+				"Create an image describing the psychological past and showing a "
+						+ "bright future, based on the recomentations in the text"),
+		AdviceRoute("Analyse the destinations the person was and give " +
+				"meaningful suggestions, which other destinations could be of interest",
+				"Create an image with some nice pictures of past destinations and "
+						+ "new pictures of suggested destinations");
+
+		private final String image;
+		private final String text;
+
+		private Prompt(final String text, final String image) {
+			this.text = text;
+			this.image = image;
+		}
+	};
 
 	@Autowired
 	private AdminService adminService;
@@ -63,25 +82,24 @@ public class AiService {
 		public final List<String> emojis = new ArrayList<>();
 	}
 
-	public AiSummary summary(final String text) {
+	public AiSummary summary(final Prompt prompt, final String text) {
 		if (text.length() < 900)
 			return null;
-		return type == AiType.Gemini ? this.summaryGemini(text)
-				: type == AiType.GPT ? this.summaryGPT(text) : null;
+		return type == AiType.Gemini ? this.summaryGemini(prompt, text)
+				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
 	}
 
 	@SuppressWarnings("null")
-	protected AiSummary summaryGemini(final String text) {
+	protected AiSummary summaryGemini(final Prompt prompt, final String text) {
 		int chars = text.length() / 10;
 		if (chars < 300)
 			chars = 300;
 		else if (chars > 3000)
 			chars = 3000;
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
-				.parts(ImmutableList.<Part>of(Part.fromText(promptSummary.replace("{0}", "" + chars) + "\n" + text)))
+				.parts(ImmutableList.<Part>of(Part.fromText(prompt.text.replace("{0}", "" + chars) + ":\n" + text)))
 				.build());
 		final Map<String, Schema> attributes = new HashMap<>();
-		attributes.put("name", Schema.builder().type(Type.Known.STRING).build());
 		attributes.put("adjectives", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
 				.type(Type.Known.STRING).build()).build());
 		attributes.put("emojis", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
@@ -89,7 +107,7 @@ public class AiService {
 		final Map<String, Schema> schema = new HashMap<>();
 		schema.put("summary", Schema.builder().type(Type.Known.STRING).build());
 		schema.put("attributes", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
-				.type(Type.Known.OBJECT).properties(attributes).required(Arrays.asList("name", "adjectives", "emojis"))
+				.type(Type.Known.OBJECT).properties(attributes).required(Arrays.asList("adjectives", "emojis"))
 				.build()).build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build()).responseMimeType("application/json")
@@ -112,18 +130,18 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final AiSummary aiSummary = this.convert(s.toString());
-			// aiSummary.image = this.imageGemini(aiSummary.text);
+			aiSummary.image = this.imageGemini(prompt, aiSummary.text);
 			aiSummary.textSummary = chars;
 			aiSummary.textLength = text.length();
 			return aiSummary;
 		}
 	}
 
-	private byte[] imageGemini(final String text) {
+	private byte[] imageGemini(final Prompt prompt, final String text) {
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.responseModalities(Arrays.asList("IMAGE")).build();
 		final GenerateContentResponse generateContentResponse = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContent("gemini-2.5-flash-image", promptImage + "\n" + text, config);
+				.build().models.generateContent("gemini-2.5-flash-image", prompt.image + ":\n" + text, config);
 		final ImmutableList<Part> parts = generateContentResponse.parts();
 		if (parts != null) {
 			for (final Part part : parts) {
@@ -166,7 +184,7 @@ public class AiService {
 		return list;
 	}
 
-	private AiSummary summaryGPT(final String text) {
+	private AiSummary summaryGPT(final Prompt prompt, final String text) {
 		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
 			final String s = WebClient
 					.create("https://api.openai.com/v1/completions")

@@ -408,9 +408,17 @@ button:hover {
 		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
 	}
 
+	summaryDialog() {
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection></input-selection><button>KI fragen</button>' } }));
+		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
+		selection.add('Summary', 'Zusammenfassung');
+		selection.add('AdvicePsychology', 'Psychologische Empfehlung');
+		selection.add('AdviceRoute', 'Routen-Empfehlung');
+	}
+
 	summary() {
-		api.event.getSummary(summary => {
-			var s = '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' +
+		api.event.getSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), summary => {
+			var s = (summary.image ? '<img src="data:image/jpg;base64,' + summary.image + '" style="max-width: 100%;"/>' : '') +
 				'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
 				summary.text.replace(/\n/g, '<br/>');
 			document.dispatchEvent(new CustomEvent('popup', { detail: { body: s } }));
