@@ -105,8 +105,27 @@ chart bar {
 	max-width: 2em;
 	justify-self: center;
 	width: 100%;
+}
+button {
+	position: absolute;
+	right: 1em;
+	bottom: 7em;
+	border-radius: 2em;
+	border: none;
+	background: var(--background-clickable);
+	padding: 0.75em 1.5em;
+	outline: none;
+	cursor: pointer;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0 0.5em;
+	color: white;
+	font-size: 1em;
+	transition: var(--transition-clickable)
 }`;
-		this._root.appendChild(document.createElement('wordcloud')).appendChild(document.createElement('button')).innerText = 'AI';
+		var summary = this._root.appendChild(document.createElement('button'));
+		summary.onclick = ViewStatistics.summary;
+		summary.innerText = 'AI';
+		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('chart'));
 	}
 
