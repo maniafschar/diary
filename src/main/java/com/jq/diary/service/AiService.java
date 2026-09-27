@@ -30,7 +30,6 @@ import com.google.genai.gaos.models.interactions.CreateModelInteraction;
 import com.google.genai.gaos.models.interactions.CreateModelInteractionResponseFormat;
 import com.google.genai.gaos.models.interactions.ImageContent;
 import com.google.genai.gaos.models.interactions.ImageResponseFormat;
-import com.google.genai.gaos.models.interactions.ImageResponseFormatDelivery;
 import com.google.genai.gaos.models.interactions.ImageResponseFormatMimeType;
 import com.google.genai.gaos.models.interactions.Interaction;
 import com.google.genai.gaos.models.interactions.InteractionsInput;
@@ -154,7 +153,6 @@ public class AiService {
 					.input(InteractionsInput.of(prompt))
 					.responseFormat(CreateModelInteractionResponseFormat.of(ResponseFormat.of(
 							ImageResponseFormat.builder().mimeType(ImageResponseFormatMimeType.IMAGE_JPEG)
-									.delivery(ImageResponseFormatDelivery.INLINE)
 									.build())))
 					.build();
 			final Interaction interaction = client.interactions.create()
