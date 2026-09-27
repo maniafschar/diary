@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.ImmutableList;
 import com.google.genai.Client;
 import com.google.genai.ResponseStream;
+import com.google.genai.gaos.models.interactions.CreateModelInteraction;
+import com.google.genai.gaos.models.interactions.CreateModelInteractionResponseFormat;
+import com.google.genai.gaos.models.interactions.ImageContent;
+import com.google.genai.gaos.models.interactions.ImageResponseFormat;
+import com.google.genai.gaos.models.interactions.ImageResponseFormatMimeType;
+import com.google.genai.gaos.models.interactions.Interaction;
+import com.google.genai.gaos.models.interactions.InteractionsInput;
+import com.google.genai.gaos.models.interactions.ResponseFormat;
+import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
 import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
@@ -93,13 +101,13 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(Base64.getEncoder().encodeToString(this.imageGemini()));
+			aiSummary.setImage(this.imageGemini());
 			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
 
-	private byte[] imageGemini() {
+	private String imageGemini() {
 		@SuppressWarnings("null")
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
@@ -129,16 +137,24 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 
-			final GenerateContentResponse response = Client.builder().apiKey(this.geminiKey)
-					.build().models
-					.generateContent("gemini-3.1-flash-image", s.toString(), GenerateContentConfig.builder()
-							.responseModalities(Arrays.asList("IMAGE"))
-							.responseMimeType("image/jpeg")
-							.build());
-			if (response.candidates().isPresent() && !response.candidates().get().isEmpty()) {
-				final Part part = response.candidates().get().get(0).content().get().parts().get().get(0);
-				if (part.inlineData().isPresent())
-					return part.inlineData().get().data().get();
+			try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
+				final CreateModelInteraction request = CreateModelInteraction.builder()
+						.model("gemini-3.1-flash-image")
+						.input(InteractionsInput.of(s.toString()))
+						.responseFormat(CreateModelInteractionResponseFormat.of(ResponseFormat.of(
+								ImageResponseFormat.builder().mimeType(ImageResponseFormatMimeType.IMAGE_JPEG)
+										.build())))
+						.build();
+				final Interaction interaction = client.interactions.create()
+						.body(CreateInteractionRequestBody.of(request))
+						.call()
+						.interaction()
+						.orElse(null);
+				if (interaction != null && interaction.outputImage().isPresent()) {
+					final ImageContent image = interaction.outputImage().get();
+					if (image.data().isPresent())
+						return image.data().get();
+				}
 			}
 		}
 		return null;
