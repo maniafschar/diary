@@ -82,7 +82,7 @@ public class EventApi extends ApplicationApi {
 	}
 
 	@PostMapping("summary")
-	public Summary putSummary(@RequestHeader final BigInteger contactId,
+	public Summary postSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt,
 			@RequestParam("ids") final List<BigInteger> ids) {
 		return this.eventService.summary(prompt, this.getList(contactId, clientId), clientId);
