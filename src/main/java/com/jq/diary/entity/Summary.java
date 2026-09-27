@@ -25,28 +25,36 @@ public class Summary extends BaseEntity {
 	private final List<String> emojis = new ArrayList<>();
 
 	public enum Prompt {
-		Summary("Fass dieses Tagebuch in {0} Wörter zusammen",
-				"Erstelle ein Bild, das die Gefühle der Menschen in diesem Text zum Ausdruck bringt"),
-		AdvicePsychology("Erstelle nach der Analyse des Tagebuchs eine psychologische Einschätzung "
-				+ "(Umfang: {0} Wörter) und liste mindestens 3 praktische Ratschläge auf, "
-				+ "wie die Person sein Leben künftig verbessern kann",
-				"Erstelle ein Bild, das die psychologische Vergangenheit darstellt und, basierend "
-						+ "auf den Empfehlungen im Text, die Zukunft zeigt"),
-		AdviceRoute("Schlage mindestens 7 neue Orte bzw. Reiseziele vor, die von Interesse sein könnten, "
-				+ "basierend auf den Orten, die im Tagebuch erwähnt werden und den Stimmungen dort",
-				"Erstelle ein Bild mit schönen Aufnahmen vergangener Orte im Tagebuch und "
-						+ "Bildern der vorgeschlagenen Reiseziele");
+		Summary("Rolle: Reagiere als präziser und objektiver Textanalyst. \n\n"
+				+ "Aufgabe: Fasse den folgenden Tagebucheintrag sachlich zusammen. Extrahiere die wesentlichen Ereignisse, Gedanken und Kernbotschaften, ohne den Text psychologisch zu interpretieren, zu bewerten oder Ratschläge zu erteilen. Bleibe nah am Originalton.\n\n"
+				+ "Format der Ausgabe:\n"
+				+ "- Kerngedanke (1-2 Sätze, die das Hauptthema auf den Punkt bringen)\n"
+				+ "- Wichtigste Punkte (Eine kurze Bullet-Point-Liste der konkreten Ereignisse oder Gedanken)\n\n"
+				+ "Hier ist mein Tagebucheintrag"),
+		AdvicePsychology(
+				"Rolle: Reagiere als erfahrener, empathischer psychologischer Berater und Coach. Analysiere das folgende Tagebuch strukturiert und sachlich. Nimm eine neutrale, unterstützende Perspektive ein.\n\n"
+						+ "Aufgabe:\n"
+						+ "Schritt 1: Analysiere den Text auf wiederkehrende emotionale Muster, Denkgewohnheiten (z.B. Glaubenssätze) und versteckte Stressoren.\n"
+						+ "Schritt 2: Formuliere auf Basis dieser Analyse exakt 3 konkrete, handlungsorientierte und realistische Tipps, wie ich mein Wohlbefinden und mein Leben im Alltag verbessern kann.\n\n"
+						+ "Format der Ausgabe:\n"
+						+ "- Psychologische Kurzanalyse (Maximal 3 Absätze)\n"
+						+ "- Die 3 Tipps (Als nummerierte Liste mit je einer kurzen Begründung aus dem Text)\n\n"
+						+ "Hier ist mein Tagebucheintrag"),
+		AdviceRoute(
+				"Rolle: Du bist ein extrem erfahrener Reise-Concierge und Datenanalyst für personalisierte Reiseerlebnisse.\n\n"
+						+ "Aufgabe:\n"
+						+ "1. Analysiere die unten stehenden Tagebucheinträge. Achte besonders auf die Orte (Adressen/Koordinaten), an denen das Stimmungsbarometer am höchsten war (Werte 4 und 5). Leite daraus ab, welche Art von Umgebung (z. B. Natur, Großstadt, Küste, Berge) und welches Reisetempo dem Autor am besten tun.\n"
+						+ "2. Basierend auf diesem Reiseprofil: Empfiehl 10 völlig neue Reisetipps (Orte, Regionen oder spezifische Sehenswürdigkeiten), die der Autor noch NICHT besucht hat, die aber perfekt zu den Mustern seiner Lieblingsorte passen.\n\n"
+						+ "Regeln für die Ausgabe:\n"
+						+ "- Nenne für jeden der 10 Tipps den genauen Namen des Ortes/der Region und das Land.\n"
+						+ "- Füge jedem Tipp eine kurze, treffende Begründung hinzu, warum dieser Ort basierend auf den Daten (z. B. „Ähnelt Koordinate X, bietet aber mehr Ruhe...“) perfekt passt.\n"
+						+ "- Preise oder Kosten dürfen im Text NICHT erwähnt werden. Zeige auch keine Sterne-Bewertungen oder Review-Zahlen.\n\n"
+						+ "Hier sind die Tagebuch-Daten");
 
-		private final String image;
 		private final String text;
 
-		private Prompt(final String text, final String image) {
+		private Prompt(final String text) {
 			this.text = text;
-			this.image = image;
-		}
-
-		public String getImage() {
-			return this.image;
 		}
 
 		public String getText() {

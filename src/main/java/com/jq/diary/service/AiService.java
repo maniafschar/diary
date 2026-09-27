@@ -61,14 +61,9 @@ public class AiService {
 
 	@SuppressWarnings("null")
 	protected Summary summaryGemini(final Prompt prompt, final String text) {
-		int chars = text.length() / 10;
-		if (chars < 300)
-			chars = 300;
-		else if (chars > 3000)
-			chars = 3000;
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
-						.<Part>of(Part.fromText(prompt.getText().replace("{0}", "" + chars) + ":\n" + text)))
+						.<Part>of(Part.fromText(prompt.getText() + ":\n" + text)))
 				.build());
 		final Map<String, Schema> schema = new HashMap<>();
 		schema.put("summary", Schema.builder().type(Type.Known.STRING).build());
@@ -98,25 +93,53 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(Base64.getEncoder().encodeToString(this.imageGemini(prompt, aiSummary.getNote())));
-			aiSummary.setTextSummary(chars);
+			aiSummary.setImage(Base64.getEncoder().encodeToString(this.imageGemini()));
 			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
 
-	private byte[] imageGemini(final Prompt prompt, final String text) {
+	private byte[] imageGemini() {
+		@SuppressWarnings("null")
+		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
+				.parts(ImmutableList
+						.<Part>of(Part.fromText(
+								"Erstelle mir auf Basis deiner obigen psychologischen Analyse einen präzisen Bild-Prompt für einen KI-Bildgenerator. \n\n"
+										+ "Regeln für den Bild-Prompt:\n"
+										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher (z. B. ein Boot im Nebel, das auf ein Licht zusteuert; ein Garten, der durch Risse im Asphalt bricht).\n"
+										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht (z. B. warmes Sonnenlicht, mystischer Nebel)? Welche Farben dominieren (z. B. beruhigende Blautöne, energetisches Orange)?\n"
+										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil (z. B. „surrealistisches Ölgemälde“, „minimale Vektorgrafik“ oder „cinematische 3D-Illustration“). Vermeide fotorealistische Menschen, um die Privatsphäre zu wahren.\n"
+										+ "4. Gib mir den finalen Prompt sowohl auf Deutsch als auch auf Englisch aus.\n")))
+				.build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.responseModalities(Arrays.asList("IMAGE")).build();
-		final GenerateContentResponse generateContentResponse = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContent("gemini-2.5-flash-image", prompt.getImage() + ":\n" + text, config);
-		final ImmutableList<Part> parts = generateContentResponse.parts();
-		if (parts != null) {
-			for (final Part part : parts) {
-				if (part.inlineData().isPresent()) {
-					final var blob = part.inlineData().get();
-					if (blob.data().isPresent())
-						return blob.data().get();
+				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build())
+				.responseSchema(Schema.builder()
+						.type(Type.Known.STRING)
+						.build())
+				.build();
+		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
+				.build().models.generateContentStream("gemini-2.5-flash-lite", contents, config)) {
+			final StringBuffer s = new StringBuffer();
+			for (final GenerateContentResponse res : responseStream) {
+				if (res.candidates().isEmpty() || res.candidates().get().get(0).content().isEmpty()
+						|| res.candidates().get().get(0).content().get().parts().isEmpty())
+					continue;
+				final List<Part> parts = res.candidates().get().get(0).content().get().parts().get();
+				for (final Part part : parts)
+					s.append(part.text().orElse(""));
+			}
+			final GenerateContentResponse generateContentResponse = Client.builder().apiKey(this.geminiKey)
+					.build().models
+					.generateContent("gemini-2.5-flash-image", s.toString(), GenerateContentConfig.builder()
+							.responseModalities(Arrays.asList("IMAGE")).build());
+			final ImmutableList<Part> parts = generateContentResponse.parts();
+			if (parts != null) {
+				for (final Part part : parts) {
+					if (part.inlineData().isPresent()) {
+						final var blob = part.inlineData().get();
+						if (blob.data().isPresent())
+							return blob.data().get();
+					}
 				}
 			}
 		}
