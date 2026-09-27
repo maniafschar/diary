@@ -25,12 +25,12 @@ public class Summary extends BaseEntity {
 	private final List<String> emojis = new ArrayList<>();
 
 	public enum Prompt {
-		Summary("Rolle: Reagiere als präziser und objektiver Textanalyst. \n\n"
+		Summary("Rolle: Reagiere als präziser und objektiver Textanalyst.\n\n"
 				+ "Aufgabe: Fasse den folgenden Tagebucheintrag sachlich zusammen. Extrahiere die wesentlichen Ereignisse, Gedanken und Kernbotschaften, ohne den Text psychologisch zu interpretieren, zu bewerten oder Ratschläge zu erteilen. Bleibe nah am Originalton.\n\n"
 				+ "Format der Ausgabe:\n"
 				+ "- Kerngedanke (1-2 Sätze, die das Hauptthema auf den Punkt bringen)\n"
 				+ "- Wichtigste Punkte (Eine kurze Bullet-Point-Liste der konkreten Ereignisse oder Gedanken)\n\n"
-				+ "Hier ist mein Tagebucheintrag"),
+				+ "Hier sind meine Tagebucheinträge"),
 		AdvicePsychology(
 				"Rolle: Reagiere als erfahrener, empathischer psychologischer Berater und Coach. Analysiere das folgende Tagebuch strukturiert und sachlich. Nimm eine neutrale, unterstützende Perspektive ein.\n\n"
 						+ "Aufgabe:\n"
@@ -39,7 +39,7 @@ public class Summary extends BaseEntity {
 						+ "Format der Ausgabe:\n"
 						+ "- Psychologische Kurzanalyse (Maximal 3 Absätze)\n"
 						+ "- Die 3 Tipps (Als nummerierte Liste mit je einer kurzen Begründung aus dem Text)\n\n"
-						+ "Hier ist mein Tagebucheintrag"),
+						+ "Hier sind meine Tagebucheinträge"),
 		AdviceRoute(
 				"Rolle: Du bist ein extrem erfahrener Reise-Concierge und Datenanalyst für personalisierte Reiseerlebnisse.\n\n"
 						+ "Aufgabe:\n"
@@ -49,7 +49,7 @@ public class Summary extends BaseEntity {
 						+ "- Nenne für jeden der 10 Tipps den genauen Namen des Ortes/der Region und das Land.\n"
 						+ "- Füge jedem Tipp eine kurze, treffende Begründung hinzu, warum dieser Ort basierend auf den Daten (z. B. „Ähnelt Koordinate X, bietet aber mehr Ruhe...“) perfekt passt.\n"
 						+ "- Preise oder Kosten dürfen im Text NICHT erwähnt werden. Zeige auch keine Sterne-Bewertungen oder Review-Zahlen.\n\n"
-						+ "Hier sind die Tagebuch-Daten");
+						+ "Hier sind meine Tagebucheinträge");
 
 		private final String text;
 

@@ -82,7 +82,7 @@ public class AiService {
 						.build())
 				.build();
 		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContentStream("gemini-2.5-flash-lite", contents, config)) {
+				.build().models.generateContentStream("gemini-3.5-flash-lite", contents, config)) {
 			final StringBuffer s = new StringBuffer();
 			for (final GenerateContentResponse res : responseStream) {
 				if (res.candidates().isEmpty() || res.candidates().get().get(0).content().isEmpty()
@@ -118,7 +118,7 @@ public class AiService {
 						.build())
 				.build();
 		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContentStream("gemini-2.5-flash-lite", contents, config)) {
+				.build().models.generateContentStream("gemini-3.5-flash-lite", contents, config)) {
 			final StringBuffer s = new StringBuffer();
 			for (final GenerateContentResponse res : responseStream) {
 				if (res.candidates().isEmpty() || res.candidates().get().get(0).content().isEmpty()

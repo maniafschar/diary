@@ -158,17 +158,21 @@ public class EventService {
 
 	public Summary summary(final Prompt prompt, final List<Event> events, final BigInteger clientId) {
 		final StringBuilder text = new StringBuilder();
+		int no = 0;
 		for (final Event event : events) {
+			text.append("Eintrag " + ++no + ":\n");
 			text.append("Datum: " + event.getDate().toString() + "\n");
 			if (event.getRating() != null)
-				text.append("Stimmung: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
-			text.append("Ort: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
-			text.append("Longitude: " + event.getLocation().getLongitude() + "\n");
-			text.append("Latitude: " + event.getLocation().getLatitude() + "\n");
-			text.append("Bemerkung: " + event.getNote());
-			text.append("\n\n--\n\n");
+				text.append(
+						"Stimmung: " + (int) (event.getRating() / event.getRatingCount() / 20 + 0.5) + "/5 stars\n");
+			text.append("Name des Ortes: " + event.getLocation().getName() + "\n");
+			text.append("Adresse: " + event.getLocation().getAddress() + "\n");
+			text.append("Längengrad: " + event.getLocation().getLongitude() + "\n");
+			text.append("Breitengrad: " + event.getLocation().getLatitude() + "\n");
+			text.append("Text: " + event.getNote().replace('\n', ' '));
+			text.append("\n\n");
 		}
-		final Summary summary = this.aiService.summary(prompt, text.toString());
+		final Summary summary = this.aiService.summary(prompt, text.toString().trim());
 		summary.setClient(this.repository.one(Client.class, clientId));
 		final String image = summary.getImage();
 		final byte[] imageBytes = Base64.getDecoder().decode(summary.getImage());
