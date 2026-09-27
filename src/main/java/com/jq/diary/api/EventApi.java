@@ -81,7 +81,7 @@ public class EventApi extends ApplicationApi {
 		return this.repository.list("from Summary where client.id=?1", Summary.class, clientId);
 	}
 
-	@PutMapping("summary")
+	@PostMapping("summary")
 	public Summary putSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt,
 			@RequestParam("ids") final List<BigInteger> ids) {
