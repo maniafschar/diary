@@ -161,8 +161,10 @@ public class EventService {
 		for (final Event event : events) {
 			text.append("Date: " + event.getDate().toString() + "\n");
 			if (event.getRating() != null)
-				text.append("Mood: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
+				text.append("Rating: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
 			text.append("Location: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
+			text.append("Longitude: " + event.getLocation().getLongitude() + "\n");
+			text.append("Latitude: " + event.getLocation().getLatitude() + "\n");
 			text.append("Remark: " + event.getNote());
 			text.append("\n\n--\n\n");
 		}
