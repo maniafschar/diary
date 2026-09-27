@@ -375,16 +375,70 @@ button.confirmed::after {
 	}
 
 	static pdf() {
-		dialog.export(false);
+		dialog.export('action.export(false)', 'PDF erzeugen', () => { });
 	}
 
 	static email() {
-		dialog.export(true);
+		dialog.export('action.export(true)', 'Email senden', popup => {
+			dialog.createField(popup.appendChild(document.createElement('element')), 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
+				var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
+				if (e.value.indexOf(event.detail.label) < 0)
+					e.value = (e.value + ' ' + event.detail.label).trim();
+			});
+		});
+		api.event.getEmailList(list => {
+			var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
+			list.forEach(e => s.add(e, e));
+			if (list.length)
+				s.open();
+		});
+		popup.appendChild(document.createElement('style')).textContent = `
+a {
+	display: block;
+	font-size: 0.8em;
+	padding: 0.5em;
+}
+toggle {
+	text-align: center;
+	margin-top: 1em;
+}
+div.toggle>div {
+	max-height: 15em;
+	overflow: auto;
+}`;
+		var toggle = popup.appendChild(document.createElement('toggle'));
+		toggle.setAttribute('onclick', 'ui.toggle(event)');
+		toggle.innerText = 'Bereits geteilte Links';
+		toggle.style.display = 'none';
+		var eventLinks = popup.appendChild(document.createElement('div'));
+		eventLinks.classList.add('toggle');
+		eventLinks = eventLinks.appendChild(document.createElement('div'));
+		api.event.getLinkList(list => {
+			if (list.length > 0)
+				toggle.style.display = '';
+			for (var i = 0; i < list.length; i++) {
+				var item = eventLinks.appendChild(document.createElement('a'));
+				var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
+					list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
+				var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
+				date.setDate(date.getDate() + 1);
+				if (date >= new Date()) {
+					item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
+					item.setAttribute('target', '_blank');
+				} else {
+					item.classList.add('outdated');
+					text += ' (abgelaufen)';
+				}
+				text += '<br/>' + list[i].events.length + ' Einträge';
+				if (list[i].count)
+					text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
+				item.innerHTML = text;
+			}
+		});
 	}
 
 	static summary() {
-		ui.navigate(0);
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: '<input-selection value="Summary"></input-selection><div style="text-align: center; padding-top: 1.5em;"><button onclick="action.summary()">KI fragen</button></div>' } }));
+		dialog.export('action.summary()', 'KI fragen', popup => popup.appendChild(document.createElement('input-selection')).setAttribute('value', 'Summary'));
 		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
 		for (var i = 0; i < this.summaryPrompts.length; i++)
 			selection.add(this.summaryPrompts[i][0], this.summaryPrompts[i][1]);
@@ -434,11 +488,7 @@ div.toggle>div {
 		}));
 	}
 
-	static openSummary(summary) {
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: JSON.stringify(summary) } }))
-	}
-
-	static export(email) {
+	static export(action, label, fields) {
 		ui.navigate(0);
 		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
@@ -460,14 +510,7 @@ div.toggle>div {
 		inputDate.setAttribute('type', 'date');
 		inputDate.setAttribute('min', table.list[table.list.length - 1].date);
 		inputDate.setAttribute('max', table.list[0].date);
-		if (email) {
-			element = popup.appendChild(document.createElement('element'));
-			dialog.createField(element, 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
-				var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
-				if (e.value.indexOf(event.detail.label) < 0)
-					e.value = (e.value + ' ' + event.detail.label).trim();
-			});
-		}
+		fields(popup);
 		var count = popup.appendChild(document.createElement('count'));
 		count.style.position = 'relative';
 		count.style.display = 'block';
@@ -482,63 +525,12 @@ div.toggle>div {
 		table.addEventListener('select', listener);
 
 		popup.appendChild(document.createElement('error'));
-		var buttonDiv = dialog.createButton(popup, 'action.export(' + email + ')');
-		buttonDiv.querySelector('button').innerText = email ? 'Email senden' : 'PDF erzeugen';
+		var buttonDiv = dialog.createButton(popup, action);
+		buttonDiv.querySelector('button').innerText = label;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
 			document.querySelector('event view-table').removeAttribute('mode');
 			table.removeEventListener('select', listener);
 		}, { once: true });
-		if (email) {
-			api.event.getEmailList(list => {
-				var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
-				list.forEach(e => s.add(e, e));
-				if (list.length)
-					s.open();
-			});
-			popup.appendChild(document.createElement('style')).textContent = `
-a {
-	display: block;
-	font-size: 0.8em;
-	padding: 0.5em;
-}
-toggle {
-	text-align: center;
-	margin-top: 1em;
-}
-div.toggle>div {
-	max-height: 15em;
-	overflow: auto;
-}`;
-			var toggle = popup.appendChild(document.createElement('toggle'));
-			toggle.setAttribute('onclick', 'ui.toggle(event)');
-			toggle.innerText = 'Bereits geteilte Links';
-			toggle.style.display = 'none';
-			var eventLinks = popup.appendChild(document.createElement('div'));
-			eventLinks.classList.add('toggle');
-			eventLinks = eventLinks.appendChild(document.createElement('div'));
-			api.event.getLinkList(list => {
-				if (list.length > 0)
-					toggle.style.display = '';
-				for (var i = 0; i < list.length; i++) {
-					var item = eventLinks.appendChild(document.createElement('a'));
-					var text = 'Erstellt am ' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '<br/>' +
-						list[i].email + (list[i].start ? '<br/>Erster Zugriff am ' + ui.formatTime(new Date((list[i].start).replace('+00:00', ''))) : '');
-					var date = list[i].start ? new Date(list[i].start.replace('+00:00', '')) : new Date();
-					date.setDate(date.getDate() + 1);
-					if (date >= new Date()) {
-						item.setAttribute('href', 'https://diary.cafe?access=' + list[i].identifier);
-						item.setAttribute('target', '_blank');
-					} else {
-						item.classList.add('outdated');
-						text += ' (abgelaufen)';
-					}
-					text += '<br/>' + list[i].events.length + ' Einträge';
-					if (list[i].count)
-						text += ' · ' + list[i].count + (list[i].count == 1 ? ' Zugriff' : ' Zugriffe');
-					item.innerHTML = text;
-				}
-			});
-		}
 	}
 }
