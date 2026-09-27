@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.ImmutableList;
 import com.google.genai.Client;
 import com.google.genai.ResponseStream;
+import com.google.genai.gaos.models.errors.CreateInteractionClientError;
 import com.google.genai.gaos.models.interactions.CreateModelInteraction;
 import com.google.genai.gaos.models.interactions.CreateModelInteractionResponseFormat;
 import com.google.genai.gaos.models.interactions.ImageContent;
@@ -105,13 +106,13 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(this.imageGemini(this.imageGeminiPrompt()));
+			aiSummary.setImage(this.imageGemini(this.imageGeminiPrompt(aiSummary.getNote())));
 			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
 
-	private String imageGeminiPrompt() {
+	private String imageGeminiPrompt(final String summary) {
 		@SuppressWarnings("null")
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
@@ -121,7 +122,8 @@ public class AiService {
 										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher (z. B. ein Boot im Nebel, das auf ein Licht zusteuert; ein Garten, der durch Risse im Asphalt bricht).\n"
 										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht (z. B. warmes Sonnenlicht, mystischer Nebel)? Welche Farben dominieren (z. B. beruhigende Blautöne, energetisches Orange)?\n"
 										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil (z. B. „surrealistisches Ölgemälde“, „minimale Vektorgrafik“ oder „cinematische 3D-Illustration“). Vermeide fotorealistische Menschen, um die Privatsphäre zu wahren.\n"
-										+ "4. Gib mir den finalen Prompt nur auf Englisch aus.")))
+										+ "4. Gib mir den finalen Prompt nur auf Englisch aus.\n\n"
+										+ "Hier die Zusammenfassung:\n" + summary)))
 				.build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
@@ -171,6 +173,9 @@ public class AiService {
 					return Base64.getEncoder().encodeToString(out.toByteArray());
 				}
 			}
+		} catch (final CreateInteractionClientError er) {
+			this.adminService.createTicket(
+					new Ticket(er.bodyAsString() + "\n\n" + new Ticket(Utilities.stackTraceToString(er))));
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 		}
