@@ -45,6 +45,7 @@ import com.google.genai.types.Type;
 import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.entity.Ticket;
+import com.jq.diary.util.Json;
 import com.jq.diary.util.Utilities;
 
 @Service
@@ -162,6 +163,7 @@ public class AiService {
 					.orElse(null);
 			if (interaction != null && interaction.outputImage().isPresent()) {
 				final ImageContent image = interaction.outputImage().get();
+				this.adminService.createTicket(new Ticket(Json.toPrettyString(image)));
 				if (image.data().isPresent())
 					return image.data().get();
 				if (image.uri().isPresent()) {
