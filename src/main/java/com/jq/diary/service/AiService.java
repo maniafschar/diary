@@ -101,13 +101,13 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(this.imageGemini());
+			aiSummary.setImage(this.imageGemini(aiSummary.getNote()));
 			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
 
-	private String imageGemini() {
+	private String imageGemini(final String summary) {
 		@SuppressWarnings("null")
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
@@ -117,7 +117,8 @@ public class AiService {
 										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher (z. B. ein Boot im Nebel, das auf ein Licht zusteuert; ein Garten, der durch Risse im Asphalt bricht).\n"
 										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht (z. B. warmes Sonnenlicht, mystischer Nebel)? Welche Farben dominieren (z. B. beruhigende Blautöne, energetisches Orange)?\n"
 										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil (z. B. „surrealistisches Ölgemälde“, „minimale Vektorgrafik“ oder „cinematische 3D-Illustration“). Vermeide fotorealistische Menschen, um die Privatsphäre zu wahren.\n"
-										+ "4. Gib mir den finalen Prompt sowohl auf Deutsch als auch auf Englisch aus.\n")))
+										+ "4. Gib mir den finalen Prompt sowohl auf Deutsch als auch auf Englisch aus.\n\n"
+										+ "Hier die Zusammenfassung:\n" + summary)))
 				.build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
@@ -136,7 +137,7 @@ public class AiService {
 				for (final Part part : parts)
 					s.append(part.text().orElse(""));
 			}
-
+			this.adminService.createTicket(new Ticket(s.toString()));
 			try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
 				final CreateModelInteraction request = CreateModelInteraction.builder()
 						.model("gemini-3.1-flash-image")
