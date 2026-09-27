@@ -70,23 +70,19 @@ public class AiService {
 				.parts(ImmutableList
 						.<Part>of(Part.fromText(prompt.getText().replace("{0}", "" + chars) + ":\n" + text)))
 				.build());
-		final Map<String, Schema> attributes = new HashMap<>();
-		attributes.put("adjectives", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
-				.type(Type.Known.STRING).build()).build());
-		attributes.put("emojis", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
-				.type(Type.Known.STRING).build()).build());
 		final Map<String, Schema> schema = new HashMap<>();
 		schema.put("summary", Schema.builder().type(Type.Known.STRING).build());
-		schema.put("attributes", Schema.builder().type(Type.Known.ARRAY).items(Schema.builder()
-				.type(Type.Known.OBJECT).properties(attributes).required(Arrays.asList("adjectives", "emojis"))
-				.build()).build());
+		schema.put("adjectives", Schema.builder().type(Type.Known.ARRAY)
+				.items(Schema.builder().type(Type.Known.STRING).build()).build());
+		schema.put("emojis", Schema.builder().type(Type.Known.ARRAY)
+				.items(Schema.builder().type(Type.Known.STRING).build()).build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build()).responseMimeType("application/json")
 				.responseSchema(Schema.builder()
 						.type(Type.Known.OBJECT)
 						.properties(schema)
-						.required(Arrays.asList("summary", "attributes"))
-						.propertyOrdering(Arrays.asList("summary", "attributes"))
+						.required(Arrays.asList("summary", "adjectives", "emojis"))
+						.propertyOrdering(Arrays.asList("summary", "adjectives", "emojis"))
 						.build())
 				.build();
 		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
@@ -132,11 +128,8 @@ public class AiService {
 			final JsonNode node = new ObjectMapper().readTree(summary);
 			final Summary response = new Summary();
 			response.setNote(node.get("summary").asText().trim());
-			final ArrayNode attributes = (ArrayNode) node.get("attributes");
-			for (final JsonNode attribute : attributes) {
-				response.getAdjectives().addAll(this.convertList((ArrayNode) attribute.get("adjectives")));
-				response.getEmojis().addAll(this.convertList((ArrayNode) attribute.get("emojis")));
-			}
+			response.getAdjectives().addAll(this.convertList((ArrayNode) node.get("adjectives")));
+			response.getEmojis().addAll(this.convertList((ArrayNode) node.get("emojis")));
 			return response;
 		} catch (final JsonProcessingException ex) {
 			throw new RuntimeException(ex);
