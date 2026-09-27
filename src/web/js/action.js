@@ -479,7 +479,13 @@ class action {
 	}
 
 	static summary() {
-		api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), dialog.summaryDisplay);
+		var table = document.querySelector('view-table');
+		var ids = [];
+		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
+		if (ids.length == 0)
+			error.innerText = 'Selektiere Einträge aus der Liste aus.';
+		else
+			api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), ids, dialog.summaryDisplay);
 	}
 }
 
