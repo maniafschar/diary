@@ -132,7 +132,7 @@ chart bar {
 		for (var i = 0; i < tokens.length; i++) {
 			const next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
-			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1.3) * fontSize) + 'px';
+			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 0.8) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('details', {
 					detail: next.token,
