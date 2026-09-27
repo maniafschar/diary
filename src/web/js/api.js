@@ -191,10 +191,14 @@ class api {
 			});
 		},
 
-		postSummary(propmt, success) {
+		postSummary(propmt, eventIds, success) {
+			var formData = new FormData();
+			formData.append('ids', eventIds);
+			formData.append('propmt', propmt);
 			api.ajax({
 				url: 'event/summary?prompt=' + encodeURIComponent(propmt),
 				method: 'POST',
+				body: formData,
 				success: success
 			});
 		},
