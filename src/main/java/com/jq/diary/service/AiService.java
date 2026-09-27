@@ -167,6 +167,10 @@ public class AiService {
 					.createTicket(new Ticket("model:" + Json.toPrettyString(interaction.model().orElse(null))));
 			this.adminService.createTicket(new Ticket("created:" + interaction.created().orElse(null)));
 			this.adminService.createTicket(new Ticket("text:" + interaction.outputText().orElse(null)));
+			this.adminService.createTicket(new Ticket("image:" + interaction.outputImage().orElse(null)));
+			this.adminService.createTicket(new Ticket("audio:" + interaction.outputAudio().orElse(null)));
+			this.adminService.createTicket(new Ticket("video:" + interaction.outputVideo().orElse(null)));
+			this.adminService.createTicket(new Ticket("labels:" + interaction.labels().orElse(null)));
 			if (interaction != null && interaction.outputImage().isPresent()) {
 				final ImageContent image = interaction.outputImage().get();
 				if (image.data().isPresent())
