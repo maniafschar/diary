@@ -167,9 +167,12 @@ public class EventService {
 						"Stimmung: " + (int) (event.getRating() / event.getRatingCount() / 20 + 0.5) + "/5 stars\n");
 			text.append("Name des Ortes: " + event.getLocation().getName() + "\n");
 			text.append("Adresse: " + event.getLocation().getAddress() + "\n");
-			text.append("Längengrad: " + event.getLocation().getLongitude() + "\n");
-			text.append("Breitengrad: " + event.getLocation().getLatitude() + "\n");
-			text.append("Text: " + event.getNote().replace('\n', ' '));
+			if (event.getLocation() != null) {
+				text.append("Längengrad: " + event.getLocation().getLongitude() + "\n");
+				text.append("Breitengrad: " + event.getLocation().getLatitude() + "\n");
+			}
+			if (event.getNote() != null)
+				text.append("Text: " + event.getNote().replace('\n', ' '));
 			text.append("\n\n");
 		}
 		final Summary summary = this.aiService.summary(prompt, text.toString().trim());
