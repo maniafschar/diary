@@ -1,9 +1,12 @@
 package com.jq.diary.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,13 +104,13 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(this.imageGemini(aiSummary.getNote()));
+			aiSummary.setImage(this.imageGemini(this.imageGeminiPrompt(aiSummary.getNote())));
 			aiSummary.setTextLength(text.length());
 			return aiSummary;
 		}
 	}
 
-	private String imageGemini(final String summary) {
+	private String imageGeminiPrompt(final String summary) {
 		@SuppressWarnings("null")
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
@@ -138,25 +141,37 @@ public class AiService {
 					s.append(part.text().orElse(""));
 			}
 			this.adminService.createTicket(new Ticket(s.toString()));
-			try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
-				final CreateModelInteraction request = CreateModelInteraction.builder()
-						.model("gemini-3.1-flash-image")
-						.input(InteractionsInput.of(s.toString()))
-						.responseFormat(CreateModelInteractionResponseFormat.of(ResponseFormat.of(
-								ImageResponseFormat.builder().mimeType(ImageResponseFormatMimeType.IMAGE_JPEG)
-										.build())))
-						.build();
-				final Interaction interaction = client.interactions.create()
-						.body(CreateInteractionRequestBody.of(request))
-						.call()
-						.interaction()
-						.orElse(null);
-				if (interaction != null && interaction.outputImage().isPresent()) {
-					final ImageContent image = interaction.outputImage().get();
-					if (image.data().isPresent())
-						return image.data().get();
+			return s.toString();
+		}
+	}
+
+	private String imageGemini(final String prompt) {
+		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
+			final CreateModelInteraction request = CreateModelInteraction.builder()
+					.model("gemini-3.1-flash-image")
+					.input(InteractionsInput.of(prompt))
+					.responseFormat(CreateModelInteractionResponseFormat.of(ResponseFormat.of(
+							ImageResponseFormat.builder().mimeType(ImageResponseFormatMimeType.IMAGE_JPEG)
+									.build())))
+					.build();
+			final Interaction interaction = client.interactions.create()
+					.body(CreateInteractionRequestBody.of(request))
+					.call()
+					.interaction()
+					.orElse(null);
+			if (interaction != null && interaction.outputImage().isPresent()) {
+				final ImageContent image = interaction.outputImage().get();
+				if (image.data().isPresent())
+					return image.data().get();
+				if (image.uri().isPresent()) {
+					final String imageUrl = image.uri().get();
+					final ByteArrayOutputStream out = new ByteArrayOutputStream();
+					IOUtils.copy(new URI(imageUrl).toURL(), out);
+					return Base64.getEncoder().encodeToString(out.toByteArray());
 				}
 			}
+		} catch (final Exception ex) {
+			this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 		}
 		return null;
 	}
