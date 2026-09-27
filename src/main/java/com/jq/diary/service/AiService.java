@@ -33,7 +33,9 @@ import com.google.genai.gaos.models.interactions.ImageResponseFormat;
 import com.google.genai.gaos.models.interactions.ImageResponseFormatMimeType;
 import com.google.genai.gaos.models.interactions.Interaction;
 import com.google.genai.gaos.models.interactions.InteractionsInput;
+import com.google.genai.gaos.models.interactions.ModelOutputStep;
 import com.google.genai.gaos.models.interactions.ResponseFormat;
+import com.google.genai.gaos.models.interactions.Step;
 import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
 import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentConfig;
@@ -45,7 +47,6 @@ import com.google.genai.types.Type;
 import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.entity.Ticket;
-import com.jq.diary.util.Json;
 import com.jq.diary.util.Utilities;
 
 @Service
@@ -161,24 +162,38 @@ public class AiService {
 					.call()
 					.interaction()
 					.orElse(null);
-			this.adminService
-					.createTicket(new Ticket("errors:" + Json.toPrettyString(interaction.errors().orElse(null))));
-			this.adminService
-					.createTicket(new Ticket("model:" + Json.toPrettyString(interaction.model().orElse(null))));
-			this.adminService.createTicket(new Ticket("created:" + interaction.created().orElse(null)));
-			this.adminService.createTicket(new Ticket("text:" + interaction.outputText().orElse(null)));
-			this.adminService.createTicket(new Ticket("image:" + interaction.outputImage().orElse(null)));
-			this.adminService.createTicket(new Ticket("audio:" + interaction.outputAudio().orElse(null)));
-			this.adminService.createTicket(new Ticket("video:" + interaction.outputVideo().orElse(null)));
-			this.adminService.createTicket(new Ticket("labels:" + interaction.labels().orElse(null)));
-			if (interaction != null && interaction.outputImage().isPresent()) {
+			if (interaction == null)
+				return null;
+			this.adminService.createTicket(new Ticket("interaction status:" + interaction.status().orElse(null)));
+			final StringBuilder outputSummary = new StringBuilder("model output steps:");
+			for (final Step step : interaction.steps().orElse(List.of())) {
+				outputSummary.append(' ').append(step.type());
+				if (step instanceof final ModelOutputStep modelOutputStep) {
+					for (final com.google.genai.gaos.models.interactions.Content content : modelOutputStep.content()
+							.orElse(List.of())) {
+						outputSummary.append(' ').append(content.type());
+						if (content instanceof final ImageContent imageContent) {
+							outputSummary.append("[data=").append(imageContent.data().isPresent())
+									.append(",uri=").append(imageContent.uri().isPresent()).append(']');
+							if (imageContent.data().isPresent())
+								return imageContent.data().get();
+							if (imageContent.uri().isPresent()) {
+								final ByteArrayOutputStream out = new ByteArrayOutputStream();
+								IOUtils.copy(new URI(imageContent.uri().get()).toURL(), out);
+								return Base64.getEncoder().encodeToString(out.toByteArray());
+							}
+						}
+					}
+				}
+			}
+			this.adminService.createTicket(new Ticket(outputSummary.toString()));
+			if (interaction.outputImage().isPresent()) {
 				final ImageContent image = interaction.outputImage().get();
 				if (image.data().isPresent())
 					return image.data().get();
 				if (image.uri().isPresent()) {
-					final String imageUrl = image.uri().get();
 					final ByteArrayOutputStream out = new ByteArrayOutputStream();
-					IOUtils.copy(new URI(imageUrl).toURL(), out);
+					IOUtils.copy(new URI(image.uri().get()).toURL(), out);
 					return Base64.getEncoder().encodeToString(out.toByteArray());
 				}
 			}
