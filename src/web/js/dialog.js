@@ -375,11 +375,11 @@ button.confirmed::after {
 	}
 
 	static pdf() {
-		dialog.export('action.export(false)', 'PDF erzeugen', () => { });
+		dialog.export('action.export("pdf")', 'PDF erzeugen', () => { });
 	}
 
 	static email() {
-		dialog.export('action.export(true)', 'Email senden', popup => {
+		dialog.export('action.export("email")', 'Email senden', popup => {
 			dialog.createField(popup.appendChild(document.createElement('element')), 'Email', 'emails').parentElement.appendChild(document.createElement('input-selection')).addEventListener('changed', event => {
 				var e = document.querySelector('dialog-popup').content().querySelector('input[name="emails"]');
 				if (e.value.indexOf(event.detail.label) < 0)
@@ -438,7 +438,7 @@ div.toggle>div {
 	}
 
 	static summary() {
-		dialog.export('action.summary()', 'KI fragen', popup => popup.appendChild(document.createElement('input-selection')).setAttribute('value', 'Summary'));
+		dialog.export('action.export("ai")', 'KI fragen', popup => popup.appendChild(document.createElement('input-selection')).setAttribute('value', 'Summary'));
 		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
 		for (var i = 0; i < this.summaryPrompts.length; i++)
 			selection.add(this.summaryPrompts[i][0], this.summaryPrompts[i][1]);

@@ -446,7 +446,7 @@ class action {
 		}, 500);
 	}
 
-	static export(email) {
+	static export(type) {
 		var content = document.querySelector('dialog-popup').content();
 		var error = content.querySelector('error');
 		error.innerText = '';
@@ -455,37 +455,27 @@ class action {
 		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
 		if (ids.length == 0)
 			error.innerText = 'Selektiere Einträge aus der Liste aus.';
-		else {
-			if (email) {
-				var emails = content.querySelector('input[name="emails"]').value.trim();
-				emails = emails.replace(/,/g, ' ');
-				emails = emails.replace(/;/g, ' ');
-				while (emails.indexOf('  ') > -1)
-					emails = emails.replace(/  /g, ' ');
-				if (emails) {
-					emails = emails.split(' ');
-					for (var i = 0; i < emails.length; i++) {
-						if (emails[i].indexOf('@') < 1) {
-							error.innerText = 'Gib eine valide Emailadresse ein.';
-							return;
-						}
+		else if (type == 'email') {
+			var emails = content.querySelector('input[name="emails"]').value.trim();
+			emails = emails.replace(/,/g, ' ');
+			emails = emails.replace(/;/g, ' ');
+			while (emails.indexOf('  ') > -1)
+				emails = emails.replace(/  /g, ' ');
+			if (emails) {
+				emails = emails.split(' ');
+				for (var i = 0; i < emails.length; i++) {
+					if (emails[i].indexOf('@') < 1) {
+						error.innerText = 'Gib eine valide Emailadresse ein.';
+						return;
 					}
-					api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
-				} else
-					error.innerText = 'Gib eine Emailadresse ein.';
+				}
+				api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
 			} else
-				api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
-		}
-	}
-
-	static summary() {
-		var table = document.querySelector('view-table');
-		var ids = [];
-		table.table().querySelectorAll('tr.selected').forEach(e => ids.push(table.list[e.getAttribute('i')].id));
-		if (ids.length == 0)
-			error.innerText = 'Selektiere Einträge aus der Liste aus.';
-		else
+				error.innerText = 'Gib eine Emailadresse ein.';
+		} else if (type == 'ai')
 			api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), ids, dialog.summaryDisplay);
+		else
+			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 	}
 }
 
