@@ -159,13 +159,13 @@ public class EventService {
 	public Summary summary(final Prompt prompt, final List<Event> events, final BigInteger clientId) {
 		final StringBuilder text = new StringBuilder();
 		for (final Event event : events) {
-			text.append("Date: " + event.getDate().toString() + "\n");
+			text.append("Datum: " + event.getDate().toString() + "\n");
 			if (event.getRating() != null)
-				text.append("Rating: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
-			text.append("Location: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
+				text.append("Stimmung: " + (event.getRating() / event.getRatingCount() / 20) + "/5 stars\n");
+			text.append("Ort: " + event.getLocation().getName() + "\n" + event.getLocation().getAddress() + "\n");
 			text.append("Longitude: " + event.getLocation().getLongitude() + "\n");
 			text.append("Latitude: " + event.getLocation().getLatitude() + "\n");
-			text.append("Remark: " + event.getNote());
+			text.append("Bemerkung: " + event.getNote());
 			text.append("\n\n--\n\n");
 		}
 		final Summary summary = this.aiService.summary(prompt, text.toString());

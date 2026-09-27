@@ -25,17 +25,18 @@ public class Summary extends BaseEntity {
 	private final List<String> emojis = new ArrayList<>();
 
 	public enum Prompt {
-		Summary("Summarize this diary in about {0} characters "
-				+ ", emphasis the dates with the most feelings",
-				"Create an image expressing the feelings of the people in this text"),
-		AdvicePsychology("After analysing the diary, in about {0} characters give a psychological review and "
-				+ "describe in at least 3 practical advices, how to improve his life in future",
-				"Create an image describing the psychological past and showing a "
-						+ "bright future, based on the recomentations in the text"),
-		AdviceRoute("Analyse the locations and mood of the persons diary and " +
-				"suggest at least 3 new cities/destinations, which could be of interest",
-				"Create an image with some nice pictures of past locations and "
-						+ "new pictures of suggested destinations");
+		Summary("Fass dieses Tagebuch in etwa {0} Zeichen zusammen und hebe dabei die Daten hervor, "
+				+ "die mit den stärksten positiven oder negativen Gefühlen verbunden sind",
+				"Erstelle ein Bild, das die Gefühle der Menschen in diesem Text zum Ausdruck bringt"),
+		AdvicePsychology("Erstelle nach der Analyse des Tagebuchs eine psychologische Einschätzung "
+				+ "(Umfang: ca. {0} Zeichen) und beschreibe anhand von mindestens drei praktischen Ratschlägen, "
+				+ "wie die Person sein Leben künftig verbessern kann",
+				"Erstelle ein Bild, das die psychologische Vergangenheit darstellt und, basierend "
+						+ "auf den Empfehlungen im Text, die Zukunft zeigt"),
+		AdviceRoute("Schlage mindestens 7 neue Orte bzw. Reiseziele vor, die von Interesse sein könnten, "
+				+ "basierend auf den Orten, die im Tagebuch erwähnt werden und den Stimmungen dort",
+				"Erstelle ein Bild mit schönen Aufnahmen vergangener Orte im Tagebuch und "
+						+ "Bildern der vorgeschlagenen Reiseziele");
 
 		private final String image;
 		private final String text;
