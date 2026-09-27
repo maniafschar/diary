@@ -81,10 +81,10 @@ public class EventApi extends ApplicationApi {
 		return this.repository.list("from Summary where client.id=?1", Summary.class, clientId);
 	}
 
-	@PostMapping("summary")
+	@PostMapping(path = "summary", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Summary postSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt,
-			@RequestParam("ids") final List<BigInteger> ids) {
+			@RequestParam final List<BigInteger> ids) {
 		return this.eventService.summary(prompt, this.getList(contactId, clientId), clientId);
 	}
 
