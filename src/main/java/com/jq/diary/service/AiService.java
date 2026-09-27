@@ -128,19 +128,17 @@ public class AiService {
 				for (final Part part : parts)
 					s.append(part.text().orElse(""));
 			}
-			final GenerateContentResponse generateContentResponse = Client.builder().apiKey(this.geminiKey)
+
+			final GenerateContentResponse response = Client.builder().apiKey(this.geminiKey)
 					.build().models
-					.generateContent("gemini-2.5-flash-image", s.toString(), GenerateContentConfig.builder()
-							.responseModalities(Arrays.asList("IMAGE")).build());
-			final ImmutableList<Part> parts = generateContentResponse.parts();
-			if (parts != null) {
-				for (final Part part : parts) {
-					if (part.inlineData().isPresent()) {
-						final var blob = part.inlineData().get();
-						if (blob.data().isPresent())
-							return blob.data().get();
-					}
-				}
+					.generateContent("gemini-3.1-flash-image", s.toString(), GenerateContentConfig.builder()
+							.responseModalities(Arrays.asList("IMAGE"))
+							.responseMimeType("image/jpeg")
+							.build());
+			if (response.candidates().isPresent() && !response.candidates().get().isEmpty()) {
+				final Part part = response.candidates().get().get(0).content().get().parts().get().get(0);
+				if (part.inlineData().isPresent())
+					return part.inlineData().get().data().get();
 			}
 		}
 		return null;
