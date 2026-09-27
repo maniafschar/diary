@@ -77,7 +77,8 @@ public class AiService {
 		schema.put("emojis", Schema.builder().type(Type.Known.ARRAY)
 				.items(Schema.builder().type(Type.Known.STRING).build()).build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build()).responseMimeType("application/json")
+				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build())
+				.responseMimeType("application/json")
 				.responseSchema(Schema.builder()
 						.type(Type.Known.OBJECT)
 						.properties(schema)
