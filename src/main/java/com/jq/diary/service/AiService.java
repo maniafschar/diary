@@ -72,7 +72,7 @@ public class AiService {
 		schema.put("emojis", Schema.builder().type(Type.Known.ARRAY)
 				.items(Schema.builder().type(Type.Known.STRING).build()).build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build())
+				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
 				.responseMimeType("application/json")
 				.responseSchema(Schema.builder()
 						.type(Type.Known.OBJECT)
@@ -112,7 +112,7 @@ public class AiService {
 										+ "4. Gib mir den finalen Prompt sowohl auf Deutsch als auch auf Englisch aus.\n")))
 				.build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.thinkingConfig(ThinkingConfig.builder().thinkingBudget(0).build())
+				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
 				.responseSchema(Schema.builder()
 						.type(Type.Known.STRING)
 						.build())
