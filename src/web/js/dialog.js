@@ -386,8 +386,9 @@ button.confirmed::after {
 					e.value = (e.value + ' ' + event.detail.label).trim();
 			});
 		});
+		var popup = document.querySelector('dialog-popup').content();
 		api.event.getEmailList(list => {
-			var s = document.querySelector('dialog-popup').content().querySelector('input-selection');
+			var s = popup.querySelector('input-selection');
 			list.forEach(e => s.add(e, e));
 			if (list.length)
 				s.open();

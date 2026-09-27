@@ -78,7 +78,8 @@ public class EventApi extends ApplicationApi {
 	public List<Summary> getSummary(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		this.authorizationService.requireContact(contactId, clientId);
-		return this.repository.list("from Summary where client.id=?1", Summary.class, clientId);
+		return Utilities.filter(
+				this.repository.list("from Summary where client.id=?1 order by date desc", Summary.class, clientId));
 	}
 
 	@PostMapping(path = "summary", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
