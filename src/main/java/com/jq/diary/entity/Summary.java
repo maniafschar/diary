@@ -25,11 +25,10 @@ public class Summary extends BaseEntity {
 	private final List<String> emojis = new ArrayList<>();
 
 	public enum Prompt {
-		Summary("Fass dieses Tagebuch in etwa {0} Zeichen zusammen und hebe dabei die Daten hervor, "
-				+ "die mit den stärksten positiven oder negativen Gefühlen verbunden sind",
+		Summary("Fass dieses Tagebuch in {0} Wörter zusammen",
 				"Erstelle ein Bild, das die Gefühle der Menschen in diesem Text zum Ausdruck bringt"),
 		AdvicePsychology("Erstelle nach der Analyse des Tagebuchs eine psychologische Einschätzung "
-				+ "(Umfang: ca. {0} Zeichen) und beschreibe anhand von mindestens drei praktischen Ratschlägen, "
+				+ "(Umfang: {0} Wörter) und liste mindestens 3 praktische Ratschläge auf, "
 				+ "wie die Person sein Leben künftig verbessern kann",
 				"Erstelle ein Bild, das die psychologische Vergangenheit darstellt und, basierend "
 						+ "auf den Empfehlungen im Text, die Zukunft zeigt"),

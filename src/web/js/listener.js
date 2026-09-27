@@ -260,7 +260,7 @@ img.speak {
 								images += '<img src="/med/' + list[i].eventImages[i2].imageThumbnail + '" />';
 						}
 						if (list[i].rating) {
-							text = '<input-rating class="minimal" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
+							text = '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
 							textSort = list[i].rating + textSort;
 							if (textSort.length > 10)
 								textSort = textSort.substring(0, 10).trim();
