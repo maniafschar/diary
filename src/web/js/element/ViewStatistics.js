@@ -1,4 +1,3 @@
-
 export { ViewStatistics };
 
 class ViewStatistics extends HTMLElement {
@@ -120,7 +119,7 @@ chart bar {
 	}
 
 	renderWordcloud(tokens) {
-		var fontSize = parseInt(document.body.style.fontSize);
+		var fontSize = parseInt(document.body.style.fontSize) + 3;
 		var positions = [];
 		if (tokens.length == 0)
 			return positions;
@@ -133,7 +132,7 @@ chart bar {
 		for (var i = 0; i < tokens.length; i++) {
 			const next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
-			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 1) * fontSize) + 'px';
+			next.word.style.fontSize = ((next.token.count - min) / (max - min) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('details', {
 					detail: next.token,
