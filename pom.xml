@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>com.google.genai</groupId>
 			<artifactId>google-genai</artifactId>
-			<version>1.0.0</version>
+			<version>1.70.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vdurmont</groupId>
@@ -94,11 +94,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.genai</groupId>
-			<artifactId>google-genai</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bytedeco</groupId>
