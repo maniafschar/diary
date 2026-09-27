@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.ImmutableList;
 import com.google.genai.Client;
 import com.google.genai.ResponseStream;
-import com.google.genai.gaos.models.errors.CreateInteractionClientError;
 import com.google.genai.gaos.models.interactions.CreateModelInteraction;
 import com.google.genai.gaos.models.interactions.CreateModelInteractionResponseFormat;
 import com.google.genai.gaos.models.interactions.ImageContent;
@@ -143,7 +142,6 @@ public class AiService {
 				for (final Part part : parts)
 					s.append(part.text().orElse(""));
 			}
-			this.adminService.createTicket(new Ticket(s.toString()));
 			return s.toString();
 		}
 	}
@@ -164,7 +162,6 @@ public class AiService {
 					.orElse(null);
 			if (interaction == null)
 				return null;
-			this.adminService.createTicket(new Ticket("interaction status:" + interaction.status().orElse(null)));
 			final StringBuilder outputSummary = new StringBuilder("model output steps:");
 			for (final Step step : interaction.steps().orElse(List.of())) {
 				outputSummary.append(' ').append(step.type());
@@ -186,7 +183,6 @@ public class AiService {
 					}
 				}
 			}
-			this.adminService.createTicket(new Ticket(outputSummary.toString()));
 			if (interaction.outputImage().isPresent()) {
 				final ImageContent image = interaction.outputImage().get();
 				if (image.data().isPresent())
@@ -197,9 +193,6 @@ public class AiService {
 					return Base64.getEncoder().encodeToString(out.toByteArray());
 				}
 			}
-		} catch (final CreateInteractionClientError er) {
-			this.adminService.createTicket(
-					new Ticket(er.bodyAsString() + "\n\n" + new Ticket(Utilities.stackTraceToString(er))));
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 		}
@@ -217,9 +210,6 @@ public class AiService {
 			return response;
 		} catch (final JsonProcessingException ex) {
 			throw new RuntimeException(ex);
-		} finally {
-			this.adminService.createTicket(new Ticket((error.length() > 0 ? Ticket.ERROR : "") +
-					"AI\n" + error + summary));
 		}
 	}
 
