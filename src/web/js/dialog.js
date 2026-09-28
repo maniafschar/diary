@@ -474,26 +474,28 @@ div.toggle>div {
 				var item = eventLinks.appendChild(document.createElement('a'));
 				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + this.summaryPrompts.find(e => e[0] == list[i].prompt)[1];
 				const summary = list[i];
-				item.onclick = () => dialog.summaryDisplay(summary);
+				item.onclick = () => dialog.summaryDisplay(summary, true);
 			}
 		});
 		dialog.summaryContent = popup;
 	}
 
-	static summaryDisplay(summary) {
-		document.dispatchEvent(new CustomEvent('popup', {
+	static summaryDisplay(summary, reopen) {
+		var body = {
 			detail: {
 				body:
 					(summary.image ? '<img src="' + (summary.image.indexOf('.') > 0 ? '/med/' + summary.image : 'data:image/jpg;base64,' + summary.image) + '" style="max-width: 100%; border-radius: 0.5em;"/>' : '') +
 					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-					summary.note.replace(/\n/g, '<br/>'),
-				onclose() {
-					var popup = document.querySelector('dialog-popup').content();
-					popup.textContent = '';
-					popup.appendChild(dialog.summaryContent);
-				}
+					summary.note.replace(/\n/g, '<br/>')
 			}
-		}));
+		}
+		if (reopen)
+			body.detail.onclose = () => {
+				var popup = document.querySelector('dialog-popup').content();
+				popup.textContent = '';
+				popup.appendChild(dialog.summaryContent);
+			};
+		document.dispatchEvent(new CustomEvent('popup', body));
 	}
 
 	static export(action, label, fields) {
