@@ -540,7 +540,8 @@ div.toggle>div {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
 			document.querySelector('event view-table').removeAttribute('mode');
-			table.removeEventListener('select', listener);
+			if (!dialog.summaryContent)
+				table.removeEventListener('select', listener);
 		}, { once: true });
 	}
 }
