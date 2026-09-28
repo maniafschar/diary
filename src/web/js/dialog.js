@@ -494,7 +494,8 @@ div.toggle>div {
 				var popup = document.querySelector('dialog-popup').content();
 				popup.textContent = '';
 				popup.appendChild(dialog.summaryContent);
-				document.querySelector('event view-table').setAttribute('mode', 'selection');
+				var table = document.querySelector('event view-table');
+				table.setAttribute('mode', 'selection');
 				table.addEventListener('select', dialog.countListener);
 				document.addEventListener('popup', () => {
 					document.querySelector('event view-table').removeAttribute('mode');
@@ -508,8 +509,9 @@ div.toggle>div {
 
 	static countListener() {
 		var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
-		document.querySelector('dialog-popup').content().querySelector('count').innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
-		document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
+		var popup = document.querySelector('dialog-popup').content();
+		popup.querySelector('count').innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
+		popup.querySelector('error').innerText = '';
 	}
 
 	static export(action, label, fields) {
