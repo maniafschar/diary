@@ -8,6 +8,8 @@ class InputDate extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 	}
 	connectedCallback() {
+		if (this._root.childElementCount)
+			return;
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	white-space: nowrap;
