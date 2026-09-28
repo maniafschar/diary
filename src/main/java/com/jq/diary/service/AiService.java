@@ -117,13 +117,13 @@ public class AiService {
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
 				.parts(ImmutableList
 						.<Part>of(Part.fromText(
-								"Erstelle mir auf Basis deiner obigen psychologischen Analyse einen präzisen Bild-Prompt für einen KI-Bildgenerator. \n\n"
+								"Erstelle mir auf Basis Deiner psychologischen Analyse, die unten angefügt ist, einen präzisen Bild-Prompt für einen KI-Bildgenerator.\n\n"
 										+ "Regeln für den Bild-Prompt:\n"
-										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher (z. B. ein Boot im Nebel, das auf ein Licht zusteuert; ein Garten, der durch Risse im Asphalt bricht).\n"
-										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht (z. B. warmes Sonnenlicht, mystischer Nebel)? Welche Farben dominieren (z. B. beruhigende Blautöne, energetisches Orange)?\n"
-										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil (z. B. „surrealistisches Ölgemälde“, „minimale Vektorgrafik“ oder „cinematische 3D-Illustration“). Vermeide fotorealistische Menschen, um die Privatsphäre zu wahren.\n"
-										+ "4. Gib mir den finalen Prompt nur auf Englisch aus.\n\n"
-										+ "Hier die Zusammenfassung:\n" + summary)))
+										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher\n"
+										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht? Welche Farben dominieren?\n"
+										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil. Entscheide selber, welcher Stil am besten zur Stimmung im Text passt.\n"
+										+ "4. Gib mir den finalen Prompt nur auf Deutsch aus.\n\n"
+										+ "Hier Deine Zusammenfassung:\n" + summary)))
 				.build());
 		final GenerateContentConfig config = GenerateContentConfig.builder()
 				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
