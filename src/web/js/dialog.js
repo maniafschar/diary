@@ -6,6 +6,7 @@ export { dialog };
 
 class dialog {
 	static files;
+	static summaryContent;
 	static summaryPrompts = [
 		['Summary', 'Zusammenfassung'],
 		['AdvicePsychology', 'Psychologische Empfehlung'],
@@ -386,7 +387,7 @@ button.confirmed::after {
 					e.value = (e.value + ' ' + event.detail.label).trim();
 			});
 		});
-		var popup = document.querySelector('dialog-popup').content();
+		var popup = document.querySelector('dialog-popup').content().querySelector('div');
 		api.event.getEmailList(list => {
 			var s = popup.querySelector('input-selection');
 			list.forEach(e => s.add(e, e));
@@ -444,7 +445,7 @@ div.toggle>div {
 		for (var i = 0; i < this.summaryPrompts.length; i++)
 			selection.add(this.summaryPrompts[i][0], this.summaryPrompts[i][1]);
 		selection.open();
-		var popup = document.querySelector('dialog-popup').content();
+		var popup = document.querySelector('dialog-popup').content().querySelector('div');
 		popup.appendChild(document.createElement('style')).textContent = `
 a {
 	display: block;
@@ -476,6 +477,7 @@ div.toggle>div {
 				item.onclick = () => dialog.summaryDisplay(summary);
 			}
 		});
+		dialog.summaryContent = popup;
 	}
 
 	static summaryDisplay(summary) {
@@ -487,6 +489,13 @@ div.toggle>div {
 					summary.note.replace(/\n/g, '<br/>')
 			}
 		}));
+		document.addEventListener('popup', () =>
+			document.dispatchEvent(new CustomEvent('popup', {
+				detail: {
+					body: dialog.summaryContent
+				}
+			}), { once: true })
+		)
 	}
 
 	static export(action, label, fields) {

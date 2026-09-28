@@ -162,16 +162,11 @@ public class AiService {
 					.orElse(null);
 			if (interaction == null)
 				return null;
-			final StringBuilder outputSummary = new StringBuilder("model output steps:");
 			for (final Step step : interaction.steps().orElse(List.of())) {
-				outputSummary.append(' ').append(step.type());
 				if (step instanceof final ModelOutputStep modelOutputStep) {
 					for (final com.google.genai.gaos.models.interactions.Content content : modelOutputStep.content()
 							.orElse(List.of())) {
-						outputSummary.append(' ').append(content.type());
 						if (content instanceof final ImageContent imageContent) {
-							outputSummary.append("[data=").append(imageContent.data().isPresent())
-									.append(",uri=").append(imageContent.uri().isPresent()).append(']');
 							if (imageContent.data().isPresent())
 								return imageContent.data().get();
 							if (imageContent.uri().isPresent()) {
@@ -200,7 +195,6 @@ public class AiService {
 	}
 
 	protected Summary convert(final String summary) {
-		final String error = "";
 		try {
 			final JsonNode node = new ObjectMapper().readTree(summary);
 			final Summary response = new Summary();
