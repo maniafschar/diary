@@ -456,7 +456,7 @@ a {
 				var image = new Image();
 				image.onload = () => {
 					document.dispatchEvent(new CustomEvent('progressbar'));
-					imageContainer.style.height = (image.height * data.innerWidth / image.width) + 'px';
+					imageContainer.style.height = (image.height * data.offsetWidth / image.width) + 'px';
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
