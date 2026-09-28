@@ -108,8 +108,8 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
-		for (long i = 19; i < 24; i++) {
-			final Summary summary = this.repository.one(Summary.class, BigInteger.valueOf(i));
+		for (long i = 1; i < 6; i++) {
+			final Summary summary = this.repository.one(Summary.class, BigInteger.valueOf(18 + i));
 			summary.setImage(Attachment.createImage("jpg",
 					IOUtils.toByteArray(new FileInputStream("/var/diary/build/image" + i + ".jpg"))));
 			this.repository.save(summary);
