@@ -491,6 +491,7 @@ div.toggle>div {
 		}
 		if (reopen)
 			body.detail.onclose = () => {
+				dialog.summaryContent.querySelector('count').innerText = '';
 				var popup = document.querySelector('dialog-popup').content();
 				popup.textContent = '';
 				popup.appendChild(dialog.summaryContent);
