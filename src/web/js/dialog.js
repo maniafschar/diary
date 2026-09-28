@@ -486,16 +486,14 @@ div.toggle>div {
 				body:
 					(summary.image ? '<img src="' + (summary.image.indexOf('.') > 0 ? '/med/' + summary.image : 'data:image/jpg;base64,' + summary.image) + '" style="max-width: 100%; border-radius: 0.5em;"/>' : '') +
 					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-					summary.note.replace(/\n/g, '<br/>')
+					summary.note.replace(/\n/g, '<br/>'),
+				onclose() {
+					var popup = document.querySelector('dialog-popup').content();
+					popup.textContent = '';
+					popup.appendChild(dialog.summaryContent);
+				}
 			}
 		}));
-		setTimeout(() => document.addEventListener('popup', () =>
-			document.dispatchEvent(new CustomEvent('popup', {
-				detail: {
-					body: dialog.summaryContent
-				}
-			}), { once: true })
-		), 500);
 	}
 
 	static export(action, label, fields) {

@@ -1,6 +1,7 @@
 export { DialogPopup };
 
 class DialogPopup extends HTMLElement {
+	static onclose;
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
@@ -270,13 +271,18 @@ div.toggle>div {
 		popup.style.left = right ? 'initial' : '';
 		popup.style.right = right ? '1em' : '';
 		document.body.style.overflow = 'hidden';
+		DialogPopup.onclose = event.detail.onclose;
 	}
 
 	close(popup) {
-		popup.addEventListener('transitionend', () => popup.querySelector('content').textContent = '', { capture: false, passive: true, once: true });
-		popup.style.transform = '';
-		popup.removeAttribute('i');
-		document.body.style.overflow = '';
+		if (DialogPopup.onclose)
+			DialogPopup.onclose();
+		else {
+			popup.addEventListener('transitionend', () => popup.querySelector('content').textContent = '', { capture: false, passive: true, once: true });
+			popup.style.transform = '';
+			popup.removeAttribute('i');
+			document.body.style.overflow = '';
+		}
 	}
 
 	content() {
