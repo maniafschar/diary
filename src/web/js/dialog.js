@@ -489,7 +489,7 @@ div.toggle>div {
 					summary.note.replace(/\n/g, '<br/>')
 			}
 		}));
-		document.addEventListener('popup', setTimeout(() =>
+		setTimeout(() => document.addEventListener('popup', () =>
 			document.dispatchEvent(new CustomEvent('popup', {
 				detail: {
 					body: dialog.summaryContent
