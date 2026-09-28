@@ -508,7 +508,7 @@ div.toggle>div {
 
 	static countListener() {
 		var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
-		count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
+		document.querySelector('dialog-popup').content().querySelector('count').innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
 		document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
 	}
 
