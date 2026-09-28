@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Service;
 import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Log;
+import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.repository.Repository.Attachment;
 
 @Service
 public class AdminService {
@@ -105,6 +108,12 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
+		for (long i = 19; i < 24; i++) {
+			final Summary summary = this.repository.one(Summary.class, BigInteger.valueOf(i));
+			summary.setImage(Attachment.createImage("jpg",
+					IOUtils.toByteArray(new FileInputStream("/var/diary/build/image" + i + ".jpg"))));
+			this.repository.save(summary);
+		}
 		return null;
 	}
 
