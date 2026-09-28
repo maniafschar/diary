@@ -113,6 +113,13 @@ data {
 	position: relative;
 	display: inline-block;
 	max-width: 50em;
+	vertical-align: bottom;
+}
+@media only screen and (min-width: 50em) {
+	data {
+		box-shadow: 0 0 1em rgba(0, 0, 0, 0.3);
+		margin: 1em;
+	}
 }
 data description {
 	border: solid 2vw transparent;
