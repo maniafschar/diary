@@ -543,7 +543,7 @@ div.toggle>div {
 		buttonDiv.querySelector('button').innerText = label;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		var close = event => {
-			if (!event.detail?.body && document.querySelector('dialog-popup').content().querySelector('[i="' + id + '"]')) {
+			if (!event.detail?.body && !dialog.summaryContent && document.querySelector('dialog-popup').content().querySelector('[i="' + id + '"]')) {
 				document.querySelector('event view-table').removeAttribute('mode');
 				table.removeEventListener('select', listener);
 				document.removeEventListener('popup', close);
