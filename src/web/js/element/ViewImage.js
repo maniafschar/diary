@@ -119,6 +119,10 @@ data {
 	data {
 		box-shadow: 0 0 1em rgba(0, 0, 0, 0.3);
 		margin: 1em;
+		border-radius: 1em;
+	}
+	imageContainer {
+		border-radius: 1em 1em 0 0;
 	}
 }
 data description {
