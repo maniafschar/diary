@@ -506,7 +506,7 @@ div.toggle>div {
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
 		popup.style.overflowX = 'hidden';
-		var id = new Date().getTime() + Math.random;
+		const id = new Date().getTime() + Math.random();
 		popup.setAttribute('i', id);
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Ab', 'date', 'input-date');
@@ -542,8 +542,8 @@ div.toggle>div {
 		var buttonDiv = dialog.createButton(popup, action);
 		buttonDiv.querySelector('button').innerText = label;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		var close = () => {
-			if (document.querySelector('dialog-popup').content().querySelector('[i="' + id + '"]')) {
+		var close = event => {
+			if (!event.detail?.body && document.querySelector('dialog-popup').content().querySelector('[i="' + id + '"]')) {
 				document.querySelector('event view-table').removeAttribute('mode');
 				table.removeEventListener('select', listener);
 				document.removeEventListener('popup', close);
