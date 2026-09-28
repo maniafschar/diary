@@ -517,6 +517,8 @@ div.toggle>div {
 
 	static export(action, label, fields) {
 		ui.navigate(0);
+		var event = document.querySelector('element.event');
+		document.querySelector('html').scrollTo({ top: event.offsetTop + event.offsetHeight - window.innerHeight + 5, behavior: 'smooth' });
 		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
