@@ -494,10 +494,22 @@ div.toggle>div {
 				var popup = document.querySelector('dialog-popup').content();
 				popup.textContent = '';
 				popup.appendChild(dialog.summaryContent);
+				document.querySelector('event view-table').setAttribute('mode', 'selection');
+				table.addEventListener('select', dialog.countListener);
+				document.addEventListener('popup', () => {
+					document.querySelector('event view-table').removeAttribute('mode');
+					table.removeEventListener('select', dialog.countListener);
+				}, { once: true });
 			};
 		else
 			dialog.summaryContent = null;
 		document.dispatchEvent(new CustomEvent('popup', body));
+	}
+
+	static countListener() {
+		var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
+		count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
+		document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
 	}
 
 	static export(action, label, fields) {
@@ -506,7 +518,7 @@ div.toggle>div {
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
 		popup.style.overflowX = 'hidden';
-		const id = new Date().getTime() + Math.random();
+		var id = new Date().getTime() + Math.random;
 		popup.setAttribute('i', id);
 		var element = popup.appendChild(document.createElement('element'));
 		var inputDate = dialog.createField(element, 'Ab', 'date', 'input-date');
@@ -531,24 +543,15 @@ div.toggle>div {
 		count.style.textAlign = 'center';
 		count.style.opacity = 0.4;
 		count.style.fontSize = '0.8em';
-		var listener = () => {
-			var x = document.querySelector('view-table').table().querySelectorAll('tr.selected').length;
-			count.innerText = x == 0 ? '' : (x + (x == 1 ? ' Eintrag' : ' Einträge'));
-			document.querySelector('dialog-popup').content().querySelector('error').innerText = '';
-		};
-		table.addEventListener('select', listener);
+		table.addEventListener('select', dialog.countListener);
 
 		popup.appendChild(document.createElement('error'));
 		var buttonDiv = dialog.createButton(popup, action);
 		buttonDiv.querySelector('button').innerText = label;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		var close = event => {
-			if (!event.detail?.body && document.querySelector('dialog-popup').content().querySelector('[i="' + id + '"]')) {
-				document.querySelector('event view-table').removeAttribute('mode');
-				table.removeEventListener('select', listener);
-				document.removeEventListener('popup', close);
-			}
-		};
-		document.addEventListener('popup', close);
+		document.addEventListener('popup', () => {
+			document.querySelector('event view-table').removeAttribute('mode');
+			table.removeEventListener('select', dialog.countListener);
+		}, { once: true });
 	}
 }
