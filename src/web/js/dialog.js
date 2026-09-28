@@ -495,6 +495,8 @@ div.toggle>div {
 				popup.textContent = '';
 				popup.appendChild(dialog.summaryContent);
 			};
+		else
+			dialog.summaryContent = null;
 		document.dispatchEvent(new CustomEvent('popup', body));
 	}
 
@@ -539,9 +541,10 @@ div.toggle>div {
 		buttonDiv.querySelector('button').innerText = label;
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		document.addEventListener('popup', () => {
-			document.querySelector('event view-table').removeAttribute('mode');
-			if (!dialog.summaryContent)
+			if (!dialog.summaryContent) {
+				document.querySelector('event view-table').removeAttribute('mode');
 				table.removeEventListener('select', listener);
+			}
 		}, { once: true });
 	}
 }
