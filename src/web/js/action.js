@@ -443,7 +443,8 @@ class action {
 				imageStyle.height = 'fit-content';
 				imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
 			}
-		}, 500);
+			this.resizeTimeout = null;
+		}, 600);
 	}
 
 	static export(type) {

@@ -111,7 +111,8 @@ button img {
 }
 data {
 	position: relative;
-	display: block;
+	display: inline-block;
+	max-width: 50em;
 }
 data description {
 	border: solid 2vw transparent;
@@ -455,7 +456,7 @@ a {
 				var image = new Image();
 				image.onload = () => {
 					document.dispatchEvent(new CustomEvent('progressbar'));
-					imageContainer.style.height = (image.naturalHeight * window.innerWidth / image.naturalWidth) + 'px';
+					imageContainer.style.height = (image.height * data.innerWidth / image.width) + 'px';
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
