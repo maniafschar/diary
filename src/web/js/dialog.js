@@ -367,6 +367,7 @@ button.confirmed::after {
 		var keys = Object.keys(api.clients);
 		for (var i = 0; i < keys.length; i++)
 			selection.add(keys[i], api.clients[keys[i]].name);
+		selection.open();
 		document.querySelector('dialog-popup').content().querySelector('input-selection').addEventListener('changed', () => {
 			api.clientId = document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value');
 			document.dispatchEvent(new CustomEvent('event'));
