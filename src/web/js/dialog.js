@@ -84,9 +84,9 @@ ${dialog.stylePictures}`;
 				content.querySelector('input-date[name="date"]').setAttribute('value', InputDate.local2server(e.datetime));
 			if (e.location) {
 				content.querySelector('input[name="locationName"]').value = e.location.name;
-				content.querySelector('input[name="longitude"]').value = e.location.longitude;
-				content.querySelector('input[name="latitude"]').value = e.location.latitude;
-				content.querySelector('input[name="altitude"]').value = e.location.altitude;
+				content.querySelector('input[name="longitude"]').value = e.location.longitude || '';
+				content.querySelector('input[name="latitude"]').value = e.location.latitude || '';
+				content.querySelector('input[name="altitude"]').value = e.location.altitude || '';
 				content.querySelector('textarea[name="address"]').value = e.location.address;
 			}
 			if (e.data.indexOf('.mov') > 0 || e.data.indexOf('.mp4') > 0) {
