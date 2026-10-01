@@ -186,7 +186,6 @@ body>h2 {
 	margin: 0;
 	text-overflow: ellipsis;
 	text-align: left;
-	color: white;
 	filter: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
 	z-index: 4;
 	max-width: 100%;
