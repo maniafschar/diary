@@ -107,7 +107,6 @@ body>container element.intro {
 body>container element.intro img.text,
 body>container element.intro img.textSub {
 	position: absolute;
-	top: 0;
 	left: 0;
 	max-width: 40em;
 }
@@ -115,6 +114,8 @@ body>container element.intro img.textSub {
 body>container element.intro img.textSub {
 	bottom: 2vh;
 	width: 20em;
+	left: 50%;
+	margin-left: -10em;
 }
 
 body>container element.intro description {
