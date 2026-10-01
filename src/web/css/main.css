@@ -108,7 +108,7 @@ body>container element.intro img.text,
 body>container element.intro img.textSub {
 	position: absolute;
 	left: 0;
-	max-width: 40em;
+	max-height: 50%;
 }
 
 body>container element.intro img.textSub {
