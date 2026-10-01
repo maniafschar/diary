@@ -100,7 +100,7 @@ body>container>elementContainer>element {
 
 body>container element.intro {
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	padding: 0;
 }
 
