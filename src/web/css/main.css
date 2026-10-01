@@ -112,10 +112,10 @@ body>container element.intro img.textSub {
 }
 
 body>container element.intro img.textSub {
-	bottom: 2vh;
-	width: 20em;
+	bottom: 0;
+	width: 16em;
 	left: 50%;
-	margin-left: -10em;
+	margin-left: -8em;
 }
 
 body>container element.intro description {
