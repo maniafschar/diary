@@ -209,6 +209,9 @@ body>.mobile-nav-popup {
 		border-radius: 1em 0 0 0;
 		z-index: 9;
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
+		opacity: 1;
+		transform: translateY(0);
+		transition: opacity 0.25s ease, transform 0.25s ease;
 	}
 
 	body>.mobile-nav-popup .mobile-nav-item {
