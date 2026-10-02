@@ -1,6 +1,8 @@
 package com.jq.diary;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -53,6 +55,7 @@ public class Application {
 				}
 			});
 		new ProcessBuilder("./web.sh", "start").start();
+		waitForFrontend(URL, Duration.ofSeconds(30));
 		this.driver = createWebDriver(400, 900);
 		this.driver.get(URL);
 		final Client client = new Client();
@@ -104,5 +107,25 @@ public class Application {
 	static WebDriver createWebDriver(final int width, final int height) {
 		return new ChromeDriver(new ChromeOptions()
 				.addArguments("user-data-dir=./chrome", "window-size=" + width + "," + height));
+	}
+
+	private static void waitForFrontend(final String frontendUrl, final Duration timeout) throws InterruptedException {
+		final long deadline = System.currentTimeMillis() + timeout.toMillis();
+		while (System.currentTimeMillis() < deadline) {
+			try {
+				final HttpURLConnection connection = (HttpURLConnection) new URI(frontendUrl).toURL().openConnection();
+				connection.setConnectTimeout(1000);
+				connection.setReadTimeout(1000);
+				connection.setRequestMethod("GET");
+				connection.connect();
+				final int statusCode = connection.getResponseCode();
+				if (statusCode >= 200 && statusCode < 500) {
+					return;
+				}
+			} catch (final Exception ignored) {
+			}
+			Thread.sleep(250);
+		}
+		throw new IllegalStateException("Timed out waiting for the frontend at " + frontendUrl + " to start");
 	}
 }

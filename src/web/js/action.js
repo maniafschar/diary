@@ -142,7 +142,7 @@ class action {
 		else
 			api.authentication.getLogin(email.value, password.value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
 				if (success) {
-					document.querySelector('body buttons button.add, body buttons button.export, body buttons button.summary').style.display = api.user.admin ? 'block' : 'none';
+					document.querySelector('body navigation button.add, body navigation button.export, body navigation button.summary').style.display = api.user.admin ? 'block' : 'none';
 					document.dispatchEvent(new CustomEvent('event'));
 				}
 			});

@@ -229,7 +229,7 @@ img.speak {
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			if (api.access && !events.length)
 				return;
-			var clientName = document.querySelector('body>[name="clientName"]');
+			var clientName = document.querySelector('body navigation [name="clientName"]');
 			clientName.style.display = '';
 			if (api.clientId) {
 				clientName.innerText = api.clients[api.clientId].name;
@@ -331,7 +331,7 @@ img.speak {
 				document.querySelector('element.event div.title count').innerText = '';
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
-			document.querySelector('body>button[name="logoff"]').style.display = '';
+			document.querySelector('body navigation button[name="logoff"]').style.display = '';
 			if (api.access) {
 				document.querySelector("element.event button.add").style.display = 'none';
 				document.querySelector("element.event button.export").style.display = 'none';
