@@ -67,7 +67,14 @@
 				<img src="image/statistics.svg" />
 				<span>Statistics</span>
 			</button>
-			<button class="icon add" onclick="dialog.add()"><img src="image/add.svg" /><span>Add event</span></button>
+			<button onclick="ui.navigate(4)">
+				<img src="image/user.svg" />
+				<span>Teilnehmer</span>
+			</button>
+			<button class="icon add" onclick="dialog.add()">
+				<img src="image/add.svg" />
+				<span>Add event</span>
+			</button>
 			<button class="icon export" onclick="dialog.email()">
 				<img src="image/email.svg" />
 				<span>Email</span>
@@ -79,6 +86,10 @@
 			<button onclick="action.logoff()" name="logoff" class="icon" style="display: none;">
 				<img src="image/logoff.svg" />
 				<span>Log out</span>
+			</button>
+			<button onclick="ui.navigateImprint()">
+				<img src="image/imprint.svg" />
+				<span>Impressum</span>
 			</button>
 		</navigation>
 		<container>
@@ -100,6 +111,15 @@
 					</element>
 					<element class="statistics">
 						<view-statistics></view-statistics>
+					</element>
+					<element class="user" style="padding-top: 2.3em; max-height: 25em;">
+						<div class="title">
+							<b>Teilnehmer<count></count></b>
+							<button class="icon addUser" onclick="dialog.addUser()">+</button>
+						</div>
+						<user>
+							<view-table></view-table>
+						</user>
 					</element>
 				</elementContainer>
 			</element>
@@ -143,15 +163,6 @@
 				<div style="text-align: center;">
 					<button onclick=" action.createClient()">Erstellen</button>
 				</div>
-			</element>
-			<element class="user" style="padding-top: 2.3em; max-height: 25em;">
-				<div class="title">
-					<b>Teilnehmer<count></count></b>
-					<button class="icon addUser" onclick="dialog.addUser()">+</button>
-				</div>
-				<user>
-					<view-table></view-table>
-				</user>
 			</element>
 			<element class="imprint">
 				<toggle onclick="ui.toggle(event)">
