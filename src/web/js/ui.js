@@ -56,11 +56,43 @@ class ui {
 	}
 
 	static navigate(i) {
-		var buttons = document.querySelectorAll('body navigation button');
+		var buttons = [...document.querySelectorAll('body navigation button[data-nav-index]')]
+			.sort((a, b) => Number(a.dataset.navIndex) - Number(b.dataset.navIndex));
 		buttons.forEach(e => e.classList.remove('selected'));
-		buttons[i].classList.add('selected');
+		var button = buttons.find(e => Number(e.dataset.navIndex) == i);
+		if (button)
+			button.classList.add('selected');
 		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
 		document.querySelectorAll('elementContainer>element')[i].dispatchEvent(new CustomEvent('visible'));
+	}
+
+	static openMoreMenu() {
+		var menu = document.createElement('div');
+		menu.style.display = 'flex';
+		menu.style.flexDirection = 'column';
+		menu.style.gap = '0.5rem';
+		menu.style.minWidth = '12rem';
+		[...document.querySelectorAll('body navigation button.icon.mobile-more-item')].forEach(button => {
+			var item = menu.appendChild(document.createElement('button'));
+			item.type = 'button';
+			item.style.margin = '0';
+			item.style.padding = '0.7rem 0.85rem';
+			item.style.borderRadius = '0.75rem';
+			item.style.display = 'flex';
+			item.style.alignItems = 'center';
+			item.style.justifyContent = 'flex-start';
+			item.style.gap = '0.6rem';
+			item.style.background = 'rgba(0, 0, 0, 0.04)';
+			item.style.color = 'black';
+			var icon = button.querySelector('img, svg');
+			if (icon)
+				item.appendChild(icon.cloneNode(true));
+			var label = document.createElement('span');
+			label.textContent = button.querySelector('span')?.textContent || '';
+			item.appendChild(label);
+			item.onclick = button.onclick;
+		});
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: menu } }));
 	}
 
 	static parents(e, nodeName) {

@@ -51,23 +51,23 @@
 				<img src="image/title.png" />
 				<h2 name="clientName"></h2>
 			</logo>
-			<button class="icon selected" onclick="ui.navigate(0)">
+			<button class="icon selected" data-nav-index="0" onclick="ui.navigate(0)">
 				<img src="image/list.svg" />
 				<span>Events</span>
 			</button>
-			<button class="icon" onclick="ui.navigate(1)">
+			<button class="icon" data-nav-index="1" onclick="ui.navigate(1)">
 				<img src="image/calendar.svg" />
 				<span>Calendar</span>
 			</button>
-			<button class="icon" onclick="ui.navigate(2)">
+			<button class="icon" data-nav-index="2" onclick="ui.navigate(2)">
 				<img src="image/location.svg" />
 				<span>Map</span>
 			</button>
-			<button class="icon" onclick="ui.navigate(3)">
+			<button class="icon" data-nav-index="3" onclick="ui.navigate(3)">
 				<img src="image/statistics.svg" />
 				<span>Statistics</span>
 			</button>
-			<button class="icon" onclick="ui.navigate(4)">
+			<button class="icon" data-nav-index="4" onclick="ui.navigate(4)">
 				<img src="image/user.svg" />
 				<span>Teilnehmer</span>
 			</button>
@@ -75,19 +75,22 @@
 				<img src="image/add.svg" />
 				<span>Add event</span>
 			</button>
-			<button class="icon export" onclick="dialog.email()">
+			<button class="icon more" onclick="ui.openMoreMenu()" type="button">
+				<span class="more-dots">⋯</span>
+			</button>
+			<button class="icon export mobile-more-item" onclick="dialog.email()">
 				<img src="image/email.svg" />
 				<span>Email</span>
 			</button>
-			<button class="icon summary" onclick="dialog.summary()">
+			<button class="icon summary mobile-more-item" onclick="dialog.summary()">
 				<img src="image/ai.svg" />
 				<span>AI summary</span>
 			</button>
-			<button onclick="action.logoff()" name="logoff" class="icon" style="display: none;">
+			<button onclick="action.logoff()" name="logoff" class="icon mobile-more-item" style="display: none;">
 				<img src="image/logoff.svg" />
 				<span>Log out</span>
 			</button>
-			<button class="icon" onclick="ui.navigateImprint()">
+			<button class="icon mobile-more-item" onclick="ui.navigateImprint()">
 				<img src="image/imprint.svg" />
 				<span>Impressum</span>
 			</button>

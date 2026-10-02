@@ -147,9 +147,20 @@ body>main>navigation button.icon svg {
 	height: 1.25rem;
 }
 
+body>main>navigation button.icon.more {
+	display: none;
+}
+
 body>main>navigation button.icon span {
 	font-size: 0.8rem;
 	line-height: 1.2;
+}
+
+body>main>navigation button.icon.more .more-dots {
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: 0.1rem;
 }
 
 body>main>navigation button.icon.selected {
@@ -222,11 +233,25 @@ body>main>container {
 		font-size: 1rem;
 	}
 
+	body>main>navigation button.icon.mobile-more-item {
+		display: none;
+	}
+
+	body>main>navigation button.icon.more {
+		display: flex;
+		flex: 1 1 0;
+	}
+
 	body>main>navigation button.icon img,
 	body>main>navigation button.icon svg {
 		flex: 0 0 1.2rem;
 		width: 1.2rem;
 		height: 1.2rem;
+	}
+
+	body>main>navigation button.icon.more .more-dots {
+		font-size: 1.8rem;
+		letter-spacing: 0.15rem;
 	}
 
 	body>main>navigation button.icon span {
