@@ -200,11 +200,10 @@ body>.mobile-nav-popup {
 	opacity: 0;
 	pointer-events: none;
 	transform: translateY(0.5rem);
-	transition: opacity 0.25s ease, transform 0.25s ease;
+	transition: transform 0.4s ease;
 }
 
 body>.mobile-nav-popup.open {
-	opacity: 1;
 	pointer-events: auto;
 	transform: translateY(0);
 }
