@@ -310,6 +310,7 @@ body>main>container>element.login {
 	background: rgba(255, 20, 10, 0.1);
 	border: solid 1em transparent;
 	text-align: left;
+	overflow: auto;
 }
 
 body>main>container>element.event {
