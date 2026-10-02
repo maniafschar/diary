@@ -51,23 +51,33 @@
 				<img src="image/title.png" />
 				<h2 name="clientName"></h2>
 			</logo>
-			<button class="icon selected" onclick="ui.navigate(0)"><img
-					src="image/list.svg" /><span>Events</span></button>
-			<button class="icon" onclick="ui.navigate(1)"><img src="image/calendar.svg" /><span>Calendar</span></button>
-			<button class="icon" onclick="ui.navigate(2)"><img src="image/location.svg" /><span>Map</span></button>
-			<button class="icon" onclick="ui.navigate(3)"><img
-					src="image/statistics.svg" /><span>Statistics</span></button>
-			<button class="icon add" onclick="dialog.add()">+<span>Add event</span></button>
-			<button class="icon export" onclick="dialog.email()">@<span>Email</span></button>
-			<button class="icon summary" onclick="dialog.summary()">ai<span>AI summary</span></button>
+			<button class="icon selected" onclick="ui.navigate(0)">
+				<img src="image/list.svg" />
+				<span>Events</span>
+			</button>
+			<button class="icon" onclick="ui.navigate(1)">
+				<img src="image/calendar.svg" />
+				<span>Calendar</span>
+			</button>
+			<button class="icon" onclick="ui.navigate(2)">
+				<img src="image/location.svg" />
+				<span>Map</span>
+			</button>
+			<button class="icon" onclick="ui.navigate(3)">
+				<img src="image/statistics.svg" />
+				<span>Statistics</span>
+			</button>
+			<button class="icon add" onclick="dialog.add()"><img src="image/add.svg" /><span>Add event</span></button>
+			<button class="icon export" onclick="dialog.email()">
+				<img src="image/email.svg" />
+				<span>Email</span>
+			</button>
+			<button class="icon summary" onclick="dialog.summary()">
+				<img src="image/ai.svg" />
+				<span>AI summary</span>
+			</button>
 			<button onclick="action.logoff()" name="logoff" class="icon" style="display: none;">
-				<svg fill="#000" width="200px" height="200px" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-					<g>
-						<path
-							d="M40.80762,172H215.19238a20.00012,20.00012,0,0,0,15.52246-32.61182L143.52246,32.0752a19.99907,19.99907,0,0,0-31.04492-.00049L25.28516,139.38818A20.00012,20.00012,0,0,0,40.80762,172ZM128,51.0293,206.78906,148H49.21094ZM236,208a12.00028,12.00028,0,0,1-12,12H32a12,12,0,0,1,0-24H224A12.00028,12.00028,0,0,1,236,208Z">
-						</path>
-					</g>
-				</svg>
+				<img src="image/logoff.svg" />
 				<span>Log out</span>
 			</button>
 		</navigation>
