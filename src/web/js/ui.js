@@ -69,7 +69,8 @@ class ui {
 	static openMoreMenu() {
 		var existing = document.querySelector('body > .mobile-nav-popup');
 		if (existing) {
-			existing.remove();
+			existing.classList.remove('open');
+			setTimeout(() => existing.remove(), 220);
 			return;
 		}
 		var menu = document.createElement('div');
@@ -80,7 +81,8 @@ class ui {
 			item.type = 'button';
 			item.className = 'mobile-nav-item';
 			item.onclick = () => {
-				menu.remove();
+				menu.classList.remove('open');
+				setTimeout(() => menu.remove(), 220);
 				if (button.onclick)
 					button.onclick();
 			};
@@ -92,9 +94,11 @@ class ui {
 			item.appendChild(label);
 		});
 		document.body.appendChild(menu);
+		requestAnimationFrame(() => menu.classList.add('open'));
 		var close = event => {
 			if (!event || !menu.contains(event.target)) {
-				menu.remove();
+				menu.classList.remove('open');
+				setTimeout(() => menu.remove(), 220);
 				document.removeEventListener('click', close);
 			}
 		};
