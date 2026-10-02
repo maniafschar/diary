@@ -67,32 +67,36 @@ class ui {
 	}
 
 	static openMoreMenu() {
+		var existing = document.querySelector('body > .mobile-nav-popup');
+		if (existing)
+			existing.remove();
 		var menu = document.createElement('div');
-		menu.style.display = 'flex';
-		menu.style.flexDirection = 'column';
-		menu.style.gap = '0.5rem';
-		menu.style.minWidth = '12rem';
+		menu.className = 'mobile-nav-popup';
+		menu.setAttribute('role', 'menu');
 		[...document.querySelectorAll('body navigation button.icon.mobile-more-item')].forEach(button => {
 			var item = menu.appendChild(document.createElement('button'));
 			item.type = 'button';
-			item.style.margin = '0';
-			item.style.padding = '0.7rem 0.85rem';
-			item.style.borderRadius = '0.75rem';
-			item.style.display = 'flex';
-			item.style.alignItems = 'center';
-			item.style.justifyContent = 'flex-start';
-			item.style.gap = '0.6rem';
-			item.style.background = 'rgba(0, 0, 0, 0.04)';
-			item.style.color = 'black';
+			item.className = 'mobile-nav-item';
+			item.onclick = () => {
+				menu.remove();
+				if (button.onclick)
+					button.onclick();
+			};
 			var icon = button.querySelector('img, svg');
 			if (icon)
 				item.appendChild(icon.cloneNode(true));
 			var label = document.createElement('span');
 			label.textContent = button.querySelector('span')?.textContent || '';
 			item.appendChild(label);
-			item.onclick = button.onclick;
 		});
-		document.dispatchEvent(new CustomEvent('popup', { detail: { body: menu } }));
+		document.body.appendChild(menu);
+		var close = event => {
+			if (!event || !menu.contains(event.target)) {
+				menu.remove();
+				document.removeEventListener('click', close);
+			}
+		};
+		document.addEventListener('click', close, { once: true });
 	}
 
 	static parents(e, nodeName) {
