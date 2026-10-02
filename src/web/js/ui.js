@@ -68,8 +68,10 @@ class ui {
 
 	static openMoreMenu() {
 		var existing = document.querySelector('body > .mobile-nav-popup');
-		if (existing)
+		if (existing) {
 			existing.remove();
+			return;
+		}
 		var menu = document.createElement('div');
 		menu.className = 'mobile-nav-popup';
 		menu.setAttribute('role', 'menu');
