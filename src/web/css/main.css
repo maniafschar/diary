@@ -106,10 +106,14 @@ body>main>navigation {
 	background: rgba(255, 255, 255, 0.7);
 }
 
-body>main>navigation>img {
-	margin-left: 0.5em;
-	max-width: calc(90% - 0.5em);
-	height: auto;
+body>main>navigation>title {
+	display: block;
+	position: relative;
+	text-align: center;
+}
+
+body>main>navigation>title>img {
+	max-width: 90%;
 }
 
 body>main>navigation h2 {
