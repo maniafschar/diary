@@ -207,6 +207,8 @@ body>.mobile-nav-popup {
 		padding: 0.5rem;
 		background: rgba(255, 255, 255, 0.7);
 		border-radius: 1em 0 0 0;
+		z-index: 9;
+		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
 	}
 
 	body>.mobile-nav-popup .mobile-nav-item {
@@ -249,6 +251,7 @@ body>.mobile-nav-popup {
 		justify-content: space-around;
 		gap: 0.15rem;
 		padding: 0.5rem 0.35rem max(0.5rem, env(safe-area-inset-bottom));
+		z-index: 10;
 	}
 
 	body>main>navigation>logo {
