@@ -246,7 +246,7 @@ body>main>container {
 }
 
 body>main>container elementContainer {
-	width: 400%;
+	width: 500%;
 	position: relative;
 	display: flex;
 	transition: ease .4s all;
@@ -254,7 +254,7 @@ body>main>container elementContainer {
 }
 
 body>main>container elementContainer>element {
-	width: 25%;
+	width: 20%;
 }
 
 body>main>container buttons {
