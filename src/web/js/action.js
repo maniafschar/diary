@@ -263,11 +263,11 @@ class action {
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('element.calendar').style.display = '';
 		document.querySelector('element.user').style.display = '';
-		document.querySelector("element.event button.add").style.display = '';
-		document.querySelector("element.event button.export").style.display = '';
-		document.querySelector("element.event button.summary").style.display = '';
-		document.querySelector('body>[name="logoff"]').style.display = 'none';
-		document.querySelector('body>[name="clientName"]').innerText = '';
+		document.querySelector('body navigation button.add').style.display = '';
+		document.querySelector('body navigation button.export').style.display = '';
+		document.querySelector('body navigation button.summary').style.display = '';
+		document.querySelector('body navigation button[name="logoff"]').style.display = 'none';
+		document.querySelector('body navigation [name="clientName"]').innerText = '';
 		ui.navigate(0);
 	}
 
