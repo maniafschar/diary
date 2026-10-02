@@ -96,7 +96,7 @@ class ui {
 				document.removeEventListener('click', close);
 			}
 		};
-		document.addEventListener('click', close, { once: true });
+		setTimeout(() => document.addEventListener('click', close, { once: true }), 100);
 	}
 
 	static parents(e, nodeName) {
