@@ -250,7 +250,7 @@ body>main>container elementContainer {
 	position: relative;
 	display: flex;
 	transition: ease .4s all;
-	height: 30em;
+	height: 100%;
 }
 
 body>main>container elementContainer>element {
