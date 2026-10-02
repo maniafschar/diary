@@ -197,9 +197,8 @@ body>.mobile-nav-popup {
 	right: 0;
 	bottom: calc(4.4em + env(safe-area-inset-bottom));
 	z-index: 9;
-	opacity: 0;
 	pointer-events: none;
-	transform: translateY(0.5rem);
+	transform: translateY(100%);
 	transition: transform 0.4s ease;
 }
 
