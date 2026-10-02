@@ -260,6 +260,7 @@ body>.mobile-nav-popup.open {
 		gap: 0.15rem;
 		padding: 0.5rem 0.35rem max(0.5rem, env(safe-area-inset-bottom));
 		z-index: 10;
+		box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.18);
 	}
 
 	body>main>navigation>logo {
