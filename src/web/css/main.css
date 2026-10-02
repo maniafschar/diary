@@ -103,7 +103,7 @@ body>main>navigation {
 	align-items: stretch;
 	gap: 0.3rem;
 	padding: 0.75rem 0.5rem;
-	background: rgba(255, 255, 255, 0.7);
+	background: rgba(255, 255, 255, 0.95);
 }
 
 body>main>navigation>logo {
@@ -205,7 +205,7 @@ body>.mobile-nav-popup {
 		gap: 0.35rem;
 		min-width: 12rem;
 		padding: 0.5rem;
-		background: rgba(255, 255, 255, 0.7);
+		background: rgba(255, 255, 255, 0.95);
 		border-radius: 1em 0 0 0;
 		z-index: 9;
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
