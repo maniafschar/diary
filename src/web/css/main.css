@@ -106,13 +106,13 @@ body>main>navigation {
 	background: rgba(255, 255, 255, 0.7);
 }
 
-body>main>navigation>title {
+body>main>navigation>logo {
 	display: block;
 	position: relative;
 	text-align: center;
 }
 
-body>main>navigation>title>img {
+body>main>navigation>logo>img {
 	max-width: 90%;
 }
 
