@@ -30,21 +30,104 @@
 
 html {
 	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scroll-snap-type: y mandatory;
+	scroll-behavior: smooth;
 }
 
 body {
 	margin: 0;
 	padding: 0;
+	min-height: 100%;
 	text-align: center;
-	overflow-x: hidden;
+	overflow: visible;
 	line-height: 1.4;
 	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-body>container {
+body>intro,
+body>main {
+	width: 100%;
+	height: 100vh;
+	height: 100svh;
+	min-height: 100vh;
+	min-height: 100svh;
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+}
+
+body>intro {
 	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+body>intro>img:first-child {
+	min-width: 100%;
+	min-height: 100%;
+}
+
+body>intro img.text,
+body>intro img.textSub {
+	position: absolute;
+	left: 0;
+	max-width: 100%;
+	max-height: 50%;
+}
+
+body>intro img.text {
+	top: 0;
+}
+
+body>intro img.textSub {
+	bottom: max(1rem, env(safe-area-inset-bottom));
+	width: min(16em, 80%);
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+body>main {
+	display: grid;
+	grid-template-columns: 4.5rem minmax(0, 1fr);
+	grid-template-rows: minmax(0, 1fr);
+	overflow: hidden;
+}
+
+body>main>navigation {
+	grid-column: 1;
+	grid-row: 1;
+	display: flex;
 	flex-direction: column;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.75rem 0.5rem;
+	background: rgba(255, 255, 255, 0.7);
+}
+
+body>main>navigation h2 {
+	position: static;
+	max-width: 100%;
+	margin: 0 0 0.5rem;
+	font-size: 0.7rem;
+	white-space: normal;
+	word-break: break-word;
+}
+
+body>main>navigation button.icon {
+	position: relative;
+	flex: 0 0 2.6rem;
+	width: 2.6rem;
+	height: 2.6rem;
+}
+
+body>main>container {
+	grid-column: 2;
+	grid-row: 1;
+	display: block;
+	min-width: 0;
+	min-height: 0;
 	height: 100%;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -52,7 +135,46 @@ body>container {
 	transition: .8s ease-out;
 }
 
-body>container elementContainer {
+@media (max-width: 700px) {
+	body>main {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: minmax(0, 1fr) auto;
+	}
+
+	body>main>navigation {
+		grid-column: 1;
+		grid-row: 2;
+		flex-direction: row;
+		justify-content: center;
+		gap: 0.3rem;
+		padding: 0.5rem 0.35rem max(0.5rem, env(safe-area-inset-bottom));
+	}
+
+	body>main>navigation h2 {
+		position: absolute;
+		right: 0.5rem;
+		bottom: calc(100% + 0.35rem);
+		max-width: 60%;
+		padding: 0.35rem 0.5rem;
+		background: rgba(255, 255, 255, 0.8);
+	}
+
+	body>main>navigation button.icon {
+		flex: 0 1 2.6rem;
+		width: 2.6rem;
+		height: auto;
+		max-height: 2.6rem;
+		aspect-ratio: 1;
+		font-size: 1rem;
+	}
+
+	body>main>container {
+		grid-column: 1;
+		grid-row: 1;
+	}
+}
+
+body>main>container elementContainer {
 	width: 400%;
 	position: relative;
 	display: flex;
@@ -60,11 +182,11 @@ body>container elementContainer {
 	height: 30em;
 }
 
-body>container elementContainer>element {
+body>main>container elementContainer>element {
 	width: 25%;
 }
 
-body>container buttons {
+body>main>container buttons {
 	position: relative;
 	display: block;
 	width: 100%;
@@ -72,7 +194,7 @@ body>container buttons {
 	overflow-y: hidden;
 }
 
-body>container buttons>div {
+body>main>container buttons>div {
 	display: flex;
 	justify-content: space-between;
 	padding: 0.5em 0;
@@ -80,63 +202,31 @@ body>container buttons>div {
 	width: 100%;
 }
 
-body>container buttons button {
+body>main>container buttons button {
 	position: relative !important;
 	margin: 0 0.5em !important;
 }
 
 
-body>container buttons button>img {
+body>main>container buttons button>img {
 	padding: 0.4em;
 	width: 100%;
 	height: 100%;
 }
 
-body>container>element,
-body>container>elementContainer>element {
+body>main>container>element,
+body>main>container>elementContainer>element {
 	display: block;
 	position: relative;
 }
 
-body>container element.intro {
-	display: flex;
-	justify-content: left;
-	padding: 0;
-}
-
-body>container element.intro img.text,
-body>container element.intro img.textSub {
-	position: absolute;
-	left: 0;
-	max-height: 50%;
-}
-
-body>container element.intro img.textSub {
-	bottom: 0;
-	width: 16em;
-	left: 50%;
-	margin-left: -8em;
-}
-
-body>container element.intro description {
-	position: absolute;
-	bottom: 0;
-	color: white;
-	padding: 0.5em;
-	background: rgba(0, 0, 0, 0.15);
-	margin: 1em;
-	border-radius: 1em;
-	font-size: 1.2em;
-	text-shadow: 0.1em 0.1em 0.5em black;
-}
-
-body>container element div.title {
+body>main>container element div.title {
 	text-align: left;
 	padding-left: 0.5em;
 	height: 1.5em;
 }
 
-body>container element div.title count {
+body>main>container element div.title count {
 	font-size: 0.7em;
 	margin-left: 0.75em;
 	display: inline-block;
@@ -144,23 +234,23 @@ body>container element div.title count {
 	font-weight: normal;
 }
 
-body>container>element.login {
+body>main>container>element.login {
 	background: rgba(255, 20, 10, 0.1);
 	border: solid 1em transparent;
 	text-align: left;
 }
 
-body>container>element.event {
+body>main>container>element.event {
 	background: rgba(255, 220, 0, 0.1);
 	display: none;
 }
 
-body>container>element.user {
+body>main>container>element.user {
 	background: rgba(20, 100, 250, 0.1);
 	display: none;
 }
 
-body>container>element.imprint {
+body>main>container>element.imprint {
 	border: solid 1em transparent;
 }
 

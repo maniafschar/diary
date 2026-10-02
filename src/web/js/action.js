@@ -53,7 +53,7 @@ class action {
 				else
 					api.activateProgressbar();
 			});
-		setTimeout(function () { document.querySelector('body>container').style.opacity = 1; }, 400);
+		setTimeout(function () { document.querySelector('body>main>container').style.opacity = 1; }, 400);
 	}
 
 	static addFeedback(eventId) {
@@ -432,17 +432,6 @@ class action {
 			if (fontSize == parseInt(document.body.style.fontSize))
 				return;
 			document.body.style.fontSize = fontSize + 'px';
-			var imageWidth = 1671, imageHeight = 941;
-			var imageStyle = document.querySelector('body element.intro>img').style;
-			if (window.innerHeight / imageHeight * imageWidth > window.innerWidth) {
-				imageStyle.height = window.innerHeight + 'px';
-				imageStyle.width = 'fit-content';
-				imageStyle.marginTop = 0;
-			} else {
-				imageStyle.width = window.innerWidth + 'px';
-				imageStyle.height = 'fit-content';
-				imageStyle.marginTop = (window.innerHeight - window.innerWidth / imageWidth * imageHeight) + 'px';
-			}
 			this.resizeTimeout = null;
 		}, 600);
 	}
