@@ -142,6 +142,10 @@ body>main>navigation button.icon {
 	display: none;
 }
 
+body>main>navigation button.icon.visible {
+	display: block;
+}
+
 body>main>navigation button.icon img,
 body>main>navigation button.icon svg {
 	flex: 0 0 1.25rem;
