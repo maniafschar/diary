@@ -139,6 +139,7 @@ body>main>navigation button.icon {
 	background: transparent;
 	color: black;
 	text-align: left;
+	display: none;
 }
 
 body>main>navigation button.icon img,
@@ -324,7 +325,6 @@ body>imprint.open>.imprint-panel {
 		max-height: none;
 		padding: 0.25rem 0.1rem;
 		font-size: 1rem;
-		display: none;
 	}
 
 	body>main>navigation button.icon.mobile-more-item {
