@@ -461,6 +461,6 @@ images img {
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
-		document.querySelector('imprint').addEventListener('click', e => e.target == document.querySelector('imprint>div') && document.querySelector('imprint').classList.remove('open'));
+		document.querySelector('imprint').addEventListener('click', e => e.target.nodeName == 'TOGGLE' || document.querySelector('imprint').classList.remove('open'));
 	}
 }
