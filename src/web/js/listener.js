@@ -7,6 +7,7 @@ export { listener };
 class listener {
 	static touchStartX;
 	static touchStartY;
+	static scrollY = 0;
 	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
@@ -424,8 +425,18 @@ images img {
 	}
 
 	static init() {
-		window.addEventListener('scroll', () => document.querySelectorAll('body>main, body>intro').forEach(e => e.style.opacity == 0 ? e.style.opacity = 1 : null), { passive: true });
-		window.addEventListener('scrollend', () => document.querySelector(window.scrollY > 0 ? 'body>intro' : 'body>main').style.opacity = 0, { passive: true });
+		window.addEventListener('scroll', () => {
+			var intro = document.querySelectorAll('body>intro');
+			var main = document.querySelectorAll('body>main');
+			var setOpacity = (e, value) => { if (e.style.opacity != value) e.style.opacity = value; };
+			if (listener.scrollY - window.scrollY > 0) {
+				setOpacity(main, 1);
+				setOpacity(intro, 0);
+			} else {
+				setOpacity(main, 0);
+				setOpacity(intro, 1);
+			}
+		}, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
 				listener.updateContacts();
