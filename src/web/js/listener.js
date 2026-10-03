@@ -335,7 +335,7 @@ img.speak {
 			document.querySelector('element.login').style.display = 'none';
 			document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.classList.add('visible'));
 			document.querySelectorAll('body navigation button[data-type="loggedInAuthor"]').forEach(e => api.user?.admin ? e.classList.add('visible') : e.classList.remove('visible'));
-			document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.add('visible'));
+			document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.remove('visible'));
 			if (api.access)
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			else {
