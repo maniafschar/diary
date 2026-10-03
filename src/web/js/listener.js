@@ -424,7 +424,7 @@ images img {
 	}
 
 	static init() {
-		window.addEventListener('scroll', () => document.querySelector(window.scrollY > 0 ? 'body>main' : 'body>intro').style.opacity = 1, { passive: true });
+		window.addEventListener('scroll', () => document.querySelectorAll('body>main, body>intro').forEach(e => e.style.opacity == 0 ? e.style.opacity = 1 : null), { passive: true });
 		window.addEventListener('scrollend', () => document.querySelector(window.scrollY > 0 ? 'body>intro' : 'body>main').style.opacity = 0, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
