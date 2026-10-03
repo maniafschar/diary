@@ -215,7 +215,6 @@ body>imprint {
 	align-items: center;
 	justify-content: center;
 	padding: 5%;
-	background: rgba(18, 36, 46, 0.12);
 	transform: scale(0);
 	pointer-events: none;
 	transition: transform 0.4s ease, backdrop-filter 0.4s ease;
@@ -225,21 +224,18 @@ body>imprint {
 body>imprint.open {
 	transform: scale(1);
 	pointer-events: auto;
-	backdrop-filter: blur(0.08rem);
 }
 
 body>imprint>.imprint-panel {
-	position: relative;
-	width: 90vw;
-	height: 90vh;
+	position: absolute;
+	top: 5vh;
 	max-width: 90vw;
 	max-height: 90vh;
 	overflow: auto;
-	padding: 1.25rem 1.4rem 1.5rem 1.4rem;
+	padding: 2em;
 	background: linear-gradient(135deg, rgba(201, 231, 245, 0.94), rgba(255, 203, 197, 0.9));
-	border-radius: 1.5rem;
-	box-shadow: 0 1.5rem 3rem rgba(20, 41, 55, 0.2);
-	transform: translateY(1.5rem) scale(0.97);
+	border-radius: 1em;
+	box-shadow: 0 0 1em rgba(20, 41, 55, 0.2);
 	transition: transform 0.35s ease;
 	pointer-events: auto;
 }
