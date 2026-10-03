@@ -424,6 +424,14 @@ images img {
 	}
 
 	static init() {
+		window.addEventListener('scrollstart', event => {
+			var e = document.querySelector(window.scrollY > 0 ? 'body>main' : 'body>intro');
+			e.style.opaciy = 1;
+		}, { passive: true });
+		window.addEventListener('scrollend', event => {
+			var e = document.querySelector(window.scrollY > 0 ? 'body>intro' : 'body>main');
+			e.style.opaciy = 0;
+		}, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
 				listener.updateContacts();
