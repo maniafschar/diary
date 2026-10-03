@@ -461,5 +461,6 @@ images img {
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
+		document.querySelector('imprint').addEventListener('click', document.querySelector('imprint').classList.remove('open'));
 	}
 }

@@ -119,6 +119,7 @@ class ui {
 				e.classList.remove('open');
 		};
 	}
+
 	static parents(e, nodeName) {
 		if (e) {
 			nodeName = nodeName.toUpperCase();
