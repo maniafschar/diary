@@ -230,6 +230,8 @@ img.speak {
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
 			if (api.access && !events.length)
 				return;
+			if (api.user?.id)
+				document.querySelector('body navigation').classList.add('loggedIn');
 			var clientName = document.querySelector('body navigation [name="clientName"]');
 			clientName.style.display = '';
 			if (api.clientId) {

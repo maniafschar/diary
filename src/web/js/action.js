@@ -259,6 +259,7 @@ class action {
 			if (e.table().querySelector('tbody'))
 				e.table().querySelector('tbody').textContent = '';
 		});
+		document.querySelector('body navigation').classList.remove('loggedIn');
 		document.querySelector('element view-map').setLocations(null);
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';

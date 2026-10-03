@@ -143,7 +143,7 @@ body>main>navigation button.icon {
 }
 
 body>main>navigation button.icon.visible {
-	display: block;
+	display: flex;
 }
 
 body>main>navigation button.icon img,
@@ -331,11 +331,11 @@ body>imprint.open>.imprint-panel {
 		font-size: 1rem;
 	}
 
-	body>main>navigation button.icon.mobile-more-item {
+	body>main>navigation.loggedIn button.icon.mobile-more-item {
 		display: none;
 	}
 
-	body>main>navigation button.icon.more {
+	body>main>navigation.loggedIn button.icon.more {
 		display: flex;
 		flex: 1 1 0;
 	}
