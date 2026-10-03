@@ -436,6 +436,8 @@ images img {
 			setOpacity(main, 0);
 			setOpacity(intro, 1);
 		}
+		if (document.querySelector('body > .mobile-nav-popup'))
+			ui.openMoreMenu();
 		listener.scrollY = window.scrollY;
 	}
 

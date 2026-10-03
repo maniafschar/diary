@@ -241,7 +241,7 @@ body>imprint.open>.imprint-panel {
 		min-width: 12rem;
 		padding: 0.5rem;
 		background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
-		border-radius: 1em 0 0 0;
+		border-radius: 1em 0 0 1em;
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
 		position: fixed;
 		right: 0;
