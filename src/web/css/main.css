@@ -208,6 +208,46 @@ body>.mobile-nav-popup.open {
 	transform: translateY(0);
 }
 
+body>imprint {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5%;
+	background: rgba(18, 36, 46, 0.12);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.35s ease, backdrop-filter 0.35s ease;
+	z-index: 50;
+}
+
+body>imprint.open {
+	opacity: 1;
+	pointer-events: auto;
+	backdrop-filter: blur(0.08rem);
+}
+
+body>imprint>.imprint-panel {
+	position: relative;
+	width: 90vw;
+	height: 90vh;
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow: auto;
+	padding: 1.25rem 1.4rem 1.5rem 1.4rem;
+	background: linear-gradient(135deg, rgba(201, 231, 245, 0.94), rgba(255, 203, 197, 0.9));
+	border-radius: 1.5rem;
+	box-shadow: 0 1.5rem 3rem rgba(20, 41, 55, 0.2);
+	transform: translateY(1.5rem) scale(0.97);
+	transition: transform 0.35s ease;
+	pointer-events: auto;
+}
+
+body>imprint.open>.imprint-panel {
+	transform: translateY(0) scale(1);
+}
+
 @media (max-width: 700px) {
 	body>.mobile-nav-popup {
 		display: flex;

@@ -105,6 +105,20 @@ class ui {
 		setTimeout(() => document.addEventListener('click', close, { once: true }), 100);
 	}
 
+	static openImprint() {
+		var e = document.querySelector('imprint');
+		if (!e)
+			return;
+		if (e.classList.contains('open')) {
+			e.classList.remove('open');
+			return;
+		}
+		e.classList.add('open');
+		e.onclick = event => {
+			if (event.target === e)
+				e.classList.remove('open');
+		};
+	}
 	static parents(e, nodeName) {
 		if (e) {
 			nodeName = nodeName.toUpperCase();
