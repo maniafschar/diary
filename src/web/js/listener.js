@@ -334,7 +334,7 @@ img.speak {
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
 			document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.style.display = 'block');
-			document.querySelectorAll('body navigation button[data-type="loggedAuthor"]').forEach(e => e.style.display = api.user?.admin ? 'block' : '');
+			document.querySelectorAll('body navigation button[data-type="loggedInAuthor"]').forEach(e => e.style.display = api.user?.admin ? 'block' : '');
 			document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.style.display = '');
 			if (api.access)
 				api.authentication.getClient(client => clientName.innerText = client.name);
