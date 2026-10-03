@@ -429,7 +429,7 @@ images img {
 			var intro = document.querySelector('body>intro');
 			var main = document.querySelector('body>main');
 			var setOpacity = (e, value) => { if (e.style.opacity != value) e.style.opacity = value; };
-			if (listener.scrollY - window.scrollY > 0) {
+			if (listener.scrollY - window.scrollY < 0) {
 				setOpacity(main, 1);
 				setOpacity(intro, 0);
 			} else {
