@@ -263,9 +263,9 @@ class action {
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('body navigation [name="clientName"]').innerText = '';
-		document.querySelectorAll('body navigation button[data-type*="loggedIn"]').forEach(e => e.style.display = '');
+		document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.style.display = '');
 		document.querySelectorAll('body navigation button[data-type="loggedAuthor"]').forEach(e => e.style.display = '');
-		document.querySelectorAll('body navigation button[data-type*="loggedOut"]').forEach(e => e.style.display = 'block');
+		document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.style.display = 'block');
 		document.dispatchEvent(new CustomEvent('popup'));
 		ui.navigate(0);
 	}
