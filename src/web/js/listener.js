@@ -436,6 +436,7 @@ images img {
 				setOpacity(main, 0);
 				setOpacity(intro, 1);
 			}
+			listener.scrollY = window.scrollY;
 		}, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
