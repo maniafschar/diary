@@ -91,7 +91,7 @@ body>intro img.textSub {
 
 body>main {
 	display: grid;
-	grid-template-columns: 12rem minmax(0, 1fr);
+	grid-template-columns: 15rem minmax(0, 1fr);
 	grid-template-rows: minmax(0, 1fr);
 	overflow: hidden;
 }
@@ -114,7 +114,7 @@ body>main>navigation>logo {
 }
 
 body>main>navigation>logo>img {
-	max-width: 90%;
+	max-width: 80%;
 }
 
 body>main>navigation h2 {
@@ -238,7 +238,7 @@ body>imprint.open>.imprint-panel {
 		display: flex;
 		flex-direction: column-reverse;
 		gap: 0.35rem;
-		min-width: 12rem;
+		min-width: 10rem;
 		padding: 0.5rem;
 		background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 		border-radius: 1em 0 0 1em;
