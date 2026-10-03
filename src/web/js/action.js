@@ -142,10 +142,8 @@ class action {
 			document.querySelector('element.login error').innerText = 'Ein Passwort wird benötigt.';
 		else
 			api.authentication.getLogin(email.value, password.value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
-				if (success) {
-					document.querySelector('body navigation button.add, body navigation button.export, body navigation button.summary').style.display = api.user.admin ? 'block' : 'none';
+				if (success)
 					document.dispatchEvent(new CustomEvent('event'));
-				}
 			});
 	}
 
