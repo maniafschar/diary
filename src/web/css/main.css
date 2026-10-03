@@ -197,22 +197,6 @@ body>main>container {
 	transition: .8s ease-out;
 }
 
-body>.mobile-nav-popup {
-	display: block;
-	position: fixed;
-	right: 0;
-	bottom: calc(4.4em + env(safe-area-inset-bottom));
-	z-index: 9;
-	pointer-events: none;
-	transform: translateY(100%);
-	transition: transform 0.4s ease;
-}
-
-body>.mobile-nav-popup.open {
-	pointer-events: auto;
-	transform: translateY(0);
-}
-
 body>imprint {
 	position: fixed;
 	inset: 0;
@@ -256,9 +240,21 @@ body>imprint.open>.imprint-panel {
 		gap: 0.35rem;
 		min-width: 12rem;
 		padding: 0.5rem;
-		background: rgba(255, 255, 255, 0.95);
+		background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 		border-radius: 1em 0 0 0;
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
+		position: fixed;
+		right: 0;
+		bottom: calc(5em + env(safe-area-inset-bottom));
+		z-index: 9;
+		pointer-events: none;
+		transform: translateX(100%);
+		transition: transform 0.4s ease;
+	}
+
+	body>.mobile-nav-popup.open {
+		pointer-events: auto;
+		transform: translateX(0);
 	}
 
 	body>.mobile-nav-popup .mobile-nav-item {
@@ -332,7 +328,7 @@ body>imprint.open>.imprint-panel {
 	}
 
 	body>main>navigation.loggedIn button.icon.mobile-more-item {
-		display: none;
+		display: none !important;
 	}
 
 	body>main>navigation.loggedIn button.icon.more {
