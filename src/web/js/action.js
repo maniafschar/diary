@@ -268,6 +268,7 @@ class action {
 		document.querySelector('body navigation button.summary').style.display = '';
 		document.querySelector('body navigation button[name="logoff"]').style.display = 'none';
 		document.querySelector('body navigation [name="clientName"]').innerText = '';
+		document.dispatchEvent(new CustomEvent('popup'));
 		ui.navigate(0);
 	}
 
