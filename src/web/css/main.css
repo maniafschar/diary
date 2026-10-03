@@ -324,6 +324,7 @@ body>imprint.open>.imprint-panel {
 		max-height: none;
 		padding: 0.25rem 0.1rem;
 		font-size: 1rem;
+		display: none;
 	}
 
 	body>main>navigation button.icon.mobile-more-item {
@@ -433,16 +434,6 @@ body>main>container>element.login {
 
 body>main>container>element.event {
 	background: rgba(255, 220, 0, 0.1);
-	display: none;
-}
-
-body>main>container>element.user {
-	background: rgba(20, 100, 250, 0.1);
-	display: none;
-}
-
-body>main>container>element.imprint {
-	border: solid 1em transparent;
 	display: none;
 }
 

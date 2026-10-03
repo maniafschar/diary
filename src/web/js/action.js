@@ -261,13 +261,10 @@ class action {
 		document.querySelector('element view-map').setLocations(null);
 		document.querySelector('element.event').style.display = '';
 		document.querySelector('element.login').style.display = '';
-		document.querySelector('element.calendar').style.display = '';
-		document.querySelector('element.user').style.display = '';
-		document.querySelector('body navigation button.add').style.display = '';
-		document.querySelector('body navigation button.export').style.display = '';
-		document.querySelector('body navigation button.summary').style.display = '';
-		document.querySelector('body navigation button[name="logoff"]').style.display = 'none';
 		document.querySelector('body navigation [name="clientName"]').innerText = '';
+		document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.style.display = '');
+		document.querySelectorAll('body navigation button[data-type="loggedAuthor"]').forEach(e => e.style.display = '');
+		document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.style.display = 'block');
 		document.dispatchEvent(new CustomEvent('popup'));
 		ui.navigate(0);
 	}

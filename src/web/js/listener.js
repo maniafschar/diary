@@ -235,8 +235,9 @@ img.speak {
 			if (api.clientId) {
 				clientName.innerText = api.clients[api.clientId].name;
 				if (Object.keys(api.clients).length > 1) {
-					clientName.style.cursor = 'pointer';
-					clientName.onclick = dialog.client;
+					var logo = document.querySelector('body navigation logo');
+					logo.style.cursor = 'pointer';
+					logo.onclick = dialog.client;
 				}
 			}
 
@@ -332,14 +333,12 @@ img.speak {
 				document.querySelector('element.event div.title count').innerText = '';
 			document.querySelector('element.event').style.display = 'block';
 			document.querySelector('element.login').style.display = 'none';
-			document.querySelector('body navigation button[name="logoff"]').style.display = '';
-			if (api.access) {
-				document.querySelector("element.event button.add").style.display = 'none';
-				document.querySelector("element.event button.export").style.display = 'none';
-				document.querySelector("element.event button.summary").style.display = 'none';
+			document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.style.display = 'block');
+			document.querySelectorAll('body navigation button[data-type="loggedAuthor"]').forEach(e => e.style.display = api.user?.admin ? 'block' : '');
+			document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.style.display = '');
+			if (api.access)
 				api.authentication.getClient(client => clientName.innerText = client.name);
-			} else {
-				document.querySelector('element.user').style.display = 'block';
+			else {
 				var viewImage = document.querySelector("view-image");
 				if (viewImage.style.transform?.indexOf('1') > 0)
 					setTimeout(() => listener.updateViewImage(viewImage.list[viewImage.index].index), 100);
