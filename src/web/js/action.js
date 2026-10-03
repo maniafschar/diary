@@ -22,6 +22,7 @@ export { action };
 class action {
 	static resizeTimeout;
 	static init() {
+		action.logoff();
 		action.resize();
 		listener.init();
 		if (document.location.search) {
