@@ -261,6 +261,7 @@ td.column1 {
 	background: var(--background-content);
 	padding: 0.5em 1em 0 0;
 	border-radius: 0.5em 0.5em 0 0;
+	width: fit-content !important;
 }
 td.column2 {
 	grid-column: 1;
@@ -274,6 +275,9 @@ td.column2 images {
 	max-height: initial;
 	text-align: center;
 	height: 8em;
+	position: relative;
+	display: block;
+	margin-top: 1em;
 }
 td.column2 images img {
 	height: 100%;
