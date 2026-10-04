@@ -33,22 +33,15 @@ label {
 	background: var(--background-content);
 	padding: 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
-	grid-column: 1;
-	grid-row: 1;
 	width: fit-content;
+	box-sizing: border-box;
 	grid-column: 1;
 	grid-row: 1;
 }
-
 value {
 	position: relative;
-	min-width: 7em;
-	max-height: 20em;
-	max-width: 100%;
-	margin-bottom: 1em;
-	line-height: 1.5;
+	width: 100%;
 	overflow: auto;
-	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
 	background: var(--background-content);
 	box-sizing: border-box;
