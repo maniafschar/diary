@@ -294,6 +294,7 @@ td.column2 images {
     overflow-x: auto;
 	overflow-y: hidden;
     box-sizing: border-box;
+	width: 100%;
 }
 td.column2 images img {
 	height: 100%;

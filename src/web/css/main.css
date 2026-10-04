@@ -414,8 +414,9 @@ body>main>container>elementContainer>element {
 
 body>main>container element div.title {
 	text-align: left;
-	padding-left: 0.5em;
-	height: 1.5em;
+	padding-left: 1.5em;
+	height: 2.5em;
+	line-height: 2.5;
 }
 
 body>main>container element div.title count {
