@@ -329,7 +329,7 @@ img.speak {
 				document.querySelector('element.event div.title count').innerText = (pastEvents ? pastEvents : '') + (events.length - pastEvents ? (pastEvents ? ' · ' : '') + (events.length - pastEvents) : '');
 			} else
 				document.querySelector('element.event div.title count').innerText = '';
-			document.querySelector('element.event').style.display = 'block';
+			document.querySelector('element.event').style.opacity = 1;
 			document.querySelector('element.login').style.display = 'none';
 			document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.classList.add('visible'));
 			document.querySelectorAll('body navigation button[data-type="loggedInAuthor"]').forEach(e => api.user?.admin ? e.classList.add('visible') : e.classList.remove('visible'));

@@ -259,7 +259,7 @@ class action {
 		});
 		document.querySelector('body navigation').classList.remove('loggedIn');
 		document.querySelector('element view-map').setLocations(null);
-		document.querySelector('element.event').style.display = '';
+		document.querySelector('element.event').style.opacity = '';
 		document.querySelector('element.login').style.display = '';
 		document.querySelector('body navigation [name="clientName"]').innerText = '';
 		document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.classList.remove('visible'));

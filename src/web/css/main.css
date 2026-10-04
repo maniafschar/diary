@@ -449,6 +449,7 @@ body>main>container>element.login {
 
 body>main>container>element.event {
 	overflow: hidden;
+	opacity: 0;
 }
 
 body>button {
