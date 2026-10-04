@@ -186,7 +186,7 @@ field item {
 	border-radius: 0.5em;
 	cursor: pointer;
 	padding-right: 2em;
-	background-color: rgba(255, 255, 255, 0.4);
+	background-color: var(--background-content);
 }
 field item.selected {
 	background-color: rgba(255, 255, 255, 0.8);
@@ -258,7 +258,7 @@ td.column1 {
 	grid-row: 1;
 	position: relative;
 	font-size: 0.8em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	padding: 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	clear: left;
@@ -269,11 +269,15 @@ td.column1 {
 td.column2 {
 	grid-column: 1;
 	grid-row: 3;
+	background: var(--background-content);
 	width: 100% !important;
+	max-height: initial;
+	text-align: center;
 }
 td.column3 {
 	grid-column: 1;
 	grid-row: 2;
+	background: var(--background-content);
 	width: 100% !important;
 }`);
 			table.style('input-rating{margin-right:0.5em;}');

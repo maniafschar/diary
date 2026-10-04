@@ -2,6 +2,7 @@
 	--transition-clickable: ease .4s all;
 	--background-clickable: rgba(0, 0, 120, 0.4);
 	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
+	--background-content: rgba(255, 255, 255, 0.4);
 	--color-clickable: white;
 }
 
@@ -104,7 +105,7 @@ body>main>navigation {
 	align-items: stretch;
 	gap: 0.3rem;
 	padding: 0.75rem 0.5rem;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 }
 
 body>main>navigation>logo {
@@ -598,7 +599,7 @@ label {
 	position: relative;
 	color: darkmagenta;
 	font-size: 0.8em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	padding: 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	clear: left;
@@ -616,7 +617,7 @@ value {
 	overflow: auto;
 	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	float: left;
 	clear: left;
 	user-select: text;
@@ -649,7 +650,7 @@ field {
 	width: 100%;
 	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	margin-bottom: 1em;
 	clear: left;
 }

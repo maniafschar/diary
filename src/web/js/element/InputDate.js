@@ -88,7 +88,7 @@ next {
 	z-index: 2;
 	top: 0;
 	padding: 0 0.1em;
-	color: rgba(255, 255, 255, 0.4);
+	color: var(--background-content);
 	cursor: pointer;
 	line-height: 1;
 }

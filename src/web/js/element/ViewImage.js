@@ -65,7 +65,7 @@ hint {
 	position: absolute;
 	left: 50%;
 	bottom: 1.6em;
-	color: rgba(255, 255, 255, 0.4);
+	color: var(--background-content);
 	width: 8em;
 	margin-left: -4em;
 	cursor: pointer;
@@ -188,7 +188,7 @@ label {
 	position: relative;
 	color: darkmagenta;
 	font-size: 0.8em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	padding: 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	clear: left;
@@ -205,7 +205,7 @@ value {
 	overflow: auto;
 	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	float: left;
 	clear: left;
 	user-select: text;
@@ -218,7 +218,7 @@ field {
 	min-height: 1.5em;
 	padding: 0.5em;
 	border-radius: 0 0.5em 0.5em 0.5em;
-	background: rgba(255, 255, 255, 0.4);
+	background: var(--background-content);
 	margin-bottom: 1em;
 	clear: left;
 }
