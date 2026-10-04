@@ -275,6 +275,14 @@ td.column2 {
 	border-radius: 0 0.5em 0.5em 0.5em;
 	overflow: hidden;
 }
+td.column2 input-rating {
+	float: right;
+}
+td.column2 note {
+	position: relative;
+	display: block;
+	padding: 1em;
+}
 td.column2 images {
 	max-height: initial;
 	text-align: center;
@@ -304,7 +312,7 @@ td.column2 images img {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var label = ui.formatTime(date) + ' ' + list[i].location.name;
-						var text = list[i].note ? list[i].note.replace(/\n/g, ' ').trim() : '', textSort = text;
+						var text = '<note>' + list[i].note ? list[i].note.replace(/\n/g, ' ').trim() + '</note>' : '', textSort = text;
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
@@ -312,7 +320,7 @@ td.column2 images img {
 							images = '<images>' + images + '</images>';
 						}
 						if (list[i].rating) {
-							label = '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + label;
+							text += '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>';
 							textSort = list[i].rating + textSort;
 							if (textSort.length > 10)
 								textSort = textSort.substring(0, 10).trim();
