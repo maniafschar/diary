@@ -365,14 +365,14 @@ body>imprint.open>.imprint-panel {
 	}
 }
 
-body>main>container elementContainer {
+body>main>container eventContainer {
 	width: 100%;
 	position: relative;
 	display: flex;
 	height: 100%;
 }
 
-body>main>container elementContainer>element {
+body>main>container eventContainer>element {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -384,7 +384,7 @@ body>main>container elementContainer>element {
 	transition: opacity 0.4s ease;
 }
 
-body>main>container elementContainer>element.active {
+body>main>container eventContainer>element.active {
 	opacity: 1;
 	pointer-events: auto;
 }
@@ -418,9 +418,11 @@ body>main>container buttons button>img {
 }
 
 body>main>container>element {
-	display: block;
-	position: relative;
+	left: 0;
+	top: 0;
+	position: absolute;
 	height: 100%;
+	width: 100%;
 }
 
 body>main>container element div.title {

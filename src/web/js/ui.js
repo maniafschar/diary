@@ -62,7 +62,7 @@ class ui {
 		var button = buttons.find(e => Number(e.dataset.navIndex) == i);
 		if (button)
 			button.classList.add('selected');
-		var elements = [...document.querySelectorAll('elementContainer>element')];
+		var elements = [...document.querySelectorAll('eventContainer>element')];
 		elements.forEach((element, index) => element.classList.toggle('active', index == i));
 		elements[i]?.dispatchEvent(new CustomEvent('visible'));
 	}
