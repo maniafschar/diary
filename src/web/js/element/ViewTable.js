@@ -316,7 +316,6 @@ filter count {
 					tr.setAttribute('class', data[i].row.class);
 				for (var i2 = 0; i2 < this.columns.length; i2++) {
 					var td = tr.appendChild(document.createElement('td'));
-					td.classList.add('column' + (i2 + 1));
 					if (this.columns[i2].style)
 						td.setAttribute('style', this.columns[i2].style);
 					td.innerHTML = (typeof data[i][i2] == 'object' ? data[i][i2].text : data[i][i2]) || '&nbsp;';
@@ -333,6 +332,7 @@ filter count {
 						td.classList.add('unclickable');
 					else
 						td.setAttribute('onclick', 'this.getRootNode().host.openDetails(event)');
+					td.classList.add('column' + (i2 + 1));
 				}
 			}
 		}
