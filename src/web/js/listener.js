@@ -245,6 +245,10 @@ img.speak {
 
 			var table = document.querySelector('event view-table');
 			table.list = events;
+			table.setStyle(`
+thead {
+	display: none;
+}`);
 			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();

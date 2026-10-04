@@ -191,6 +191,7 @@ filter count {
 	float: right;
 	text-align: right;
 }`;
+		this._root.appendChild(document.createElement('style')).classList.add('custom');
 		this._root.appendChild(document.createElement('filters'));
 		this._root.appendChild(document.createElement('table'));
 		this.addEventListener('filter', event => this.filterTable(event.detail));
@@ -208,6 +209,10 @@ filter count {
 
 	deselectAll() {
 		this._root.querySelectorAll('tr.selected')?.forEach(tr => tr.classList.remove('selected'));
+	}
+
+	setStyle(style) {
+		this._root.querySelector('style.custom').textContent = style;
 	}
 
 	select(index) {
@@ -252,6 +257,7 @@ filter count {
 		for (var i = 0; i < this.columns.length; i++) {
 			var th = tr.appendChild(document.createElement('th'));
 			th.innerText = this.columns[i].label;
+			th.classList.add('column' + i);
 			if (this.columns[i].style)
 				th.setAttribute('style', this.columns[i].style);
 			if (widths[i] == 0)
@@ -310,6 +316,7 @@ filter count {
 					tr.setAttribute('class', data[i].row.class);
 				for (var i2 = 0; i2 < this.columns.length; i2++) {
 					var td = tr.appendChild(document.createElement('td'));
+					td.classList.add('column' + i2);
 					if (this.columns[i2].style)
 						td.setAttribute('style', this.columns[i2].style);
 					td.innerHTML = (typeof data[i][i2] == 'object' ? data[i][i2].text : data[i][i2]) || '&nbsp;';
