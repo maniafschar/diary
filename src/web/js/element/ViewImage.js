@@ -53,6 +53,7 @@ value {
 buttons {
 	grid-column: 1;
 	grid-row: 3;
+	height: 5em;
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -114,16 +115,10 @@ button.icon {
 	width: 2em;
 	height: 2em;
 	position: absolute;
-	bottom: 0.5em;
+	bottom: 0;
 	margin: 0;
 	padding: 0;
 	color: rgba(255, 255, 255, 0.9);
-}
-button.edit {
-	width: 1em;
-	height: 1em;
-	bottom: inherit;
-	right: 0;
 }
 button img {
 	width: 50%;
@@ -176,15 +171,14 @@ data>nav dot.selected {
 	color: gold;
 }
 button.next {
-	right: 0.5em;
+	right: 0;
 }
 button.prev {
-	left: 0.5em;
+	left: 0;
 	}
 button.close {
 	left: 50%;
 	margin-left: -1em;
-	bottom: 0.5em;
 }
 a {
 	text-decoration: none;
