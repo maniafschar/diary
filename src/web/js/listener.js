@@ -249,6 +249,9 @@ img.speak {
 thead {
 	display: none;
 }
+tbody {
+	height: 100%;
+}
 tr {
 	padding: 0 0.5em 0.5em 0.5em;
 	display: grid;
@@ -269,7 +272,8 @@ td.column2 {
 	background: var(--background-content);
 	width: 100% !important;
 	max-height: initial;
-	border-radius: 0 0 0.5em 0.5em;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	overflow: hidden;
 }
 td.column2 images {
 	max-height: initial;
@@ -277,11 +281,12 @@ td.column2 images {
 	height: 8em;
 	position: relative;
 	display: block;
-	margin-top: 1em;
+	margin: 1em 0;
 }
 td.column2 images img {
 	height: 100%;
 	padding: 0 0.25em;
+	border-radius: 0.5em;
 }`);
 			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
