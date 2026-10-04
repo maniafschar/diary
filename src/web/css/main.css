@@ -2,7 +2,7 @@
 	--transition-clickable: ease .4s all;
 	--background-clickable: rgba(0, 0, 120, 0.4);
 	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
-	--background-content: rgba(255, 255, 255, 0.4);
+	--background-content: rgba(255, 255, 255, 0.6);
 	--color-clickable: white;
 }
 
