@@ -52,7 +52,7 @@ buttons {
 	grid-column: 1;
 	grid-row: 3;
 	height: 5em;
-	posistion: relative;
+	position: relative;
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -425,6 +425,7 @@ a {
 				position++;
 		}
 		this._root.querySelector('hint').innerText = (position + 1) + '/' + this.list.length;
+		this._root.querySelector('label').innerText = this.list[this.index].label;
 	}
 
 	updateImage(index, speak) {
