@@ -281,7 +281,11 @@ td.column2 images {
 	height: 8em;
 	position: relative;
 	display: block;
-	margin: 1em 0;
+	margin: 0.5em 0;
+	white-space: nowrap;
+    overflow-x: auto;
+	overflow-y: hidden;
+    box-sizing: border-box;
 }
 td.column2 images img {
 	height: 100%;
