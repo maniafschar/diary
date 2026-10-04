@@ -21,12 +21,25 @@ class ViewImage extends HTMLElement {
 	right: 0;
 	top: 0;
 	bottom: 0;
-	z-index: 4;
+	padding: 1em;
 	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
-	display: flex;
+	display: grid;
 	align-items: center;
 	font-size: 1em;
 	z-index: 450;
+}
+:host(label) {
+	position: relative;
+	background: var(--background-content);
+	padding: 0.5em;
+	border-radius: 0.5em 0.5em 0 0;
+	grid-column: 1;
+	grid-row: 1;
+}
+:host(value) {
+	grid-column: 1;
+	grid-row: 2;
+
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -168,7 +181,7 @@ a {
 	display: inline-block;
 }
 
-label {
+value label {
 	position: relative;
 	color: darkmagenta;
 	font-size: 0.8em;
