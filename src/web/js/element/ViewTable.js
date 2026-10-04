@@ -67,7 +67,7 @@ tbody tr {
 	cursor: pointer;
 }
 
-tbody tr.selected {
+tbody tr.selected td {
 	background-color: rgba(255, 100, 50, 0.1) !important;
 }
 
