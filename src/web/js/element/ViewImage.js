@@ -127,7 +127,7 @@ button img {
 data {
 	position: relative;
 	display: inline-block;
-	vertical-align: bottom;
+	width: 100%;
 }
 data description {
 	border: solid 2vw transparent;
