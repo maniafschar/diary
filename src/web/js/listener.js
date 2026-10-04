@@ -248,6 +248,33 @@ img.speak {
 			table.setStyle(`
 thead {
 	display: none;
+}
+tr {
+	marging: 0.5em;
+	display: grid;
+}
+td.column1 {
+	grid-column: 1;
+	grid-row: 1;
+	position: relative;
+	font-size: 0.8em;
+	background: rgba(255, 255, 255, 0.4);
+	padding: 0.5em;
+	border-radius: 0.5em 0.5em 0 0;
+	clear: left;
+	float: left;
+	display: inline;
+	width: fit-content !important;
+}
+td.column2 {
+	grid-column: 1;
+	grid-row: 3;
+	width: 100% !important;
+}
+td.column3 {
+	grid-column: 1;
+	grid-row: 2;
+	width: 100% !important;
 }`);
 			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
@@ -273,7 +300,7 @@ thead {
 							if (textSort.length > 10)
 								textSort = textSort.substring(0, 10).trim();
 						}
-						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + '<br/>' + list[i].location.name });
+						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + ' ' + list[i].location.name });
 						row.push({ attributes: { class: 'image' }, text: images });
 						row.push({ attributes: { class: 'text', i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)

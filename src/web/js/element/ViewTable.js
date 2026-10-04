@@ -257,7 +257,7 @@ filter count {
 		for (var i = 0; i < this.columns.length; i++) {
 			var th = tr.appendChild(document.createElement('th'));
 			th.innerText = this.columns[i].label;
-			th.classList.add('column' + i);
+			th.classList.add('column' + (i + 1));
 			if (this.columns[i].style)
 				th.setAttribute('style', this.columns[i].style);
 			if (widths[i] == 0)
@@ -316,7 +316,7 @@ filter count {
 					tr.setAttribute('class', data[i].row.class);
 				for (var i2 = 0; i2 < this.columns.length; i2++) {
 					var td = tr.appendChild(document.createElement('td'));
-					td.classList.add('column' + i2);
+					td.classList.add('column' + (i2 + 1));
 					if (this.columns[i2].style)
 						td.setAttribute('style', this.columns[i2].style);
 					td.innerHTML = (typeof data[i][i2] == 'object' ? data[i][i2].text : data[i][i2]) || '&nbsp;';
