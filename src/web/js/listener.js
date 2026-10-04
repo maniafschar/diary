@@ -260,7 +260,7 @@ tr {
 td.column1 {
 	grid-column: 1;
 	grid-row: 1;
-	font-size: 0.8em;
+	font-weight: bold;
 	background: var(--background-content);
 	padding: 0.5em 1em 0 0;
 	border-radius: 0.5em 0.5em 0 0;
@@ -312,7 +312,7 @@ td.column2 images img {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var label = ui.formatTime(date) + ' ' + list[i].location.name;
-						var text = '<note>' + list[i].note ? list[i].note.replace(/\n/g, ' ').trim() + '</note>' : '', textSort = text;
+						var text = list[i].note ? '<note>' + list[i].note.replace(/\n/g, ' ').trim() + '</note>' : '', textSort = text;
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
