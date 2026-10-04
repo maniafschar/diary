@@ -257,40 +257,33 @@ tr {
 td.column1 {
 	grid-column: 1;
 	grid-row: 1;
-	position: relative;
 	font-size: 0.8em;
 	background: var(--background-content);
-	padding: 0.5em;
+	padding: 0.5em 1em 0 0;
 	border-radius: 0.5em 0.5em 0 0;
-	clear: left;
-	float: left;
-	display: inline;
-	width: fit-content !important;
-}
-td.column2 img {
-	height: initial;
 }
 td.column2 {
-	grid-column: 1;
-	grid-row: 3;
-	background: var(--background-content);
-	width: 100% !important;
-	max-height: initial;
-	text-align: center;
-}
-td.column3 {
 	grid-column: 1;
 	grid-row: 2;
 	background: var(--background-content);
 	width: 100% !important;
 	max-height: initial;
+	border-radius: 0 0 0.5em 0.5em;
+}
+td.column2 images {
+	max-height: initial;
+	text-align: center;
+	height: 8em;
+}
+td.column2 images img {
+	height: 100%;
+	padding: 0 0.25em;
 }`);
 			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
 				table.columns.push({ label: 'Datum/Ort', sort: true, width: 30, detail: true, style: 'overflow-y:hidden;' });
-				table.columns.push({ label: 'Bilder', width: 15, detail: true });
 				table.columns.push({ label: 'Bemerkung', sort: true, width: 55, detail: true });
 				table.setConvert(list => {
 					var d = [];
@@ -303,6 +296,7 @@ td.column3 {
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
 								images += '<img src="/med/' + list[i].eventImages[i2].imageThumbnail + '" />';
+							images = '<images>' + images + '</images>';
 						}
 						if (list[i].rating) {
 							label = '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + label;
@@ -311,8 +305,7 @@ td.column3 {
 								textSort = textSort.substring(0, 10).trim();
 						}
 						row.push({ attributes: { value: date.getTime() }, text: label });
-						row.push({ attributes: { class: 'image' }, text: images });
-						row.push({ attributes: { class: 'text', i: 'note_' + list[i].id, value: textSort }, text: text });
+						row.push({ attributes: { class: 'text', i: 'note_' + list[i].id, value: textSort }, text: text + images });
 						if (date < now)
 							row.row = { class: 'past' };
 						d.push(row);
