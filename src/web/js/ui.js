@@ -62,8 +62,9 @@ class ui {
 		var button = buttons.find(e => Number(e.dataset.navIndex) == i);
 		if (button)
 			button.classList.add('selected');
-		document.querySelector('elementContainer').style.marginLeft = (-i * 100) + '%';
-		document.querySelectorAll('elementContainer>element')[i].dispatchEvent(new CustomEvent('visible'));
+		var elements = [...document.querySelectorAll('elementContainer>element')];
+		elements.forEach((element, index) => element.classList.toggle('active', index == i));
+		elements[i]?.dispatchEvent(new CustomEvent('visible'));
 	}
 
 	static openMoreMenu() {
