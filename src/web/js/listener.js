@@ -284,7 +284,7 @@ td.column2 note {
 	position: relative;
 	display: block;
 	padding: 0.5em 0.5em 0 0.5em;
-	max-height: 5em; 
+	max-height: 5.7em; 
 	overflow: hidden;
 }
 td.column2 images {
