@@ -24,8 +24,6 @@ class ViewImage extends HTMLElement {
 	padding: 1em;
 	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 	display: grid;
-	align-items: center;
-	font-size: 1em;
 	z-index: 450;
 	overflow: hidden;
 }
@@ -33,7 +31,7 @@ label {
 	position: relative;
 	background: var(--background-content);
 	padding: 0.5em;
-	border-radius: 0.5em 0.5em 0 0;
+	border-radius: 1em 1em 0 0;
 	width: fit-content;
 	box-sizing: border-box;
 	grid-column: 1;
@@ -43,7 +41,7 @@ value {
 	position: relative;
 	width: 100%;
 	overflow: auto;
-	border-radius: 0 0.5em 0.5em 0.5em;
+	border-radius: 0 1em 1em 1em;
 	background: var(--background-content);
 	box-sizing: border-box;
 	grid-column: 1;
@@ -54,6 +52,7 @@ buttons {
 	grid-column: 1;
 	grid-row: 3;
 	height: 5em;
+	posistion: relative;
 }
 *::-webkit-scrollbar {
 	display: none;
