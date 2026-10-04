@@ -13,7 +13,6 @@ class listener {
 			ui.extractPseudonyms(contacts);
 			var table = document.querySelector('user view-table');
 			table.list = contacts;
-			table.style('.pending{color:grey;}');
 			if (!table.columns.length) {
 				table.setOpenDetail(dialog.contact);
 				table.columns.push({ label: 'Name', sort: true, width: 30, detail: true });
@@ -23,7 +22,7 @@ class listener {
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
 						row.push(list[i].verified ? list[i].name : { attributes: { class: 'pending' }, text: list[i].name });
-						row.push({ text: list[i].participations ? list[i].participations : '', attributes: { value: list[i].participations } });
+						row.push({ text: ('Hinzugefügt am <b>' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '</b>') + (list[i].verified ? '' : ' (noch nicht verifiziert)') + (list[i].participations ? list[i].participations : ''), attributes: { value: list[i].participations || 0 } });
 						d.push(row);
 					}
 					return d;
@@ -245,67 +244,6 @@ img.speak {
 
 			var table = document.querySelector('event view-table');
 			table.list = events;
-			table.setStyle(`
-thead {
-	display: none;
-}
-tbody {
-	height: 100%;
-}
-tr {
-	padding: 0 0.5em 0.5em 0.5em;
-	display: grid;
-	box-sizing: border-box;
-}
-td.column1 {
-	grid-column: 1;
-	grid-row: 1;
-	font-weight: bold;
-	background: var(--background-content);
-	padding: 0.5em 1em 0 0.5em;
-	border-radius: 0.5em 0.5em 0 0;
-	width: fit-content !important;
-}
-td.column2 {
-	grid-column: 1;
-	grid-row: 2;
-	background: var(--background-content);
-	width: 100% !important;
-	max-height: initial;
-	border-radius: 0 0.5em 0.5em 0.5em;
-	overflow: hidden;
-}
-td.column2 input-rating {
-	position: absolute;
-    right: 0;
-    font-size: 0.8em;
-	margin-right: 0;
-}
-td.column2 note {
-	position: relative;
-	display: block;
-	padding: 0.5em 0.5em 0 0.5em;
-	max-height: 5.7em; 
-	overflow: hidden;
-}
-td.column2 images {
-	max-height: initial;
-	text-align: center;
-	height: 8em;
-	position: relative;
-	display: block;
-	margin: 1em 0 0.5em 0;
-	white-space: nowrap;
-    overflow-x: auto;
-	overflow-y: hidden;
-    box-sizing: border-box;
-	width: 100%;
-}
-td.column2 images img {
-	height: 100%;
-	padding: 0 0.25em;
-	border-radius: 0.5em;
-}`);
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
@@ -525,5 +463,68 @@ images img {
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
 		document.querySelector('imprint').addEventListener('click', e => e.target.nodeName == 'TOGGLE' || document.querySelector('imprint').classList.remove('open'));
+		var style = `
+thead {
+	display: none;
+}
+tbody {
+	height: 100%;
+}
+tr {
+	padding: 0 0.5em 0.5em 0.5em;
+	display: grid;
+	box-sizing: border-box;
+}
+td.column1 {
+	grid-column: 1;
+	grid-row: 1;
+	font-weight: bold;
+	background: var(--background-content);
+	padding: 0.5em 1em 0 0.5em;
+	border-radius: 0.5em 0.5em 0 0;
+	width: fit-content !important;
+}
+td.column2 {
+	grid-column: 1;
+	grid-row: 2;
+	background: var(--background-content);
+	width: 100% !important;
+	max-height: initial;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	overflow: hidden;
+}
+td.column2 input-rating {
+	position: absolute;
+    right: 0;
+    font-size: 0.8em;
+	margin-right: 0;
+}
+td.column2 note {
+	position: relative;
+	display: block;
+	padding: 0.5em 0.5em 0 0.5em;
+	max-height: 5.7em; 
+	overflow: hidden;
+}
+td.column2 images {
+	max-height: initial;
+	text-align: center;
+	height: 8em;
+	position: relative;
+	display: block;
+	margin: 1em 0 0.5em 0;
+	white-space: nowrap;
+    overflow-x: auto;
+	overflow-y: hidden;
+    box-sizing: border-box;
+	width: 100%;
+}
+td.column2 images img {
+	height: 100%;
+	padding: 0 0.25em;
+	border-radius: 0.5em;
+}`;
+		document.querySelector('event view-table').setStyle(style);
+		document.querySelector('user view-table').setStyle(style + '\ntr.pending td.column1{color:grey;}\ntd.column2{padding:0.5em;}');
 	}
 }

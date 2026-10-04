@@ -342,11 +342,6 @@ filter count {
 		this.dispatchEvent(new CustomEvent('changed', { detail: { numberOfRows: this._root.querySelectorAll('tbody tr').length } }));
 	}
 
-
-	style(style) {
-		return this._root.appendChild(document.createElement('style')).textContent = style;
-	}
-
 	table() {
 		return this._root.querySelector('table');
 	}
