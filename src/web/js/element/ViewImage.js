@@ -30,12 +30,13 @@ class ViewImage extends HTMLElement {
 label {
 	position: relative;
 	background: var(--background-content);
-	padding: 0.5em;
+	padding: 0.5em 1em 0.5em 0;
 	border-radius: 1em 1em 0 0;
 	width: fit-content;
 	box-sizing: border-box;
 	grid-column: 1;
 	grid-row: 1;
+	font-weight: bold;
 }
 value {
 	position: relative;
