@@ -262,7 +262,7 @@ td.column1 {
 	grid-row: 1;
 	font-weight: bold;
 	background: var(--background-content);
-	padding: 0.5em 1em 0 0;
+	padding: 0.5em 1em 0 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	width: fit-content !important;
 }
@@ -281,7 +281,7 @@ td.column2 input-rating {
 td.column2 note {
 	position: relative;
 	display: block;
-	padding: 1em;
+	padding: 0.5em;
 }
 td.column2 images {
 	max-height: initial;
