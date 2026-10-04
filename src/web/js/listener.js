@@ -276,16 +276,15 @@ td.column2 {
 	overflow: hidden;
 }
 td.column2 input-rating {
-	float: right;
+	position: absolute;
+    right: 0;
+    font-size: 0.8em;
 }
 td.column2 note {
 	position: relative;
 	display: block;
-	padding: 0.5em;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-	line-clamp: 3; 
+	padding: 0.5em 0.5em 0 0.5em;
+	max-height: 5em; 
 	overflow: hidden;
 }
 td.column2 images {
@@ -294,7 +293,7 @@ td.column2 images {
 	height: 8em;
 	position: relative;
 	display: block;
-	margin: 0.5em 0;
+	margin: 1em 0 0.5em 0;
 	white-space: nowrap;
     overflow-x: auto;
 	overflow-y: hidden;
@@ -306,7 +305,6 @@ td.column2 images img {
 	padding: 0 0.25em;
 	border-radius: 0.5em;
 }`);
-			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
 				var now = new Date();
 				table.setOpenDetail(event => listener.updateViewImage(document.querySelector('event view-table').list[ui.parents(event.target, 'tr').getAttribute('i')].id));
