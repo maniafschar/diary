@@ -48,7 +48,7 @@ value {
 	box-sizing: border-box;
 	grid-column: 1;
 	grid-row: 2;
-	height: calc(100% - 2em);
+	height: 100%;
 }
 *::-webkit-scrollbar {
 	display: none;
