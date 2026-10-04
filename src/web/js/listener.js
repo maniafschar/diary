@@ -279,6 +279,7 @@ td.column2 input-rating {
 	position: absolute;
     right: 0;
     font-size: 0.8em;
+	margin-right: 0;
 }
 td.column2 note {
 	position: relative;
