@@ -250,8 +250,9 @@ thead {
 	display: none;
 }
 tr {
-	marging: 0.5em;
+	padding: 0 0.5em 0.5em 0.5em;
 	display: grid;
+	box-sizing: border-box;
 }
 td.column1 {
 	grid-column: 1;
@@ -265,6 +266,9 @@ td.column1 {
 	float: left;
 	display: inline;
 	width: fit-content !important;
+}
+td.column2 img {
+	height: initial;
 }
 td.column2 {
 	grid-column: 1;
