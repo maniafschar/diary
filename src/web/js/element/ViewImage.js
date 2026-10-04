@@ -50,6 +50,10 @@ value {
 	grid-row: 2;
 	height: 100%;
 }
+buttons {
+	grid-column: 1;
+	grid-row: 3;
+}
 *::-webkit-scrollbar {
 	display: none;
 }
@@ -178,8 +182,9 @@ button.prev {
 	left: 0.5em;
 	}
 button.close {
-	right: 0.5em;
-	top: 0.5em;
+	left: 50%;
+	margin-left: -1em;
+	bottom: 0.5em;
 }
 a {
 	text-decoration: none;
@@ -284,17 +289,18 @@ a {
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
-		var next = this._root.appendChild(document.createElement('button'));
+		var buttons = this._root.appendChild(document.createElement('buttons'));
+		var next = buttons.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('next');
 		next.classList.add('icon');
 		next.onclick = () => this.navigate(true);
-		var prev = this._root.appendChild(document.createElement('button'));
+		var prev = buttons.appendChild(document.createElement('button'));
 		prev.innerText = '<';
 		prev.classList.add('prev');
 		prev.classList.add('icon');
 		prev.onclick = () => this.navigate(false);
-		var close = this._root.appendChild(document.createElement('button'));
+		var close = buttons.appendChild(document.createElement('button'));
 		close.onclick = () => this.close();
 		close.classList.add('close');
 		close.classList.add('icon');
