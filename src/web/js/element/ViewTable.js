@@ -116,7 +116,7 @@ td.image img {
 	border-radius: 0.5em;
 }
 
-tbody tr:hover {
+tbody tr:hover td {
 	background-color: rgba(255, 170, 120, 0.1);
 }
 

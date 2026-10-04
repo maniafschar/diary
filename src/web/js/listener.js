@@ -283,6 +283,7 @@ td.column3 {
 	grid-row: 2;
 	background: var(--background-content);
 	width: 100% !important;
+	max-height: initial;
 }`);
 			table.style('input-rating{margin-right:0.5em;}');
 			if (!table.columns.length) {
@@ -296,6 +297,7 @@ td.column3 {
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
 						var date = new Date(list[i].date.replace('+00:00', ''));
+						var label = ui.formatTime(date) + ' ' + list[i].location.name;
 						var text = list[i].note ? list[i].note.replace(/\n/g, ' ').trim() : '', textSort = text;
 						var images = '';
 						if (list[i].eventImages) {
@@ -303,12 +305,12 @@ td.column3 {
 								images += '<img src="/med/' + list[i].eventImages[i2].imageThumbnail + '" />';
 						}
 						if (list[i].rating) {
-							text = '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + (text || '');
+							label = '<input-rating class="line" value="' + parseFloat(list[i].rating / list[i].ratingCount).toFixed(1) + '"></input-rating>' + label;
 							textSort = list[i].rating + textSort;
 							if (textSort.length > 10)
 								textSort = textSort.substring(0, 10).trim();
 						}
-						row.push({ attributes: { value: date.getTime() }, text: ui.formatTime(date) + ' ' + list[i].location.name });
+						row.push({ attributes: { value: date.getTime() }, text: label });
 						row.push({ attributes: { class: 'image' }, text: images });
 						row.push({ attributes: { class: 'text', i: 'note_' + list[i].id, value: textSort }, text: text });
 						if (date < now)
