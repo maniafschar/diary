@@ -282,6 +282,11 @@ td.column2 note {
 	position: relative;
 	display: block;
 	padding: 0.5em;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3; 
+	overflow: hidden;
 }
 td.column2 images {
 	max-height: initial;
