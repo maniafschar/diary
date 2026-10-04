@@ -196,6 +196,7 @@ body>main>container {
 	overflow-y: auto;
 	opacity: 0;
 	transition: .8s ease-out;
+	position: relative;
 }
 
 body>imprint {
