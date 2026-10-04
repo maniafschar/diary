@@ -16,7 +16,7 @@ class ViewImage extends HTMLElement {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	transform: scale(0);
-	position: fixed;
+	position: absolute;
 	left: 0;
 	right: 0;
 	top: 0;
@@ -30,11 +30,6 @@ class ViewImage extends HTMLElement {
 }
 *::-webkit-scrollbar {
 	display: none;
-}
-div {
-	overflow: auto;
-	width: 100%;
-	height: 100%;
 }
 imageContainer {
 	position: relative;
@@ -112,18 +107,7 @@ button img {
 data {
 	position: relative;
 	display: inline-block;
-	max-width: 50em;
 	vertical-align: bottom;
-}
-@media only screen and (min-width: 50em) {
-	data {
-		box-shadow: 0 0 1em rgba(0, 0, 0, 0.3);
-		margin: 1em;
-		border-radius: 1em;
-	}
-	imageContainer {
-		border-radius: 1em 1em 0 0;
-	}
 }
 data description {
 	border: solid 2vw transparent;
@@ -270,20 +254,21 @@ a {
 	display: inline-block;
 }`;
 		this._root.appendChild(document.createElement('style')).classList.add('custom');
-		var div = this._root.appendChild(document.createElement('div'));
-		var data = div.appendChild(document.createElement('data'));
+		this._root.appendChild(document.createElement('label'));
+		var value = this._root.appendChild(document.createElement('value'));
+		var data = value.appendChild(document.createElement('data'));
 		data.appendChild(document.createElement('nav'));
 		var imageContainer = data.appendChild(document.createElement('imageContainer'));
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
 		data.appendChild(document.createElement('description'));
-		var next = div.appendChild(document.createElement('button'));
+		var next = this._root.appendChild(document.createElement('button'));
 		next.innerText = '>';
 		next.classList.add('next');
 		next.classList.add('icon');
 		next.onclick = () => this.navigate(true);
-		var prev = div.appendChild(document.createElement('button'));
+		var prev = this._root.appendChild(document.createElement('button'));
 		prev.innerText = '<';
 		prev.classList.add('prev');
 		prev.classList.add('icon');
@@ -328,10 +313,10 @@ a {
 
 	close() {
 		this._root.host.addEventListener('transitionend',
-			() => this._root.querySelector('div').scrollTop = 0, { capture: false, passive: true, once: true });
+			() => this._root.scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
 		window.speechSynthesis.cancel();
-		this._root.querySelector('div video').pause();
+		this._root.querySelector('video').pause();
 		document.body.style.overflow = '';
 	}
 
@@ -391,7 +376,6 @@ a {
 	}
 
 	update(forward) {
-		this._root.querySelector('div').style.display = '';
 		var description = this._root.querySelector('description');
 		var nav = this._root.querySelector('nav');
 		description.addEventListener('transitionend', () => {
