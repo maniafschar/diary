@@ -48,6 +48,7 @@ value {
 	grid-column: 1;
 	grid-row: 2;
 	height: 100%;
+	border: solid 0.5em transparent;
 }
 buttons {
 	grid-column: 1;
