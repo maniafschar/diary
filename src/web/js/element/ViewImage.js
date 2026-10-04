@@ -27,6 +27,7 @@ class ViewImage extends HTMLElement {
 	align-items: center;
 	font-size: 1em;
 	z-index: 450;
+	overflow: hidden;
 }
 label {
 	position: relative;
@@ -104,7 +105,6 @@ button:hover {
 	background: var(--background-clickable-highlight);
 }
 button.icon {
-	background: transparent;
 	font-size: 2em;
 	width: 2em;
 	height: 2em;
