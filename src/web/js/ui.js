@@ -116,12 +116,14 @@ class ui {
 		}
 		e.classList.add('open');
 		document.querySelector('html').style.overflow = 'hidden';
-		e.onclick = event => {
-			if (event.target === e) {
-				e.classList.remove('open');
-				document.querySelector('html').style.overflow = '';
-			}
-		};
+		if (!e.onclick) {
+			e.onclick = event => {
+				if (event.target === e) {
+					e.classList.remove('open');
+					document.querySelector('html').style.overflow = '';
+				}
+			};
+		}
 	}
 
 	static parents(e, nodeName) {
