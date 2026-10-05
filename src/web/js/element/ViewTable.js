@@ -85,6 +85,7 @@ th {
 	display: inline-block;
 	white-space: nowrap;
 	border-left: solid 0.5em transparent;
+	transition: all .4s ease-out;
 }
 
 td:last-child,
