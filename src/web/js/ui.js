@@ -1,3 +1,4 @@
+import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 
 export { ui };
@@ -106,6 +107,13 @@ class ui {
 		setTimeout(() => document.addEventListener('click', close, { once: true }), 100);
 	}
 
+	static freeze(freeze) {
+		if (freeze)
+			document.querySelector('html').classList.add('freeze');
+		else if (!api.user?.id)
+			document.querySelector('html').classList.remove('freeze');
+	}
+
 	static openImprint() {
 		var e = document.querySelector('imprint');
 		if (!e)
@@ -115,12 +123,12 @@ class ui {
 			return;
 		}
 		e.classList.add('open');
-		document.querySelector('html').style.overflow = 'hidden';
+		ui.freeze(true);
 		if (!e.onclick) {
 			e.onclick = event => {
 				if (event.target.nodeName != 'TOGGLE') {
 					e.classList.remove('open');
-					document.querySelector('html').style.overflow = '';
+					ui.freeze(false);
 				}
 			};
 		}

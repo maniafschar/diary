@@ -142,8 +142,13 @@ class action {
 			document.querySelector('element.login error').innerText = 'Ein Passwort wird benötigt.';
 		else
 			api.authentication.getLogin(email.value, password.value, document.querySelector('element.login input-checkbox[name="login"]').getAttribute('checked') == 'true', success => {
-				if (success)
+				if (success) {
 					document.dispatchEvent(new CustomEvent('event'));
+					setTimeout(() => {
+						window.addEventListener('scrollend', () => ui.freeze(true), { passive: true, once: true });
+						document.querySelector('html').scrollTo({ top: document.querySelector('main').getBoundingClientRect().top + document.querySelector('html').scrollTop, behavior: 'smooth' });
+					}, 50);
+				}
 			});
 	}
 
