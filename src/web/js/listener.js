@@ -439,7 +439,7 @@ images img {
 
 	static init() {
 		listener.scrollMain();
-		window.addEventListener('scroll', listener.scrollMain, { passive: true });
+		window.addEventListener('scrollend', listener.scrollMain, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
 				listener.updateContacts();
