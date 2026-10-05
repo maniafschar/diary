@@ -482,6 +482,10 @@ td.column1 {
 	padding: 0.5em 1em 0 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	width: fit-content !important;
+	white-space: nowrap;
+	max-width: 70%;
+	overflow: hidden;
+	text-overflow: ellepsis;
 }
 td.column2 {
 	grid-column: 1;
