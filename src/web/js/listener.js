@@ -7,7 +7,6 @@ export { listener };
 class listener {
 	static touchStartX;
 	static touchStartY;
-	static scrollY = 0;
 	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
@@ -425,7 +424,7 @@ images img {
 		var intro = document.querySelector('body>intro');
 		var main = document.querySelector('body>main');
 		var setOpacity = (e, value) => { if (e.style.opacity !== value) e.style.opacity = value; };
-		if (listener.scrollY - window.scrollY < 0) {
+		if (window.scrollY > 0) {
 			setOpacity(main, 1);
 			setOpacity(intro, 0);
 		} else {
@@ -434,7 +433,6 @@ images img {
 		}
 		if (document.querySelector('body > .mobile-nav-popup'))
 			ui.openMoreMenu();
-		listener.scrollY = window.scrollY;
 	}
 
 	static init() {
