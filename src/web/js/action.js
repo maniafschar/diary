@@ -60,7 +60,7 @@ class action {
 	static loginPost() {
 		document.dispatchEvent(new CustomEvent('event'));
 		setTimeout(() => {
-			if (window.screenY == 0) {
+			if (window.scrollY == 0) {
 				window.addEventListener('scrollend', () => ui.freeze(true), { passive: true, once: true });
 				document.querySelector('html').scrollTo({ top: document.querySelector('main').getBoundingClientRect().top + document.querySelector('html').scrollTop, behavior: 'smooth' });
 			} else
