@@ -275,6 +275,7 @@ class action {
 		document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.add('visible'));
 		document.dispatchEvent(new CustomEvent('popup'));
 		ui.navigate(0);
+		ui.freeze(false);
 	}
 
 	static prefillRegistraation(email) {

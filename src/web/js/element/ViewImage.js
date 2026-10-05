@@ -53,7 +53,7 @@ value {
 buttons {
 	grid-column: 1;
 	grid-row: 3;
-	height: 5em;
+	height: 3em;
 	position: relative;
 }
 *::-webkit-scrollbar {
@@ -112,9 +112,9 @@ button:hover {
 	background: var(--background-clickable-highlight);
 }
 button.icon {
-	font-size: 2em;
-	width: 2em;
-	height: 2em;
+	font-size: 1.5em;
+	width: 1.5em;
+	height: 1.5em;
 	position: absolute;
 	bottom: 0;
 	margin: 0;
