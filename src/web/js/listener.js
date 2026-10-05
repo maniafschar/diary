@@ -485,7 +485,7 @@ td.column1 {
 	white-space: nowrap;
 	max-width: 70%;
 	overflow: hidden;
-	text-overflow: ellepsis;
+	text-overflow: ellipsis;
 }
 td.column2 {
 	grid-column: 1;
