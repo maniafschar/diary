@@ -270,7 +270,7 @@ div.toggle>div {
 		var right = event.detail.align == 'right';
 		popup.style.left = right ? 'initial' : '';
 		popup.style.right = right ? '1em' : '';
-		document.body.style.overflow = 'hidden';
+		document.querySelector('html').style.overflow = 'hidden';
 		DialogPopup.onclose = event.detail.onclose;
 	}
 
@@ -282,7 +282,7 @@ div.toggle>div {
 			popup.addEventListener('transitionend', () => popup.querySelector('content').textContent = '', { capture: false, passive: true, once: true });
 			popup.style.transform = '';
 			popup.removeAttribute('i');
-			document.body.style.overflow = '';
+			document.querySelector('html').style.overflow = '';
 		}
 	}
 
