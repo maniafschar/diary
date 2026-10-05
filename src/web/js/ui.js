@@ -118,7 +118,7 @@ class ui {
 		document.querySelector('html').style.overflow = 'hidden';
 		if (!e.onclick) {
 			e.onclick = event => {
-				if (event.target === e) {
+				if (event.target.nodeName != 'TOGGLE') {
 					e.classList.remove('open');
 					document.querySelector('html').style.overflow = '';
 				}
