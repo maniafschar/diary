@@ -437,7 +437,7 @@ images img {
 
 	static init() {
 		listener.scrollMain();
-		window.addEventListener('scroll', () => document.querySelectorAll('body>intro, body>main').forEach(e => { if (!e.style.opacity) e.style.opacity = 1; }), { passive: true });
+		window.addEventListener('scroll', () => document.querySelectorAll('body>intro, body>main').forEach(e => { if (!e.style.opacity) e.style.opacity = 1; }), { passive: false });
 		window.addEventListener('scrollend', listener.scrollMain, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
