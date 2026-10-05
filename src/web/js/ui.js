@@ -115,9 +115,12 @@ class ui {
 			return;
 		}
 		e.classList.add('open');
+		document.querySelector('html').style.overflow = 'hidden';
 		e.onclick = event => {
-			if (event.target === e)
+			if (event.target === e) {
 				e.classList.remove('open');
+				document.querySelector('html').style.overflow = '';
+			}
 		};
 	}
 
