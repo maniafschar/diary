@@ -57,7 +57,6 @@ body>main {
 	min-height: 100svh;
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
-	transition: opacity .4s ease-out;
 }
 
 body>intro {
