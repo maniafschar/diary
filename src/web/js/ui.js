@@ -102,7 +102,7 @@ class ui {
 		name.setAttribute('name', 'clientName');
 		name.innerText = api.clients[api.clientId].name;
 		if (Object.keys(api.clients).length > 1)
-			logo.onclick = dialog.client;
+			logo.onclick = () => { this.openMoreMenu(); dialog.client() };
 		document.body.appendChild(menu);
 		requestAnimationFrame(() => menu.classList.add('open'));
 		var close = event => {
