@@ -425,9 +425,9 @@ images img {
 		var main = document.querySelector('body>main');
 		var setOpacity = (e, value) => {
 			if (!value && e.classList.contains('visible'))
-				e.classList.remove('visible');
+				e.classList.add('invisible');
 			if (value && !e.classList.contains('visible'))
-				e.classList.add('visible');
+				e.classList.remove('invisible');
 		};
 		if (window.scrollY > 0) {
 			setOpacity(main, true);
