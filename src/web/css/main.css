@@ -64,6 +64,18 @@ body>main {
 	transition: opacity .4s ease-out;
 }
 
+html.freeze body>intro {
+	opacity: 0 !important;
+}
+
+html.freeze body>main {
+	opacity: 1 !important;
+}
+
+invisible {
+	opacity: 0;
+}
+
 body>intro {
 	display: block;
 	position: relative;
