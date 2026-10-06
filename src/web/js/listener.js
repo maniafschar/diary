@@ -444,7 +444,7 @@ images img {
 		listener.scrollMain();
 		window.addEventListener('scroll', () => {
 			document.querySelector('view-image').close();
-			document.querySelectorAll('body>intro, body>main').forEach(e => { if (e.style.opacity != '1') e.style.opacity = 1; });
+			document.querySelectorAll('body>intro, body>main').forEach(e => { if (e.classList.contains('invisible')) e.classList.remove('invisible'); });
 		}, { passive: false });
 		window.addEventListener('scrollend', listener.scrollMain, { passive: true });
 		document.addEventListener('eventParticipation', event => {
