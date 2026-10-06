@@ -96,10 +96,10 @@ class ui {
 			item.appendChild(label);
 		});
 		var logo = menu.appendChild(document.createElement('logo'));
+		logo.appendChild(document.createElement('img')).setAttribute('src', 'image/title.png');
 		var name = logo.appendChild(document.createElement('h2'));
 		name.setAttribute('name', 'clientName');
 		name.innerText = api.clients[api.clientId].name;
-		logo.appendChild(document.createElement('img')).setAttribute('src', 'image/title.png');
 		document.body.appendChild(menu);
 		requestAnimationFrame(() => menu.classList.add('open'));
 		var close = event => {
