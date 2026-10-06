@@ -720,6 +720,7 @@ toggle {
 	position: relative;
 	display: block;
 	cursor: pointer;
+	text-align: left;
 }
 
 toggle::before {
