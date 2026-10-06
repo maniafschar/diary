@@ -308,7 +308,8 @@ body>imprint.open>.imprint-panel {
 	}
 
 	body>.mobile-nav-popup logo img {
-		width: 10em;
+		width: 8em;
+		margin-top: 0.25em;
 	}
 
 	body>main {
