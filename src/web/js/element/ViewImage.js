@@ -18,9 +18,9 @@ class ViewImage extends HTMLElement {
 	transform: scale(0);
 	position: absolute;
 	left: 0;
-	top: 100vh;
-	width: 100vw;
-	height: 100vh;
+	top: 100dvh;
+	width: 100dvw;
+	height: 100dvh;
 	padding: 1em;
 	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
 	display: grid;
