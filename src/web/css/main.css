@@ -69,7 +69,7 @@ html.freeze body>main {
 	opacity: 1 !important;
 }
 
-invisible {
+.invisible {
 	opacity: 0;
 }
 
