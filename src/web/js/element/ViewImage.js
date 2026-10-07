@@ -37,6 +37,8 @@ label {
 	grid-column: 1;
 	grid-row: 1;
 	font-weight: bold;
+	max-width: 90%;
+	text-align: left;
 }
 value {
 	position: relative;
@@ -84,14 +86,10 @@ imageContainer video.next {
 	opacity: 0;
 }
 hint {
-	font-size: 1.3em;
 	position: absolute;
-	left: 50%;
-	bottom: 1.6em;
+	bottom: 0;
+	right: 3.6em;
 	color: var(--background-content);
-	width: 8em;
-	margin-left: -4em;
-	cursor: pointer;
 }
 button {
 	background: var(--background-clickable);
