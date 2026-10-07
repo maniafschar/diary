@@ -37,7 +37,8 @@ html {
 	scroll-behavior: smooth;
 }
 
-html.freeze {
+html.freeze,
+html.loggedIn {
 	overflow: hidden;
 }
 
@@ -61,11 +62,11 @@ body>main {
 	transition: opacity .4s ease-out;
 }
 
-html.freeze body>intro {
+html.loggedIn body>intro {
 	opacity: 0 !important;
 }
 
-html.freeze body>main {
+html.loggedIn body>main {
 	opacity: 1 !important;
 }
 

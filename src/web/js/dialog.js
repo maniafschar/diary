@@ -168,6 +168,52 @@ ${dialog.stylePictures}`;
 		location.querySelector('input-selection')._root.querySelector('input').style.marginTop = '1em';
 	}
 
+	static openMoreMenu() {
+		var existing = document.querySelector('body > .mobile-nav-popup');
+		if (existing) {
+			existing.classList.remove('open');
+			setTimeout(() => existing.remove(), 220);
+			return;
+		}
+		var menu = document.createElement('div');
+		menu.className = 'mobile-nav-popup';
+		menu.setAttribute('role', 'menu');
+		[...document.querySelectorAll('body navigation button.icon.mobile-more-item')].forEach(button => {
+			var item = menu.appendChild(document.createElement('button'));
+			item.type = 'button';
+			item.className = 'mobile-nav-item';
+			item.onclick = () => {
+				menu.classList.remove('open');
+				setTimeout(() => menu.remove(), 220);
+				if (button.onclick)
+					button.onclick();
+			};
+			var icon = button.querySelector('img, svg');
+			if (icon)
+				item.appendChild(icon.cloneNode(true));
+			var label = document.createElement('span');
+			label.textContent = button.querySelector('span')?.textContent || '';
+			item.appendChild(label);
+		});
+		var logo = menu.appendChild(document.createElement('logo'));
+		logo.appendChild(document.createElement('img')).setAttribute('src', 'image/title.png');
+		var name = logo.appendChild(document.createElement('h2'));
+		name.setAttribute('name', 'clientName');
+		name.innerText = api.clients[api.clientId].name;
+		if (Object.keys(api.clients).length > 1)
+			logo.onclick = () => { this.openMoreMenu(); dialog.client() };
+		document.body.appendChild(menu);
+		requestAnimationFrame(() => menu.classList.add('open'));
+		var close = event => {
+			if (!event || !menu.contains(event.target)) {
+				menu.classList.remove('open');
+				setTimeout(() => menu.remove(), 220);
+				document.removeEventListener('click', close);
+			}
+		};
+		setTimeout(() => document.addEventListener('click', close, { once: true }), 100);
+	}
+
 	static addUser() {
 		var popup = document.createElement('div');
 		dialog.createField(popup, 'Name', 'name');

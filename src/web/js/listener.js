@@ -437,7 +437,7 @@ images img {
 			setOpacity(intro, true);
 		}
 		if (document.querySelector('body > .mobile-nav-popup'))
-			ui.openMoreMenu();
+			dialog.openMoreMenu();
 	}
 
 	static init() {

@@ -61,10 +61,10 @@ class action {
 		document.dispatchEvent(new CustomEvent('event'));
 		setTimeout(() => {
 			if (window.scrollY == 0) {
-				window.addEventListener('scrollend', () => ui.freeze(true), { passive: true, once: true });
+				window.addEventListener('scrollend', () => document.querySelector('html').classList.add('loggedIn'), { passive: true, once: true });
 				document.querySelector('html').scrollTo({ top: document.querySelector('main').getBoundingClientRect().top + document.querySelector('html').scrollTop, behavior: 'smooth' });
 			} else
-				ui.freeze(true);
+				document.querySelector('html').classList.add('loggedIn');
 		}, 50);
 	}
 
@@ -278,7 +278,7 @@ class action {
 		document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.add('visible'));
 		document.dispatchEvent(new CustomEvent('popup'));
 		ui.navigate(0);
-		ui.freeze(false);
+		document.querySelector('html').classList.remove('loggedIn');
 	}
 
 	static prefillRegistraation(email) {
