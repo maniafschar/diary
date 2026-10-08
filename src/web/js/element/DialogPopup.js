@@ -22,7 +22,7 @@ popup {
 	transform: scale(0);
 	position: fixed;
 	width: fit-content;
-	max-width: 90%;
+	max-width: 90dvw;
 	background-color: blanchedalmond;
 	top: 6%;
 	left: 0;
@@ -63,7 +63,7 @@ content {
 	position: relative;
 	display: block;
 	margin: 1em;
-	max-height: 82vh;
+	max-height: 82dvh;
 	max-width: 50em;
 	overflow: auto;
 	text-align: left;
