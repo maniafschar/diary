@@ -51,54 +51,56 @@
 				<img src="image/title.png" />
 				<h2 name="clientName"></h2>
 			</logo>
-			<button class="icon selected" data-type="loggedOut">
-				<img src="image/login.svg" />
-				<span>Einloggen</span>
-			</button>
-			<button class="icon selected" data-nav-index="0" data-type="loggedIn" onclick="ui.navigate(0)">
-				<img src="image/list.svg" />
-				<span>Events</span>
-			</button>
-			<button class="icon" data-nav-index="1" onclick="ui.navigate(1)" data-type="loggedIn">
-				<img src="image/calendar.svg" />
-				<span>Kalender</span>
-			</button>
-			<button class="icon" data-nav-index="2" onclick="ui.navigate(2)" data-type="loggedIn">
-				<img src="image/location.svg" />
-				<span>Karte</span>
-			</button>
-			<button class="icon" data-nav-index="3" onclick="ui.navigate(3)" data-type="loggedIn">
-				<img src="image/statistics.svg" />
-				<span>Statistik</span>
-			</button>
-			<button class="icon mobile-more-item" class="icon" data-nav-index="4" onclick="ui.navigate(4)"
-				data-type="loggedInAuthor">
-				<img src="image/user.svg" />
-				<span>Teilnehmer</span>
-			</button>
-			<button class="icon add" onclick="dialog.add()" data-type="loggedInAuthor">
-				<img src="image/add.svg" />
-				<span>Neuer Eintrag</span>
-			</button>
-			<button class="icon more" onclick="dialog.openMoreMenu()" type="button">
-				<span class="more-dots">⋯</span>
-			</button>
-			<button class="icon export mobile-more-item" onclick="dialog.email()" data-type="loggedInAuthor">
-				<img src="image/email.svg" />
-				<span>Teilen</span>
-			</button>
-			<button class="icon summary mobile-more-item" onclick="dialog.summary()" data-type="loggedInAuthor">
-				<img src="image/ai.svg" />
-				<span>AI Auswertung</span>
-			</button>
-			<button onclick="action.logoff()" name="logoff" class="icon mobile-more-item" data-type="loggedIn">
-				<img src="image/logoff.svg" />
-				<span>Ausloggen</span>
-			</button>
-			<button class="icon mobile-more-item visible" onclick="ui.openImprint()">
-				<img src="image/imprint.svg" />
-				<span>Impressum</span>
-			</button>
+			<buttons>
+				<button class="icon selected" data-type="loggedOut">
+					<img src="image/login.svg" />
+					<span>Einloggen</span>
+				</button>
+				<button class="icon selected" data-nav-index="0" data-type="loggedIn" onclick="ui.navigate(0)">
+					<img src="image/list.svg" />
+					<span>Events</span>
+				</button>
+				<button class="icon" data-nav-index="1" onclick="ui.navigate(1)" data-type="loggedIn">
+					<img src="image/calendar.svg" />
+					<span>Kalender</span>
+				</button>
+				<button class="icon" data-nav-index="2" onclick="ui.navigate(2)" data-type="loggedIn">
+					<img src="image/location.svg" />
+					<span>Karte</span>
+				</button>
+				<button class="icon" data-nav-index="3" onclick="ui.navigate(3)" data-type="loggedIn">
+					<img src="image/statistics.svg" />
+					<span>Statistik</span>
+				</button>
+				<button class="icon mobile-more-item" class="icon" data-nav-index="4" onclick="ui.navigate(4)"
+					data-type="loggedInAuthor">
+					<img src="image/user.svg" />
+					<span>Teilnehmer</span>
+				</button>
+				<button class="icon add" onclick="dialog.add()" data-type="loggedInAuthor">
+					<img src="image/add.svg" />
+					<span>Neuer Eintrag</span>
+				</button>
+				<button class="icon more" onclick="dialog.openMoreMenu()" type="button">
+					<span class="more-dots">⋯</span>
+				</button>
+				<button class="icon export mobile-more-item" onclick="dialog.email()" data-type="loggedInAuthor">
+					<img src="image/email.svg" />
+					<span>Teilen</span>
+				</button>
+				<button class="icon summary mobile-more-item" onclick="dialog.summary()" data-type="loggedInAuthor">
+					<img src="image/ai.svg" />
+					<span>AI Auswertung</span>
+				</button>
+				<button onclick="action.logoff()" name="logoff" class="icon mobile-more-item" data-type="loggedIn">
+					<img src="image/logoff.svg" />
+					<span>Ausloggen</span>
+				</button>
+				<button class="icon mobile-more-item visible" onclick="ui.openImprint()">
+					<img src="image/imprint.svg" />
+					<span>Impressum</span>
+				</button>
+			</buttons>
 		</navigation>
 		<container>
 			<element class="event">
