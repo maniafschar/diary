@@ -141,6 +141,12 @@ body>main>navigation h2 {
 	word-break: break-word;
 }
 
+body>main>navigation buttons {
+	display: block;
+	position: relative;
+	overflow: auto;
+}
+
 body>main>navigation button.icon {
 	position: relative;
 	display: flex;
