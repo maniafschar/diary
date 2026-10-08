@@ -7,15 +7,9 @@ class DialogPopup extends HTMLElement {
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
-		this._visualViewport = window.visualViewport;
 		this._syncVisualViewport = () => {
-			if (!this._visualViewport)
-				return;
-			var popup = this._root.querySelector('popup');
-			if (!popup)
-				return;
-			popup.style.setProperty('--visual-viewport-top', Math.max(8, this._visualViewport.offsetTop + 8) + 'px');
-			popup.style.setProperty('--visual-viewport-height', Math.max(120, this._visualViewport.height - 16) + 'px');
+			if (window.visualViewport)
+				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', Math.max(120, window.visualViewport.height - 16) + 'px');
 		};
 	}
 	connectedCallback() {
@@ -34,8 +28,8 @@ popup {
 	width: fit-content;
 	max-width: 90dvw;
 	background-color: blanchedalmond;
-	top: var(--visual-viewport-top, 6%);
-	max-height: var(--visual-viewport-height, 100dvh);
+	top: 5vh;
+	max-height: var(--visual-viewport-height, 82dvh);
 	left: 0;
 	right: 0;
 	margin: 0 auto;
@@ -264,12 +258,12 @@ div.toggle>div {
 		popup.appendChild(document.createElement('content'));
 		document.addEventListener('popup', event => event.detail?.body ? this.open(event, this._root.querySelector('popup')) : this.close(this._root.querySelector('popup')));
 		this._syncVisualViewport();
-		this._visualViewport?.addEventListener('resize', this._syncVisualViewport);
-		this._visualViewport?.addEventListener('scroll', this._syncVisualViewport);
+		window.visualViewport?.addEventListener('resize', this._syncVisualViewport);
+		window.visualViewport?.addEventListener('scroll', this._syncVisualViewport);
 	}
 	disconnectedCallback() {
-		this._visualViewport?.removeEventListener('resize', this._syncVisualViewport);
-		this._visualViewport?.removeEventListener('scroll', this._syncVisualViewport);
+		window.visualViewport?.removeEventListener('resize', this._syncVisualViewport);
+		window.visualViewport?.removeEventListener('scroll', this._syncVisualViewport);
 	}
 
 	open(event, popup) {
