@@ -9,7 +9,7 @@ class DialogPopup extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 		this._syncVisualViewport = () => {
 			if (window.visualViewport)
-				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', Math.max(120, window.visualViewport.height - 16) + 'px');
+				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', Math.max(120, window.visualViewport.height - 0.18 * window.innerHeight) + 'px');
 		};
 	}
 	connectedCallback() {
