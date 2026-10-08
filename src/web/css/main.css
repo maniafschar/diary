@@ -586,11 +586,7 @@ event {
 	width: 100%;
 	min-width: 100%;
 	overflow-x: auto;
-}
-
-event,
-user {
-	height: calc(100% - 1.5em);
+	height: calc(100% - 2.5em);
 }
 
 a {
