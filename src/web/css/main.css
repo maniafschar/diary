@@ -126,6 +126,7 @@ body>main>navigation>logo {
 	display: block;
 	position: relative;
 	text-align: center;
+	padding-top: 1em;
 }
 
 body>main>navigation>logo>img {
