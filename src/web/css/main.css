@@ -113,6 +113,8 @@ body>main {
 
 body>main>navigation {
 	background: var(--background-content);
+	display: flex;
+	flex-direction: column;
 }
 
 body>main>navigation>buttons {
@@ -125,7 +127,6 @@ body>main>navigation>buttons {
 	padding: 0.75rem 0.5rem;
 	overflow-y: auto;
 	overflow-x: hidden;
-	min-height: 0;
 }
 
 body>main>navigation>logo {
