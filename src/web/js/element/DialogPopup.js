@@ -13,19 +13,14 @@ class DialogPopup extends HTMLElement {
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', window.visualViewport.offsetTop + 'px');
 				} else {
-					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', null);
-					this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', 0);
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', '82vh');
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', '5vh');
 				}
 			}
 		};
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
-:host(*) {
-	position: fixed;
-	top: var(--visual-viewport-offsettop, 0);
-}
-
 *::-webkit-scrollbar {
 	display: none;
 }
@@ -36,7 +31,7 @@ popup {
 	width: fit-content;
 	max-width: 90dvw;
 	background-color: blanchedalmond;
-	top: 5vh;
+	top: var(--visual-viewport-offsettop);
 	max-height: var(--visual-viewport-height, 82vh);
 	left: 0;
 	right: 0;
