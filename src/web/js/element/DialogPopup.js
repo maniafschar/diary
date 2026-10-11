@@ -9,15 +9,21 @@ class DialogPopup extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 		this._syncVisualViewport = () => {
 			if (window.visualViewport) {
-				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
-				this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', window.visualViewport.offsetTop + 'px');
+				if (window.visualViewport.offsetTop) {
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', window.visualViewport.offsetTop + 'px');
+				} else {
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', null);
+					this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', 0);
+				}
 			}
 		};
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
-	position: relative;
+	position: fixed;
+	top: var(--visual-viewport-offsettop, 0);
 }
 
 *::-webkit-scrollbar {
@@ -26,13 +32,12 @@ class DialogPopup extends HTMLElement {
 
 popup {
 	transform: scale(0);
-	position: fixed;
+	position: relative;
 	width: fit-content;
 	max-width: 90dvw;
 	background-color: blanchedalmond;
 	top: 5vh;
 	max-height: var(--visual-viewport-height, 82vh);
-	top: var(--visual-viewport-offsettop, 0);
 	left: 0;
 	right: 0;
 	margin: 0 auto;
