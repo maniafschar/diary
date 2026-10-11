@@ -486,7 +486,7 @@ td.column1 {
 	border-radius: 0.5em 0.5em 0 0;
 	width: fit-content !important;
 	white-space: nowrap;
-	max-width: 90%;
+	max-width: 80%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
