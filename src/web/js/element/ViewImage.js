@@ -18,7 +18,7 @@ class ViewImage extends HTMLElement {
 	transform: scale(0);
 	position: absolute;
 	left: 0;
-	top: 100dvh;
+	top: 0;
 	width: 100dvw;
 	height: 100dvh;
 	padding: 1em;
