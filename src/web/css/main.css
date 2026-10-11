@@ -64,6 +64,7 @@ body>main {
 
 html.loggedIn body>intro {
 	opacity: 0 !important;
+	display: none;
 }
 
 html.loggedIn body>main {
