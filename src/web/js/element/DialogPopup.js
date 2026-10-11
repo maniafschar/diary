@@ -8,8 +8,10 @@ class DialogPopup extends HTMLElement {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
 		this._syncVisualViewport = () => {
-			if (window.visualViewport)
-				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', Math.max(120, window.visualViewport.height - 0.18 * window.innerHeight) + 'px');
+			if (window.visualViewport) {
+				this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
+				this._root.querySelector('popup').style.setProperty('--visual-viewport-offsettop', window.visualViewport.offsetTop + 'px');
+			}
 		};
 	}
 	connectedCallback() {
@@ -29,7 +31,8 @@ popup {
 	max-width: 90dvw;
 	background-color: blanchedalmond;
 	top: 5vh;
-	max-height: var(--visual-viewport-height, 82dvh);
+	max-height: var(--visual-viewport-height, 82vh);
+	top: var(--visual-viewport-offsettop, 0);
 	left: 0;
 	right: 0;
 	margin: 0 auto;

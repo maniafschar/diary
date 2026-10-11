@@ -5,8 +5,6 @@ import { ui } from "./ui";
 export { listener };
 
 class listener {
-	static touchStartX;
-	static touchStartY;
 	static updateContacts() {
 		api.contact.getList(contacts => {
 			ui.extractPseudonyms(contacts);
@@ -445,7 +443,7 @@ images img {
 		window.addEventListener('scroll', () => {
 			document.querySelector('view-image').close();
 			document.querySelectorAll('body>intro, body>main').forEach(e => { if (e.classList.contains('invisible')) e.classList.remove('invisible'); });
-		}, { passive: false });
+		}, { passive: true });
 		window.addEventListener('scrollend', listener.scrollMain, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
