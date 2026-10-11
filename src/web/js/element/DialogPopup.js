@@ -27,7 +27,7 @@ class DialogPopup extends HTMLElement {
 
 popup {
 	transform: scale(0);
-	position: relative;
+	position: fixed;
 	width: fit-content;
 	max-width: 90dvw;
 	background-color: blanchedalmond;
