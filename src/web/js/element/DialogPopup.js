@@ -260,13 +260,10 @@ div.toggle>div {
 		popup.appendChild(document.createElement('close')).onclick = () => document.dispatchEvent(new CustomEvent('popup'));
 		popup.appendChild(document.createElement('content'));
 		document.addEventListener('popup', event => event.detail?.body ? this.open(event, this._root.querySelector('popup')) : this.close(this._root.querySelector('popup')));
-		this._syncVisualViewport();
 		window.visualViewport?.addEventListener('resize', this._syncVisualViewport);
-		window.visualViewport?.addEventListener('scroll', this._syncVisualViewport);
 	}
 	disconnectedCallback() {
 		window.visualViewport?.removeEventListener('resize', this._syncVisualViewport);
-		window.visualViewport?.removeEventListener('scroll', this._syncVisualViewport);
 	}
 
 	open(event, popup) {
@@ -289,6 +286,7 @@ div.toggle>div {
 		popup.style.right = right ? '1em' : '';
 		ui.freeze(true);
 		DialogPopup.onclose = event.detail.onclose;
+		this._syncVisualViewport();
 	}
 
 	close(popup) {
