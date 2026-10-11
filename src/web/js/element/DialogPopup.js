@@ -9,6 +9,7 @@ class DialogPopup extends HTMLElement {
 		this._root = this.attachShadow({ mode: 'open' });
 		this._syncVisualViewport = () => {
 			if (window.visualViewport) {
+				console.log(window.visualViewport.height);
 				if (window.visualViewport.height < window.innerHeight)
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
 				else
