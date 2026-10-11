@@ -7,14 +7,13 @@ class DialogPopup extends HTMLElement {
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
-		this._syncVisualViewport = () => {
-			if (window.visualViewport) {
-				console.log(window.visualViewport.height);
+		this.syncVisualViewport = () => {
+			setTimeout(() => {
 				if (window.visualViewport.height < window.innerHeight)
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
 				else
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', '82vh');
-			}
+			}, 100);
 		};
 	}
 	connectedCallback() {
@@ -258,10 +257,10 @@ div.toggle>div {
 		popup.appendChild(document.createElement('close')).onclick = () => document.dispatchEvent(new CustomEvent('popup'));
 		popup.appendChild(document.createElement('content'));
 		document.addEventListener('popup', event => event.detail?.body ? this.open(event, this._root.querySelector('popup')) : this.close(this._root.querySelector('popup')));
-		window.visualViewport?.addEventListener('resize', this._syncVisualViewport);
+		window.visualViewport?.addEventListener('resize', this.syncVisualViewport);
 	}
 	disconnectedCallback() {
-		window.visualViewport?.removeEventListener('resize', this._syncVisualViewport);
+		window.visualViewport?.removeEventListener('resize', this.syncVisualViewport);
 	}
 
 	open(event, popup) {
@@ -284,7 +283,7 @@ div.toggle>div {
 		popup.style.right = right ? '1em' : '';
 		ui.freeze(true);
 		DialogPopup.onclose = event.detail.onclose;
-		this._syncVisualViewport();
+		this.syncVisualViewport();
 	}
 
 	close(popup) {
