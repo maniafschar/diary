@@ -13,7 +13,8 @@ class DialogPopup extends HTMLElement {
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', window.visualViewport.height + 'px');
 				else
 					this._root.querySelector('popup').style.setProperty('--visual-viewport-height', '82vh');
-			}, 100);
+				this._root.activeElement.scrollIntoView({ behavior: 'smooth' });
+			}, 400);
 		};
 	}
 	connectedCallback() {
