@@ -493,7 +493,8 @@ td.column2 {
 	grid-column: 1;
 	grid-row: 2;
 	background: var(--background-content);
-	width: calc(100vw - 1em) !important;
+	width: 100% !important;
+	max-width: calc(100vw - 1em) !important;
 	max-height: initial;
 	border-radius: 0 0.5em 0.5em 0.5em;
 	overflow: hidden;
