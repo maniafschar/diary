@@ -17,7 +17,7 @@
 	<meta name="description" content="Organize events, make unforgettable memories, share them in your community." />
 	<meta name="keywords" content="events, memories, groups, hobbies, leisure time, pictures, scores" />
 	<meta http-equiv="Content-Security-Policy"
-		content="default-src 'self' https://diary.cafe; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; img-src 'self' blob: data: https://diary.cafe http://localhost:9000 https://*.openstreetmap.org; frame-src *; media-src 'self' https://diary.cafe http://localhost:9000; font-src 'self'; connect-src 'self' https://diary.cafe http://localhost:9001;">
+		content="default-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; img-src 'self' blob: data: app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe https://*.openstreetmap.org; frame-src *; media-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe; font-src 'self'; connect-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe;">
 	<meta name="robots" content="index,follow" />
 	<meta name="fragment" content="!" />
 	<meta name="mobile-web-app-capable" content="yes" />
@@ -36,14 +36,15 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<script defer type="text/javascript" src="cordova.js"></script>
 	<script defer type="text/javascript" src="js/main.js"></script>
 </head>
 
 <body onload="action.init()">
 	<intro>
-		<img src="/image/start.png" />
-		<img src="/image/text.png" class="text" />
-		<img src="/image/textSub.png" class="textSub" />
+		<img src="image/start.png" />
+		<img src="image/text.png" class="text" />
+		<img src="image/textSub.png" class="textSub" />
 	</intro>
 	<main>
 		<navigation>

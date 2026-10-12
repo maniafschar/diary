@@ -3,12 +3,17 @@ import JSEncrypt from 'jsencrypt';
 export { api };
 
 class api {
-	static url = '{placeholderServer}/rest/api/';
+	static serverUrl = '{placeholderServer}';
+	static url = api.serverUrl + '/rest/api/';
 	static clients = {};
 	static clientId;
 	static user;
 	static access;
 	static progressbar = false;
+
+	static mediaUrl(path) {
+		return api.serverUrl + '/med/' + path;
+	}
 
 	static authentication = {
 		getLogin(email, password, refreshToken, success) {

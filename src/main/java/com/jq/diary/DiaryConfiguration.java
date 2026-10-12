@@ -10,6 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class DiaryConfiguration implements AsyncConfigurer {
 	private static final String[] allowedOrigins = {
 			"http://localhost:9000",
+			"http://localhost",
+			"https://localhost",
+			"app://localhost",
+			"ionic://localhost",
 			"https://diary.cafe"
 	};
 

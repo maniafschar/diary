@@ -43,7 +43,7 @@ class listener {
 		var listImageThumbnails = function (event) {
 			var list = '';
 			for (var i = 0; i < event.eventImages.length; i++)
-				list += '<thumbnail onclick="action.eventImageDelete(event,' + event.eventImages[i].id + ')" i="' + event.eventImages[i].id + '"><img src="/med/' + event.eventImages[i].imageThumbnail + '" /></thumbnail>';
+				list += '<thumbnail onclick="action.eventImageDelete(event,' + event.eventImages[i].id + ')" i="' + event.eventImages[i].id + '"><img src="' + api.mediaUrl(event.eventImages[i].imageThumbnail) + '" /></thumbnail>';
 			return list;
 		};
 		var listRatings = function (event) {
@@ -254,7 +254,7 @@ img.speak {
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
-								images += '<img src="/med/' + list[i].eventImages[i2].imageThumbnail + '" />';
+								images += '<img src="' + api.mediaUrl(list[i].eventImages[i2].imageThumbnail) + '" />';
 							images = '<images>' + images + '</images>';
 						}
 						if (list[i].rating) {
@@ -312,7 +312,7 @@ img.speak {
 						altitude: events[i].location.altitude,
 						note: events[i].note,
 						rating: events[i].rating ? events[i].rating / events[i].ratingCount : null,
-						images: events[i].eventImages.length ? events[i].eventImages.map(e => '/med/' + e.imageThumbnail) : null
+						images: events[i].eventImages.length ? events[i].eventImages.map(e => api.mediaUrl(e.imageThumbnail)) : null
 					});
 			}
 			viewCalendar.render();
@@ -413,7 +413,7 @@ images img {
 			value.setAttribute('onclick', 'listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
-				images.appendChild(document.createElement('img')).src = '/med/' + l.eventImages[i2].imageThumbnail;
+				images.appendChild(document.createElement('img')).src = api.mediaUrl(l.eventImages[i2].imageThumbnail);
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
 	}

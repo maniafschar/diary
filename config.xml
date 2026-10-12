@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"
+		id="com.jq.diary" version="1.0.0">
+	<name>Diary Cafe</name>
+	<description>Organize events, make unforgettable memories, and share them with your community.</description>
+	<author email="support@diary.cafe" href="https://diary.cafe">JNet Quality Consulting GmbH</author>
+	<content src="index.html" />
+	<icon src="res/icon.png" />
+	<access origin="https://diary.cafe" />
+	<allow-navigation href="https://diary.cafe/*" />
+	<allow-intent href="https://*/*" />
+	<allow-intent href="mailto:*" />
+	<allow-intent href="tel:*" />
+	<preference name="scheme" value="https" />
+	<preference name="hostname" value="localhost" />
+	<preference name="AndroidXEnabled" value="true" />
+	<preference name="DisallowOverscroll" value="true" />
+	<preference name="Orientation" value="default" />
+</widget>

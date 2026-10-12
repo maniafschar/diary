@@ -121,12 +121,12 @@ images {
 			var m = this._root.appendChild(document.createElement('div'));
 			m.style.flex = 1;
 			L.Marker.prototype.options.icon = L.icon({
-				iconUrl: '/image/marker-icon.png',
-				iconRetinaUrl: '/image/marker-icon-2x.png',
+				iconUrl: 'image/marker-icon.png',
+				iconRetinaUrl: 'image/marker-icon-2x.png',
 				iconSize: [34, 46],
 				iconAnchor: [20, 45],
 				popupAnchor: [-3, -36],
-				shadowUrl: '/image/marker-shadow.png',
+				shadowUrl: 'image/marker-shadow.png',
 				shadowSize: [60, 50],
 				shadowAnchor: [20, 45]
 			});

@@ -464,7 +464,7 @@ a {
 				next.autoplay = true;
 				next.setAttribute('playsinline', true);
 				next.classList.add('next');
-				next.appendChild(document.createElement('source')).src = '/med/' + src;
+				next.appendChild(document.createElement('source')).src = api.mediaUrl(src);
 				next.load();
 				setTimeout(() => current.style.opacity = 0, 50);
 			} else {
@@ -496,7 +496,7 @@ a {
 					setTimeout(() => { current.style.opacity = 0; next.style.opacity = 1; }, 50);
 				};
 				image.onerror = () => this.loading = false;
-				image.src = '/med/' + src;
+				image.src = api.mediaUrl(src);
 			}
 		} else {
 			imageContainer.style.height = 0;
