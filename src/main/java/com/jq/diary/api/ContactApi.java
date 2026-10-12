@@ -2,7 +2,6 @@ package com.jq.diary.api;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +59,8 @@ public class ContactApi extends ApplicationApi {
 		if (contact.getNote() != null)
 			original.setNote(contact.getNote());
 		this.contactService.save(original);
-		if (contact.getClients() != null && original.getClients().stream().anyMatch(e -> e.getId().equals(clientId)) && user.getAdmin() != null && user.getAdmin()) {
+		if (contact.getClients() != null && original.getClients().stream().anyMatch(e -> e.getId().equals(clientId))
+				&& user.getAdmin() != null && user.getAdmin()) {
 			final Client c = contact.getClients().iterator().next();
 			final Client client = this.repository.one(Client.class, clientId);
 			client.setImage(c.getImage());
@@ -91,7 +91,8 @@ public class ContactApi extends ApplicationApi {
 			@PathVariable final BigInteger eventId) {
 		final Contact verifiedContact = this.authorizationService.requireContact(contactId, clientId);
 		final Contact eventContact = this.authorizationService.requireContact(contactIdEvent, clientId);
-		if (verifiedContact.getClients().stream().anyMatch(e -> eventContact.getClients().stream().anyMatch(e2 -> e2.getId().equals(e.getId())))) {
+		if (verifiedContact.getClients().stream()
+				.anyMatch(e -> eventContact.getClients().stream().anyMatch(e2 -> e2.getId().equals(e.getId())))) {
 			final ContactEvent contactEvent = new ContactEvent();
 			contactEvent.setContact(eventContact);
 			contactEvent.setEvent(this.authorizationService.requireEvent(eventId, verifiedContact.getId()));

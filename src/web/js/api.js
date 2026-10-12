@@ -306,6 +306,25 @@ class api {
 		}
 	}
 
+	static voice = {
+		getVoiceCallInfo(success) {
+			api.ajax({
+				url: 'voice/info',
+				success: success
+			});
+		},
+
+		postVoiceCall(success, error) {
+			api.ajax({
+				url: 'voice/call',
+				method: 'POST',
+				body: { confirmed: true },
+				success: success,
+				error: error
+			});
+		}
+	}
+
 	static location = {
 		getAddress(latitude, longitude, success) {
 			api.ajax({

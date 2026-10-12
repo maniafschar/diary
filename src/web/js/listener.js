@@ -485,8 +485,7 @@ td.column1 {
 	padding: 0.5em 1em 0 0.5em;
 	border-radius: 0.5em 0.5em 0 0;
 	width: fit-content !important;
-	white-space: nowrap;
-	max-width: 80%;
+	max-width: 85vw;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -494,7 +493,7 @@ td.column2 {
 	grid-column: 1;
 	grid-row: 2;
 	background: var(--background-content);
-	width: 100% !important;
+	width: calc(100vw - 1em) !important;
 	max-height: initial;
 	border-radius: 0 0.5em 0.5em 0.5em;
 	overflow: hidden;

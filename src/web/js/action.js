@@ -144,6 +144,38 @@ class action {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
+	static startAiCall() {
+		api.voice.getVoiceCallInfo(info => {
+			var popup = document.createElement('div');
+			popup.style.textAlign = 'center';
+			var message = popup.appendChild(document.createElement('div'));
+			if (!info.configured) {
+				message.innerText = 'Der KI-Anruf ist noch nicht auf dem Server konfiguriert.';
+				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+				return;
+			}
+			message.innerText = 'Es wird ein gebührenpflichtiger Anruf an ' + info.destination + ' gestartet. '
+				+ 'Der Assistent kündigt sich als KI an. Bitte fahre nur fort, wenn du diese Nummer anrufen darfst.';
+			var controls = popup.appendChild(document.createElement('div'));
+			controls.style.marginTop = '1em';
+			var button = controls.appendChild(document.createElement('button'));
+			button.innerText = 'Anruf starten';
+			button.onclick = () => {
+				button.disabled = true;
+				message.innerText = 'Der Anruf wird gestartet ...';
+				api.voice.postVoiceCall(response => {
+					message.innerText = 'Der Anruf wurde gestartet. Anruf-ID: ' + response.callSid;
+				}, error => {
+					message.innerText = error.responseText || 'Der Anrufstatus ist unklar. Bitte prüfe Twilio, bevor du es erneut versuchst.';
+				});
+			};
+			var cancel = controls.appendChild(document.createElement('button'));
+			cancel.innerText = 'Abbrechen';
+			cancel.onclick = () => document.dispatchEvent(new CustomEvent('popup'));
+			document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+		});
+	}
+
 	static login() {
 		var email = document.querySelector('element.login input');
 		var password = document.querySelector('element.login input-password');

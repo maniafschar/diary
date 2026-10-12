@@ -72,6 +72,21 @@ public class AiService {
 				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
 	}
 
+	public String voiceReply(final List<Content> conversation) {
+		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
+			final GenerateContentResponse response = client.models.generateContent("gemini-3.5-flash-lite",
+					conversation, GenerateContentConfig.builder().build());
+			if (response.candidates().isEmpty() || response.candidates().get().isEmpty()
+					|| response.candidates().get().get(0).content().isEmpty()
+					|| response.candidates().get().get(0).content().get().parts().isEmpty())
+				return "Entschuldigung, ich konnte gerade keine Antwort formulieren.";
+			final StringBuilder answer = new StringBuilder();
+			for (final Part part : response.candidates().get().get(0).content().get().parts().get())
+				answer.append(part.text().orElse(""));
+			return answer.toString().trim();
+		}
+	}
+
 	@SuppressWarnings("null")
 	protected Summary summaryGemini(final Prompt prompt, final String text) {
 		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
