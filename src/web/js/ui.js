@@ -74,26 +74,6 @@ class ui {
 			document.querySelector('html').classList.remove('freeze');
 	}
 
-	static openImprint() {
-		var e = document.querySelector('imprint');
-		if (!e)
-			return;
-		if (e.classList.contains('open')) {
-			e.classList.remove('open');
-			return;
-		}
-		e.classList.add('open');
-		ui.freeze(true);
-		if (!e.onclick) {
-			e.onclick = event => {
-				if (event.target.nodeName != 'TOGGLE') {
-					e.classList.remove('open');
-					ui.freeze(false);
-				}
-			};
-		}
-	}
-
 	static parents(e, nodeName) {
 		if (e) {
 			nodeName = nodeName.toUpperCase();
