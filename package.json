@@ -24,6 +24,7 @@
 		"cordova": "^12.0.0",
 		"cordova-android": "^15.1.0",
 		"cordova-ios": "^8.1.1",
+		"diary-apns-registration": "file:cordova-plugins/apns-registration",
 		"express": "^4.18.3",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4",
@@ -33,6 +34,9 @@
 		"platforms": [
 			"ios",
 			"android"
-		]
+		],
+		"plugins": {
+			"com.jq.diary.apns-registration": {}
+		}
 	}
 }

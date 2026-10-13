@@ -21,6 +21,7 @@ import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.service.AuthenticationService;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.ContactService;
+import com.jq.diary.service.PushNotificationService;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -34,6 +35,9 @@ public class ContactApi extends ApplicationApi {
 
 	@Autowired
 	private ContactService contactService;
+
+	@Autowired
+	private PushNotificationService pushNotificationService;
 
 	@GetMapping("{id}")
 	public Contact get(@PathVariable final BigInteger id, @RequestHeader final BigInteger clientId) {
@@ -93,10 +97,16 @@ public class ContactApi extends ApplicationApi {
 		final Contact eventContact = this.authorizationService.requireContact(contactIdEvent, clientId);
 		if (verifiedContact.getClients().stream()
 				.anyMatch(e -> eventContact.getClients().stream().anyMatch(e2 -> e2.getId().equals(e.getId())))) {
+			final com.jq.diary.entity.Event event = this.authorizationService.requireEvent(eventId,
+					verifiedContact.getId());
 			final ContactEvent contactEvent = new ContactEvent();
 			contactEvent.setContact(eventContact);
-			contactEvent.setEvent(this.authorizationService.requireEvent(eventId, verifiedContact.getId()));
+			contactEvent.setEvent(event);
 			this.contactService.save(contactEvent);
+			if (!event.getContact().getId().equals(eventContact.getId()))
+				this.pushNotificationService.notifyContact(event.getContact().getId(), verifiedContact.getId(),
+						event.getId(),
+						"Neue Teilnahme", "Jemand hat an deinem Event teilgenommen.");
 			return contactEvent.getId();
 		}
 		throw new IllegalArgumentException("Client mismatch\ncontactId: " + contactId + "\nclientId: " + clientId
@@ -107,8 +117,13 @@ public class ContactApi extends ApplicationApi {
 	public void deleteEvent(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @PathVariable final BigInteger contactEventId) {
 		final ContactEvent contactEvent = this.repository.one(ContactEvent.class, contactEventId);
-		this.authorizationService.requireEvent(contactEvent.getEvent().getId(),
-				this.authorizationService.requireContact(contactId, clientId).getId());
+		final Contact actor = this.authorizationService.requireContact(contactId, clientId);
+		final com.jq.diary.entity.Event event = this.authorizationService.requireEvent(contactEvent.getEvent().getId(),
+				actor.getId());
 		this.contactService.delete(contactEvent);
+		if (!event.getContact().getId().equals(actor.getId())
+				&& !event.getContact().getId().equals(contactEvent.getContact().getId()))
+			this.pushNotificationService.notifyContact(event.getContact().getId(), actor.getId(), event.getId(),
+					"Teilnahme geändert", "Jemand hat seine Teilnahme an deinem Event beendet.");
 	}
 }

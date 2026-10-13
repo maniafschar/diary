@@ -27,3 +27,23 @@ Optional outbound AI phone conversations use Twilio Programmable Voice and Gemin
 - `APP_VOICE_PUBLIC_API_URL` (the exact public HTTPS API base reachable by Twilio, including any routing prefix, for example `https://your-domain/rest/api`)
 
 The logged-in user starts calls from the navigation's more menu and must confirm before dialing. Twilio callbacks require a publicly reachable HTTPS deployment; trial accounts may require the destination to be verified. The assistant identifies itself as AI. Conversation turns are held in memory only and are not recorded or persisted by this feature.
+
+## iOS push notifications (APNs)
+
+Remote push is currently enabled for iOS only. The native app registers directly with APNs; the Spring server sends notifications with Pushy over APNs HTTP/2. Android push is intentionally not enabled because it requires FCM or another push transport.
+
+Before enabling pushes:
+
+1. Create an Apple APNs authentication key and enable Push Notifications for the `com.jq.diary` App ID. Use provisioning profiles with the Push Notifications capability.
+2. Apply `src/main/resources/db/push-notifications.sql` to the application database.
+3. Configure these server environment variables. Keep the `.p8` file outside the repository:
+
+```sh
+APNS_AUTH_KEY_PATH=/secure/path/AuthKey_XXXXXXXXXX.p8
+APNS_TEAM_ID=XXXXXXXXXX
+APNS_KEY_ID=XXXXXXXXXX
+APNS_TOPIC=com.jq.diary
+APNS_SANDBOX=true
+```
+
+Use `APNS_SANDBOX=false` for App Store/production builds. The default is sandbox. On first sign-in, iOS asks the user for notification permission. The server sends alerts for new/updated events, participation changes, and once-only reminders about 30 minutes before an event. Device tokens are tied to the signed-in contact; signing out unregisters the current token. The existing contact notification preference is respected.

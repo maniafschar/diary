@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="com.jq.diary.apns-registration" version="1.0.0">
+	<name>Diary APNs Registration</name>
+	<js-module name="DiaryApns" src="www/apns.js">
+		<clobbers target="DiaryApns" />
+	</js-module>
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="DiaryApnsRegistration">
+				<param name="ios-package" value="DiaryApnsRegistration" />
+			</feature>
+		</config-file>
+		<config-file target="App/Entitlements-Debug.plist" parent="aps-environment">
+			<string>development</string>
+		</config-file>
+		<config-file target="App/Entitlements-Release.plist" parent="aps-environment">
+			<string>production</string>
+		</config-file>
+		<source-file src="src/DiaryApnsRegistration.swift" />
+	</platform>
+</plugin>

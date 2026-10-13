@@ -330,6 +330,24 @@ class api {
 		}
 	}
 
+	static push = {
+		registerToken(token) {
+			api.ajax({
+				url: 'push/register',
+				method: 'POST',
+				body: { token: token }
+			});
+		},
+
+		unregisterToken(token) {
+			api.ajax({
+				url: 'push/unregister',
+				method: 'POST',
+				body: { token: token }
+			});
+		}
+	}
+
 	static location = {
 		getAddress(latitude, longitude, success) {
 			api.ajax({

@@ -1,0 +1,11 @@
+{
+	"name": "diary-apns-registration",
+	"version": "1.0.0",
+	"description": "APNs registration bridge for the Diary Cafe iOS app",
+	"cordova": {
+		"id": "com.jq.diary.apns-registration",
+		"platforms": [
+			"ios"
+		]
+	}
+}

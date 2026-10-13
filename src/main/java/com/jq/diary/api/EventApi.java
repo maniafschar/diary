@@ -37,6 +37,7 @@ import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.service.PdfService;
+import com.jq.diary.service.PushNotificationService;
 import com.jq.diary.util.Utilities;
 
 @RestController
@@ -50,6 +51,9 @@ public class EventApi extends ApplicationApi {
 
 	@Autowired
 	private PdfService pdfService;
+
+	@Autowired
+	private PushNotificationService pushNotificationService;
 
 	@Autowired
 	private LocationService locationService;
@@ -142,6 +146,8 @@ public class EventApi extends ApplicationApi {
 		this.eventService.save(event);
 		if (rating != null)
 			this.eventService.putRating(event.getId(), contactId, rating);
+		this.pushNotificationService.notifyClient(clientId, contactId, event.getId(), "Neues Event",
+				"Ein neues Event wurde hinzugefügt.");
 		return event.getId();
 	}
 
@@ -152,6 +158,8 @@ public class EventApi extends ApplicationApi {
 		original.setDate(event.getDate());
 		original.setLocation(this.locationService.one(event.getLocation().getId()));
 		this.eventService.save(original);
+		this.pushNotificationService.notifyClient(original.getClient().getId(), contactId, original.getId(),
+				"Event geändert", "Ein Event wurde aktualisiert.");
 	}
 
 	@PutMapping("rating/{eventId}/{rating}")
@@ -165,10 +173,14 @@ public class EventApi extends ApplicationApi {
 	public BigInteger put(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Event event) {
 		if (event.getId() != null) {
-			final Contact contact = this.authorizationService.requireEvent(event.getId(), contactId).getContact();
+			final Event original = this.authorizationService.requireEvent(event.getId(), contactId);
+			final Contact contact = original.getContact();
 			if (contact.getId().equals(this.authorizationService.requireContact(contactId, clientId).getId())) {
 				event.setContact(contact);
+				event.setClient(original.getClient());
 				this.eventService.save(event);
+				this.pushNotificationService.notifyClient(original.getClient().getId(), contactId, event.getId(),
+						"Event geändert", "Ein Event wurde aktualisiert.");
 			}
 		}
 		return event.getId();

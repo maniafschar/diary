@@ -21,10 +21,17 @@ export { action };
 
 class action {
 	static resizeTimeout;
+	static pushDeviceReady = false;
+	static pushRegistrationStarted = false;
+	static pushToken;
 	static init() {
 		action.logoff();
 		action.resize();
 		listener.init();
+		document.addEventListener('deviceready', () => {
+			action.pushDeviceReady = true;
+			action.registerPushDevice();
+		}, { once: true });
 		if (document.location.search) {
 			api.access = new URL(window.location.href).searchParams?.get('access');
 			if (api.access)
@@ -58,6 +65,7 @@ class action {
 	}
 
 	static loginPost() {
+		action.registerPushDevice();
 		document.dispatchEvent(new CustomEvent('event'));
 		setTimeout(() => {
 			if (window.scrollY == 0) {
@@ -66,6 +74,27 @@ class action {
 			} else
 				document.querySelector('html').classList.add('loggedIn');
 		}, 50);
+	}
+
+	static registerPushDevice() {
+		if (!action.pushDeviceReady || window.cordova?.platformId != 'ios' || !api.user?.id || !window.DiaryApns?.register)
+			return;
+		if (action.pushToken) {
+			api.push.registerToken(action.pushToken);
+			return;
+		}
+		if (action.pushRegistrationStarted)
+			return;
+		action.pushRegistrationStarted = true;
+		window.DiaryApns.register(token => {
+			action.pushRegistrationStarted = false;
+			action.pushToken = token;
+			if (api.user?.id)
+				api.push.registerToken(token);
+		}, error => {
+			action.pushRegistrationStarted = false;
+			console.warn('APNs registration failed', error);
+		});
 	}
 
 	static addFeedback(eventId) {
