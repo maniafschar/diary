@@ -6,7 +6,6 @@ class api {
 	static serverUrl = '{placeholderServer}';
 	static url = api.serverUrl + '/rest/api/';
 	static clients = {};
-	static clientId;
 	static user;
 	static access;
 	static progressbar = false;
@@ -52,7 +51,6 @@ class api {
 						if (contact) {
 							contact.password = Encryption.jsEncrypt.decrypt(contact.password);
 							api.user = contact;
-							api.clientId = api.user.clients[0].id;
 							for (var i = 0; i < api.user.clients.length; i++)
 								api.clients[api.user.clients[i].id] = api.user.clients[i];
 							api.authentication.putToken(success);
@@ -411,7 +409,6 @@ class api {
 	static logoff() {
 		api.user = null;
 		api.clients = {};
-		api.clientId = null;
 		api.access = null;
 	}
 
@@ -461,8 +458,8 @@ class api {
 			xhr.setRequestHeader('contactId', api.user.id);
 			xhr.setRequestHeader('salt', salt);
 			xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
-			if (api.clientId)
-				xhr.setRequestHeader('clientId', api.clientId);
+			if (api.user.currentClientId)
+				xhr.setRequestHeader('clientId', api.user.currentClientId);
 		}
 		if (typeof param.body == 'string')
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
