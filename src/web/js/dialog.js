@@ -199,7 +199,7 @@ ${dialog.stylePictures}`;
 		logo.appendChild(document.createElement('img')).setAttribute('src', 'image/title.png');
 		var name = logo.appendChild(document.createElement('h2'));
 		name.setAttribute('name', 'clientName');
-		name.innerText = api.clients[api.clientId].name;
+		name.innerText = api.clients[api.user.currentClientId].name;
 		if (Object.keys(api.clients).length > 1)
 			logo.onclick = () => { this.openMoreMenu(); dialog.client() };
 		document.body.appendChild(menu);
@@ -273,8 +273,8 @@ ${dialog.stylePictures}`;
 			dialog.createField(popup, 'Name', 'name', null, contact.name);
 			dialog.createField(popup, 'Email', 'email');
 			if (api.user.admin && contact.id == api.user.id) {
-				dialog.createField(popup, 'Blogname', 'clientName', null, api.clients[api.clientId].name);
-				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.clients[api.clientId].note);
+				dialog.createField(popup, 'Blogname', 'clientName', null, api.clients[api.user.currentClientId].name);
+				dialog.createField(popup, 'Beschreibung', 'clientNote', 'textarea', api.clients[api.user.currentClientId].note);
 				popup.appendChild(document.createElement('label')).innerText = 'Bild';
 				var pictures = popup.appendChild(document.createElement('value'));
 				pictures.classList.add('pictures');
@@ -405,14 +405,14 @@ button.confirmed::after {
 	static client() {
 		var popup = document.createElement('div');
 		var selection = popup.appendChild(document.createElement('input-selection'));
-		selection.setAttribute('value', api.clientId);
+		selection.setAttribute('value', api.user.currentClientId);
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 		var keys = Object.keys(api.clients);
 		for (var i = 0; i < keys.length; i++)
 			selection.add(keys[i], api.clients[keys[i]].name);
 		selection.open();
 		document.querySelector('dialog-popup').content().querySelector('input-selection').addEventListener('changed', () => {
-			api.clientId = document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value');
+			api.user.currentClientId = document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value');
 			document.dispatchEvent(new CustomEvent('event'));
 			document.dispatchEvent(new CustomEvent('contact'));
 			document.dispatchEvent(new CustomEvent('popup'));
