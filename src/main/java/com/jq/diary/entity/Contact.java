@@ -29,6 +29,7 @@ public class Contact extends BaseEntity {
 	private Boolean notification = true;
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
+	private BigInteger currentClientId;
 
 	public Set<Client> getClients() {
 		if (this.clients == null)
@@ -39,6 +40,15 @@ public class Contact extends BaseEntity {
 	public void setClients(final Set<Client> clients) {
 		this.clients = clients;
 	}
+
+	public BigInteger getCurrentClientId() {
+		return this.currentClientId;
+	}
+
+	public void setCurrentClientId(final BigInteger currentClientId) {
+		this.currentClientId = currentClientId;
+	}
+
 
 	public String getNote() {
 		return this.note;
