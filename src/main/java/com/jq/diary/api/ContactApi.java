@@ -50,6 +50,7 @@ public class ContactApi extends ApplicationApi {
 		final Contact user = this.authorizationService.requireContact(contactId, clientId);
 		if (contact.getId() == null) {
 			contact.getClients().add(this.repository.one(Client.class, clientId));
+			contact.setCurrentClientId(contact.getClients().get(0).getId());
 			this.contactService.save(contact);
 			return contact.getId();
 		}
