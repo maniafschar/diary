@@ -65,7 +65,7 @@ public class EventApi extends ApplicationApi {
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
 		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
-		if (!clientId.equals(contact.getCurrentClientId()) {
+		if (!clientId.equals(contact.getCurrentClientId())) {
 			contact.setCurrentClientId(clientId);
 			this.repository.save(contact);
 		}
