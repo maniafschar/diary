@@ -214,6 +214,7 @@ public class AuthenticationService {
 		contact.getClients().clear();
 		contact.getClients().add(client);
 		contact.setAdmin(true);
+		contact.setCurrentClientId(client.getId());
 		try {
 			this.emailService.send(contact.getEmail(),
 					this.createEmailLoginLink(contact, this.generateLoginParam(contact)));
