@@ -228,8 +228,8 @@ img.speak {
 				document.querySelector('body navigation').classList.add('loggedIn');
 			var clientName = document.querySelector('body navigation [name="clientName"]');
 			clientName.style.display = '';
-			if (api.clientId) {
-				clientName.innerText = api.clients[api.clientId].name;
+			if (api.user.currentClientId) {
+				clientName.innerText = api.clients[api.user.currentClientId].name;
 				if (Object.keys(api.clients).length > 1) {
 					var logo = document.querySelector('body navigation logo');
 					logo.style.cursor = 'pointer';
