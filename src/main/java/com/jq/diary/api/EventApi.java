@@ -32,6 +32,7 @@ import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
 import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Summary.Prompt;
+import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
@@ -53,6 +54,9 @@ public class EventApi extends ApplicationApi {
 	private PdfService pdfService;
 
 	@Autowired
+	private Repository repository;
+
+	@Autowired
 	private PushNotificationService pushNotificationService;
 
 	@Autowired
@@ -60,8 +64,13 @@ public class EventApi extends ApplicationApi {
 
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
+		if (!clientId.equals(contact.getCurrentClientId()) {
+			contact.setCurrentClientId(clientId);
+			this.repository.save(contact);
+		}
 		return this.filter(
-				this.eventService.list(this.authorizationService.requireContact(contactId, clientId)
+				this.eventService.list(contact
 						.getClients().stream().filter(e -> e.getId().equals(clientId)).findFirst().get()));
 	}
 
