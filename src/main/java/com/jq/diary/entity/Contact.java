@@ -1,5 +1,6 @@
 package com.jq.diary.entity;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
