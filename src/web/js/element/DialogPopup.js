@@ -291,7 +291,7 @@ div.toggle>div {
 		if (DialogPopup.onclose) {
 			DialogPopup.onclose();
 			DialogPopup.onclose = null;
-		} else {
+		} else if (popup.getAttribute('i')) {
 			popup.addEventListener('transitionend', () => popup.querySelector('content').textContent = '', { capture: false, passive: true, once: true });
 			popup.style.transform = '';
 			popup.removeAttribute('i');
