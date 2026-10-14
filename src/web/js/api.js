@@ -29,7 +29,6 @@ class api {
 					if (contact) {
 						api.user = contact;
 						api.user.password = password;
-						api.clientId = api.user.clients[0].id;
 						for (var i = 0; i < contact.clients.length; i++)
 							api.clients[contact.clients[i].id] = contact.clients[i];
 						if (refreshToken)
