@@ -73,9 +73,8 @@ public class PushNotificationService {
 
 	@PreDestroy
 	void shutdown() {
-		final ApnsClient client = this.apnsClient;
-		if (client != null)
-			client.close();
+		if (this.apnsClient != null)
+			this.apnsClient.close();
 	}
 
 	public boolean isConfigured() {
