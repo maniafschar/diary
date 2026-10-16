@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jq.diary.entity.Client;
+import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
@@ -77,6 +78,7 @@ public class EventService {
 	}
 
 	public void delete(final Event event) {
+		this.invalidateChatSummaries(event.getId());
 		event.getContactEvents().forEach(e -> this.repository.delete(e));
 		event.getEventImages().forEach(e -> this.repository.delete(e));
 		event.getEventRatings().forEach(e -> this.repository.delete(e));
@@ -105,6 +107,7 @@ public class EventService {
 			contactEvent.setEvent(event);
 			this.repository.save(contactEvent);
 		}
+		this.invalidateChatSummaries(event.getId());
 	}
 
 	public EventRating putRating(final BigInteger eventId, final BigInteger contactId, final Double rating) {
@@ -120,7 +123,17 @@ public class EventService {
 		}
 		eventRating.setRating(rating);
 		this.repository.save(eventRating);
+		this.invalidateChatSummaries(eventId);
 		return eventRating;
+	}
+
+	private void invalidateChatSummaries(final BigInteger eventId) {
+		if (eventId == null)
+			return;
+		this.repository.list(
+				"select distinct s from ChatSummary s, ContactEvent ce where ce.event.id=?1 and s.contact.id=ce.contact.id",
+				ChatSummary.class, eventId)
+				.forEach(this.repository::delete);
 	}
 
 	public void saveFeedback(final EventFeedback feedback) throws EmailException {
