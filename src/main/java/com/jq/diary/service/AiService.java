@@ -95,11 +95,11 @@ public class AiService {
 	private String chatReplyGPT(final List<Content> conversation) {
 		StringBuilder chat = new StringBuilder();
 		for (final Content content : conversation) {
-			if (content.getParts().isEmpty())
+			if (content.parts().isEmpty())
 				continue;
-			chat.append(content.getRole()).append(": ");
-			for (final Part part : content.getParts())
-				chat.append(part.getText());
+			chat.append(content.role()).append(": ");
+			for (final Part part : content.parts())
+				chat.append(part.text());
 			chat.append("\n");
 		}
 		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
