@@ -1,5 +1,3 @@
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
 import { api } from './api';
 import { dialog } from './dialog';
 import { DialogPopup } from './element/DialogPopup';
