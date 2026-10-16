@@ -636,15 +636,20 @@ bubble {
 	max-width: 85%;
 	border-radius: 0.5em;
 }
-bubble.ai {
+bubble.assistant {
 	margin-left: 0;
 	background: var(--background-content);
 	color: inherit;
 }
-bubble.model {
+bubble.user {
 	margin-left: auto;
 	background: var(--background-clickable);
 	color: white;
+}
+p {
+	margin-block-start: 0;
+	margin-block-end: 0;
+	padding: 0.5em 0;
 }
 controls {
 	position: relative;
