@@ -58,6 +58,9 @@ public class AiService {
 	@Value("${app.chatGPT.key}")
 	private String chatGpt;
 
+	@Value("${app.chatGPT.model:gpt-4.1-mini}")
+	private String chatGptModel;
+
 	@Value("${app.google.gemini.apiKey}")
 	private String geminiKey;
 
@@ -93,25 +96,32 @@ public class AiService {
 	}
 
 	private String chatReplyGPT(final List<Content> conversation) {
-		StringBuilder chat = new StringBuilder();
+		final List<Map<String, String>> input = new ArrayList<>();
 		for (final Content content : conversation) {
 			if (content.parts().isEmpty())
 				continue;
-			chat.append(content.role()).append(": ");
+			final StringBuilder text = new StringBuilder();
 			for (final Part part : content.parts().get())
-				chat.append(part.text());
-			chat.append("\n");
+				text.append(part.text().orElse(""));
+			final String role = content.role().orElse("user");
+			input.add(Map.of("role", "model".equals(role) ? "assistant" : role, "content", text.toString()));
 		}
-		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
-			final String s = WebClient
-					.create("https://api.openai.com/v1/completions")
+		try {
+			final String responseBody = WebClient
+					.create("https://api.openai.com/v1/responses")
 					.post().accept(MediaType.APPLICATION_JSON)
-					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 					.header("Authorization", "Bearer " + this.chatGpt)
-					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
-							.replace("{chat}", chat.toString().replace("\"", "\\\"").replace("\n", "\\n")))
-					.retrieve().toEntity(String.class).block().getBody();
-			return new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim();
+					.bodyValue(Map.of("model", this.chatGptModel, "input", input, "store", false))
+					.retrieve().bodyToMono(String.class).block();
+			final JsonNode response = new ObjectMapper().readTree(responseBody);
+			final String answer = response.path("output_text").asText();
+			if (!answer.isBlank())
+				return answer.trim();
+			for (final JsonNode item : response.path("output"))
+				for (final JsonNode part : item.path("content"))
+					if ("output_text".equals(part.path("type").asText()))
+						return part.path("text").asText("").trim();
+			return "Entschuldigung, ich konnte gerade keine Antwort formulieren.";
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
 			return null;
