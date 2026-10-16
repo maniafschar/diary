@@ -649,7 +649,6 @@ bubble.user {
 p {
 	margin-block-start: 0;
 	margin-block-end: 0;
-	padding: 0.5em 0;
 }
 controls {
 	position: relative;
