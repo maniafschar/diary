@@ -24,18 +24,13 @@ public class PushNotificationApi extends ApplicationApi {
 
 	@PostMapping("register")
 	public void register(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final DeviceToken request) {
-		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
-		this.pushNotificationService.register(contact, request.token());
+			@RequestBody final String token) {
+		this.pushNotificationService.register(this.authorizationService.requireContact(contactId, clientId), token);
 	}
 
 	@PostMapping("unregister")
 	public void unregister(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
-			@RequestBody final DeviceToken request) {
-		this.authorizationService.requireContact(contactId, clientId);
-		this.pushNotificationService.unregister(contactId, request.token());
-	}
-
-	public record DeviceToken(String token) {
+			@RequestBody final String token) {
+		this.pushNotificationService.unregister(this.authorizationService.requireContact(contactId, clientId), token);
 	}
 }
