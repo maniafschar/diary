@@ -98,7 +98,7 @@ public class AiService {
 			if (content.parts().isEmpty())
 				continue;
 			chat.append(content.role()).append(": ");
-			for (final Part part : content.parts())
+			for (final Part part : content.parts().get())
 				chat.append(part.text());
 			chat.append("\n");
 		}
@@ -111,9 +111,7 @@ public class AiService {
 					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
 							.replace("{chat}", chat.toString().replace("\"", "\\\"").replace("\n", "\\n")))
 					.retrieve().toEntity(String.class).block().getBody();
-			final Summary response = new Summary();
-			response.setNote(new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim());
-			return response;
+			return new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim();
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
 			return null;
