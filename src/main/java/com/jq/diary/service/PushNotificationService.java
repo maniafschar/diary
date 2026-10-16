@@ -24,6 +24,8 @@ import com.jq.diary.entity.ContactEvent;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.PushDelivery;
 import com.jq.diary.entity.PushDevice;
+import com.jq.diary.entity.Ticket;
+import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository;
 
 import jakarta.annotation.PostConstruct;
