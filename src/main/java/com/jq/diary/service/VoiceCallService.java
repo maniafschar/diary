@@ -124,7 +124,7 @@ public class VoiceCallService {
 			return this.sayAndHangUp("Danke für das Gespräch. Auf Wiederhören!");
 		}
 		try {
-			final String answer = this.aiService.voiceReply(conversation.history);
+			final String answer = this.aiService.chatReply(conversation.history);
 			conversation.history.add(Content.builder().role("model").parts(Part.fromText(answer)).build());
 			return this.gather(sessionId, answer);
 		} catch (final RuntimeException ex) {
