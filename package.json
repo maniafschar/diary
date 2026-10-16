@@ -14,7 +14,9 @@
 	"dependencies": {
 		"@babel/runtime": "^7.24.0",
 		"core-js": "^3.40.0",
-		"jsencrypt": "^3.5.4"
+		"dompurify": "^3.2.6",
+		"jsencrypt": "^3.5.4",
+		"marked": "^15.0.12"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.24.0",

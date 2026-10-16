@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 import { api } from './api';
 import { dialog } from './dialog';
 import { DialogPopup } from './element/DialogPopup';
@@ -193,7 +195,7 @@ class action {
 		send.innerText = 'Senden';
 		var renderMessage = message => {
 			var bubble = history.appendChild(document.createElement('div'));
-			bubble.style.whiteSpace = 'pre-wrap';
+			bubble.style.whiteSpace = 'normal';
 			bubble.style.padding = '0.75em';
 			bubble.style.margin = '0.5em 0';
 			bubble.style.maxWidth = '85%';
@@ -201,7 +203,7 @@ class action {
 			bubble.style.background = message.role === 'user' ? 'var(--background-clickable)' : 'var(--background-content)';
 			bubble.style.color = message.role === 'user' ? 'white' : 'inherit';
 			bubble.style.borderRadius = '0.5em';
-			bubble.textContent = message.text;
+			bubble.innerHTML = DOMPurify.sanitize(marked.parse(message.text || ''));
 			history.scrollTop = history.scrollHeight;
 		};
 		var sending = false;
