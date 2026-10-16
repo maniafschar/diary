@@ -50,7 +50,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private static AiType type = AiType.Gemini;
+	private static AiType type = AiType.GPT;
 
 	@Autowired
 	private AdminService adminService;
@@ -71,8 +71,13 @@ public class AiService {
 		return type == AiType.Gemini ? this.summaryGemini(prompt, text)
 				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
 	}
-
+	
 	public String chatReply(final List<Content> conversation) {
+		return type == AiType.Gemini ? this.chatReplyGemini(conversation)
+				: type == AiType.GPT ? this.chatReplyGPT(conversation) : null;
+	}
+
+	public String chatReplyGemini(final List<Content> conversation) {
 		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
 			final GenerateContentResponse response = client.models.generateContent("gemini-3.5-flash-lite",
 					conversation, GenerateContentConfig.builder().build());
@@ -84,6 +89,34 @@ public class AiService {
 			for (final Part part : response.candidates().get().get(0).content().get().parts().get())
 				answer.append(part.text().orElse(""));
 			return answer.toString().trim();
+		}
+	}
+
+	private String chatReplyGPT(final List<Content> conversation) {
+		StringBuilder chat = new StringBuilder();
+		for (final Content content : conversation) {
+			if (content.getParts().isEmpty())
+				continue;
+			chat.append(content.getRole()).append(": ");
+			for (final Part part : content.getParts())
+				chat.append(part.getText());
+			chat.append("\n");
+		}
+		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
+			final String s = WebClient
+					.create("https://api.openai.com/v1/completions")
+					.post().accept(MediaType.APPLICATION_JSON)
+					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+					.header("Authorization", "Bearer " + this.chatGpt)
+					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
+							.replace("{chat}", chat.toString().replace("\"", "\\\"").replace("\n", "\\n")))
+					.retrieve().toEntity(String.class).block().getBody();
+			final Summary response = new Summary();
+			response.setNote(new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim());
+			return response;
+		} catch (final Exception ex) {
+			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
+			return null;
 		}
 	}
 
