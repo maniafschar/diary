@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,6 @@ import jakarta.annotation.PreDestroy;
 
 @Service
 public class PushNotificationService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(PushNotificationService.class);
 	private final Repository repository;
 	private final String keyPath;
 	private final String teamId;
@@ -67,7 +64,7 @@ public class PushNotificationService {
 					.setSigningKey(ApnsSigningKey.loadFromPkcs8File(new File(this.keyPath), this.teamId, this.keyId))
 					.build();
 		} catch (final Exception ex) {
-			LOGGER.error("APNs could not be initialized; push notifications remain disabled.", ex);
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -93,11 +90,11 @@ public class PushNotificationService {
 		this.repository.save(device);
 	}
 
-	public void unregister(final BigInteger contactId, final String token) {
+	public void unregister(final Contact contact, final String token) {
 		if (token == null)
 			return;
 		this.repository.list("from PushDevice where token=?1 and contact.id=?2", PushDevice.class,
-				token.toLowerCase(), contactId).forEach(this.repository::delete);
+				token.toLowerCase(), contact.getId()).forEach(this.repository::delete);
 	}
 
 	public void notifyClient(final BigInteger clientId, final BigInteger excludedContactId,
@@ -111,8 +108,7 @@ public class PushNotificationService {
 	}
 
 	public void notifyContact(final BigInteger contactId, final BigInteger excludedContactId,
-			final BigInteger eventId,
-			final String title, final String body) {
+			final BigInteger eventId, final String title, final String body) {
 		if (!this.isConfigured())
 			return;
 		final List<PushDevice> devices = this.repository.list(
@@ -176,9 +172,9 @@ public class PushNotificationService {
 				.sendNotification(notification);
 		future.whenComplete((response, error) -> {
 			if (error != null || response == null || !response.isAccepted()) {
-				LOGGER.warn("APNs push failed for device {}: {}", device.getId(),
-						error != null ? error.getMessage()
-								: response == null ? "no response" : response.getRejectionReason().orElse("rejected"));
+				this.repository.save(new Ticket("APNs push failed for device " + device.getId() + ": "
+						+ (error != null ? error.getMessage()
+								: response == null ? "no response" : response.getRejectionReason().orElse("rejected"))));
 				if (response != null && response.getStatusCode() == 410)
 					this.repository.delete(device);
 				if (reminder != null)
