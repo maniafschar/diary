@@ -308,19 +308,19 @@ class api {
 		}
 	}
 
-	static voice = {
-		getVoiceCallInfo(success) {
+	static chat = {
+		getMessages(success) {
 			api.ajax({
-				url: 'voice/info',
+				url: 'chat/messages',
 				success: success
 			});
 		},
 
-		postVoiceCall(success, error) {
+		postMessage(text, success, error) {
 			api.ajax({
-				url: 'voice/call',
+				url: 'chat/messages',
 				method: 'POST',
-				body: { confirmed: true },
+				body: { text: text },
 				success: success,
 				error: error
 			});

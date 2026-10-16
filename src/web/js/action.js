@@ -173,36 +173,61 @@ class action {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
-	static startAiCall() {
-		api.voice.getVoiceCallInfo(info => {
-			var popup = document.createElement('div');
-			popup.style.textAlign = 'center';
-			var message = popup.appendChild(document.createElement('div'));
-			if (!info.configured) {
-				message.innerText = 'Der KI-Anruf ist noch nicht auf dem Server konfiguriert.';
-				document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+	static startAiChat() {
+		var popup = document.createElement('div');
+		popup.style.width = 'min(42em, 80vw)';
+		var history = popup.appendChild(document.createElement('div'));
+		history.style.maxHeight = '45vh';
+		history.style.overflowY = 'auto';
+		history.style.marginBottom = '1em';
+		var status = popup.appendChild(document.createElement('div'));
+		status.style.minHeight = '1.5em';
+		status.style.textAlign = 'center';
+		var input = popup.appendChild(document.createElement('input-textarea'));
+		input.setAttribute('compact', '');
+		input.setAttribute('aria-label', 'Nachricht an den KI-Chat');
+		var controls = popup.appendChild(document.createElement('div'));
+		controls.style.textAlign = 'center';
+		controls.style.marginTop = '0.5em';
+		var send = controls.appendChild(document.createElement('button'));
+		send.innerText = 'Senden';
+		var renderMessage = message => {
+			var bubble = history.appendChild(document.createElement('div'));
+			bubble.style.whiteSpace = 'pre-wrap';
+			bubble.style.padding = '0.75em';
+			bubble.style.margin = '0.5em 0';
+			bubble.style.maxWidth = '85%';
+			bubble.style.marginLeft = message.role === 'user' ? 'auto' : '0';
+			bubble.style.background = message.role === 'user' ? 'var(--background-clickable)' : 'var(--background-content)';
+			bubble.style.color = message.role === 'user' ? 'white' : 'inherit';
+			bubble.style.borderRadius = '0.5em';
+			bubble.textContent = message.text;
+			history.scrollTop = history.scrollHeight;
+		};
+		var sending = false;
+		var sendMessage = () => {
+			var text = input.value?.trim();
+			if (!text || sending)
 				return;
-			}
-			message.innerText = 'Es wird ein gebührenpflichtiger Anruf an ' + info.destination + ' gestartet. '
-				+ 'Der Assistent kündigt sich als KI an. Bitte fahre nur fort, wenn du diese Nummer anrufen darfst.';
-			var controls = popup.appendChild(document.createElement('div'));
-			controls.style.marginTop = '1em';
-			var button = controls.appendChild(document.createElement('button'));
-			button.innerText = 'Anruf starten';
-			button.onclick = () => {
-				button.disabled = true;
-				message.innerText = 'Der Anruf wird gestartet ...';
-				api.voice.postVoiceCall(response => {
-					message.innerText = 'Der Anruf wurde gestartet. Anruf-ID: ' + response.callSid;
-				}, error => {
-					message.innerText = error.responseText || 'Der Anrufstatus ist unklar. Bitte prüfe Twilio, bevor du es erneut versuchst.';
-				});
-			};
-			var cancel = controls.appendChild(document.createElement('button'));
-			cancel.innerText = 'Abbrechen';
-			cancel.onclick = () => document.dispatchEvent(new CustomEvent('popup'));
-			document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
-		});
+			sending = true;
+			send.disabled = true;
+			input.value = '';
+			renderMessage({ role: 'user', text: text });
+			status.innerText = 'Antwort wird erstellt ...';
+			api.chat.postMessage(text, response => {
+				renderMessage({ role: 'assistant', text: response.answer });
+				status.innerText = '';
+				sending = false;
+				send.disabled = false;
+			}, error => {
+				status.innerText = error.responseText || 'Die Antwort konnte nicht erstellt werden.';
+				sending = false;
+				send.disabled = false;
+			});
+		};
+		send.onclick = sendMessage;
+		api.chat.getMessages(messages => messages.forEach(renderMessage));
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
 	static login() {

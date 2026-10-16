@@ -72,7 +72,7 @@ public class AiService {
 				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
 	}
 
-	public String voiceReply(final List<Content> conversation) {
+	public String chatReply(final List<Content> conversation) {
 		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
 			final GenerateContentResponse response = client.models.generateContent("gemini-3.5-flash-lite",
 					conversation, GenerateContentConfig.builder().build());

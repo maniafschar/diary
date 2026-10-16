@@ -36,6 +36,10 @@ textarea {
 	box-sizing: border-box;
 }
 
+:host([compact]) textarea {
+	height: 5em;
+}
+
 button.speech {
 	top: 0;
 	right: 0;
@@ -76,7 +80,7 @@ button svg {
 	display: none;
 }`;
 		var textarea = this._root.appendChild(document.createElement('textarea'));
-		textarea.addEventListener('change', e => this.value = this._root.querySelector('textarea').value);
+		textarea.addEventListener('input', () => this.value = textarea.value);
 		if (this.getAttribute('value')) {
 			textarea.value = this.getAttribute('value');
 			this.value = textarea.value;
@@ -91,6 +95,16 @@ button svg {
 </svg>`;
 			document.createElement('audio-player').controls = 'hidden';
 		}
+	}
+
+	get value() {
+		return this._root.querySelector('textarea').value;
+	}
+
+	set value(value) {
+		const textarea = this._root.querySelector('textarea');
+		if (textarea)
+			textarea.value = value || '';
 	}
 
 	captureAudio() {
