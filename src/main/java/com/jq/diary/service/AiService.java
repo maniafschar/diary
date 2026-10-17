@@ -99,7 +99,8 @@ public class AiService {
 					new org.springframework.ai.chat.prompt.Prompt(messages));
 			final String answer = response.getResult().getOutput().getText();
 			return answer == null || answer.isBlank()
-					? "Entschuldigung, ich konnte gerade keine Antwort formulieren." : answer.trim();
+					? "Entschuldigung, ich konnte gerade keine Antwort formulieren."
+					: answer.trim();
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
 			throw new IllegalStateException("Spring AI chat request failed.", ex);
@@ -119,30 +120,31 @@ public class AiService {
 			final String apiKey;
 			final String defaultModel;
 			switch (provider) {
-			case "GEMINI" -> {
-				baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
-				completionsPath = "/chat/completions";
-				apiKey = this.geminiKey;
-				defaultModel = "gemini-2.5-flash-lite";
-			}
-			case "GPT", "OPENAI" -> {
-				baseUrl = "https://api.openai.com";
-				completionsPath = "/v1/chat/completions";
-				apiKey = this.chatGpt;
-				defaultModel = "gpt-4o-mini";
-			}
-			case "HUGGINGFACE" -> {
-				baseUrl = "https://router.huggingface.co/v1";
-				completionsPath = "/chat/completions";
-				apiKey = this.huggingFace;
-				defaultModel = "google/gemma-2-2b-it";
-			}
-			default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
+				case "GEMINI" -> {
+					baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
+					completionsPath = "/chat/completions";
+					apiKey = this.geminiKey;
+					defaultModel = "gemini-2.5-flash-lite";
+				}
+				case "GPT", "OPENAI" -> {
+					baseUrl = "https://api.openai.com";
+					completionsPath = "/v1/chat/completions";
+					apiKey = this.chatGpt;
+					defaultModel = "gpt-4o-mini";
+				}
+				case "HUGGINGFACE" -> {
+					baseUrl = "https://router.huggingface.co/v1";
+					completionsPath = "/chat/completions";
+					apiKey = this.huggingFace;
+					defaultModel = "google/gemma-2-2b-it";
+				}
+				default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
 			}
 			if (apiKey == null || apiKey.isBlank())
 				throw new IllegalStateException("AI chat provider " + provider + " has no API key configured.");
 			final String modelName = this.chatModelName == null || this.chatModelName.isBlank()
-					? defaultModel : this.chatModelName;
+					? defaultModel
+					: this.chatModelName;
 			final OpenAiApi api = OpenAiApi.builder()
 					.baseUrl(baseUrl)
 					.completionsPath(completionsPath)
