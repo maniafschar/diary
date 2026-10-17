@@ -50,7 +50,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private static AiType type = AiType.GPT;
+	private static AiType type = AiType.Gemini;
 
 	@Autowired
 	private AdminService adminService;
@@ -71,7 +71,7 @@ public class AiService {
 		return type == AiType.Gemini ? this.summaryGemini(prompt, text)
 				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
 	}
-	
+
 	public String chatReply(final List<Content> conversation) {
 		return type == AiType.Gemini ? this.chatReplyGemini(conversation)
 				: type == AiType.GPT ? this.chatReplyGPT(conversation) : null;
