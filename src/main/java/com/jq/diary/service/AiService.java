@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -46,6 +45,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
+	private static AiProvider provider = AiProvider.HuggingFace;
 	private volatile ChatModel springAiChatModel;
 
 	@Autowired
@@ -60,23 +60,18 @@ public class AiService {
 	@Value("${app.huggingface.apiKey}")
 	private String huggingFace;
 
-	@Value("${app.ai.chat.provider:GEMINI}")
-	private String chatProvider;
-
-	@Value("${app.ai.chat.model:}")
-	private String chatModelName;
+	enum AiProvider {
+		GPT, Gemini, HuggingFace, None
+	}
 
 	public Summary summary(final Prompt prompt, final String text) {
-		if (text.length() < 900 || this.chatProvider.trim().equalsIgnoreCase("NONE"))
+		if (text.length() < 900 || provider == AiProvider.HuggingFace)
 			return null;
 		return this.summarySpringAi(prompt, text);
 	}
 
 	public String chatReply(final List<Content> conversation) {
-		if (this.chatProvider.trim().equalsIgnoreCase("NONE"))
-			return null;
-		final String provider = this.chatProvider.trim().toUpperCase(Locale.ROOT);
-		if (provider.equals("NONE"))
+		if (provider == AiProvider.None)
 			return null;
 		final List<Message> messages = new ArrayList<>();
 		for (final Content content : conversation) {
@@ -93,7 +88,7 @@ public class AiService {
 			else
 				messages.add(new UserMessage(text.toString()));
 		}
-		final ChatModel model = this.chatModel(provider);
+		final ChatModel model = this.chatModel();
 		try {
 			final ChatResponse response = model.call(
 					new org.springframework.ai.chat.prompt.Prompt(messages));
@@ -107,7 +102,7 @@ public class AiService {
 		}
 	}
 
-	private ChatModel chatModel(final String provider) {
+	private ChatModel chatModel() {
 		ChatModel model = this.springAiChatModel;
 		if (model != null)
 			return model;
@@ -120,19 +115,19 @@ public class AiService {
 			final String apiKey;
 			final String defaultModel;
 			switch (provider) {
-				case "GEMINI" -> {
+				case Gemini -> {
 					baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
 					completionsPath = "/chat/completions";
 					apiKey = this.geminiKey;
 					defaultModel = "gemini-2.5-flash-lite";
 				}
-				case "GPT", "OPENAI" -> {
+				case GPT -> {
 					baseUrl = "https://api.openai.com";
 					completionsPath = "/v1/chat/completions";
 					apiKey = this.chatGpt;
 					defaultModel = "gpt-4o-mini";
 				}
-				case "HUGGINGFACE" -> {
+				case HuggingFace -> {
 					baseUrl = "https://router.huggingface.co/v1";
 					completionsPath = "/chat/completions";
 					apiKey = this.huggingFace;
@@ -142,9 +137,6 @@ public class AiService {
 			}
 			if (apiKey == null || apiKey.isBlank())
 				throw new IllegalStateException("AI chat provider " + provider + " has no API key configured.");
-			final String modelName = this.chatModelName == null || this.chatModelName.isBlank()
-					? defaultModel
-					: this.chatModelName;
 			final OpenAiApi api = OpenAiApi.builder()
 					.baseUrl(baseUrl)
 					.completionsPath(completionsPath)
@@ -152,7 +144,7 @@ public class AiService {
 					.build();
 			model = OpenAiChatModel.builder()
 					.openAiApi(api)
-					.defaultOptions(OpenAiChatOptions.builder().model(modelName).build())
+					.defaultOptions(OpenAiChatOptions.builder().model(defaultModel).build())
 					.build();
 			this.springAiChatModel = model;
 			return model;
@@ -169,7 +161,7 @@ public class AiService {
 					.responseFormat(new org.springframework.ai.openai.api.ResponseFormat(
 							org.springframework.ai.openai.api.ResponseFormat.Type.JSON_OBJECT, null))
 					.build();
-			final ChatResponse response = this.chatModel(this.chatProvider.trim().toUpperCase(Locale.ROOT))
+			final ChatResponse response = this.chatModel()
 					.call(new org.springframework.ai.chat.prompt.Prompt(messages, options));
 			final Summary summary = this.convert(response.getResult().getOutput().getText());
 			summary.setImage(this.imageGemini(this.imageGeminiPrompt(summary.getNote())));
@@ -185,7 +177,7 @@ public class AiService {
 		final String instructions = "Erstelle aus dieser psychologischen Analyse einen präzisen Bild-Prompt. "
 				+ "Nutze eine starke visuelle Metapher, beschreibe Vordergrund, Licht und Farben und wähle "
 				+ "einen passenden kunstvollen Stil. Gib ausschließlich den finalen Prompt auf Deutsch aus.";
-		final ChatResponse response = this.chatModel(this.chatProvider.trim().toUpperCase(Locale.ROOT))
+		final ChatResponse response = this.chatModel()
 				.call(new org.springframework.ai.chat.prompt.Prompt(
 						List.of(new SystemMessage(instructions), new UserMessage(summary))));
 		return response.getResult().getOutput().getText().trim();
@@ -258,5 +250,4 @@ public class AiService {
 			list.add(node.get(i).asText().toLowerCase().replace("**", ""));
 		return list;
 	}
-
 }
