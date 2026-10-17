@@ -45,7 +45,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private static AiProvider provider = AiProvider.HuggingFace;
+	private static AiProvider provider = AiProvider.GPT;
 	private volatile ChatModel springAiChatModel;
 
 	@Autowired
