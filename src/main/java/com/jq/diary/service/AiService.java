@@ -79,7 +79,7 @@ public class AiService {
 
 	public String chatReplyGemini(final List<Content> conversation) {
 		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
-			final GenerateContentResponse response = client.models.generateContent("gemini-3.5-flash-lite",
+			final GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash-lite",
 					conversation, GenerateContentConfig.builder().build());
 			if (response.candidates().isEmpty() || response.candidates().get().isEmpty()
 					|| response.candidates().get().get(0).content().isEmpty()
