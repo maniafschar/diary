@@ -131,7 +131,7 @@ public class AiService {
 					baseUrl = "https://router.huggingface.co/v1";
 					completionsPath = "/chat/completions";
 					apiKey = this.huggingFace;
-					defaultModel = "google/gemma-2-2b-it";
+					defaultModel = "google/gemma-3-27b-it";
 				}
 				default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
 			}
