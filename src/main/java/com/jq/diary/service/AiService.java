@@ -1,30 +1,31 @@
 package com.jq.diary.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.common.collect.ImmutableList;
 import com.google.genai.Client;
-import com.google.genai.ResponseStream;
 import com.google.genai.gaos.models.interactions.CreateModelInteraction;
 import com.google.genai.gaos.models.interactions.CreateModelInteractionResponseFormat;
 import com.google.genai.gaos.models.interactions.ImageContent;
@@ -37,12 +38,7 @@ import com.google.genai.gaos.models.interactions.ResponseFormat;
 import com.google.genai.gaos.models.interactions.Step;
 import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
 import com.google.genai.types.Content;
-import com.google.genai.types.GenerateContentConfig;
-import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
-import com.google.genai.types.Schema;
-import com.google.genai.types.ThinkingConfig;
-import com.google.genai.types.Type;
 import com.jq.diary.entity.Summary;
 import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.entity.Ticket;
@@ -50,7 +46,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private static AiType type = AiType.Gemini;
+	private volatile ChatModel springAiChatModel;
 
 	@Autowired
 	private AdminService adminService;
@@ -61,135 +57,136 @@ public class AiService {
 	@Value("${app.google.gemini.apiKey}")
 	private String geminiKey;
 
-	private enum AiType {
-		GPT, Gemini, None
-	}
+	@Value("${app.huggingface.apiKey}")
+	private String huggingFace;
+
+	@Value("${app.ai.chat.provider:GEMINI}")
+	private String chatProvider;
+
+	@Value("${app.ai.chat.model:}")
+	private String chatModelName;
 
 	public Summary summary(final Prompt prompt, final String text) {
-		if (text.length() < 900)
+		if (text.length() < 900 || this.chatProvider.trim().equalsIgnoreCase("NONE"))
 			return null;
-		return type == AiType.Gemini ? this.summaryGemini(prompt, text)
-				: type == AiType.GPT ? this.summaryGPT(prompt, text) : null;
+		return this.summarySpringAi(prompt, text);
 	}
 
 	public String chatReply(final List<Content> conversation) {
-		return type == AiType.Gemini ? this.chatReplyGemini(conversation)
-				: type == AiType.GPT ? this.chatReplyGPT(conversation) : null;
-	}
-
-	public String chatReplyGemini(final List<Content> conversation) {
-		try (final Client client = Client.builder().apiKey(this.geminiKey).build()) {
-			final GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash-lite",
-					conversation, GenerateContentConfig.builder().build());
-			if (response.candidates().isEmpty() || response.candidates().get().isEmpty()
-					|| response.candidates().get().get(0).content().isEmpty()
-					|| response.candidates().get().get(0).content().get().parts().isEmpty())
-				return "Entschuldigung, ich konnte gerade keine Antwort formulieren.";
-			final StringBuilder answer = new StringBuilder();
-			for (final Part part : response.candidates().get().get(0).content().get().parts().get())
-				answer.append(part.text().orElse(""));
-			return answer.toString().trim();
-		}
-	}
-
-	private String chatReplyGPT(final List<Content> conversation) {
-		StringBuilder chat = new StringBuilder();
+		if (this.chatProvider.trim().equalsIgnoreCase("NONE"))
+			return null;
+		final String provider = this.chatProvider.trim().toUpperCase(Locale.ROOT);
+		if (provider.equals("NONE"))
+			return null;
+		final List<Message> messages = new ArrayList<>();
 		for (final Content content : conversation) {
 			if (content.parts().isEmpty())
 				continue;
-			chat.append(content.role()).append(": ");
+			final String role = content.role().orElse("user");
+			final StringBuilder text = new StringBuilder();
 			for (final Part part : content.parts().get())
-				chat.append(part.text());
-			chat.append("\n");
+				text.append(part.text().orElse(""));
+			if (role.equals("system"))
+				messages.add(new SystemMessage(text.toString()));
+			else if (role.equals("model") || role.equals("assistant"))
+				messages.add(new AssistantMessage(text.toString()));
+			else
+				messages.add(new UserMessage(text.toString()));
 		}
-		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
-			final String s = WebClient
-					.create("https://api.openai.com/v1/completions")
-					.post().accept(MediaType.APPLICATION_JSON)
-					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					.header("Authorization", "Bearer " + this.chatGpt)
-					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
-							.replace("{chat}", chat.toString().replace("\"", "\\\"").replace("\n", "\\n")))
-					.retrieve().toEntity(String.class).block().getBody();
-			return new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim();
+		final ChatModel model = this.chatModel(provider);
+		try {
+			final ChatResponse response = model.call(
+					new org.springframework.ai.chat.prompt.Prompt(messages));
+			final String answer = response.getResult().getOutput().getText();
+			return answer == null || answer.isBlank()
+					? "Entschuldigung, ich konnte gerade keine Antwort formulieren." : answer.trim();
 		} catch (final Exception ex) {
 			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
-			return null;
+			throw new IllegalStateException("Spring AI chat request failed.", ex);
 		}
 	}
 
-	@SuppressWarnings("null")
-	protected Summary summaryGemini(final Prompt prompt, final String text) {
-		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
-				.parts(ImmutableList
-						.<Part>of(Part.fromText(prompt.getText() + ":\n" + text)))
-				.build());
-		final Map<String, Schema> schema = new HashMap<>();
-		schema.put("summary", Schema.builder().type(Type.Known.STRING).build());
-		schema.put("adjectives", Schema.builder().type(Type.Known.ARRAY)
-				.items(Schema.builder().type(Type.Known.STRING).build()).build());
-		schema.put("emojis", Schema.builder().type(Type.Known.ARRAY)
-				.items(Schema.builder().type(Type.Known.STRING).build()).build());
-		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
-				.responseMimeType("application/json")
-				.responseSchema(Schema.builder()
-						.type(Type.Known.OBJECT)
-						.properties(schema)
-						.required(Arrays.asList("summary", "adjectives", "emojis"))
-						.propertyOrdering(Arrays.asList("summary", "adjectives", "emojis"))
-						.build())
-				.build();
-		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContentStream("gemini-3.5-flash-lite", contents, config)) {
-			final StringBuffer s = new StringBuffer();
-			for (final GenerateContentResponse res : responseStream) {
-				if (res.candidates().isEmpty() || res.candidates().get().get(0).content().isEmpty()
-						|| res.candidates().get().get(0).content().get().parts().isEmpty())
-					continue;
-				final List<Part> parts = res.candidates().get().get(0).content().get().parts().get();
-				for (final Part part : parts)
-					s.append(part.text().orElse(""));
+	private ChatModel chatModel(final String provider) {
+		ChatModel model = this.springAiChatModel;
+		if (model != null)
+			return model;
+		synchronized (this) {
+			model = this.springAiChatModel;
+			if (model != null)
+				return model;
+			final String baseUrl;
+			final String completionsPath;
+			final String apiKey;
+			final String defaultModel;
+			switch (provider) {
+			case "GEMINI" -> {
+				baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
+				completionsPath = "/chat/completions";
+				apiKey = this.geminiKey;
+				defaultModel = "gemini-2.5-flash-lite";
 			}
-			final Summary aiSummary = this.convert(s.toString());
-			aiSummary.setImage(this.imageGemini(this.imageGeminiPrompt(aiSummary.getNote())));
-			aiSummary.setTextLength(text.length());
-			return aiSummary;
+			case "GPT", "OPENAI" -> {
+				baseUrl = "https://api.openai.com";
+				completionsPath = "/v1/chat/completions";
+				apiKey = this.chatGpt;
+				defaultModel = "gpt-4o-mini";
+			}
+			case "HUGGINGFACE" -> {
+				baseUrl = "https://router.huggingface.co/v1";
+				completionsPath = "/chat/completions";
+				apiKey = this.huggingFace;
+				defaultModel = "google/gemma-2-2b-it";
+			}
+			default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
+			}
+			if (apiKey == null || apiKey.isBlank())
+				throw new IllegalStateException("AI chat provider " + provider + " has no API key configured.");
+			final String modelName = this.chatModelName == null || this.chatModelName.isBlank()
+					? defaultModel : this.chatModelName;
+			final OpenAiApi api = OpenAiApi.builder()
+					.baseUrl(baseUrl)
+					.completionsPath(completionsPath)
+					.apiKey(apiKey)
+					.build();
+			model = OpenAiChatModel.builder()
+					.openAiApi(api)
+					.defaultOptions(OpenAiChatOptions.builder().model(modelName).build())
+					.build();
+			this.springAiChatModel = model;
+			return model;
+		}
+	}
+
+	private Summary summarySpringAi(final Prompt prompt, final String text) {
+		try {
+			final List<Message> messages = List.of(
+					new SystemMessage(prompt.getText() + "\n\nGib ausschließlich ein gültiges JSON-Objekt "
+							+ "mit summary (String), adjectives (String-Array) und emojis (String-Array) zurück."),
+					new UserMessage(text));
+			final OpenAiChatOptions options = OpenAiChatOptions.builder()
+					.responseFormat(new org.springframework.ai.openai.api.ResponseFormat(
+							org.springframework.ai.openai.api.ResponseFormat.Type.JSON_OBJECT, null))
+					.build();
+			final ChatResponse response = this.chatModel(this.chatProvider.trim().toUpperCase(Locale.ROOT))
+					.call(new org.springframework.ai.chat.prompt.Prompt(messages, options));
+			final Summary summary = this.convert(response.getResult().getOutput().getText());
+			summary.setImage(this.imageGemini(this.imageGeminiPrompt(summary.getNote())));
+			summary.setTextLength(text.length());
+			return summary;
+		} catch (final Exception ex) {
+			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
+			throw new IllegalStateException("Spring AI summary request failed.", ex);
 		}
 	}
 
 	private String imageGeminiPrompt(final String summary) {
-		@SuppressWarnings("null")
-		final List<Content> contents = ImmutableList.<Content>of(Content.builder().role("user")
-				.parts(ImmutableList
-						.<Part>of(Part.fromText(
-								"Erstelle mir auf Basis Deiner psychologischen Analyse, die unten angefügt ist, einen präzisen Bild-Prompt für einen KI-Bildgenerator.\n\n"
-										+ "Regeln für den Bild-Prompt:\n"
-										+ "1. Übersetze die emotionale Kernbotschaft der Analyse in eine starke, visuelle Metapher\n"
-										+ "2. Beschreibe die Szene detailliert: Was ist im Vordergrund? Wie ist das Licht? Welche Farben dominieren?\n"
-										+ "3. Definiere den Stil: Nutze einen kunstvollen, symbolischen Stil. Entscheide selber, welcher Stil am besten zur Stimmung im Text passt.\n"
-										+ "4. Gib mir den finalen Prompt nur auf Deutsch aus.\n\n"
-										+ "Hier Deine Zusammenfassung:\n" + summary)))
-				.build());
-		final GenerateContentConfig config = GenerateContentConfig.builder()
-				.thinkingConfig(ThinkingConfig.builder().thinkingLevel("MINIMAL").build())
-				.responseSchema(Schema.builder()
-						.type(Type.Known.STRING)
-						.build())
-				.build();
-		try (final ResponseStream<GenerateContentResponse> responseStream = Client.builder().apiKey(this.geminiKey)
-				.build().models.generateContentStream("gemini-3.5-flash-lite", contents, config)) {
-			final StringBuffer s = new StringBuffer();
-			for (final GenerateContentResponse res : responseStream) {
-				if (res.candidates().isEmpty() || res.candidates().get().get(0).content().isEmpty()
-						|| res.candidates().get().get(0).content().get().parts().isEmpty())
-					continue;
-				final List<Part> parts = res.candidates().get().get(0).content().get().parts().get();
-				for (final Part part : parts)
-					s.append(part.text().orElse(""));
-			}
-			return s.toString();
-		}
+		final String instructions = "Erstelle aus dieser psychologischen Analyse einen präzisen Bild-Prompt. "
+				+ "Nutze eine starke visuelle Metapher, beschreibe Vordergrund, Licht und Farben und wähle "
+				+ "einen passenden kunstvollen Stil. Gib ausschließlich den finalen Prompt auf Deutsch aus.";
+		final ChatResponse response = this.chatModel(this.chatProvider.trim().toUpperCase(Locale.ROOT))
+				.call(new org.springframework.ai.chat.prompt.Prompt(
+						List.of(new SystemMessage(instructions), new UserMessage(summary))));
+		return response.getResult().getOutput().getText().trim();
 	}
 
 	private String imageGemini(final String prompt) {
@@ -260,22 +257,4 @@ public class AiService {
 		return list;
 	}
 
-	private Summary summaryGPT(final Prompt prompt, final String text) {
-		try (final InputStream in = this.getClass().getResourceAsStream("/gpt.json")) {
-			final String s = WebClient
-					.create("https://api.openai.com/v1/completions")
-					.post().accept(MediaType.APPLICATION_JSON)
-					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					.header("Authorization", "Bearer " + this.chatGpt)
-					.bodyValue(IOUtils.toString(in, StandardCharsets.UTF_8)
-							.replace("{chat}", text.replace("\"", "\\\"").replace("\n", "\\n")))
-					.retrieve().toEntity(String.class).block().getBody();
-			final Summary response = new Summary();
-			response.setNote(new ObjectMapper().readTree(s).get("choices").get(0).get("text").asText().trim());
-			return response;
-		} catch (final Exception ex) {
-			this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
-			return null;
-		}
-	}
 }

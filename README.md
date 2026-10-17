@@ -18,6 +18,18 @@ npm run cordova:android
 
 The iOS build requires Xcode and CocoaPods 1.16 or newer. Android requires Android SDK command-line tools, platform-tools, Android platform 36, and Build Tools 36.0.0. The app bundles the web UI but connects to the production backend at `https://diary.cafe` by default; override `DIARY_API_SERVER` when building for another backend.
 
+## AI chat provider
+
+The Spring AI provider for chat replies, text summaries, and image prompts is selected on the server with `APP_AI_CHAT_PROVIDER`: `GEMINI` (default), `GPT`/`OPENAI`, `HUGGINGFACE`, or `NONE`. For Hugging Face Inference Providers, configure:
+
+```sh
+APP_AI_CHAT_PROVIDER=HUGGINGFACE
+APP_HUGGINGFACE_TOKEN=hf_...
+APP_HUGGINGFACE_MODEL=google/gemma-2-2b-it
+```
+
+The token needs Hugging Face Inference Providers permission and must remain server-side. Actual image rendering still uses Google's Gemini image API; the selected Spring AI provider generates its prompt.
+
 Optional outbound AI phone conversations use Twilio Programmable Voice and Gemini. Configure these server environment variables before enabling the feature:
 
 - `TWILIO_ACCOUNT_SID`
