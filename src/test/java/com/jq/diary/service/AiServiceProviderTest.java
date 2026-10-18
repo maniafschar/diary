@@ -1,12 +1,15 @@
 package com.jq.diary.service;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.openai.OpenAiChatModel;
 
 import com.google.genai.types.Content;
 import com.jq.diary.service.AiService.AiProvider;
@@ -24,6 +27,15 @@ class AiServiceProviderTest {
 		this.setField(service, "huggingFace", "");
 		assertThrows(IllegalStateException.class,
 				() -> service.chatReply(List.of(Content.builder().role("user").build())));
+	}
+
+	@Test
+	void ollamaProviderBuildsLocalChatModelWithoutApiKey() throws Exception {
+		final AiService service = this.serviceWithProvider(AiProvider.Ollama);
+		final Method chatModel = AiService.class.getDeclaredMethod("chatModel");
+		chatModel.setAccessible(true);
+
+		assertInstanceOf(OpenAiChatModel.class, chatModel.invoke(service));
 	}
 
 	private AiService serviceWithProvider(final AiProvider provider) throws Exception {

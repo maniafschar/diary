@@ -45,7 +45,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private static AiProvider provider = AiProvider.GPT;
+	private AiProvider provider = AiProvider.Ollama;
 	private volatile ChatModel springAiChatModel;
 
 	@Autowired
@@ -61,7 +61,7 @@ public class AiService {
 	private String huggingFace;
 
 	enum AiProvider {
-		GPT, Gemini, HuggingFace, None
+		GPT, Gemini, HuggingFace, Ollama, None
 	}
 
 	public Summary summary(final Prompt prompt, final String text) {
@@ -133,9 +133,15 @@ public class AiService {
 					apiKey = this.huggingFace;
 					defaultModel = "google/gemma-3-27b-it";
 				}
+				case Ollama -> {
+					baseUrl = "http://127.0.0.1:11434";
+					completionsPath = "/v1/chat/completions";
+					apiKey = "ollama";
+					defaultModel = "qwen3:8b";
+				}
 				default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
 			}
-			if (apiKey == null || apiKey.isBlank())
+			if (provider != AiProvider.Ollama && (apiKey == null || apiKey.isBlank()))
 				throw new IllegalStateException("AI chat provider " + provider + " has no API key configured.");
 			final OpenAiApi api = OpenAiApi.builder()
 					.baseUrl(baseUrl)
@@ -164,7 +170,8 @@ public class AiService {
 			final ChatResponse response = this.chatModel()
 					.call(new org.springframework.ai.chat.prompt.Prompt(messages, options));
 			final Summary summary = this.convert(response.getResult().getOutput().getText());
-			summary.setImage(this.imageGemini(this.imageGeminiPrompt(summary.getNote())));
+			if (provider != AiProvider.Ollama)
+				summary.setImage(this.imageGemini(this.imageGeminiPrompt(summary.getNote())));
 			summary.setTextLength(text.length());
 			return summary;
 		} catch (final Exception ex) {
