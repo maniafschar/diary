@@ -62,11 +62,13 @@ public class ChatService {
 		final List<Content> conversation = new ArrayList<>();
 		for (int i = firstMessage; i < messages.size(); i++) {
 			final ChatMessage message = messages.get(i);
-			String messageText = message.getText();
-			if (message.getId().equals(userMessage.getId()))
-				messageText = SYSTEM_PROMPT + this.eventContext(contact) + "\n\nAktuelle Nachricht: " + messageText;
+			final String messageText = message.getText();
+			// if (message.getId().equals(userMessage.getId()))
+			// messageText = SYSTEM_PROMPT + this.eventContext(contact) + "\n\nAktuelle
+			// Nachricht: " + messageText;
 			conversation.add(Content.builder().role("assistant".equals(message.getRole()) ? "model" : "user")
 					.parts(Part.fromText(messageText)).build());
+			break;
 		}
 
 		final String answer = this.aiService.chatReply(conversation);
@@ -99,7 +101,7 @@ public class ChatService {
 		if (events.isEmpty())
 			return "";
 		final StringBuilder context = new StringBuilder("\n\n").append(EVENT_CONTEXT_PROMPT);
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < events.size(); i++) {
 			final Event event = events.get(i);
 			context.append("\n\nEintrag ").append(i + 1).append(':');
 			if (event.getDate() != null)
