@@ -88,6 +88,7 @@ public class AiService {
 			else
 				messages.add(new UserMessage(text.toString()));
 		}
+		System.out.println(messages);
 		final ChatModel model = this.chatModel();
 		try {
 			final ChatResponse response = model.call(
