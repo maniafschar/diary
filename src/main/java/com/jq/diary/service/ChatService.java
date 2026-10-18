@@ -21,7 +21,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class ChatService {
-	private static final int MAX_HISTORY_MESSAGES = 30;
+	private static final int MAX_HISTORY_MESSAGES = 1;
 	private static final String SYSTEM_PROMPT = "Du bist ein freundlicher, knapper deutschsprachiger Chatassistent. "
 			+ "Du bist eine KI und gibst dich nie als Mensch aus. Antworte passend zum bisherigen Gespräch. "
 			+ "Bitte frage nicht nach Passwörtern, Zahlungsdaten oder anderen vertraulichen Informationen. "
@@ -62,13 +62,12 @@ public class ChatService {
 		final List<Content> conversation = new ArrayList<>();
 		for (int i = firstMessage; i < messages.size(); i++) {
 			final ChatMessage message = messages.get(i);
-			final String messageText = message.getText();
-			// if (message.getId().equals(userMessage.getId()))
-			// messageText = SYSTEM_PROMPT + this.eventContext(contact) + "\n\nAktuelle
-			// Nachricht: " + messageText;
+			String messageText = message.getText();
+			if (message.getId().equals(userMessage.getId()))
+				messageText = SYSTEM_PROMPT + this.eventContext(contact) + "\n\nAktuelle Nachricht: "
+						+ messageText;
 			conversation.add(Content.builder().role("assistant".equals(message.getRole()) ? "model" : "user")
 					.parts(Part.fromText(messageText)).build());
-			break;
 		}
 
 		final String answer = this.aiService.chatReply(conversation);
