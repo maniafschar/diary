@@ -45,7 +45,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private AiProvider provider = AiProvider.Ollama;
+	private final AiProvider provider = AiProvider.Ollama;
 	private volatile ChatModel springAiChatModel;
 
 	@Autowired
@@ -65,13 +65,13 @@ public class AiService {
 	}
 
 	public Summary summary(final Prompt prompt, final String text) {
-		if (text.length() < 900 || provider == AiProvider.HuggingFace)
+		if (text.length() < 900)
 			return null;
 		return this.summarySpringAi(prompt, text);
 	}
 
 	public String chatReply(final List<Content> conversation) {
-		if (provider == AiProvider.None)
+		if (this.provider == AiProvider.None)
 			return null;
 		final List<Message> messages = new ArrayList<>();
 		for (final Content content : conversation) {
@@ -114,7 +114,7 @@ public class AiService {
 			final String completionsPath;
 			final String apiKey;
 			final String defaultModel;
-			switch (provider) {
+			switch (this.provider) {
 				case Gemini -> {
 					baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
 					completionsPath = "/chat/completions";
@@ -139,10 +139,10 @@ public class AiService {
 					apiKey = "ollama";
 					defaultModel = "qwen3:8b";
 				}
-				default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + provider);
+				default -> throw new IllegalArgumentException("Unsupported AI chat provider: " + this.provider);
 			}
-			if (provider != AiProvider.Ollama && (apiKey == null || apiKey.isBlank()))
-				throw new IllegalStateException("AI chat provider " + provider + " has no API key configured.");
+			if (this.provider != AiProvider.Ollama && (apiKey == null || apiKey.isBlank()))
+				throw new IllegalStateException("AI chat provider " + this.provider + " has no API key configured.");
 			final OpenAiApi api = OpenAiApi.builder()
 					.baseUrl(baseUrl)
 					.completionsPath(completionsPath)
@@ -170,7 +170,7 @@ public class AiService {
 			final ChatResponse response = this.chatModel()
 					.call(new org.springframework.ai.chat.prompt.Prompt(messages, options));
 			final Summary summary = this.convert(response.getResult().getOutput().getText());
-			if (provider != AiProvider.Ollama)
+			if (this.provider != AiProvider.Ollama)
 				summary.setImage(this.imageGemini(this.imageGeminiPrompt(summary.getNote())));
 			summary.setTextLength(text.length());
 			return summary;

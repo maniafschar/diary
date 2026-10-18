@@ -78,7 +78,7 @@ public class ChatService {
 		final List<ChatSummary> cachedSummaries = this.repository.list(
 				"from ChatSummary where contact.id=?1", ChatSummary.class, contact.getId());
 		final String summary;
-		if (cachedSummaries.isEmpty()){
+		if (cachedSummaries.isEmpty()) {
 			final List<Event> events = this.repository.list(
 					"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
 					Event.class, contact.getId());
@@ -99,7 +99,7 @@ public class ChatService {
 		if (events.isEmpty())
 			return "";
 		final StringBuilder context = new StringBuilder("\n\n").append(EVENT_CONTEXT_PROMPT);
-		for (int i = 0; i < events.size(); i++) {
+		for (int i = 0; i < 1; i++) {
 			final Event event = events.get(i);
 			context.append("\n\nEintrag ").append(i + 1).append(':');
 			if (event.getDate() != null)
