@@ -66,7 +66,7 @@ public class ChatService {
 					.parts(Part.fromText(messageText)).build());
 		}
 
-		final String answer = this.aiService.chatReply(conversation);
+		final String answer = this.aiService.chatReplyWithWeb(conversation);
 		this.repository.save(this.createMessage(contact, "assistant", answer));
 		return answer;
 	}

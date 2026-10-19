@@ -13,6 +13,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
@@ -51,6 +52,9 @@ public class AiService {
 	@Autowired
 	private AdminService adminService;
 
+	@Autowired
+	private WebTool webTool;
+
 	@Value("${app.chatGPT.key}")
 	private String chatGpt;
 
@@ -71,6 +75,15 @@ public class AiService {
 	}
 
 	public String chatReply(final List<Content> conversation) {
+		return this.chatReply(conversation, false);
+	}
+
+	/** Like {@link #chatReply(List)}, but the model may search and read web pages. */
+	public String chatReplyWithWeb(final List<Content> conversation) {
+		return this.chatReply(conversation, true);
+	}
+
+	private String chatReply(final List<Content> conversation, final boolean web) {
 		if (this.provider == AiProvider.None)
 			return null;
 		final List<Message> messages = new ArrayList<>();
@@ -91,8 +104,10 @@ public class AiService {
 		System.out.println(messages);
 		final ChatModel model = this.chatModel();
 		try {
-			final ChatResponse response = model.call(
-					new org.springframework.ai.chat.prompt.Prompt(messages));
+			final ChatResponse response = web
+					? model.call(new org.springframework.ai.chat.prompt.Prompt(messages,
+							OpenAiChatOptions.builder().toolCallbacks(ToolCallbacks.from(this.webTool)).build()))
+					: model.call(new org.springframework.ai.chat.prompt.Prompt(messages));
 			final String answer = response.getResult().getOutput().getText();
 			return answer == null || answer.isBlank()
 					? "Entschuldigung, ich konnte gerade keine Antwort formulieren."
