@@ -8,22 +8,23 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.ChatSummary;
+import com.jq.diary.entity.ChatSummary.Category;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository;
 
-class ChatServiceTest {
+class EventContextServiceTest {
 	@Test
 	void formatsAllEventDetailsForChatContext() {
 		final Event first = new Event();
@@ -43,7 +44,7 @@ class ChatServiceTest {
 		second.setDate(Date.from(Instant.parse("2025-04-13T09:00:00Z")));
 		second.setNote("Frühstück mit Freunden.");
 
-		final String context = ChatService.formatEventContext(List.of(first, second));
+		final String context = EventContextService.formatEventContext(List.of(first, second));
 
 		assertTrue(context.contains("2025-04-12T14:30:00Z"));
 		assertTrue(context.contains("Ort: Am See"));
@@ -58,32 +59,38 @@ class ChatServiceTest {
 
 	@Test
 	void omitsEventContextWhenNoEventsExist() {
-		assertEquals("", ChatService.formatEventContext(List.of()));
+		assertEquals("", EventContextService.formatEventContext(List.of()));
 	}
 
 	@Test
-	void reusesCachedSummaryUntilANewEventIsSaved() {
+	void recomputesOnlyDuringDailyRefreshAfterAChange() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chatReply(anyList())).thenReturn("Erste Zusammenfassung", "Aktualisierte Zusammenfassung");
-		final ChatService chatService = new ChatService();
-		ReflectionTestUtils.setField(chatService, "repository", repository);
-		ReflectionTestUtils.setField(chatService, "aiService", aiService);
+		final EventContextService service = new EventContextService();
+		ReflectionTestUtils.setField(service, "repository", repository);
+		ReflectionTestUtils.setField(service, "aiService", aiService);
 		final Contact contact = new Contact();
 		contact.setId(BigInteger.ONE);
 		final Event event = new Event();
 		event.setContact(contact);
 		repository.events = List.of(event);
 
-		assertTrue(chatService.eventContext(contact).contains("Erste Zusammenfassung"));
-		assertTrue(chatService.eventContext(contact).contains("Erste Zusammenfassung"));
+		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
+		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
 		verify(aiService, times(1)).chatReply(anyList());
 
 		final EventService eventService = new EventService();
 		ReflectionTestUtils.setField(eventService, "repository", repository);
+		ReflectionTestUtils.setField(eventService, "eventContextService", service);
 		eventService.save(event);
 
-		assertTrue(chatService.eventContext(contact).contains("Aktualisierte Zusammenfassung"));
+		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
+		verify(aiService, times(1)).chatReply(anyList());
+
+		service.refresh(contact);
+
+		assertTrue(service.context(contact, Category.CHAT).contains("Aktualisierte Zusammenfassung"));
 		verify(aiService, times(2)).chatReply(anyList());
 	}
 
@@ -103,7 +110,7 @@ class ChatServiceTest {
 
 		@Override
 		public void save(final BaseEntity entity) {
-			if (entity instanceof ChatSummary chatSummary)
+			if (entity instanceof final ChatSummary chatSummary)
 				this.summary = chatSummary;
 			if (entity instanceof Event && entity.getId() == null)
 				entity.setId(BigInteger.TWO);
