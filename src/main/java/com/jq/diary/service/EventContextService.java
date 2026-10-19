@@ -86,28 +86,28 @@ public class EventContextService {
 		return list.isEmpty() ? null : list.get(0);
 	}
 
-	private void compute(final Contact contact, final Category category, final ChatSummary existing) {
+	private ChatSummary compute(final Contact contact, final Category category, final ChatSummary existing) {
 		final long start = System.nanoTime();
 		final List<Event> events = this.repository.list(
 				"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
 				Event.class, contact.getId());
-		if (events.size() > 0) {
-			final String text = events.isEmpty() ? ""
-					: this.aiService.chatReply(List.of(Content.builder().role("user")
-							.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))
-							.build()));
-			final ChatSummary summary = existing == null ? new ChatSummary() : existing;
-			summary.setContact(contact);
-			summary.setCategory(category);
-			summary.setText(text);
-			summary.setDirty(false);
-			this.repository.save(summary);
-			this.adminService
-					.createTicket(new Ticket("EventContext " + category.name() + "\ncontact: " + contact.getId()
-							+ "\nevents: " + events.size() + "\naction: "
-							+ (existing == null ? "created" : "recomputed") + "\nduration: "
-							+ (System.nanoTime() - start) / 1_000_000 + " ms"));
-		}
+		if (events.size() == 0)
+			return new ChatSummary();
+		final String text = events.isEmpty() ? ""
+				: this.aiService.chatReply(List.of(Content.builder().role("user")
+						.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))
+						.build()));
+		final ChatSummary summary = existing == null ? new ChatSummary() : existing;
+		summary.setContact(contact);
+		summary.setCategory(category);
+		summary.setText(text);
+		summary.setDirty(false);
+		this.repository.save(summary);
+		this.adminService.createTicket(new Ticket("EventContext " + category.name() + "\ncontact: " + contact.getId()
+				+ "\nevents: " + events.size() + "\naction: "
+				+ (existing == null ? "created" : "recomputed") + "\nduration: "
+				+ (System.nanoTime() - start) / 1_000_000 + " ms"));
+		return summary;
 	}
 
 	static String formatEventContext(final List<Event> events) {
