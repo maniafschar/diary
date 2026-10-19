@@ -70,6 +70,8 @@ class EventContextServiceTest {
 		final EventContextService service = new EventContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
+		final AdminService adminService = mock(AdminService.class);
+		ReflectionTestUtils.setField(service, "adminService", adminService);
 		final Contact contact = new Contact();
 		contact.setId(BigInteger.ONE);
 		final Event event = new Event();
@@ -92,6 +94,7 @@ class EventContextServiceTest {
 
 		assertTrue(service.context(contact, Category.CHAT).contains("Aktualisierte Zusammenfassung"));
 		verify(aiService, times(2)).chatReply(anyList());
+		verify(adminService, times(2)).createTicket(org.mockito.ArgumentMatchers.any());
 	}
 
 	private static class InMemoryRepository extends Repository {

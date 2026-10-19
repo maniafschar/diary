@@ -15,6 +15,7 @@ import com.jq.diary.entity.ChatSummary.Category;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Location;
+import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
 
 /**
@@ -33,6 +34,9 @@ public class EventContextService {
 
 	@Autowired
 	private AiService aiService;
+
+	@Autowired
+	private AdminService adminService;
 
 	/** Returns the formatted summary, computing it only if none exists yet. */
 	public String context(final Contact contact, final Category category) {
@@ -82,21 +86,28 @@ public class EventContextService {
 		return list.isEmpty() ? null : list.get(0);
 	}
 
-	private ChatSummary compute(final Contact contact, final Category category, final ChatSummary existing) {
+	private void compute(final Contact contact, final Category category, final ChatSummary existing) {
+		final long start = System.nanoTime();
 		final List<Event> events = this.repository.list(
 				"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
 				Event.class, contact.getId());
-		final String text = events.isEmpty() ? ""
-				: this.aiService.chatReply(List.of(Content.builder().role("user")
-						.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))
-						.build()));
-		final ChatSummary summary = existing == null ? new ChatSummary() : existing;
-		summary.setContact(contact);
-		summary.setCategory(category);
-		summary.setText(text);
-		summary.setDirty(false);
-		this.repository.save(summary);
-		return summary;
+		if (events.size() > 0) {
+			final String text = events.isEmpty() ? ""
+					: this.aiService.chatReply(List.of(Content.builder().role("user")
+							.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))
+							.build()));
+			final ChatSummary summary = existing == null ? new ChatSummary() : existing;
+			summary.setContact(contact);
+			summary.setCategory(category);
+			summary.setText(text);
+			summary.setDirty(false);
+			this.repository.save(summary);
+			this.adminService
+					.createTicket(new Ticket("EventContext " + category.name() + "\ncontact: " + contact.getId()
+							+ "\nevents: " + events.size() + "\naction: "
+							+ (existing == null ? "created" : "recomputed") + "\nduration: "
+							+ (System.nanoTime() - start) / 1_000_000 + " ms"));
+		}
 	}
 
 	static String formatEventContext(final List<Event> events) {
