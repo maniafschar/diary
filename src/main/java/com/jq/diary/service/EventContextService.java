@@ -81,8 +81,7 @@ public class EventContextService {
 
 	private ChatSummary find(final Contact contact, final Category category) {
 		final List<ChatSummary> list = this.repository.list(
-				"from ChatSummary where contact.id=?1 and category=?2", ChatSummary.class, contact.getId(),
-				category.name());
+				"from ChatSummary where contact.id=?1 and category=?2", ChatSummary.class, contact.getId(), category);
 		return list.isEmpty() ? null : list.get(0);
 	}
 
