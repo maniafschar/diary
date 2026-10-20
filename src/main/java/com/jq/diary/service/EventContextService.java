@@ -17,6 +17,7 @@ import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Location;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.util.Utilities;
 
 /**
  * Condenses the diary entries of a contact into one summary per
@@ -59,7 +60,7 @@ public class EventContextService {
 				});
 	}
 
-	@Scheduled(cron = "0 0 3 * * *")
+	@Scheduled(cron = "0 0 */2 * * *")
 	public void refreshDaily() {
 		final List<Contact> contacts = this.repository.list(
 				"select distinct c from Contact c, ContactEvent ce where ce.contact.id=c.id", Contact.class);
@@ -68,6 +69,7 @@ public class EventContextService {
 				this.refresh(contact);
 			} catch (final RuntimeException ex) {
 				// one failing contact must not stop the others
+				this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
 			}
 	}
 
