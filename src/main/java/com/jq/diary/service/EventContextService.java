@@ -60,7 +60,7 @@ public class EventContextService {
 				});
 	}
 
-	@Scheduled(cron = "0 0 */2 * * *")
+	@Scheduled(cron = "0 0 * * * *")
 	public void refreshDaily() {
 		final List<Contact> contacts = this.repository.list(
 				"select distinct c from Contact c, ContactEvent ce where ce.contact.id=c.id", Contact.class);
@@ -94,6 +94,7 @@ public class EventContextService {
 				Event.class, contact.getId());
 		if (events.size() == 0)
 			return new ChatSummary();
+		this.adminService.createTicket(new Ticket("Start user " + contact.getId() + " " + category));
 		final String text = events.isEmpty() ? ""
 				: this.aiService.chatReply(List.of(Content.builder().role("user")
 						.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))
