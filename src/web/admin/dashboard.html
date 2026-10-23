@@ -300,6 +300,12 @@
                     <span id="filter-count" aria-live="polite"></span>
                 </div>
 
+                <form class="toolbar" id="link-form">
+                    <input type="text" id="link-title" placeholder="Titel" maxlength="200" required>
+                    <input type="url" id="link-url" placeholder="https://..." required>
+                    <button type="submit">Hinzufügen</button>
+                </form>
+
                 <table id="tabTable">
                     <thead>
                         <tr>
@@ -345,32 +351,86 @@
 
         searchInput.addEventListener('input', applyFilter);
 
-        async function loadLinks() {
+        const linkStorageKey = 'gothaer-work-info-links';
+        let links = [];
+
+        const validLink = link => link && typeof link.url === 'string' &&
+            /^https?:\/\//i.test(link.url) && typeof link.title === 'string';
+
+        function saveLinks() {
+            try {
+                localStorage.setItem(linkStorageKey, JSON.stringify(links));
+            } catch (error) {
+                alert('Speichern im Browser ist derzeit nicht möglich.');
+            }
+        }
+
+        function renderLinks() {
             const tbody = document.querySelector('#tabTable tbody');
+            tbody.replaceChildren();
+            links.slice().sort((a, b) => a.title.localeCompare(b.title, 'de')).forEach(link => {
+                const row = tbody.insertRow();
+                const anchor = document.createElement('a');
+                anchor.href = link.url;
+                anchor.target = '_blank';
+                anchor.rel = 'noopener';
+                anchor.textContent = link.title || link.url;
+                row.insertCell().appendChild(anchor);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'todo-delete';
+                deleteButton.type = 'button';
+                deleteButton.textContent = '×';
+                deleteButton.title = 'Link löschen';
+                deleteButton.setAttribute('aria-label', `Link löschen: ${link.title}`);
+                deleteButton.addEventListener('click', () => {
+                    if (!confirm(`Link "${link.title}" wirklich löschen?`)) return;
+                    links = links.filter(entry => entry !== link);
+                    saveLinks();
+                    renderLinks();
+                });
+                row.insertCell().appendChild(deleteButton);
+            });
+            applyFilter();
+        }
+
+        async function loadLinks() {
+            try {
+                const saved = localStorage.getItem(linkStorageKey);
+                if (saved !== null) {
+                    links = JSON.parse(saved).filter(validLink);
+                    renderLinks();
+                    return;
+                }
+            } catch (error) {
+                // fall back to the default list
+            }
             try {
                 // Absolute path, so it also works when the page is served as /dashboard
                 const response = await fetch('/admin/links.json', { cache: 'no-cache' });
                 if (!response.ok) throw new Error(response.status);
-                const links = await response.json();
-                links.forEach(link => {
-                    if (!link || typeof link.url !== 'string' || !/^https?:\/\//i.test(link.url)) return;
-                    const row = tbody.insertRow();
-                    const anchor = document.createElement('a');
-                    anchor.href = link.url;
-                    anchor.target = '_blank';
-                    anchor.rel = 'noopener';
-                    anchor.textContent = link.title || link.url;
-                    row.insertCell().appendChild(anchor);
-                    row.insertCell();
-                });
+                links = (await response.json()).filter(validLink);
             } catch (error) {
-                const cell = tbody.insertRow().insertCell();
-                cell.colSpan = 2;
-                cell.textContent = 'Links konnten nicht geladen werden.';
+                links = [];
             }
-            applyFilter();
-            sortTable(0);
+            renderLinks();
         }
+
+        document.getElementById('link-form').addEventListener('submit', event => {
+            event.preventDefault();
+            const title = document.getElementById('link-title').value.trim();
+            const url = document.getElementById('link-url').value.trim();
+            const link = { title, url };
+            if (!title || !validLink(link)) {
+                alert('Bitte einen Titel und eine gültige http(s)-URL angeben.');
+                return;
+            }
+            if (!confirm(`Link "${title}" hinzufügen?`)) return;
+            links.push(link);
+            saveLinks();
+            renderLinks();
+            event.target.reset();
+        });
 
         function sortTable(col) {
             const table = document.getElementById("tabTable");
