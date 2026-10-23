@@ -307,13 +307,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://netze.gothaer.de/spaces/AEK/pages/1157500884/Automatische+Zahlung+nach+RG-Pr%C3%BCfung"
-                                    target="_blank">Automatische Zahlung nach RG-Prüfung</a></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
 
@@ -350,7 +344,33 @@
         }
 
         searchInput.addEventListener('input', applyFilter);
-        applyFilter();
+
+        async function loadLinks() {
+            const tbody = document.querySelector('#tabTable tbody');
+            try {
+                // Absolute path, so it also works when the page is served as /dashboard
+                const response = await fetch('/admin/links.json', { cache: 'no-cache' });
+                if (!response.ok) throw new Error(response.status);
+                const links = await response.json();
+                links.forEach(link => {
+                    if (!link || typeof link.url !== 'string' || !/^https?:\/\//i.test(link.url)) return;
+                    const row = tbody.insertRow();
+                    const anchor = document.createElement('a');
+                    anchor.href = link.url;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener';
+                    anchor.textContent = link.title || link.url;
+                    row.insertCell().appendChild(anchor);
+                    row.insertCell();
+                });
+            } catch (error) {
+                const cell = tbody.insertRow().insertCell();
+                cell.colSpan = 2;
+                cell.textContent = 'Links konnten nicht geladen werden.';
+            }
+            applyFilter();
+            sortTable(0);
+        }
 
         function sortTable(col) {
             const table = document.getElementById("tabTable");
@@ -482,8 +502,7 @@
 
         renderTodos();
 
-        // Initial alphabetisch nach Titel sortieren
-        window.onload = () => sortTable(0);
+        loadLinks();
     </script>
 
 </body>
