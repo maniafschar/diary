@@ -327,11 +327,49 @@
     </div>
 
     <script>
+        const apiUrl = '/rest/sc/dashboard';
         const searchInput = document.getElementById('search');
+        const linkList = document.getElementById('link-list');
+        const todoForm = document.getElementById('todo-form');
+        const todoInput = document.getElementById('todo-input');
+        const todoList = document.getElementById('todo-list');
+        const todoCount = document.getElementById('todo-count');
+        const infoEditor = document.getElementById('info-editor');
+        let links = [];
+        let todos = [];
+
+        // The admin login of the support center (index.html) stores the same secret
+        async function api(method, path = '', body) {
+            let secret = localStorage.getItem('credentials');
+            if (!secret) {
+                secret = prompt('Admin-Zugang:');
+                if (!secret) throw new Error('Kein Zugang angegeben');
+                localStorage.setItem('credentials', secret);
+            }
+            const response = await fetch(apiUrl + path, {
+                method,
+                headers: { 'contactId': secret, 'Content-Type': 'application/json' },
+                body: body === undefined ? undefined : JSON.stringify(body)
+            });
+            if (response.status === 401) {
+                localStorage.removeItem('credentials');
+                throw new Error('Zugang abgelehnt');
+            }
+            if (!response.ok) throw new Error('Fehler ' + response.status);
+            const text = await response.text();
+            return text ? JSON.parse(text) : null;
+        }
+
+        function fail(error) {
+            alert('Aktion fehlgeschlagen: ' + error.message);
+        }
+
+        const validLink = link => link && typeof link.url === 'string' &&
+            /^https?:\/\//i.test(link.url) && typeof link.title === 'string';
 
         function applyFilter() {
             const filter = searchInput.value.toLowerCase();
-            const items = document.querySelectorAll('#link-list .todo-item');
+            const items = linkList.querySelectorAll('.todo-item');
             let visible = 0;
 
             items.forEach(item => {
@@ -345,23 +383,8 @@
 
         searchInput.addEventListener('input', applyFilter);
 
-        const linkStorageKey = 'gothaer-work-info-links';
-        let links = [];
-
-        const validLink = link => link && typeof link.url === 'string' &&
-            /^https?:\/\//i.test(link.url) && typeof link.title === 'string';
-
-        function saveLinks() {
-            try {
-                localStorage.setItem(linkStorageKey, JSON.stringify(links));
-            } catch (error) {
-                alert('Speichern im Browser ist derzeit nicht möglich.');
-            }
-        }
-
         function renderLinks() {
-            const list = document.getElementById('link-list');
-            list.replaceChildren();
+            linkList.replaceChildren();
             links.slice().sort((a, b) => a.title.localeCompare(b.title, 'de')).forEach(link => {
                 const item = document.createElement('li');
                 item.className = 'todo-item';
@@ -381,109 +404,48 @@
                 deleteButton.textContent = '×';
                 deleteButton.title = 'Link löschen';
                 deleteButton.setAttribute('aria-label', `Link löschen: ${link.title}`);
-                deleteButton.addEventListener('click', () => {
+                deleteButton.addEventListener('click', async () => {
                     if (!confirm(`Link "${link.title}" wirklich löschen?`)) return;
-                    links = links.filter(entry => entry !== link);
-                    saveLinks();
-                    renderLinks();
+                    try {
+                        await api('DELETE', '/link/' + link.id);
+                        links = links.filter(entry => entry !== link);
+                        renderLinks();
+                    } catch (error) {
+                        fail(error);
+                    }
                 });
 
                 item.append(text, deleteButton);
-                list.appendChild(item);
+                linkList.appendChild(item);
             });
 
             if (links.length === 0) {
                 const empty = document.createElement('li');
                 empty.className = 'todo-empty';
                 empty.textContent = 'Noch keine Links.';
-                list.appendChild(empty);
+                linkList.appendChild(empty);
             }
             applyFilter();
         }
 
-        async function loadLinks() {
-            try {
-                const saved = localStorage.getItem(linkStorageKey);
-                if (saved !== null) {
-                    links = JSON.parse(saved).filter(validLink);
-                    renderLinks();
-                    return;
-                }
-            } catch (error) {
-                // fall back to the default list
-            }
-            try {
-                // Absolute path, so it also works when the page is served as /dashboard
-                const response = await fetch('/admin/links.json', { cache: 'no-cache' });
-                if (!response.ok) throw new Error(response.status);
-                links = (await response.json()).filter(validLink);
-            } catch (error) {
-                links = [];
-            }
-            renderLinks();
-        }
-
-        document.getElementById('link-form').addEventListener('submit', event => {
+        document.getElementById('link-form').addEventListener('submit', async event => {
             event.preventDefault();
+            const form = event.target;
             const title = document.getElementById('link-title').value.trim();
             const url = document.getElementById('link-url').value.trim();
-            const link = { title, url };
-            if (!title || !validLink(link)) {
+            if (!title || !validLink({ title, url })) {
                 alert('Bitte einen Titel und eine gültige http(s)-URL angeben.');
                 return;
             }
             if (!confirm(`Link "${title}" hinzufügen?`)) return;
-            links.push(link);
-            saveLinks();
-            renderLinks();
-            event.target.reset();
-        });
-
-        const todoStorageKey = 'gothaer-work-info-todos';
-        const todoForm = document.getElementById('todo-form');
-        const todoInput = document.getElementById('todo-input');
-        const todoList = document.getElementById('todo-list');
-        const todoCount = document.getElementById('todo-count');
-        const infoEditor = document.getElementById('info-editor');
-        const infoStorageKey = 'gothaer-work-info-details';
-        let todos = [];
-
-        try {
-            const savedInfo = localStorage.getItem(infoStorageKey);
-            if (savedInfo !== null) {
-                infoEditor.textContent = savedInfo;
-            }
-        } catch (error) {
-            // Editing remains available even when browser storage is disabled.
-        }
-
-        infoEditor.addEventListener('input', () => {
             try {
-                localStorage.setItem(infoStorageKey, infoEditor.innerText);
+                links.push(await api('POST', '/link', { title, url }));
+                renderLinks();
+                form.reset();
             } catch (error) {
-                // Keep the current edit available for this page session.
+                fail(error);
             }
         });
-
-        try {
-            const savedTodos = JSON.parse(localStorage.getItem(todoStorageKey) || '[]');
-            if (Array.isArray(savedTodos)) {
-                todos = savedTodos.filter(todo =>
-                    todo && typeof todo.id === 'string' &&
-                    typeof todo.text === 'string' && typeof todo.completed === 'boolean'
-                );
-            }
-        } catch (error) {
-            todos = [];
-        }
-
-        function saveTodos() {
-            try {
-                localStorage.setItem(todoStorageKey, JSON.stringify(todos));
-            } catch (error) {
-                todoCount.textContent = 'Speichern im Browser ist derzeit nicht möglich.';
-            }
-        }
 
         function renderTodos() {
             todoList.replaceChildren();
@@ -496,9 +458,13 @@
                 checkbox.type = 'checkbox';
                 checkbox.checked = todo.completed;
                 checkbox.setAttribute('aria-label', `Aufgabe erledigt: ${todo.text}`);
-                checkbox.addEventListener('change', () => {
-                    todo.completed = checkbox.checked;
-                    saveTodos();
+                checkbox.addEventListener('change', async () => {
+                    try {
+                        await api('PUT', '/todo/' + todo.id, { completed: checkbox.checked });
+                        todo.completed = checkbox.checked;
+                    } catch (error) {
+                        fail(error);
+                    }
                     renderTodos();
                 });
 
@@ -512,10 +478,14 @@
                 deleteButton.textContent = '×';
                 deleteButton.setAttribute('aria-label', `Aufgabe löschen: ${todo.text}`);
                 deleteButton.title = 'Aufgabe löschen';
-                deleteButton.addEventListener('click', () => {
-                    todos = todos.filter(entry => entry.id !== todo.id);
-                    saveTodos();
-                    renderTodos();
+                deleteButton.addEventListener('click', async () => {
+                    try {
+                        await api('DELETE', '/todo/' + todo.id);
+                        todos = todos.filter(entry => entry !== todo);
+                        renderTodos();
+                    } catch (error) {
+                        fail(error);
+                    }
                 });
 
                 item.append(checkbox, text, deleteButton);
@@ -533,25 +503,99 @@
             todoCount.textContent = `${openCount} offen · ${todos.length} insgesamt`;
         }
 
-        todoForm.addEventListener('submit', event => {
+        todoForm.addEventListener('submit', async event => {
             event.preventDefault();
             const text = todoInput.value.trim();
             if (!text) return;
-
-            todos.push({
-                id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-                text,
-                completed: false
-            });
-            saveTodos();
-            renderTodos();
-            todoForm.reset();
-            todoInput.focus();
+            try {
+                todos.push(await api('POST', '/todo', { text }));
+                renderTodos();
+                todoForm.reset();
+                todoInput.focus();
+            } catch (error) {
+                fail(error);
+            }
         });
 
-        renderTodos();
+        let infoTimer = null;
+        let infoDirty = false;
 
-        loadLinks();
+        async function saveInfo() {
+            clearTimeout(infoTimer);
+            if (!infoDirty) return;
+            infoDirty = false;
+            try {
+                await api('PUT', '/info', { content: infoEditor.innerText });
+            } catch (error) {
+                infoDirty = true;
+                console.error(error);
+            }
+        }
+
+        infoEditor.addEventListener('input', () => {
+            infoDirty = true;
+            clearTimeout(infoTimer);
+            infoTimer = setTimeout(saveInfo, 800);
+        });
+        infoEditor.addEventListener('blur', saveInfo);
+        window.addEventListener('pagehide', saveInfo);
+
+        // One-time import of data that so far only existed in this browser or in links.json
+        async function importLocalData() {
+            const stored = key => {
+                try {
+                    return JSON.parse(localStorage.getItem(key));
+                } catch (error) {
+                    return null;
+                }
+            };
+            let localLinks = stored('gothaer-work-info-links');
+            if (!Array.isArray(localLinks)) {
+                try {
+                    const response = await fetch('/admin/links.json', { cache: 'no-cache' });
+                    localLinks = response.ok ? await response.json() : [];
+                } catch (error) {
+                    localLinks = [];
+                }
+            }
+            for (const link of localLinks.filter(validLink))
+                links.push(await api('POST', '/link', { title: link.title, url: link.url }));
+
+            const localTodos = stored('gothaer-work-info-todos');
+            for (const todo of Array.isArray(localTodos) ? localTodos : []) {
+                if (!todo || typeof todo.text !== 'string' || !todo.text.trim()) continue;
+                const created = await api('POST', '/todo', { text: todo.text });
+                if (todo.completed === true) {
+                    await api('PUT', '/todo/' + created.id, { completed: true });
+                    created.completed = true;
+                }
+                todos.push(created);
+            }
+
+            const localInfo = localStorage.getItem('gothaer-work-info-details');
+            if (localInfo) {
+                infoEditor.textContent = localInfo;
+                infoDirty = true;
+                await saveInfo();
+            }
+        }
+
+        async function load() {
+            try {
+                const data = await api('GET');
+                links = data.links;
+                todos = data.todos;
+                infoEditor.textContent = data.info;
+                if (!links.length && !todos.length && !data.info)
+                    await importLocalData();
+            } catch (error) {
+                fail(error);
+            }
+            renderLinks();
+            renderTodos();
+        }
+
+        load();
     </script>
 
 </body>
