@@ -293,29 +293,22 @@
 
     <div class="container">
         <div class="dashboard-grid">
-            <div class="card">
-
-                <div class="toolbar">
-                    <input type="text" id="search" placeholder="🔍 Nach Titel oder URL suchen ...">
-                    <span id="filter-count" aria-live="polite"></span>
-                </div>
-
-                <form class="toolbar" id="link-form">
-                    <input type="text" id="link-title" placeholder="Titel" maxlength="200" required>
-                    <input type="url" id="link-url" placeholder="https://..." required>
+            <section class="card todo-card" aria-labelledby="links-heading">
+                <h2 id="links-heading" style="margin-top:0">Links</h2>
+                <form class="todo-form" id="link-form">
+                    <label class="sr-only" for="link-title">Titel</label>
+                    <input id="link-title" type="text" maxlength="200" placeholder="Titel ..." required>
+                    <label class="sr-only" for="link-url">URL</label>
+                    <input id="link-url" type="url" placeholder="https://..." required>
                     <button type="submit">Hinzufügen</button>
                 </form>
-
-                <table id="tabTable">
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(0)">Titel ▲▼</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+                <form class="todo-form" id="search-form" style="margin-top:10px" onsubmit="return false">
+                    <label class="sr-only" for="search">Suchen</label>
+                    <input type="text" id="search" placeholder="🔍 Nach Titel oder URL suchen ...">
+                </form>
+                <ul class="todo-list" id="link-list" aria-live="polite"></ul>
+                <p class="count" id="filter-count" aria-live="polite"></p>
+            </section>
 
             <section class="card todo-card" aria-labelledby="todo-heading">
                 <info id="info-editor" contenteditable="true" role="textbox" aria-label="Editierbare Informationen"
@@ -338,15 +331,16 @@
 
         function applyFilter() {
             const filter = searchInput.value.toLowerCase();
-            const rows = document.querySelectorAll('#tabTable tbody tr');
+            const items = document.querySelectorAll('#link-list .todo-item');
             let visible = 0;
 
-            rows.forEach(row => {
-                const match = row.textContent.toLowerCase().includes(filter);
-                row.style.display = match ? '' : 'none';
+            items.forEach(item => {
+                const match = item.textContent.toLowerCase().includes(filter) ||
+                    item.querySelector('a').href.toLowerCase().includes(filter);
+                item.style.display = match ? '' : 'none';
                 if (match) visible++;
             });
-            document.getElementById('filter-count').textContent = visible + ' / ' + rows.length;
+            document.getElementById('filter-count').textContent = visible + ' / ' + items.length;
         }
 
         searchInput.addEventListener('input', applyFilter);
@@ -366,16 +360,20 @@
         }
 
         function renderLinks() {
-            const tbody = document.querySelector('#tabTable tbody');
-            tbody.replaceChildren();
+            const list = document.getElementById('link-list');
+            list.replaceChildren();
             links.slice().sort((a, b) => a.title.localeCompare(b.title, 'de')).forEach(link => {
-                const row = tbody.insertRow();
+                const item = document.createElement('li');
+                item.className = 'todo-item';
+
+                const text = document.createElement('span');
+                text.className = 'todo-text';
                 const anchor = document.createElement('a');
                 anchor.href = link.url;
                 anchor.target = '_blank';
                 anchor.rel = 'noopener';
                 anchor.textContent = link.title || link.url;
-                row.insertCell().appendChild(anchor);
+                text.appendChild(anchor);
 
                 const deleteButton = document.createElement('button');
                 deleteButton.className = 'todo-delete';
@@ -389,8 +387,17 @@
                     saveLinks();
                     renderLinks();
                 });
-                row.insertCell().appendChild(deleteButton);
+
+                item.append(text, deleteButton);
+                list.appendChild(item);
             });
+
+            if (links.length === 0) {
+                const empty = document.createElement('li');
+                empty.className = 'todo-empty';
+                empty.textContent = 'Noch keine Links.';
+                list.appendChild(empty);
+            }
             applyFilter();
         }
 
@@ -431,24 +438,6 @@
             renderLinks();
             event.target.reset();
         });
-
-        function sortTable(col) {
-            const table = document.getElementById("tabTable");
-            const tbody = table.tBodies[0];
-            const rows = Array.from(tbody.rows);
-
-            const asc = table.dataset.sortDir !== "asc";
-
-            rows.sort((a, b) =>
-                asc
-                    ? a.cells[col].innerText.localeCompare(b.cells[col].innerText, 'de')
-                    : b.cells[col].innerText.localeCompare(a.cells[col].innerText, 'de')
-            );
-
-            rows.forEach(row => tbody.appendChild(row));
-
-            table.dataset.sortDir = asc ? "asc" : "desc";
-        }
 
         const todoStorageKey = 'gothaer-work-info-todos';
         const todoForm = document.getElementById('todo-form');
