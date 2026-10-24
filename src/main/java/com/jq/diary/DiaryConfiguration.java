@@ -24,7 +24,7 @@ public class DiaryConfiguration implements AsyncConfigurer {
 			public void addCorsMappings(final CorsRegistry registry) {
 				registry.addMapping("/**").allowedOriginPatterns(allowedOrigins)
 						.allowedHeaders("content-type", "x-requested-with", "clientId", "contactId", "salt", "password",
-								"secret")
+								"secret", "publicKey")
 						.exposedHeaders("content-disposition")
 						.allowedMethods("GET", "PUT", "POST", "OPTIONS", "DELETE", "PATCH");
 			}

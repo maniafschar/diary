@@ -339,7 +339,7 @@
         let todos = [];
 
         // The admin login of the support center (index.html) stores the same secret
-        async function api(method, path = '', body) {
+        async function api(method, path = '', body, extraHeaders = {}) {
             let secret = localStorage.getItem('credentials');
             if (!secret) {
                 secret = prompt('Admin-Zugang:');
@@ -348,7 +348,7 @@
             }
             const response = await fetch(apiUrl + path, {
                 method,
-                headers: { 'contactId': secret, 'Content-Type': 'application/json' },
+                headers: { 'contactId': secret, 'Content-Type': 'application/json', ...extraHeaders },
                 body: body === undefined ? undefined : JSON.stringify(body)
             });
             if (response.status === 401) {
@@ -580,9 +580,27 @@
             }
         }
 
+        const toBase64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+        const fromBase64 = text => Uint8Array.from(atob(text), c => c.charCodeAt(0));
+
+        // The private key never leaves the browser; the server only gets the public key
+        async function loadEncrypted() {
+            const keyPair = await crypto.subtle.generateKey({
+                name: 'RSA-OAEP', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256'
+            }, false, ['decrypt']);
+            const publicKey = toBase64(await crypto.subtle.exportKey('spki', keyPair.publicKey));
+            const encrypted = await api('GET', '', undefined, { publicKey });
+            const aesKey = await crypto.subtle.importKey('raw',
+                await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, keyPair.privateKey, fromBase64(encrypted.key)),
+                'AES-GCM', false, ['decrypt']);
+            const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromBase64(encrypted.iv) },
+                aesKey, fromBase64(encrypted.data));
+            return JSON.parse(new TextDecoder().decode(plain));
+        }
+
         async function load() {
             try {
-                const data = await api('GET');
+                const data = await loadEncrypted();
                 links = data.links;
                 todos = data.todos;
                 infoEditor.textContent = data.info;

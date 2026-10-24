@@ -2,6 +2,7 @@ package com.jq.diary.api;
 
 import java.math.BigInteger;
 import java.net.URI;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.jq.diary.dashboard.DashboardLink;
 import com.jq.diary.dashboard.DashboardRepository;
 import com.jq.diary.dashboard.DashboardTodo;
+import com.jq.diary.dashboard.HybridEncryption;
 
 /**
  * Lives below "sc/", so LogFilter requires the support center secret.
@@ -34,6 +40,9 @@ public class DashboardApi {
 	@Autowired
 	private DashboardRepository repository;
 
+	@Autowired
+	private ObjectMapper mapper;
+
 	public record Link(String title, String url) {
 	}
 
@@ -44,9 +53,16 @@ public class DashboardApi {
 	}
 
 	@GetMapping
-	public Map<String, Object> get() {
-		return Map.of("links", this.repository.links(), "todos", this.repository.todos(),
-				"info", this.repository.info());
+	public HybridEncryption.Encrypted get(@RequestHeader("publicKey") final String publicKey) {
+		try {
+			final byte[] json = this.mapper.writeValueAsBytes(Map.of("links", this.repository.links(),
+					"todos", this.repository.todos(), "info", this.repository.info()));
+			return HybridEncryption.encrypt(publicKey, json);
+		} catch (final GeneralSecurityException | IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid public key");
+		} catch (final JsonProcessingException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@PostMapping("link")
