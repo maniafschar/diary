@@ -22,6 +22,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jq.diary.dashboard.DashboardRepository;
 import com.jq.diary.dashboard.HybridEncryption;
+import com.jq.diary.dashboard.Link;
+import com.jq.diary.dashboard.Todo;
 
 /**
  * Lives below "sc/", so LogFilter requires the support center secret.
@@ -41,13 +43,13 @@ public class DashboardApi {
 	@Autowired
 	private ObjectMapper mapper;
 
-	public record Link(String title, String url, String remark) {
+	public record LinkDto(String title, String url, String remark) {
 	}
 
-	public record Todo(String text, Boolean completed) {
+	public record TodoDto(String text, Boolean completed) {
 	}
 
-	public record Info(String content) {
+	public record InfoDto(String content) {
 	}
 
 	@GetMapping
@@ -64,7 +66,7 @@ public class DashboardApi {
 	}
 
 	@PostMapping("link")
-	public Link postLink(@RequestBody final Link link) {
+	public Link postLink(@RequestBody final LinkDto link) {
 		final String title = this.text(link.title(), MAX_TITLE);
 		final String url = this.text(link.url(), MAX_URL);
 		if (!this.isHttpUrl(url))
@@ -78,12 +80,12 @@ public class DashboardApi {
 	}
 
 	@PostMapping("todo")
-	public Todo postTodo(@RequestBody final Todo todo) {
+	public Todo postTodo(@RequestBody final TodoDto todo) {
 		return this.repository.addTodo(this.text(todo.text(), MAX_TODO));
 	}
 
 	@PutMapping("todo/{id}")
-	public void putTodo(@PathVariable final BigInteger id, @RequestBody final Todo todo) {
+	public void putTodo(@PathVariable final BigInteger id, @RequestBody final TodoDto todo) {
 		if (todo.completed() == null)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "completed missing");
 		this.found(this.repository.setTodoCompleted(id, todo.completed()));
@@ -95,7 +97,7 @@ public class DashboardApi {
 	}
 
 	@PutMapping("info")
-	public void putInfo(@RequestBody final Info info) {
+	public void putInfo(@RequestBody final InfoDto info) {
 		final String content = info.content() == null ? "" : info.content();
 		if (content.length() > MAX_INFO)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "info too long");
