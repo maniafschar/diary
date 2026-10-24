@@ -40,12 +40,13 @@ public class EventContextService {
 	private AdminService adminService;
 
 	/** Returns the formatted summary, computing it only if none exists yet. */
-	public String context(final Contact contact, final Category category) {
-		ChatSummary summary = this.find(contact, category);
-		if (summary == null)
-			summary = this.compute(contact, category, null);
-		final String text = summary.getText();
-		return text == null || text.isBlank() ? "" : "\n\n" + category.getTitle() + ":\n" + text.trim();
+	public String context(final Contact contact) {
+		final List<Event> events = this.repository.list(
+				"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
+				Event.class, contact.getId());
+		if (events.size() == 0)
+			return "";
+		return "\n\nTagebuch Einträge:\n" + formatEventContext(events).trim();
 	}
 
 	/** Flags the summaries of all contacts sharing the event for recomputation. */
@@ -94,7 +95,6 @@ public class EventContextService {
 				Event.class, contact.getId());
 		if (events.size() == 0)
 			return new ChatSummary();
-		this.adminService.createTicket(new Ticket("Start user " + contact.getId() + " " + category));
 		final String text = events.isEmpty() ? ""
 				: this.aiService.chatReply(List.of(Content.builder().role("user")
 						.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + formatEventContext(events)))

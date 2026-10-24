@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.ChatMessage;
-import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.util.Utilities;
@@ -59,7 +58,7 @@ public class ChatService {
 			final ChatMessage message = messages.get(i);
 			String messageText = message.getText();
 			if (message.getId().equals(userMessage.getId()))
-				messageText = SYSTEM_PROMPT + this.eventContextService.context(contact, ChatSummary.Category.CHAT)
+				messageText = SYSTEM_PROMPT + this.eventContextService.context(contact)
 						+ "\n\nAktuelle Nachricht: "
 						+ messageText;
 			conversation.add(Content.builder().role("assistant".equals(message.getRole()) ? "model" : "user")

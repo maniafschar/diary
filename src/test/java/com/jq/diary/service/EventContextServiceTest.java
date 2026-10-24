@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,7 +64,7 @@ class EventContextServiceTest {
 	}
 
 	@Test
-	void recomputesOnlyDuringDailyRefreshAfterAChange() {
+	void contextListsEventsWithoutAiAndSummariesAreRecomputedOnlyDuringRefresh() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chatReply(anyList())).thenReturn("Erste Zusammenfassung", "Aktualisierte Zusammenfassung");
@@ -76,36 +77,54 @@ class EventContextServiceTest {
 		contact.setId(BigInteger.ONE);
 		final Event event = new Event();
 		event.setContact(contact);
+		event.setNote("Ein Spaziergang am See.");
 		repository.events = List.of(event);
 
-		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
-		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
-		verify(aiService, times(1)).chatReply(anyList());
+		final String context = service.context(contact);
+		assertTrue(context.contains("Tagebuch Einträge:"));
+		assertTrue(context.contains("Persönlicher Tagebuchkontext"));
+		assertTrue(context.contains("Beschreibung: Ein Spaziergang am See."));
+		verify(aiService, never()).chatReply(anyList());
 
 		final EventService eventService = new EventService();
 		ReflectionTestUtils.setField(eventService, "repository", repository);
 		ReflectionTestUtils.setField(eventService, "eventContextService", service);
 		eventService.save(event);
 
-		assertTrue(service.context(contact, Category.CHAT).contains("Erste Zusammenfassung"));
-		verify(aiService, times(1)).chatReply(anyList());
+		assertTrue(service.context(contact).contains("Persönlicher Tagebuchkontext"));
+		verify(aiService, never()).chatReply(anyList());
 
 		service.refresh(contact);
 
-		assertTrue(service.context(contact, Category.CHAT).contains("Aktualisierte Zusammenfassung"));
-		verify(aiService, times(2)).chatReply(anyList());
-		verify(adminService, times(2)).createTicket(org.mockito.ArgumentMatchers.any());
+		final int categories = Category.values().length;
+		verify(aiService, times(categories)).chatReply(anyList());
+		verify(adminService, times(categories)).createTicket(org.mockito.ArgumentMatchers.any());
+	}
+
+	@Test
+	void contextIsEmptyWithoutEvents() {
+		final InMemoryRepository repository = new InMemoryRepository();
+		final EventContextService service = new EventContextService();
+		ReflectionTestUtils.setField(service, "repository", repository);
+		final Contact contact = new Contact();
+		contact.setId(BigInteger.ONE);
+
+		assertEquals("", service.context(contact));
 	}
 
 	private static class InMemoryRepository extends Repository {
-		private ChatSummary summary;
+		private final java.util.Map<Category, ChatSummary> summaries = new java.util.EnumMap<>(Category.class);
 		private List<Event> events = List.of();
 
 		@Override
 		@SuppressWarnings("unchecked")
 		public <T extends BaseEntity> List<T> list(final String hql, final Class<T> clazz, final Object... params) {
-			if (clazz == ChatSummary.class)
-				return this.summary == null ? List.of() : (List<T>) List.of(this.summary);
+			if (clazz == ChatSummary.class) {
+				if (params.length < 2)
+					return (List<T>) List.copyOf(this.summaries.values());
+				final ChatSummary found = this.summaries.get(params[1]);
+				return found == null ? List.of() : (List<T>) List.of(found);
+			}
 			if (clazz == Event.class)
 				return (List<T>) this.events;
 			return List.of();
@@ -114,15 +133,15 @@ class EventContextServiceTest {
 		@Override
 		public void save(final BaseEntity entity) {
 			if (entity instanceof final ChatSummary chatSummary)
-				this.summary = chatSummary;
+				this.summaries.put(chatSummary.getCategory(), chatSummary);
 			if (entity instanceof Event && entity.getId() == null)
 				entity.setId(BigInteger.TWO);
 		}
 
 		@Override
 		public void delete(final BaseEntity entity) {
-			if (entity instanceof ChatSummary)
-				this.summary = null;
+			if (entity instanceof final ChatSummary chatSummary)
+				this.summaries.remove(chatSummary.getCategory());
 		}
 	}
 }

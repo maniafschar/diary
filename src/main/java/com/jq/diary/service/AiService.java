@@ -143,8 +143,8 @@ public class AiService {
 					defaultModel = "gemini-2.5-flash-lite";
 				}
 				case GPT -> {
-					baseUrl = "https://api.openai.com";
-					completionsPath = "/v1/chat/completions";
+					baseUrl = "https://api.openai.com/v1";
+					completionsPath = "/chat/completions";
 					apiKey = this.chatGpt;
 					defaultModel = "gpt-4o-mini";
 				}
@@ -161,8 +161,8 @@ public class AiService {
 					defaultModel = "qwen3.8-27b-w4a16";
 				}
 				case Ollama -> {
-					baseUrl = "http://127.0.0.1:11434";
-					completionsPath = "/v1/chat/completions";
+					baseUrl = "http://127.0.0.1:11434/v1";
+					completionsPath = "/chat/completions";
 					apiKey = "ollama";
 					defaultModel = "qwen3:8b";
 				}
