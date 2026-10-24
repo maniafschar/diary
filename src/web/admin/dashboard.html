@@ -540,46 +540,6 @@
         infoEditor.addEventListener('blur', saveInfo);
         window.addEventListener('pagehide', saveInfo);
 
-        // One-time import of data that so far only existed in this browser or in links.json
-        async function importLocalData() {
-            const stored = key => {
-                try {
-                    return JSON.parse(localStorage.getItem(key));
-                } catch (error) {
-                    return null;
-                }
-            };
-            let localLinks = stored('gothaer-work-info-links');
-            if (!Array.isArray(localLinks)) {
-                try {
-                    const response = await fetch('/admin/links.json', { cache: 'no-cache' });
-                    localLinks = response.ok ? await response.json() : [];
-                } catch (error) {
-                    localLinks = [];
-                }
-            }
-            for (const link of localLinks.filter(validLink))
-                links.push(await api('POST', '/link', { title: link.title, url: link.url }));
-
-            const localTodos = stored('gothaer-work-info-todos');
-            for (const todo of Array.isArray(localTodos) ? localTodos : []) {
-                if (!todo || typeof todo.text !== 'string' || !todo.text.trim()) continue;
-                const created = await api('POST', '/todo', { text: todo.text });
-                if (todo.completed === true) {
-                    await api('PUT', '/todo/' + created.id, { completed: true });
-                    created.completed = true;
-                }
-                todos.push(created);
-            }
-
-            const localInfo = localStorage.getItem('gothaer-work-info-details');
-            if (localInfo) {
-                infoEditor.textContent = localInfo;
-                infoDirty = true;
-                await saveInfo();
-            }
-        }
-
         const toBase64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes)));
         const fromBase64 = text => Uint8Array.from(atob(text), c => c.charCodeAt(0));
 
@@ -604,8 +564,6 @@
                 links = data.links;
                 todos = data.todos;
                 infoEditor.textContent = data.info;
-                if (!links.length && !todos.length && !data.info)
-                    await importLocalData();
             } catch (error) {
                 fail(error);
             }
