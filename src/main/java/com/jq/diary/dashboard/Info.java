@@ -1,13 +1,13 @@
 package com.jq.diary.dashboard;
 
+import com.jq.diary.entity.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import com.jq.diary.entity.BaseEntity;
-
 /** Single row holding the free text of the dashboard. */
 @Entity
-public class DashboardInfo extends BaseEntity {
+public class Info extends BaseEntity {
 	@Column(nullable = false, length = 1_000_000)
 	private String content = "";
 

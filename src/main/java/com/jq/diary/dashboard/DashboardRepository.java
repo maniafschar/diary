@@ -18,12 +18,12 @@ public class DashboardRepository {
 	@PersistenceContext(unitName = DatabaseConfiguration.DASHBOARD_UNIT)
 	private EntityManager em;
 
-	public List<DashboardLink> links() {
-		return this.em.createQuery("from DashboardLink order by title, id", DashboardLink.class).getResultList();
+	public List<Link> links() {
+		return this.em.createQuery("from DashboardLink order by title, id", Link.class).getResultList();
 	}
 
-	public DashboardLink addLink(final String title, final String url, final String remark) {
-		final DashboardLink link = new DashboardLink();
+	public Link addLink(final String title, final String url, final String remark) {
+		final Link link = new Link();
 		link.setTitle(title);
 		link.setUrl(url);
 		link.setRemark(remark);
@@ -33,15 +33,15 @@ public class DashboardRepository {
 	}
 
 	public boolean deleteLink(final BigInteger id) {
-		return this.delete(DashboardLink.class, id);
+		return this.delete(Link.class, id);
 	}
 
-	public List<DashboardTodo> todos() {
-		return this.em.createQuery("from DashboardTodo order by id", DashboardTodo.class).getResultList();
+	public List<Todo> todos() {
+		return this.em.createQuery("from DashboardTodo order by id", Todo.class).getResultList();
 	}
 
-	public DashboardTodo addTodo(final String text) {
-		final DashboardTodo todo = new DashboardTodo();
+	public Todo addTodo(final String text) {
+		final Todo todo = new Todo();
 		todo.setText(text);
 		todo.setCreatedAt(now());
 		this.em.persist(todo);
@@ -49,7 +49,7 @@ public class DashboardRepository {
 	}
 
 	public boolean setTodoCompleted(final BigInteger id, final boolean completed) {
-		final DashboardTodo todo = this.em.find(DashboardTodo.class, id);
+		final Todo todo = this.em.find(Todo.class, id);
 		if (todo == null)
 			return false;
 		todo.setCompleted(completed);
@@ -58,18 +58,18 @@ public class DashboardRepository {
 	}
 
 	public boolean deleteTodo(final BigInteger id) {
-		return this.delete(DashboardTodo.class, id);
+		return this.delete(Todo.class, id);
 	}
 
 	public String info() {
-		final DashboardInfo info = this.infoEntity();
+		final Info info = this.infoEntity();
 		return info == null ? "" : info.getContent();
 	}
 
 	public void saveInfo(final String content) {
-		final DashboardInfo info = this.infoEntity();
+		final Info info = this.infoEntity();
 		if (info == null) {
-			final DashboardInfo created = new DashboardInfo();
+			final Info created = new Info();
 			created.setCreatedAt(now());
 			created.setContent(content);
 			this.em.persist(created);
@@ -79,8 +79,8 @@ public class DashboardRepository {
 		}
 	}
 
-	private DashboardInfo infoEntity() {
-		final List<DashboardInfo> result = this.em.createQuery("from DashboardInfo order by id", DashboardInfo.class)
+	private Info infoEntity() {
+		final List<Info> result = this.em.createQuery("from DashboardInfo order by id", Info.class)
 				.setMaxResults(1).getResultList();
 		return result.isEmpty() ? null : result.get(0);
 	}

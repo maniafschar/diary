@@ -1,12 +1,12 @@
 package com.jq.diary.dashboard;
 
+import com.jq.diary.entity.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import com.jq.diary.entity.BaseEntity;
-
 @Entity
-public class DashboardLink extends BaseEntity {
+public class Link extends BaseEntity {
 	@Column(nullable = false, length = 200)
 	private String title;
 

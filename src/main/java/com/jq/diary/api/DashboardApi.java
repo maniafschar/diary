@@ -20,10 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.jq.diary.dashboard.DashboardLink;
 import com.jq.diary.dashboard.DashboardRepository;
-import com.jq.diary.dashboard.DashboardTodo;
 import com.jq.diary.dashboard.HybridEncryption;
 
 /**
@@ -67,7 +64,7 @@ public class DashboardApi {
 	}
 
 	@PostMapping("link")
-	public DashboardLink postLink(@RequestBody final Link link) {
+	public Link postLink(@RequestBody final Link link) {
 		final String title = this.text(link.title(), MAX_TITLE);
 		final String url = this.text(link.url(), MAX_URL);
 		if (!this.isHttpUrl(url))
@@ -81,7 +78,7 @@ public class DashboardApi {
 	}
 
 	@PostMapping("todo")
-	public DashboardTodo postTodo(@RequestBody final Todo todo) {
+	public Todo postTodo(@RequestBody final Todo todo) {
 		return this.repository.addTodo(this.text(todo.text(), MAX_TODO));
 	}
 

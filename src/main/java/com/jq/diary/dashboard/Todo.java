@@ -1,12 +1,12 @@
 package com.jq.diary.dashboard;
 
+import com.jq.diary.entity.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import com.jq.diary.entity.BaseEntity;
-
 @Entity
-public class DashboardTodo extends BaseEntity {
+public class Todo extends BaseEntity {
 	@Column(nullable = false, length = 200)
 	private String text;
 
