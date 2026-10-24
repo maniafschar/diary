@@ -13,6 +13,9 @@ public class DashboardLink extends BaseEntity {
 	@Column(nullable = false, length = 2048)
 	private String url;
 
+	@Column(length = 500)
+	private String remark;
+
 	public String getTitle() {
 		return this.title;
 	}
@@ -27,5 +30,13 @@ public class DashboardLink extends BaseEntity {
 
 	public void setUrl(final String url) {
 		this.url = url;
+	}
+
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(final String remark) {
+		this.remark = remark;
 	}
 }

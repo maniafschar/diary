@@ -250,6 +250,10 @@
             color: #b42318;
         }
 
+        .link-remark {
+            color: #6b7280;
+        }
+
         .todo-empty {
             padding: 14px 10px;
             color: #6b7280;
@@ -301,6 +305,8 @@
                     <input id="link-title" type="text" maxlength="200" placeholder="Titel ..." required>
                     <label class="sr-only" for="link-url">URL</label>
                     <input id="link-url" type="url" placeholder="https://..." required>
+                    <label class="sr-only" for="link-remark">Bemerkung</label>
+                    <input id="link-remark" type="text" maxlength="500" placeholder="Bemerkung ...">
                     <button type="submit">Hinzufügen</button>
                 </form>
                 <form class="todo-form" id="search-form" style="margin-top:10px" onsubmit="return false">
@@ -416,7 +422,11 @@
                     }
                 });
 
-                item.append(text, deleteButton);
+                const remark = document.createElement('span');
+                remark.className = 'todo-text link-remark';
+                remark.textContent = link.remark || '';
+
+                item.append(text, remark, deleteButton);
                 linkList.appendChild(item);
             });
 
@@ -434,13 +444,14 @@
             const form = event.target;
             const title = document.getElementById('link-title').value.trim();
             const url = document.getElementById('link-url').value.trim();
+            const remark = document.getElementById('link-remark').value.trim();
             if (!title || !validLink({ title, url })) {
                 alert('Bitte einen Titel und eine gültige http(s)-URL angeben.');
                 return;
             }
             if (!confirm(`Link "${title}" hinzufügen?`)) return;
             try {
-                links.push(await api('POST', '/link', { title, url }));
+                links.push(await api('POST', '/link', { title, url, remark }));
                 renderLinks();
                 form.reset();
             } catch (error) {

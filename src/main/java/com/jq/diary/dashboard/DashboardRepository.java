@@ -22,10 +22,11 @@ public class DashboardRepository {
 		return this.em.createQuery("from DashboardLink order by title, id", DashboardLink.class).getResultList();
 	}
 
-	public DashboardLink addLink(final String title, final String url) {
+	public DashboardLink addLink(final String title, final String url, final String remark) {
 		final DashboardLink link = new DashboardLink();
 		link.setTitle(title);
 		link.setUrl(url);
+		link.setRemark(remark);
 		link.setCreatedAt(now());
 		this.em.persist(link);
 		return link;

@@ -34,6 +34,7 @@ import com.jq.diary.dashboard.HybridEncryption;
 public class DashboardApi {
 	private static final int MAX_TITLE = 200;
 	private static final int MAX_URL = 2048;
+	private static final int MAX_REMARK = 500;
 	private static final int MAX_TODO = 200;
 	private static final int MAX_INFO = 1_000_000;
 
@@ -43,7 +44,7 @@ public class DashboardApi {
 	@Autowired
 	private ObjectMapper mapper;
 
-	public record Link(String title, String url) {
+	public record Link(String title, String url, String remark) {
 	}
 
 	public record Todo(String text, Boolean completed) {
@@ -71,7 +72,7 @@ public class DashboardApi {
 		final String url = this.text(link.url(), MAX_URL);
 		if (!this.isHttpUrl(url))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid url");
-		return this.repository.addLink(title, url);
+		return this.repository.addLink(title, url, this.optionalText(link.remark(), MAX_REMARK));
 	}
 
 	@DeleteMapping("link/{id}")
@@ -109,6 +110,13 @@ public class DashboardApi {
 		if (text.isEmpty() || text.length() > max)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid text");
 		return text;
+	}
+
+	private String optionalText(final String value, final int max) {
+		final String text = value == null ? "" : value.trim();
+		if (text.length() > max)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "text too long");
+		return text.isEmpty() ? null : text;
 	}
 
 	private boolean isHttpUrl(final String url) {
