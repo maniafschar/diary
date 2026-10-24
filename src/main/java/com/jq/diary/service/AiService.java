@@ -61,7 +61,7 @@ public class AiService {
 	@Value("${app.google.gemini.apiKey}")
 	private String geminiKey;
 
-	@Value("${app.google.ben.apiKey}")
+	@Value("${app.ben.apiKey}")
 	private String benKey;
 
 	@Value("${app.huggingface.apiKey}")
