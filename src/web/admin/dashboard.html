@@ -449,7 +449,6 @@
                 alert('Bitte einen Titel und eine gültige http(s)-URL angeben.');
                 return;
             }
-            if (!confirm(`Link "${title}" hinzufügen?`)) return;
             try {
                 links.push(await api('POST', '/link', { title, url, remark }));
                 renderLinks();
