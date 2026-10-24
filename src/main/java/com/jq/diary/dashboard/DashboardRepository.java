@@ -19,7 +19,7 @@ public class DashboardRepository {
 	private EntityManager em;
 
 	public List<Link> links() {
-		return this.em.createQuery("from DashboardLink order by title, id", Link.class).getResultList();
+		return this.em.createQuery("from Link order by title, id", Link.class).getResultList();
 	}
 
 	public Link addLink(final String title, final String url, final String remark) {
@@ -37,7 +37,7 @@ public class DashboardRepository {
 	}
 
 	public List<Todo> todos() {
-		return this.em.createQuery("from DashboardTodo order by id", Todo.class).getResultList();
+		return this.em.createQuery("from Todo order by id", Todo.class).getResultList();
 	}
 
 	public Todo addTodo(final String text) {
@@ -80,7 +80,7 @@ public class DashboardRepository {
 	}
 
 	private Info infoEntity() {
-		final List<Info> result = this.em.createQuery("from DashboardInfo order by id", Info.class)
+		final List<Info> result = this.em.createQuery("from Info order by id", Info.class)
 				.setMaxResults(1).getResultList();
 		return result.isEmpty() ? null : result.get(0);
 	}
