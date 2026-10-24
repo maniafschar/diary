@@ -13,10 +13,10 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
-	private final AiProvider provider = AiProvider.Ollama;
+	private final AiProvider provider = AiProvider.Ben;
 	private volatile ChatModel springAiChatModel;
 
 	@Autowired
@@ -61,11 +61,14 @@ public class AiService {
 	@Value("${app.google.gemini.apiKey}")
 	private String geminiKey;
 
+	@Value("${app.google.ben.apiKey}")
+	private String benKey;
+
 	@Value("${app.huggingface.apiKey}")
 	private String huggingFace;
 
 	enum AiProvider {
-		GPT, Gemini, HuggingFace, Ollama, None
+		GPT, Gemini, HuggingFace, Ollama, Ben, None
 	}
 
 	public Summary summary(final Prompt prompt, final String text) {
@@ -78,7 +81,9 @@ public class AiService {
 		return this.chatReply(conversation, false);
 	}
 
-	/** Like {@link #chatReply(List)}, but the model may search and read web pages. */
+	/**
+	 * Like {@link #chatReply(List)}, but the model may search and read web pages.
+	 */
 	public String chatReplyWithWeb(final List<Content> conversation) {
 		return this.chatReply(conversation, true);
 	}
@@ -148,6 +153,12 @@ public class AiService {
 					completionsPath = "/chat/completions";
 					apiKey = this.huggingFace;
 					defaultModel = "google/gemma-3-27b-it";
+				}
+				case Ben -> {
+					baseUrl = "https://100.65.185.69/v1";
+					completionsPath = "/chat/completions";
+					apiKey = this.benKey;
+					defaultModel = "qwen3:27b";
 				}
 				case Ollama -> {
 					baseUrl = "http://127.0.0.1:11434";
