@@ -63,6 +63,10 @@ public class ContactApi extends ApplicationApi {
 			original.setImage(contact.getImage());
 		if (contact.getNote() != null)
 			original.setNote(contact.getNote());
+		if (contact.getLanguage() != null && contact.getLanguage().matches("[a-z]{2,3}"))
+			original.setLanguage(contact.getLanguage());
+		if (contact.getSexualOrientation() != null)
+			original.setSexualOrientation(contact.getSexualOrientation());
 		this.contactService.save(original);
 		if (contact.getClients() != null && original.getClients().stream().anyMatch(e -> e.getId().equals(clientId))
 				&& user.getAdmin() != null && user.getAdmin()) {

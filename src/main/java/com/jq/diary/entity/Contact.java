@@ -8,6 +8,8 @@ import com.jq.diary.util.Utilities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -31,6 +33,40 @@ public class Contact extends BaseEntity {
 	private Boolean verified = false;
 	private Long passwordReset = Long.valueOf(0);
 	private BigInteger currentClientId;
+	/** ISO 639-1 code, e.g. "de". */
+	private String language;
+	@Enumerated(EnumType.STRING)
+	private SexualOrientation sexualOrientation;
+
+	public enum SexualOrientation {
+		HETERO("heterosexuell"), HOMO("homosexuell"), BI("bisexuell");
+
+		private final String label;
+
+		SexualOrientation(final String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return this.label;
+		}
+	}
+
+	public String getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(final String language) {
+		this.language = language;
+	}
+
+	public SexualOrientation getSexualOrientation() {
+		return this.sexualOrientation;
+	}
+
+	public void setSexualOrientation(final SexualOrientation sexualOrientation) {
+		this.sexualOrientation = sexualOrientation;
+	}
 
 	public Set<Client> getClients() {
 		if (this.clients == null)
