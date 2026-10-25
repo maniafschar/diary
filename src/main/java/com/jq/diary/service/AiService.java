@@ -1,5 +1,7 @@
 package com.jq.diary.service;
 
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,9 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
@@ -38,6 +42,12 @@ public class AiService {
 
 	@Value("${app.google.gemini.apiKey}")
 	private String geminiKey;
+
+	@Value("${app.ai.connectTimeoutSeconds}")
+	private long connectTimeoutSeconds;
+
+	@Value("${app.ai.readTimeoutSeconds}")
+	private long readTimeoutSeconds;
 
 	@Value("${app.ben.apiKey}")
 	private String benKey;
@@ -146,6 +156,7 @@ public class AiService {
 					.baseUrl(baseUrl)
 					.completionsPath(completionsPath)
 					.apiKey(apiKey)
+					.restClientBuilder(this.restClientBuilder())
 					.build();
 			model = OpenAiChatModel.builder()
 					.openAiApi(api)
@@ -154,5 +165,12 @@ public class AiService {
 			this.springAiChatModel = model;
 			return model;
 		}
+	}
+
+	private RestClient.Builder restClientBuilder() {
+		final JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(
+				HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(this.connectTimeoutSeconds)).build());
+		factory.setReadTimeout(Duration.ofSeconds(this.readTimeoutSeconds));
+		return RestClient.builder().requestFactory(factory);
 	}
 }
