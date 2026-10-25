@@ -18,7 +18,7 @@ class AiServiceProviderTest {
 	@Test
 	void noneProviderDoesNotMakeARequest() throws Exception {
 		final AiService service = this.serviceWithProvider(AiProvider.None);
-		assertNull(service.chatReply(List.of()));
+		assertNull(service.chatReply(List.of(), false));
 	}
 
 	@Test
@@ -26,7 +26,7 @@ class AiServiceProviderTest {
 		final AiService service = this.serviceWithProvider(AiProvider.HuggingFace);
 		this.setField(service, "huggingFace", "");
 		assertThrows(IllegalStateException.class,
-				() -> service.chatReply(List.of(Content.builder().role("user").build())));
+				() -> service.chatReply(List.of(Content.builder().role("user").build()), false));
 	}
 
 	@Test
@@ -41,6 +41,8 @@ class AiServiceProviderTest {
 	private AiService serviceWithProvider(final AiProvider provider) throws Exception {
 		final AiService service = new AiService();
 		this.setField(service, "provider", provider);
+		this.setField(service, "connectTimeoutSeconds", 10L);
+		this.setField(service, "readTimeoutSeconds", 120L);
 		return service;
 	}
 

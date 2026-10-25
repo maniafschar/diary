@@ -59,20 +59,10 @@ public class AiService {
 		GPT, Gemini, HuggingFace, Ollama, Ben, None
 	}
 
-	public String chatReply(final List<Content> conversation) {
-		return this.chatReply(conversation, false);
-	}
-
-	/**
-	 * Like {@link #chatReply(List)}, but the model may search and read web pages.
-	 */
-	public String chatReplyWithWeb(final List<Content> conversation) {
-		return this.chatReply(conversation, true);
-	}
-
-	private String chatReply(final List<Content> conversation, final boolean web) {
+	public String chatReply(final List<Content> conversation, final boolean web) {
 		if (this.provider == AiProvider.None)
 			return null;
+		final long start = System.nanoTime();
 		final List<Message> messages = new ArrayList<>();
 		for (final Content content : conversation) {
 			if (content.parts().isEmpty())
@@ -96,6 +86,9 @@ public class AiService {
 							OpenAiChatOptions.builder().toolCallbacks(ToolCallbacks.from(this.webTool)).build()))
 					: model.call(new org.springframework.ai.chat.prompt.Prompt(messages));
 			final String answer = response.getResult().getOutput().getText();
+			this.adminService
+					.createTicket(new Ticket("entries: " + conversation.size()
+							+ "\nduration: " + (System.nanoTime() - start) / 1_000_000 + " ms\n" + answer));
 			return answer == null || answer.isBlank()
 					? "Entschuldigung, ich konnte gerade keine Antwort formulieren."
 					: answer.trim();

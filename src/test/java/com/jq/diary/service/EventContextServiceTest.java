@@ -3,6 +3,7 @@ package com.jq.diary.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -69,7 +70,8 @@ class EventContextServiceTest {
 	void contextListsEventsWithoutAiAndSummariesAreRecomputedOnlyDuringRefresh() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
-		when(aiService.chatReply(anyList())).thenReturn("Erste Zusammenfassung", "Aktualisierte Zusammenfassung");
+		when(aiService.chatReply(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
+				"Aktualisierte Zusammenfassung");
 		final EventContextService service = new EventContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
@@ -91,7 +93,7 @@ class EventContextServiceTest {
 		assertTrue(context.contains("Tagebuch Einträge:"));
 		assertTrue(context.contains("Persönlicher Tagebuchkontext"));
 		assertTrue(context.contains("Beschreibung: Ein Spaziergang am See."));
-		verify(aiService, never()).chatReply(anyList());
+		verify(aiService, never()).chatReply(anyList(), eq(false));
 
 		final EventService eventService = new EventService();
 		ReflectionTestUtils.setField(eventService, "repository", repository);
@@ -99,13 +101,38 @@ class EventContextServiceTest {
 		eventService.save(event);
 
 		assertTrue(service.context(contact).contains("Persönlicher Tagebuchkontext"));
-		verify(aiService, never()).chatReply(anyList());
+		verify(aiService, never()).chatReply(anyList(), eq(false));
 
 		service.refresh(contact);
 
-		final int categories = Category.values().length;
-		verify(aiService, times(categories)).chatReply(anyList());
-		verify(adminService, times(categories)).createTicket(org.mockito.ArgumentMatchers.any());
+		// without chat messages the CHAT summary is skipped, every other category is
+		// computed
+		final int eventCategories = Category.values().length - 1;
+		verify(aiService, times(eventCategories)).chatReply(anyList(), eq(false));
+		assertEquals(eventCategories, repository.summaries.size());
+		assertTrue(!repository.summaries.containsKey(Category.CHAT));
+	}
+
+	@Test
+	void chatSummaryIsComputedFromChatMessages() {
+		final InMemoryRepository repository = new InMemoryRepository();
+		final AiService aiService = mock(AiService.class);
+		when(aiService.chatReply(anyList(), eq(false))).thenReturn("Chat Zusammenfassung");
+		final EventContextService service = new EventContextService();
+		ReflectionTestUtils.setField(service, "repository", repository);
+		ReflectionTestUtils.setField(service, "aiService", aiService);
+		final Contact contact = new Contact();
+		contact.setId(BigInteger.ONE);
+		final ChatMessage message = new ChatMessage();
+		message.setContact(contact);
+		message.setRole("user");
+		message.setNote("Hallo");
+		message.setCreatedAt(new Timestamp(Instant.parse("2025-04-12T14:30:00Z").toEpochMilli()));
+		repository.messages = List.of(message);
+
+		service.refresh(contact);
+
+		assertEquals("Chat Zusammenfassung", repository.summaries.get(Category.CHAT).getNote());
 	}
 
 	@Test
@@ -120,6 +147,7 @@ class EventContextServiceTest {
 	}
 
 	private static class InMemoryRepository extends Repository {
+		private List<ChatMessage> messages = List.of();
 		private final java.util.Map<Category, ChatSummary> summaries = new java.util.EnumMap<>(Category.class);
 		private List<Event> events = List.of();
 		private List<ChatMessage> chatMessages = List.of();
@@ -133,6 +161,8 @@ class EventContextServiceTest {
 				final ChatSummary found = this.summaries.get(params[1]);
 				return found == null ? List.of() : (List<T>) List.of(found);
 			}
+			if (clazz == ChatMessage.class)
+				return (List<T>) this.messages;
 			if (clazz == Event.class)
 				return (List<T>) this.events;
 			if (clazz == ChatMessage.class)
