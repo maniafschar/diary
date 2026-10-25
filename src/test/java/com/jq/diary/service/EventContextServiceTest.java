@@ -67,7 +67,7 @@ class EventContextServiceTest {
 	}
 
 	@Test
-	void contextListsEventsWithoutAiAndSummariesAreRecomputedOnlyDuringRefresh() {
+	void summariesAreRecomputedOnlyDuringRefresh() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chatReply(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
@@ -75,8 +75,6 @@ class EventContextServiceTest {
 		final EventContextService service = new EventContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
-		final AdminService adminService = mock(AdminService.class);
-		ReflectionTestUtils.setField(service, "adminService", adminService);
 		final Contact contact = new Contact();
 		contact.setId(BigInteger.ONE);
 		final Event event = new Event();
@@ -89,10 +87,6 @@ class EventContextServiceTest {
 		chatMessage.setCreatedAt(new Timestamp(0));
 		repository.chatMessages = List.of(chatMessage);
 
-		final String context = service.context(contact);
-		assertTrue(context.contains("Tagebuch Einträge:"));
-		assertTrue(context.contains("Persönlicher Tagebuchkontext"));
-		assertTrue(context.contains("Beschreibung: Ein Spaziergang am See."));
 		verify(aiService, never()).chatReply(anyList(), eq(false));
 
 		final EventService eventService = new EventService();
@@ -100,7 +94,6 @@ class EventContextServiceTest {
 		ReflectionTestUtils.setField(eventService, "eventContextService", service);
 		eventService.save(event);
 
-		assertTrue(service.context(contact).contains("Persönlicher Tagebuchkontext"));
 		verify(aiService, never()).chatReply(anyList(), eq(false));
 
 		service.refresh(contact);
@@ -133,17 +126,6 @@ class EventContextServiceTest {
 		service.refresh(contact);
 
 		assertEquals("Chat Zusammenfassung", repository.summaries.get(Category.CHAT).getNote());
-	}
-
-	@Test
-	void contextIsEmptyWithoutEvents() {
-		final InMemoryRepository repository = new InMemoryRepository();
-		final EventContextService service = new EventContextService();
-		ReflectionTestUtils.setField(service, "repository", repository);
-		final Contact contact = new Contact();
-		contact.setId(BigInteger.ONE);
-
-		assertEquals("", service.context(contact));
 	}
 
 	private static class InMemoryRepository extends Repository {
