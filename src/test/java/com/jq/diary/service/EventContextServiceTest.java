@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.jq.diary.entity.BaseEntity;
+import com.jq.diary.entity.ChatMessage;
 import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.ChatSummary.Category;
 import com.jq.diary.entity.Contact;
@@ -79,6 +81,11 @@ class EventContextServiceTest {
 		event.setContact(contact);
 		event.setNote("Ein Spaziergang am See.");
 		repository.events = List.of(event);
+		final ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setContact(contact);
+		chatMessage.setNote("Hi");
+		chatMessage.setCreatedAt(new Timestamp(0));
+		repository.chatMessages = List.of(chatMessage);
 
 		final String context = service.context(contact);
 		assertTrue(context.contains("Tagebuch Einträge:"));
@@ -115,6 +122,7 @@ class EventContextServiceTest {
 	private static class InMemoryRepository extends Repository {
 		private final java.util.Map<Category, ChatSummary> summaries = new java.util.EnumMap<>(Category.class);
 		private List<Event> events = List.of();
+		private List<ChatMessage> chatMessages = List.of();
 
 		@Override
 		@SuppressWarnings("unchecked")
@@ -127,6 +135,8 @@ class EventContextServiceTest {
 			}
 			if (clazz == Event.class)
 				return (List<T>) this.events;
+			if (clazz == ChatMessage.class)
+				return (List<T>) this.chatMessages;
 			return List.of();
 		}
 

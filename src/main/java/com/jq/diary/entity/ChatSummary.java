@@ -17,8 +17,8 @@ public class ChatSummary extends BaseEntity {
 	@Column(columnDefinition = "BOOLEAN")
 	private Boolean dirty;
 
-	@Column(name = "summary_text", columnDefinition = "TEXT")
-	private String text;
+	@Column(columnDefinition = "TEXT")
+	private String note;
 
 	public enum Category {
 		CHAT("Fasse die folgenden Tagebucheinträge knapp als persönlichen Hintergrund für einen Chat zusammen. "
@@ -53,12 +53,12 @@ public class ChatSummary extends BaseEntity {
 		this.contact = contact;
 	}
 
-	public String getText() {
-		return this.text;
+	public String getNote() {
+		return this.note;
 	}
 
-	public void setText(final String text) {
-		this.text = text;
+	public void setNote(final String note) {
+		this.note = note;
 	}
 
 	public Category getCategory() {

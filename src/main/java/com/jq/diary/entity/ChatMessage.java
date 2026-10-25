@@ -10,7 +10,7 @@ public class ChatMessage extends BaseEntity {
 	private Contact contact;
 
 	@Column(columnDefinition = "TEXT")
-	private String text;
+	private String note;
 
 	@Column(length = 16)
 	private String role;
@@ -23,12 +23,12 @@ public class ChatMessage extends BaseEntity {
 		this.contact = contact;
 	}
 
-	public String getText() {
-		return this.text;
+	public String getNote() {
+		return this.note;
 	}
 
-	public void setText(final String text) {
-		this.text = text;
+	public void setNote(final String note) {
+		this.note = note;
 	}
 
 	public String getRole() {

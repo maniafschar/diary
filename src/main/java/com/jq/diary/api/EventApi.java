@@ -30,8 +30,6 @@ import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
 import com.jq.diary.entity.Location;
-import com.jq.diary.entity.Summary;
-import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AuthorizationService;
@@ -85,21 +83,6 @@ public class EventApi extends ApplicationApi {
 			return this.filter(this.eventService.listAccess(eventLink));
 		}
 		return null;
-	}
-
-	@GetMapping("summary")
-	public List<Summary> getSummary(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId) {
-		this.authorizationService.requireContact(contactId, clientId);
-		return Utilities.filter(
-				this.repository.list("from Summary where client.id=?1 order by id desc", Summary.class, clientId));
-	}
-
-	@PostMapping(path = "summary", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Summary postSummary(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId, @RequestParam final Prompt prompt,
-			@RequestParam final List<BigInteger> ids) {
-		return this.eventService.summary(prompt, this.getList(contactId, clientId), clientId);
 	}
 
 	@GetMapping("{id}")

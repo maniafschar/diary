@@ -186,25 +186,6 @@ class api {
 			});
 		},
 
-		getSummary(success) {
-			api.ajax({
-				url: 'event/summary',
-				success: success
-			});
-		},
-
-		postSummary(propmt, eventIds, success) {
-			var formData = new FormData();
-			formData.append('ids', eventIds);
-			formData.append('propmt', propmt);
-			api.ajax({
-				url: 'event/summary?prompt=' + encodeURIComponent(propmt),
-				method: 'POST',
-				body: formData,
-				success: success
-			});
-		},
-
 		patch(event, success) {
 			api.ajax({
 				url: 'event',

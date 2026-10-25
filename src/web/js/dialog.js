@@ -8,12 +8,6 @@ export { dialog };
 
 class dialog {
 	static files;
-	static summaryContent;
-	static summaryPrompts = [
-		['Summary', 'Zusammenfassung'],
-		['AdvicePsychology', 'Psychologische Empfehlung'],
-		['AdviceRoute', 'Routen-Empfehlung']
-	];
 	static stylePictures = `
 value.pictures {
 	width: 100%;
@@ -483,75 +477,6 @@ div.toggle>div {
 				item.innerHTML = text;
 			}
 		});
-	}
-
-	static summary() {
-		dialog.export('action.export("ai")', 'KI fragen', popup => popup.appendChild(document.createElement('input-selection')).setAttribute('value', 'Summary'));
-		var selection = document.querySelector('dialog-popup').content().querySelector('input-selection');
-		for (var i = 0; i < this.summaryPrompts.length; i++)
-			selection.add(this.summaryPrompts[i][0], this.summaryPrompts[i][1]);
-		selection.open();
-		var popup = document.querySelector('dialog-popup').content().querySelector('div');
-		popup.appendChild(document.createElement('style')).textContent = `
-a {
-	display: block;
-	font-size: 0.8em;
-	padding: 0.5em;
-}
-toggle {
-	text-align: center;
-	margin-top: 1em;
-}
-div.toggle>div {
-	max-height: 15em;
-	overflow: auto;
-}`;
-		var toggle = popup.appendChild(document.createElement('toggle'));
-		toggle.setAttribute('onclick', 'ui.toggle(event)');
-		toggle.innerText = 'Bereits erzeugte Dokumente';
-		toggle.style.display = 'none';
-		var eventLinks = popup.appendChild(document.createElement('div'));
-		eventLinks.classList.add('toggle');
-		eventLinks = eventLinks.appendChild(document.createElement('div'));
-		api.event.getSummary(list => {
-			if (list.length > 0)
-				toggle.style.display = '';
-			for (var i = 0; i < list.length; i++) {
-				var item = eventLinks.appendChild(document.createElement('a'));
-				item.innerText = ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + ': ' + this.summaryPrompts.find(e => e[0] == list[i].prompt)[1];
-				const summary = list[i];
-				item.onclick = () => dialog.summaryDisplay(summary, true);
-			}
-		});
-		dialog.summaryContent = popup;
-	}
-
-	static summaryDisplay(summary, reopen) {
-		var body = {
-			detail: {
-				body:
-					(summary.image ? '<img src="' + (summary.image.indexOf('.') > 0 ? api.mediaUrl(summary.image) : 'data:image/jpg;base64,' + summary.image) + '" style="max-width: 100%; border-radius: 0.5em 0.5em 0 0;"/>' : '') +
-					'<div style="text-align: center; margin-bottom: 1em;"><div style="font-size: 2em;">' + summary.emojis.join('&nbsp; &nbsp;') + '</div>' + summary.adjectives.join(' · ') + '</div>' +
-					summary.note.replace(/\n/g, '<br/>')
-			}
-		}
-		if (reopen)
-			body.detail.onclose = () => {
-				dialog.summaryContent.querySelector('count').innerText = '';
-				var popup = document.querySelector('dialog-popup').content();
-				popup.textContent = '';
-				popup.appendChild(dialog.summaryContent);
-				var table = document.querySelector('event view-table');
-				table.setAttribute('mode', 'selection');
-				table.addEventListener('select', dialog.countListener);
-				document.addEventListener('popup', () => {
-					document.querySelector('event view-table').removeAttribute('mode');
-					table.removeEventListener('select', dialog.countListener);
-				}, { once: true });
-			};
-		else
-			dialog.summaryContent = null;
-		document.dispatchEvent(new CustomEvent('popup', body));
 	}
 
 	static countListener() {

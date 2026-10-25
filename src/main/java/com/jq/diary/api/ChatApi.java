@@ -46,7 +46,7 @@ public class ChatApi extends ApplicationApi {
 
 	public record MessageResponse(BigInteger id, String role, String text, Timestamp createdAt) {
 		private MessageResponse(final ChatMessage message) {
-			this(message.getId(), message.getRole(), message.getText(), message.getCreatedAt());
+			this(message.getId(), message.getRole(), message.getNote(), message.getCreatedAt());
 		}
 	}
 }

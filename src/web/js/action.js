@@ -501,9 +501,7 @@ class action {
 				api.event.postEmail(ids, emails, () => document.dispatchEvent(new CustomEvent('popup')));
 			} else
 				error.innerText = 'Gib eine Emailadresse ein.';
-		} else if (type == 'ai')
-			api.event.postSummary(document.querySelector('dialog-popup').content().querySelector('input-selection').getAttribute('value'), ids, dialog.summaryDisplay);
-		else
+		} else
 			api.event.postPdf(ids, () => document.dispatchEvent(new CustomEvent('popup')));
 	}
 }

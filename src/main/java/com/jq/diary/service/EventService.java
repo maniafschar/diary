@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,6 @@ import com.jq.diary.entity.EventFeedback;
 import com.jq.diary.entity.EventImage;
 import com.jq.diary.entity.EventLink;
 import com.jq.diary.entity.EventRating;
-import com.jq.diary.entity.Summary;
-import com.jq.diary.entity.Summary.Prompt;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.util.Utilities;
@@ -160,39 +157,6 @@ public class EventService {
 
 	public void delete(final EventImage eventImage) {
 		this.repository.delete(eventImage);
-	}
-
-	public Summary summary(final Prompt prompt, final List<Event> events, final BigInteger clientId) {
-		final StringBuilder text = new StringBuilder();
-		int no = 0;
-		for (final Event event : events) {
-			text.append("Eintrag " + ++no + ":\n");
-			text.append("Datum: " + event.getDate().toString() + "\n");
-			if (event.getRating() != null)
-				text.append(
-						"Stimmung: " + (int) (event.getRating() / event.getRatingCount() / 20 + 0.5) + "/5 stars\n");
-			text.append("Name des Ortes: " + event.getLocation().getName() + "\n");
-			text.append("Adresse: " + event.getLocation().getAddress() + "\n");
-			if (event.getLocation() != null) {
-				text.append("Längengrad: " + event.getLocation().getLongitude() + "\n");
-				text.append("Breitengrad: " + event.getLocation().getLatitude() + "\n");
-			}
-			if (event.getNote() != null)
-				text.append("Text: " + event.getNote().replace('\n', ' '));
-			text.append("\n\n");
-		}
-		final Summary summary = this.aiService.summary(prompt, text.toString().trim());
-		summary.setClient(this.repository.one(Client.class, clientId));
-		final String image = summary.getImage();
-		if (image != null) {
-			final byte[] imageBytes = Base64.getDecoder().decode(image);
-			summary.setImage(Attachment.createImage("jpg", imageBytes));
-			summary.setImageThumbnail(Attachment.createImage("jpg", Utilities.scaleImage(imageBytes, 150)));
-		}
-		summary.setPrompt(prompt);
-		this.repository.save(summary);
-		summary.setImage(image);
-		return summary;
 	}
 
 	public void exportEmail(final Contact contact, final List<Event> events, final List<String> emails)

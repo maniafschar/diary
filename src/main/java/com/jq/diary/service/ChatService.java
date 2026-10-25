@@ -56,7 +56,7 @@ public class ChatService {
 		final List<Content> conversation = new ArrayList<>();
 		for (int i = firstMessage; i < messages.size(); i++) {
 			final ChatMessage message = messages.get(i);
-			String messageText = message.getText();
+			String messageText = message.getNote();
 			if (message.getId().equals(userMessage.getId()))
 				messageText = SYSTEM_PROMPT + this.eventContextService.context(contact)
 						+ "\n\nAktuelle Nachricht: "
@@ -74,7 +74,7 @@ public class ChatService {
 		final ChatMessage message = new ChatMessage();
 		message.setContact(contact);
 		message.setRole(role);
-		message.setText(text);
+		message.setNote(text);
 		return message;
 	}
 }
