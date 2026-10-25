@@ -110,6 +110,7 @@ public class AiService {
 			final String completionsPath;
 			final String apiKey;
 			final String defaultModel;
+			boolean thinking = true;
 			switch (this.provider) {
 				case Gemini -> {
 					baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai";
@@ -134,6 +135,7 @@ public class AiService {
 					completionsPath = "/chat/completions";
 					apiKey = this.benKey;
 					defaultModel = "qwen3.8-27b-w4a16";
+					thinking = false;
 				}
 				case Ollama -> {
 					baseUrl = "http://127.0.0.1:11434/v1";
@@ -149,7 +151,7 @@ public class AiService {
 					.baseUrl(baseUrl)
 					.completionsPath(completionsPath)
 					.apiKey(apiKey)
-					.restClientBuilder(this.restClientBuilder())
+					.restClientBuilder(this.restClientBuilder(thinking))
 					.build();
 			model = OpenAiChatModel.builder()
 					.openAiApi(api)
@@ -160,10 +162,21 @@ public class AiService {
 		}
 	}
 
-	private RestClient.Builder restClientBuilder() {
+	private RestClient.Builder restClientBuilder(final boolean thinking) {
 		final JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(
 				HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(this.connectTimeoutSeconds)).build());
 		factory.setReadTimeout(Duration.ofSeconds(this.readTimeoutSeconds));
-		return RestClient.builder().requestFactory(factory);
+		final RestClient.Builder builder = RestClient.builder().requestFactory(factory);
+		if (!thinking)
+			builder.requestInterceptor((request, body, execution) -> {
+				final String json = new String(body, java.nio.charset.StandardCharsets.UTF_8).stripTrailing();
+				final byte[] changed = json.endsWith("}")
+						? (json.substring(0, json.length() - 1)
+								+ ",\"chat_template_kwargs\":{\"enable_thinking\":false}}")
+								.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+						: body;
+				return execution.execute(request, changed);
+			});
+		return builder;
 	}
 }

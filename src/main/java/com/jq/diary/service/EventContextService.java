@@ -36,18 +36,6 @@ public class EventContextService {
 	@Autowired
 	private AiService aiService;
 
-	@Autowired
-	private AdminService adminService;
-
-	public String context(final Contact contact) {
-		final List<Event> events = this.repository.list(
-				"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
-				Event.class, contact.getId());
-		if (events.size() == 0)
-			return "";
-		return "\n\nTagebuch Einträge:\n" + formatEventContext(events).trim();
-	}
-
 	public void markDirty(final BigInteger eventId) {
 		if (eventId == null)
 			return;

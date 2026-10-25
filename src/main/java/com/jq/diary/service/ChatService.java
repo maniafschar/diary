@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,28 +12,25 @@ import org.springframework.web.server.ResponseStatusException;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.ChatMessage;
+import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.util.Utilities;
 
 @Service
 public class ChatService {
-	private static final int MAX_HISTORY_MESSAGES = 1;
-	private static final String SYSTEM_PROMPT = "Du bist ein freundlicher, knapper deutschsprachiger Chatassistent. "
-			+ "Du bist eine KI und gibst dich nie als Mensch aus. Antworte passend zum bisherigen Gespräch. "
-			+ "Bitte frage nicht nach Passwörtern, Zahlungsdaten oder anderen vertraulichen Informationen. "
-			+ "Wenn Tagebucheinträge als Kontext vorhanden sind, fasse sie gedanklich knapp zusammen und "
-			+ "berücksichtige dabei zeitliche Entwicklung, Orte, Beschreibungen und Bewertungen. "
-			+ "Unterscheide belegte Angaben von Vermutungen und nutze den Kontext nur, wenn er zur Frage passt.";
+	private static final int MAX_HISTORY_MESSAGES = 30;
+	private static final String SYSTEM_PROMPT = "Du bist ein freundlicher, knapper deutschsprachiger KI-Chatassistent, "
+			+ "hndle nie als Mensch. Antworte passend zum bisherigen Gespräch und benutze die beigefügten Kontexte der "
+			+ "Person, wenn hilfreich. "
+			+ "Frage nicht nach Passwörtern, Zahlungsdaten oder anderen vertraulichen Informationen. "
+			+ "Unterscheide belegte Angaben von Vermutungen.";
 
 	@Autowired
 	private Repository repository;
 
 	@Autowired
 	private AiService aiService;
-
-	@Autowired
-	private EventContextService eventContextService;
 
 	public List<ChatMessage> list(final Contact contact) {
 		return this.repository.list("from ChatMessage where contact.id=?1 order by id asc", ChatMessage.class,
@@ -48,7 +46,6 @@ public class ChatService {
 
 		final ChatMessage userMessage = this.createMessage(contact, "user", input);
 		this.repository.save(userMessage);
-
 		final List<ChatMessage> messages = this.list(contact);
 		int firstMessage = Math.max(0, messages.size() - MAX_HISTORY_MESSAGES);
 		while (firstMessage < messages.size() && "assistant".equals(messages.get(firstMessage).getRole()))
@@ -58,9 +55,8 @@ public class ChatService {
 			final ChatMessage message = messages.get(i);
 			String messageText = message.getNote();
 			if (message.getId().equals(userMessage.getId()))
-				messageText = SYSTEM_PROMPT + this.eventContextService.context(contact)
-						+ "\n\nAktuelle Nachricht: "
-						+ messageText;
+				messageText = SYSTEM_PROMPT + this.context(contact)
+						+ "\n\nAktuelle Nachricht: " + messageText;
 			conversation.add(Content.builder().role("assistant".equals(message.getRole()) ? "model" : "user")
 					.parts(Part.fromText(messageText)).build());
 		}
@@ -68,6 +64,22 @@ public class ChatService {
 		final String answer = this.aiService.chatReply(conversation, true);
 		this.repository.save(this.createMessage(contact, "assistant", answer));
 		return answer;
+	}
+
+	private String context(final Contact contact) {
+		final List<ChatSummary> chatSummaries = this.repository.list("from ChatSummary where contact.id=?1",
+				ChatSummary.class, contact.getId());
+		final StringBuilder context = new StringBuilder(
+				"Der Benutzer möchte die Antwort in deutscher Sprache. Er möchte lediglich deutsch- und englischsprachige "
+						+ "Vorschläge, auch wenn sich Events im Ausland als Vorschläge ergeben. Er ist hetro und möchte bevorzugt "
+						+ "solche Vorschläge. Die aktuelle Uhrzeit ist " + Instant.now());
+		for (final ChatSummary chatSummary : chatSummaries) {
+			context.append("\n\n\n\n**");
+			context.append(chatSummary.getCategory().getLabel());
+			context.append("**\n");
+			context.append(chatSummary.getNote());
+		}
+		return context.toString();
 	}
 
 	private ChatMessage createMessage(final Contact contact, final String role, final String text) {
