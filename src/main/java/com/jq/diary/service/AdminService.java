@@ -28,6 +28,9 @@ public class AdminService {
 	@Autowired
 	private LocationService locationService;
 
+	@Autowired
+	private EventContextService eventContextService;
+
 	@Value("${app.admin.buildScript}")
 	private String buildScript;
 
@@ -105,6 +108,7 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
+		this.eventContextService.refreshDaily();
 		return null;
 	}
 
