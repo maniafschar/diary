@@ -77,7 +77,7 @@ public class AiService {
 				text.append(part.text().orElse(""));
 			if (role.equals(AiService.ACTOR_SYSTEM))
 				messages.add(new SystemMessage(text.toString()));
-			else if (role.equals(AiService.ACTOR_MODEL) || role.equals("assistant"))
+			else if (role.equals(AiService.ACTOR_MODEL))
 				messages.add(new AssistantMessage(text.toString()));
 			else
 				messages.add(new UserMessage(text.toString()));

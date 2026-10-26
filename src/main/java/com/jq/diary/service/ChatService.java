@@ -62,7 +62,7 @@ public class ChatService {
 		this.repository.save(userMessage);
 		final List<ChatMessage> messages = this.list(contact);
 		int firstMessage = Math.max(0, messages.size() - MAX_HISTORY_MESSAGES);
-		while (firstMessage < messages.size() && "assistant".equals(messages.get(firstMessage).getRole()))
+		while (firstMessage < messages.size() && AiService.ACTOR_MODEL.equals(messages.get(firstMessage).getRole()))
 			firstMessage++;
 		final List<Content> conversation = new ArrayList<>();
 		conversation
@@ -74,7 +74,7 @@ public class ChatService {
 		}
 
 		final String answer = this.aiService.chatReply(conversation, true);
-		this.repository.save(this.createMessage(contact, "assistant", answer));
+		this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, answer));
 		this.completeProfile(contact, messages);
 		return answer;
 	}
