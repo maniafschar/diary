@@ -138,7 +138,7 @@ public class AiService {
 					baseUrl = "https://100.65.185.69/v1";
 					completionsPath = "/chat/completions";
 					apiKey = this.benKey;
-					defaultModel = "qwen3.8-27b-w4a16";
+					defaultModel = "swift-1.5-qwen3.8-27b";
 					thinking = true;
 				}
 				case Ollama -> {
