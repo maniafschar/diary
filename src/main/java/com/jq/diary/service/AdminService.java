@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,10 @@ public class AdminService {
 
 	@Autowired
 	private LocationService locationService;
+
+	@Lazy
+	@Autowired
+	private EventContextService eventContextService;
 
 	@Value("${app.admin.buildScript}")
 	private String buildScript;
@@ -105,7 +110,8 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
-		return null;
+		this.eventContextService.refreshDaily();
+		return "ok";
 	}
 
 	private void validateSql(final String sql) {
