@@ -16,7 +16,9 @@ import com.jq.diary.entity.ChatSummary.Category;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Location;
+import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.util.Utilities;
 
 /**
  * Condenses the diary entries of a contact into one summary per
@@ -35,6 +37,9 @@ public class EventContextService {
 
 	@Autowired
 	private AiService aiService;
+
+	@Autowired
+	private AdminService adminService;
 
 	public void markDirty(final BigInteger eventId) {
 		if (eventId == null)
@@ -56,6 +61,7 @@ public class EventContextService {
 				this.refresh(contact);
 			} catch (final RuntimeException ex) {
 				// one failing contact must not stop the others
+				this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 			}
 	}
 

@@ -136,7 +136,7 @@ public class AdminService {
 
 	@Scheduled(cron = "0 0 * * * *")
 	private void demoData() {
-		final List<Event> list = this.repository.list("from Event where clientId=2", Event.class);
+		final List<Event> list = this.repository.list("from Event where client.id=2", Event.class);
 		for (final Event event : list) {
 			event.setDate(new Date(event.getDate().getTime() + 1000L * 60 * 60 * 24));
 			this.repository.save(event);
