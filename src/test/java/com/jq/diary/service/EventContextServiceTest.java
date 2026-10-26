@@ -118,7 +118,7 @@ class EventContextServiceTest {
 		contact.setId(BigInteger.ONE);
 		final ChatMessage message = new ChatMessage();
 		message.setContact(contact);
-		message.setRole("user");
+		message.setRole(AiService.ACTOR_USER);
 		message.setNote("Hallo");
 		message.setCreatedAt(new Timestamp(Instant.parse("2025-04-12T14:30:00Z").toEpochMilli()));
 		repository.messages = List.of(message);

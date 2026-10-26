@@ -26,7 +26,7 @@ class AiServiceProviderTest {
 		final AiService service = this.serviceWithProvider(AiProvider.HuggingFace);
 		this.setField(service, "huggingFace", "");
 		assertThrows(IllegalStateException.class,
-				() -> service.chatReply(List.of(Content.builder().role("user").build()), false));
+				() -> service.chatReply(List.of(Content.builder().role(AiService.ACTOR_USER).build()), false));
 	}
 
 	@Test

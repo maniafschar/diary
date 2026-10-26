@@ -11,6 +11,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
@@ -28,6 +29,9 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
+	static final String ACTOR_USER = "user";
+	static final String ACTOR_SYSTEM = "system";
+	static final String ACTOR_MODEL = "model";
 	private final AiProvider provider = AiProvider.Ben;
 	private volatile ChatModel springAiChatModel;
 
@@ -67,13 +71,13 @@ public class AiService {
 		for (final Content content : conversation) {
 			if (content.parts().isEmpty())
 				continue;
-			final String role = content.role().orElse("user");
+			final String role = content.role().orElse(ACTOR_USER);
 			final StringBuilder text = new StringBuilder();
 			for (final Part part : content.parts().get())
 				text.append(part.text().orElse(""));
-			if (role.equals("system"))
+			if (role.equals(AiService.ACTOR_SYSTEM))
 				messages.add(new SystemMessage(text.toString()));
-			else if (role.equals("model") || role.equals("assistant"))
+			else if (role.equals(AiService.ACTOR_MODEL) || role.equals("assistant"))
 				messages.add(new AssistantMessage(text.toString()));
 			else
 				messages.add(new UserMessage(text.toString()));
@@ -82,9 +86,9 @@ public class AiService {
 		final ChatModel model = this.chatModel();
 		try {
 			final ChatResponse response = web
-					? model.call(new org.springframework.ai.chat.prompt.Prompt(messages,
+					? model.call(new Prompt(messages,
 							OpenAiChatOptions.builder().toolCallbacks(ToolCallbacks.from(this.webTool)).build()))
-					: model.call(new org.springframework.ai.chat.prompt.Prompt(messages));
+					: model.call(new Prompt(messages));
 			final String answer = response.getResult().getOutput().getText();
 			this.adminService
 					.createTicket(new Ticket("entries: " + conversation.size()
@@ -135,7 +139,7 @@ public class AiService {
 					completionsPath = "/chat/completions";
 					apiKey = this.benKey;
 					defaultModel = "qwen3.8-27b-w4a16";
-					thinking = false;
+					thinking = true;
 				}
 				case Ollama -> {
 					baseUrl = "http://127.0.0.1:11434/v1";

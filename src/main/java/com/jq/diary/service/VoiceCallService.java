@@ -118,14 +118,15 @@ public class VoiceCallService {
 		conversation.emptyTurns = 0;
 		conversation.turns++;
 		final String userTurn = conversation.turns == 1 ? SYSTEM_PROMPT + "\n\nAnrufer: " + input : input;
-		conversation.history.add(Content.builder().role("user").parts(Part.fromText(userTurn)).build());
+		conversation.history.add(Content.builder().role(AiService.ACTOR_USER).parts(Part.fromText(userTurn)).build());
 		if (this.isGoodbye(input) || conversation.turns >= MAX_TURNS) {
 			this.conversations.remove(sessionId);
 			return this.sayAndHangUp("Danke für das Gespräch. Auf Wiederhören!");
 		}
 		try {
 			final String answer = this.aiService.chatReply(conversation.history, false);
-			conversation.history.add(Content.builder().role("model").parts(Part.fromText(answer)).build());
+			conversation.history
+					.add(Content.builder().role(AiService.ACTOR_MODEL).parts(Part.fromText(answer)).build());
 			return this.gather(sessionId, answer);
 		} catch (final RuntimeException ex) {
 			this.conversations.remove(sessionId);
