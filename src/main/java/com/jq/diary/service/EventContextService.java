@@ -60,7 +60,6 @@ public class EventContextService {
 			try {
 				this.refresh(contact);
 			} catch (final RuntimeException ex) {
-				// one failing contact must not stop the others
 				this.adminService.createTicket(new Ticket(Utilities.stackTraceToString(ex)));
 			}
 	}
@@ -83,7 +82,7 @@ public class EventContextService {
 		String text;
 		if (category == Category.CHAT) {
 			final List<ChatMessage> messages = this.repository.list(
-					"select m from ChatMessage e where m.contact.id=?1 order by e.createdAt asc",
+					"select m from ChatMessage m where m.contact.id=?1 order by m.createdAt asc",
 					ChatMessage.class, contact.getId());
 			if (messages.size() == 0)
 				return new ChatSummary();
