@@ -65,11 +65,11 @@ public class ChatService {
 		while (firstMessage < messages.size() && "assistant".equals(messages.get(firstMessage).getRole()))
 			firstMessage++;
 		final List<Content> conversation = new ArrayList<>();
+		conversation
+				.add(Content.builder().role(AiService.ACTOR_SYSTEM)
+						.parts(Part.fromText(SYSTEM_PROMPT + this.context(contact))).build());
 		for (int i = firstMessage; i < messages.size(); i++) {
 			final ChatMessage message = messages.get(i);
-			conversation
-					.add(Content.builder().role(AiService.ACTOR_SYSTEM)
-							.parts(Part.fromText(SYSTEM_PROMPT + this.context(contact))).build());
 			conversation.add(Content.builder().role(message.getRole()).parts(Part.fromText(message.getNote())).build());
 		}
 
