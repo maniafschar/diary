@@ -176,9 +176,10 @@ public class ChatService {
 	private void completeProfile(final Contact contact, final List<ChatMessage> messages) {
 		if (contact.getLanguage() != null && contact.getSexualOrientation() != null)
 			return;
-		final List<String> texts = messages.stream()
+		final List<String> texts = new ArrayList<>();
+		texts.addAll(messages.stream()
 				.filter(e -> AiService.ACTOR_USER.equals(e.getRole()) && e.getNote() != null && !e.getNote().isBlank())
-				.map(e -> e.getNote()).toList();
+				.map(e -> e.getNote()).toList());
 		try {
 			final List<Event> events = this.repository.list(
 					"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
