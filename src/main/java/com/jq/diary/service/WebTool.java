@@ -1,5 +1,7 @@
 package com.jq.diary.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -8,6 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Locale;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -71,8 +76,8 @@ public class WebTool {
 				}
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
-				final byte[] body = response.body();
-				final String html = new String(body, 0, Math.min(body.length, MAX_BYTES), StandardCharsets.UTF_8);
+				final byte[] body = this.decodeBody(response);
+				final String html = new String(body, StandardCharsets.UTF_8);
 				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + html));
 				return toText(html);
 			}
@@ -81,6 +86,19 @@ public class WebTool {
 			this.adminService.createTicket(
 					new Ticket(Ticket.ERROR + "webtool\n" + url + "\n" + Utilities.stackTraceToString(ex)));
 			return "Fehler: " + ex.getMessage();
+		}
+	}
+
+	private byte[] decodeBody(final HttpResponse<byte[]> response) throws Exception {
+		final String encoding = response.headers().firstValue("Content-Encoding").orElse("").toLowerCase(Locale.ROOT);
+		InputStream stream = new ByteArrayInputStream(response.body());
+		if (encoding.contains("gzip"))
+			stream = new GZIPInputStream(stream);
+		else if (encoding.contains("deflate"))
+			stream = new InflaterInputStream(stream);
+		final InputStream decodedStream = stream;
+		try (decodedStream) {
+			return decodedStream.readNBytes(MAX_BYTES);
 		}
 	}
 
