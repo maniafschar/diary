@@ -18,6 +18,7 @@ import com.jq.diary.entity.ChatMessage;
 import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Contact.SexualOrientation;
+import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
 import com.jq.diary.util.Json;
@@ -179,9 +180,18 @@ public class ChatService {
 				.filter(e -> AiService.ACTOR_USER.equals(e.getRole()) && e.getNote() != null && !e.getNote().isBlank())
 				.map(e -> e.getNote()).toList();
 		try {
+			final List<Event> events = this.repository.list(
+					"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
+					Event.class, contact.getId());
+			for (int i = 0; i < events.size(); i++) {
+				final Event event = events.get(i);
+				if (event.getNote() != null && !event.getNote().isBlank())
+					texts.add(event.getNote());
+			}
 			final String answer = this.aiService.chatReply(List.of(Content.builder().role(AiService.ACTOR_USER)
 					.parts(Part.fromText(String.join("\n---\n", texts))).role(AiService.ACTOR_SYSTEM)
 					.parts(Part.fromText(PROFILE_PROMPT)).build()), false);
+			this.adminService.createTicket(new Ticket("profile answer: " + answer));
 			if (answer == null)
 				return;
 			final int start = answer.indexOf('{');
