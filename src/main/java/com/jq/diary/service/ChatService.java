@@ -117,11 +117,12 @@ public class ChatService {
 		try {
 			final List<Content> classification = new ArrayList<>();
 			classification.add(Content.builder().role(AiService.ACTOR_SYSTEM)
-					.parts(Part.fromText(CATEGORY_CLASSIFICATION_PROMPT + "Bisher aktive Kategorien: "
-							+ this.serializeCategories(previousCategories) + ".\n\n"))
+					.parts(Part.fromText(CATEGORY_CLASSIFICATION_PROMPT + ".\n\n"))
 					.build());
-			for (int i = firstMessage; i < messages.size(); i++) {
+			for (int i = messages.size() - 1; i >= firstMessage; i--) {
 				final ChatMessage message = messages.get(i);
+				if (message.getSummaryCategories() != null && !message.getSummaryCategories().isBlank())
+					break;
 				classification
 						.add(Content.builder().role(message.getRole()).parts(Part.fromText(message.getNote())).build());
 			}

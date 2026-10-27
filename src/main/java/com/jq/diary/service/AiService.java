@@ -87,7 +87,6 @@ public class AiService {
 			else
 				messages.add(new UserMessage(text.toString()));
 		}
-		System.out.println(messages);
 		final ChatClient chatClient = this.chatClient();
 		Exception ex = null;
 		String answer = null;
@@ -96,7 +95,11 @@ public class AiService {
 			if (web)
 				client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
 			try {
+				System.out.println("PROMPT");
+				System.out.println(messages);
 				answer = client.call().content();
+				System.out.println("ANSWER");
+				System.out.println(answer);
 				if (answer != null && !answer.isBlank())
 					break;
 				try {
