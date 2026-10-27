@@ -561,7 +561,7 @@ bubble {
 	max-width: 85%;
 	border-radius: 0.5em;
 }
-bubble.assistant {
+bubble.model {
 	margin-left: 0;
 	background: var(--background-content);
 	color: inherit;
@@ -620,7 +620,7 @@ status {
 			renderMessage({ role: 'user', text: text });
 			status.innerText = 'Antwort wird erstellt ...';
 			api.chat.postMessage(text, response => {
-				renderMessage({ role: 'assistant', text: response.answer });
+				renderMessage({ role: 'model', text: response.answer });
 				status.innerText = '';
 				sending = false;
 				send.disabled = false;
