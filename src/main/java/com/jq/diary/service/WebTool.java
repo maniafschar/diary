@@ -77,7 +77,9 @@ public class WebTool {
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
 				final byte[] body = this.decodeBody(response);
-				final String html = new String(body, StandardCharsets.UTF_8);
+				String html = new String(body, StandardCharsets.UTF_8).replaceAll("<[^>]*>", " ");
+				while (html.contains("  "))
+					html = html.replace("  ", "");
 				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + html));
 				return toText(html);
 			}
