@@ -32,7 +32,7 @@ public class WebTool {
 	// quoted attribute values may contain '>', so they are matched as units
 	private static final String ATTRS = "(?:[^>\"']|\"[^\"]*\"|'[^']*')*";
 	private static final Pattern IGNORED = Pattern
-			.compile("(?is)<!--.*?-->|<(script|style|noscript|template)" + ATTRS + ">.*?</\\1\\s*>");
+			.compile("(?is)<!--.*?-->|<(script|style|noscript|template|\\!DOCTYPE)" + ATTRS + ">.*?</\\1\\s*>");
 	private static final Pattern ANCHOR = Pattern.compile("(?is)<a\\b(" + ATTRS + ")>(.*?)</a\\s*>");
 	private static final Pattern HREF = Pattern
 			.compile("(?i)\\bhref\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'>]+))");
@@ -122,14 +122,14 @@ public class WebTool {
 	}
 
 	static String toText(final String html, final URI base) {
-		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ");
+		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ").trim();
 		final Matcher anchors = ANCHOR.matcher(withoutIgnored);
 		final StringBuilder withLinks = new StringBuilder();
 		while (anchors.find()) {
 			final String href = link(anchors.group(1), base);
 			final String label = anchors.group(2);
 			anchors.appendReplacement(withLinks,
-					Matcher.quoteReplacement(href == null ? label : label + " (" + href + ")"));
+					Matcher.quoteReplacement(href == null ? label : label + " " + href + "\n"));
 		}
 		anchors.appendTail(withLinks);
 		final String text = decodeEntities(TAG.matcher(withLinks).replaceAll(" ")).replaceAll("\\s+", " ").trim();
