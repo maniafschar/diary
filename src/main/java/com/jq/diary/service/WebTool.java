@@ -48,7 +48,7 @@ public class WebTool {
 				assertPublic(uri);
 				final HttpResponse<byte[]> response = this.client.send(
 						HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(30))
-								.headers("Accept-Language", "en-US,en;q=0.9",
+								.headers("Accept-Language", "de-DE,de;en-US,en;q=0.9",
 										"Accept-Encoding", "gzip, deflate",
 										"Sec-Fetch-Dest", "document",
 										"Sec-Fetch-Mode", "navigate",
@@ -73,11 +73,13 @@ public class WebTool {
 					return "Fehler: HTTP " + response.statusCode();
 				final byte[] body = response.body();
 				final String html = new String(body, 0, Math.min(body.length, MAX_BYTES), StandardCharsets.UTF_8);
+				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + html));
 				return toText(html);
 			}
 			return "Fehler: zu viele Weiterleitungen.";
 		} catch (final Exception ex) {
-			this.adminService.createTicket(new Ticket(url + "\n" + Utilities.stackTraceToString(ex)));
+			this.adminService.createTicket(
+					new Ticket(Ticket.ERROR + "webtool\n" + url + "\n" + Utilities.stackTraceToString(ex)));
 			return "Fehler: " + ex.getMessage();
 		}
 	}
