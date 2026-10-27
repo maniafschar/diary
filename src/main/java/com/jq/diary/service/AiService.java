@@ -39,7 +39,6 @@ public class AiService {
 	private final AiProvider provider = AiProvider.Ben;
 	private volatile ChatModel springAiChatModel;
 	private volatile ChatClient springAiChatClient;
-	private final ThreadLocal<List<String>> advisorLog = new ThreadLocal<>();
 
 	@Autowired
 	private AdminService adminService;
@@ -90,42 +89,35 @@ public class AiService {
 		}
 		System.out.println(messages);
 		final ChatClient chatClient = this.chatClient();
-		final List<String> advisorEntries = new ArrayList<>();
-		this.advisorLog.set(advisorEntries);
-		try {
-			Exception ex = null;
-			String answer = null;
-			for (int i = 1; i < 4; i++) {
-				ChatClientRequestSpec client = chatClient.prompt().messages(messages);
-				if (web)
-					client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
+		Exception ex = null;
+		String answer = null;
+		for (int i = 1; i < 4; i++) {
+			ChatClientRequestSpec client = chatClient.prompt().messages(messages);
+			if (web)
+				client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
+			try {
+				answer = client.call().content();
+				if (answer != null && !answer.isBlank())
+					break;
 				try {
-					answer = client.call().content();
-					if (answer != null && !answer.isBlank())
-						break;
-					try {
-						Thread.sleep(2000L * i * i);
-					} catch (final InterruptedException interrupted) {
-						Thread.currentThread().interrupt();
-						break;
-					}
-				} catch (final Exception requestException) {
-					ex = requestException;
+					Thread.sleep(2000L * i * i);
+				} catch (final InterruptedException interrupted) {
+					Thread.currentThread().interrupt();
+					break;
 				}
+			} catch (final Exception requestException) {
+				ex = requestException;
 			}
-			final String advisorDetails = "advisor log:\n" + String.join("\n", advisorEntries);
-			if (answer != null && !answer.isBlank()) {
-				this.adminService.createTicket(new Ticket("entries: " + conversation.size() + "\nduration: "
-						+ (System.nanoTime() - start) / 1_000_000 + " ms\n" + advisorDetails + "\n" + answer));
-				return answer.trim();
-			}
-			final Exception failure = ex == null ? new IllegalStateException("AI returned an empty response.") : ex;
-			this.adminService.createTicket(
-					new Ticket(Ticket.ERROR + Utilities.stackTraceToString(failure) + "\n" + advisorDetails));
-			throw new IllegalStateException("Spring AI chat request failed.", failure);
-		} finally {
-			this.advisorLog.remove();
 		}
+		if (answer != null && !answer.isBlank()) {
+			this.adminService.createTicket(new Ticket("entries: " + conversation.size() + "\nduration: "
+					+ (System.nanoTime() - start) / 1_000_000 + " ms\n" + answer));
+			return answer.trim();
+		}
+		final Exception failure = ex == null ? new IllegalStateException("AI returned an empty response.") : ex;
+		this.adminService.createTicket(
+				new Ticket(Ticket.ERROR + Utilities.stackTraceToString(failure)));
+		throw new IllegalStateException("Spring AI chat request failed.", failure);
 	}
 
 	private ChatClient chatClient() {
@@ -145,20 +137,8 @@ public class AiService {
 	private final class TicketLoggingAdvisor implements CallAdvisor {
 		@Override
 		public ChatClientResponse adviseCall(final ChatClientRequest request, final CallAdvisorChain chain) {
-			final List<String> entries = AiService.this.advisorLog.get();
-			final long start = System.nanoTime();
-			if (entries != null)
-				entries.add("request: messages=" + request.prompt().getInstructions().size());
-			try {
-				final ChatClientResponse response = chain.nextCall(request);
-				if (entries != null)
-					entries.add("response: completed in " + (System.nanoTime() - start) / 1_000_000 + " ms");
-				return response;
-			} catch (final RuntimeException ex) {
-				if (entries != null)
-					entries.add("response: failed with " + ex.getClass().getSimpleName());
-				throw ex;
-			}
+			AiService.this.adminService.createTicket(new Ticket(request.prompt().getContents()));
+			return chain.nextCall(request);
 		}
 
 		@Override
