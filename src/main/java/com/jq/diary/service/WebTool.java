@@ -48,10 +48,8 @@ public class WebTool {
 				assertPublic(uri);
 				final HttpResponse<byte[]> response = this.client.send(
 						HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(30))
-								.headers("User-Agent", "Mozilla/5.0 (diary-chat)",
-										"Accept-Language", "en-US,en;q=0.9",
+								.headers("Accept-Language", "en-US,en;q=0.9",
 										"Accept-Encoding", "gzip, deflate",
-										"Connection", "keep-alive",
 										"Sec-Fetch-Dest", "document",
 										"Sec-Fetch-Mode", "navigate",
 										"Sec-Fetch-Site", "none",
