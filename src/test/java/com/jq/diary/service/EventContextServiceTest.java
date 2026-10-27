@@ -70,7 +70,7 @@ class EventContextServiceTest {
 	void summariesAreRecomputedOnlyDuringRefresh() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
-		when(aiService.chatReply(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
+		when(aiService.chat(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
 				"Aktualisierte Zusammenfassung");
 		final EventContextService service = new EventContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
@@ -87,21 +87,21 @@ class EventContextServiceTest {
 		chatMessage.setCreatedAt(new Timestamp(0));
 		repository.chatMessages = List.of(chatMessage);
 
-		verify(aiService, never()).chatReply(anyList(), eq(false));
+		verify(aiService, never()).chat(anyList(), eq(false));
 
 		final EventService eventService = new EventService();
 		ReflectionTestUtils.setField(eventService, "repository", repository);
 		ReflectionTestUtils.setField(eventService, "eventContextService", service);
 		eventService.save(event);
 
-		verify(aiService, never()).chatReply(anyList(), eq(false));
+		verify(aiService, never()).chat(anyList(), eq(false));
 
 		service.refresh(contact);
 
 		// without chat messages the CHAT summary is skipped, every other category is
 		// computed
 		final int eventCategories = Category.values().length - 1;
-		verify(aiService, times(eventCategories)).chatReply(anyList(), eq(false));
+		verify(aiService, times(eventCategories)).chat(anyList(), eq(false));
 		assertEquals(eventCategories, repository.summaries.size());
 		assertTrue(!repository.summaries.containsKey(Category.CHAT));
 	}
@@ -110,7 +110,7 @@ class EventContextServiceTest {
 	void chatSummaryIsComputedFromChatMessages() {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
-		when(aiService.chatReply(anyList(), eq(false))).thenReturn("Chat Zusammenfassung");
+		when(aiService.chat(anyList(), eq(false))).thenReturn("Chat Zusammenfassung");
 		final EventContextService service = new EventContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);

@@ -61,8 +61,8 @@ class ChatServiceTest {
 				.thenReturn(List.of(summary));
 
 		final AiService aiService = mock(AiService.class);
-		when(aiService.chatReply(anyList(), eq(false))).thenReturn("{\"categories\":[\"TRAVEL\"]}");
-		when(aiService.chatReply(anyList(), eq(true))).thenReturn("Antwort");
+		when(aiService.chat(anyList(), eq(false))).thenReturn("{\"categories\":[\"TRAVEL\"]}");
+		when(aiService.chat(anyList(), eq(true))).thenReturn("Antwort");
 		final ChatService service = new ChatService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
@@ -71,7 +71,7 @@ class ChatServiceTest {
 		service.send(contact, "Und was kostet das ungefähr?");
 
 		final ArgumentCaptor<List<Content>> conversationCaptor = ArgumentCaptor.forClass(List.class);
-		verify(aiService).chatReply(conversationCaptor.capture(), eq(false));
+		verify(aiService).chat(conversationCaptor.capture(), eq(false));
 		assertTrue(this.conversationText(conversationCaptor.getValue().get(0))
 				.contains("Bisher aktive Kategorien: TRAVEL"));
 		final ArgumentCaptor<ChatMessage> messageCaptor = ArgumentCaptor.forClass(ChatMessage.class);
@@ -97,8 +97,8 @@ class ChatServiceTest {
 				.thenReturn(List.of(summary));
 
 		final AiService aiService = mock(AiService.class);
-		when(aiService.chatReply(anyList(), eq(false))).thenReturn(classification);
-		when(aiService.chatReply(anyList(), eq(true))).thenReturn("Antwort");
+		when(aiService.chat(anyList(), eq(false))).thenReturn(classification);
+		when(aiService.chat(anyList(), eq(true))).thenReturn("Antwort");
 
 		final ChatService service = new ChatService();
 		ReflectionTestUtils.setField(service, "repository", repository);
@@ -107,7 +107,7 @@ class ChatServiceTest {
 		service.send(contact, "Wie spät ist es?");
 
 		final ArgumentCaptor<List<Content>> captor = ArgumentCaptor.forClass(List.class);
-		verify(aiService, times(2)).chatReply(captor.capture(), org.mockito.ArgumentMatchers.anyBoolean());
+		verify(aiService, times(2)).chat(captor.capture(), org.mockito.ArgumentMatchers.anyBoolean());
 		return this.conversationText(captor.getAllValues().get(1).get(0));
 	}
 

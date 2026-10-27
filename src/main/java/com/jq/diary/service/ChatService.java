@@ -97,7 +97,7 @@ public class ChatService {
 			conversation.add(Content.builder().role(message.getRole()).parts(Part.fromText(message.getNote())).build());
 		}
 
-		final String answer = this.aiService.chatReply(conversation, true);
+		final String answer = this.aiService.chat(conversation, true);
 		this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, answer));
 		this.completeProfile(contact, messages);
 		return answer;
@@ -126,7 +126,7 @@ public class ChatService {
 				classification
 						.add(Content.builder().role(message.getRole()).parts(Part.fromText(message.getNote())).build());
 			}
-			final String answer = this.aiService.chatReply(classification, false);
+			final String answer = this.aiService.chat(classification, false);
 			if (answer == null)
 				return Set.of();
 			final int start = answer.indexOf('{');
@@ -190,7 +190,7 @@ public class ChatService {
 				if (event.getNote() != null && !event.getNote().isBlank())
 					texts.add(event.getNote());
 			}
-			final String answer = this.aiService.chatReply(List.of(Content.builder().role(AiService.ACTOR_USER)
+			final String answer = this.aiService.chat(List.of(Content.builder().role(AiService.ACTOR_USER)
 					.parts(Part.fromText(String.join("\n---\n", texts))).role(AiService.ACTOR_SYSTEM)
 					.parts(Part.fromText(PROFILE_PROMPT)).build()), false);
 			this.adminService.createTicket(new Ticket("profile answer: " + answer));

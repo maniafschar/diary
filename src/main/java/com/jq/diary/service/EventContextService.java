@@ -95,7 +95,7 @@ public class EventContextService {
 				return new ChatSummary();
 			text = formatEventContext(events);
 		}
-		text = this.aiService.chatReply(List.of(Content.builder().role(AiService.ACTOR_USER)
+		text = this.aiService.chat(List.of(Content.builder().role(AiService.ACTOR_USER)
 				.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + text)).build()), false);
 		final ChatSummary summary = existing == null ? new ChatSummary() : existing;
 		summary.setContact(contact);

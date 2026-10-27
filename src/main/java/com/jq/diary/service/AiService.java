@@ -4,6 +4,7 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
@@ -68,7 +69,7 @@ public class AiService {
 		GPT, Gemini, HuggingFace, Ollama, Ben, None
 	}
 
-	public String chatReply(final List<Content> conversation, final boolean web) {
+	public String chat(final List<Content> conversation, final boolean callbacks) {
 		if (this.provider == AiProvider.None)
 			return null;
 		final long start = System.nanoTime();
@@ -87,19 +88,18 @@ public class AiService {
 			else
 				messages.add(new UserMessage(text.toString()));
 		}
-		final ChatClient chatClient = this.chatClient();
+		final ChatClient chatClient = this.client();
 		Exception ex = null;
 		String answer = null;
+		final long time = System.nanoTime();
+		this.adminService.createTicket(new Ticket(
+				"chat " + time + ": " + conversation.stream().map(e -> e.text()).collect(Collectors.joining("\n\n"))));
 		for (int i = 1; i < 4; i++) {
 			ChatClientRequestSpec client = chatClient.prompt().messages(messages);
-			if (web)
+			if (callbacks)
 				client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
 			try {
-				System.out.println("PROMPT");
-				System.out.println(messages);
 				answer = client.call().content();
-				System.out.println("ANSWER");
-				System.out.println(answer);
 				if (answer != null && !answer.isBlank())
 					break;
 				try {
@@ -112,18 +112,17 @@ public class AiService {
 				ex = requestException;
 			}
 		}
-		if (answer != null && !answer.isBlank()) {
-			this.adminService.createTicket(new Ticket("entries: " + conversation.size() + "\nduration: "
-					+ (System.nanoTime() - start) / 1_000_000 + " ms\n" + answer));
+		this.adminService.createTicket(new Ticket("chat " + time + ": "
+				+ (System.nanoTime() - start) / 1_000_000 + " ms\n" + answer));
+		if (answer != null && !answer.isBlank())
 			return answer.trim();
-		}
 		final Exception failure = ex == null ? new IllegalStateException("AI returned an empty response.") : ex;
 		this.adminService.createTicket(
 				new Ticket(Ticket.ERROR + Utilities.stackTraceToString(failure)));
 		throw new IllegalStateException("Spring AI chat request failed.", failure);
 	}
 
-	private ChatClient chatClient() {
+	private ChatClient client() {
 		ChatClient client = this.springAiChatClient;
 		if (client != null)
 			return client;
@@ -131,7 +130,7 @@ public class AiService {
 			client = this.springAiChatClient;
 			if (client != null)
 				return client;
-			client = ChatClient.builder(this.chatModel()).defaultAdvisors(new TicketLoggingAdvisor()).build();
+			client = ChatClient.builder(this.model()).defaultAdvisors(new TicketLoggingAdvisor()).build();
 			this.springAiChatClient = client;
 			return client;
 		}
@@ -155,7 +154,7 @@ public class AiService {
 		}
 	}
 
-	private ChatModel chatModel() {
+	private ChatModel model() {
 		ChatModel model = this.springAiChatModel;
 		if (model != null)
 			return model;
