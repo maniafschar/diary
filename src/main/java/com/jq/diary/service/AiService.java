@@ -117,7 +117,7 @@ public class AiService {
 	private final class TicketLoggingAdvisor implements CallAdvisor {
 		@Override
 		public ChatClientResponse adviseCall(final ChatClientRequest request, final CallAdvisorChain chain) {
-			AiService.this.adminService.createTicket(new Ticket(request.prompt().getContents()));
+			AiService.this.adminService.createTicket(new Ticket("calling webtool\n" + request.prompt().getContents()));
 			return chain.nextCall(request);
 		}
 

@@ -193,7 +193,6 @@ public class ChatService {
 			final String answer = this.aiService.chat(List.of(Content.builder().role(AiService.ACTOR_USER)
 					.parts(Part.fromText(String.join("\n---\n", texts))).role(AiService.ACTOR_SYSTEM)
 					.parts(Part.fromText(PROFILE_PROMPT)).build()), false);
-			this.adminService.createTicket(new Ticket("profile answer: " + answer));
 			if (answer == null || answer.isBlank())
 				return;
 			final int start = answer.indexOf('{');
