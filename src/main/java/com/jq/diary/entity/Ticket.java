@@ -26,7 +26,7 @@ public class Ticket extends BaseEntity {
 	}
 
 	public void setNote(final String note) {
-		this.note = Utilities.trim(note, 65_000);
+		this.note = Utilities.trim(note, 50_000);
 	}
 
 	public boolean isDeleted() {

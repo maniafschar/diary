@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
-import org.springframework.ai.chat.client.ChatClientRequest;
-import org.springframework.ai.chat.client.ChatClientResponse;
-import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
-import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -108,26 +104,9 @@ public class AiService {
 			client = this.springAiChatClient;
 			if (client != null)
 				return client;
-			client = ChatClient.builder(this.model()).defaultAdvisors(new TicketLoggingAdvisor()).build();
+			client = ChatClient.builder(this.model()).build();
 			this.springAiChatClient = client;
 			return client;
-		}
-	}
-
-	private final class TicketLoggingAdvisor implements CallAdvisor {
-		@Override
-		public ChatClientResponse adviseCall(final ChatClientRequest request, final CallAdvisorChain chain) {
-			return chain.nextCall(request);
-		}
-
-		@Override
-		public String getName() {
-			return "TicketLoggingAdvisor";
-		}
-
-		@Override
-		public int getOrder() {
-			return 0;
 		}
 	}
 
