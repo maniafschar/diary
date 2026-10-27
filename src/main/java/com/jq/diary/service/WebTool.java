@@ -77,9 +77,7 @@ public class WebTool {
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
 				final byte[] body = this.decodeBody(response);
-				String html = new String(body, StandardCharsets.UTF_8).replaceAll("<[^>]*>", " ");
-				while (html.contains("  "))
-					html = html.replace("  ", "");
+				final String html = toText(new String(body, StandardCharsets.UTF_8));
 				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + html));
 				return toText(html);
 			}
@@ -114,9 +112,11 @@ public class WebTool {
 	}
 
 	static String toText(final String html) {
-		final String text = html.replaceAll("(?is)<(script|style|noscript)[^>]*>.*?</\\1>", " ")
-				.replaceAll("(?s)<[^>]+>", " ").replace("&nbsp;", " ").replace("&amp;", "&")
+		String text = html.replaceAll("<[^>]*>", " ")
+				.replace("&nbsp;", " ").replace("&amp;", "&")
 				.replace("&quot;", "\"").replace("&#x27;", "'").replaceAll("\\s+", " ").trim();
+		while (text.contains("  "))
+			text = text.replace("  ", " ");
 		return text.length() > MAX_CHARS ? text.substring(0, MAX_CHARS) : text;
 	}
 }
