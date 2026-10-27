@@ -11,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -27,6 +29,14 @@ import com.jq.diary.util.Utilities;
 public class WebTool {
 	private static final int MAX_CHARS = 6000;
 	private static final int MAX_BYTES = 1_000_000;
+	// quoted attribute values may contain '>', so they are matched as units
+	private static final String ATTRS = "(?:[^>\"']|\"[^\"]*\"|'[^']*')*";
+	private static final Pattern IGNORED = Pattern
+			.compile("(?is)<!--.*?-->|<(script|style|noscript|template)" + ATTRS + ">.*?</\\1\\s*>");
+	private static final Pattern ANCHOR = Pattern.compile("(?is)<a\\b(" + ATTRS + ")>(.*?)</a\\s*>");
+	private static final Pattern HREF = Pattern
+			.compile("(?i)\\bhref\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'>]+))");
+	private static final Pattern TAG = Pattern.compile("</?[a-zA-Z][a-zA-Z0-9-]*" + ATTRS + ">");
 	private final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5))
 			.followRedirects(HttpClient.Redirect.NEVER).build();
 	@Autowired
@@ -77,9 +87,9 @@ public class WebTool {
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
 				final byte[] body = this.decodeBody(response);
-				final String html = toText(new String(body, StandardCharsets.UTF_8));
-				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + html));
-				return toText(html);
+				final String text = toText(new String(body, StandardCharsets.UTF_8), uri);
+				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + text));
+				return text;
 			}
 			return "Fehler: zu viele Weiterleitungen.";
 		} catch (final Exception ex) {
@@ -111,12 +121,38 @@ public class WebTool {
 				throw new IllegalArgumentException("Interne Adressen sind nicht erlaubt.");
 	}
 
-	static String toText(final String html) {
-		String text = html.replaceAll("<[^>]*>", " ")
-				.replace("&nbsp;", " ").replace("&amp;", "&")
-				.replace("&quot;", "\"").replace("&#x27;", "'").replaceAll("\\s+", " ").trim();
-		while (text.contains("  "))
-			text = text.replace("  ", " ");
+	static String toText(final String html, final URI base) {
+		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ");
+		final Matcher anchors = ANCHOR.matcher(withoutIgnored);
+		final StringBuilder withLinks = new StringBuilder();
+		while (anchors.find()) {
+			final String href = link(anchors.group(1), base);
+			final String label = anchors.group(2);
+			anchors.appendReplacement(withLinks,
+					Matcher.quoteReplacement(href == null ? label : label + " (" + href + ")"));
+		}
+		anchors.appendTail(withLinks);
+		final String text = decodeEntities(TAG.matcher(withLinks).replaceAll(" ")).replaceAll("\\s+", " ").trim();
 		return text.length() > MAX_CHARS ? text.substring(0, MAX_CHARS) : text;
+	}
+
+	private static String link(final String attributes, final URI base) {
+		final Matcher href = HREF.matcher(attributes);
+		if (!href.find())
+			return null;
+		String raw = href.group(1) != null ? href.group(1) : href.group(2) != null ? href.group(2) : href.group(3);
+		raw = decodeEntities(raw).trim();
+		if (raw.isEmpty() || raw.startsWith("#") || raw.regionMatches(true, 0, "javascript:", 0, 11))
+			return null;
+		try {
+			return base == null ? raw : base.resolve(raw).toString();
+		} catch (final IllegalArgumentException ex) {
+			return raw;
+		}
+	}
+
+	private static String decodeEntities(final String text) {
+		return text.replace("&nbsp;", " ").replace("&quot;", "\"").replace("&#39;", "'").replace("&#x27;", "'")
+				.replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
 	}
 }
