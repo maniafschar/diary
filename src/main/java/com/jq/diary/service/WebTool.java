@@ -42,7 +42,24 @@ public class WebTool {
 				assertPublic(uri);
 				final HttpResponse<byte[]> response = this.client.send(
 						HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(10))
-								.header("User-Agent", "Mozilla/5.0 (diary-chat)").build(),
+								.header("User-Agent", "Mozilla/5.0 (diary-chat)")
+								.header("User-Agent",
+										"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36")
+								.header("Accept",
+										"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
+								.header("Accept-Language", "en-US,en;q=0.9")
+								.header("Accept-Encoding", "gzip, deflate")
+								.header("Connection", "keep-alive")
+								.header("Sec-Fetch-Dest", "document")
+								.header("Sec-Fetch-Mode", "navigate")
+								.header("Sec-Fetch-Site", "none")
+								.header("Sec-Fetch-User", "?1")
+								.header("Sec-Ch-Ua",
+										"\"Not;A=Brand\";v=\"99\", \"Google Chrome\";v=\"139\", \"Chromium\";v=\"139\"")
+								.header("Sec-Ch-Ua-Mobile", "?0")
+								.header("Sec-Ch-Ua-Platform", "Windows")
+								.header("Upgrade-Insecure-Requests", "1")
+								.build(),
 						HttpResponse.BodyHandlers.ofByteArray());
 				if (response.statusCode() / 100 == 3 && response.headers().firstValue("location").isPresent()) {
 					uri = uri.resolve(response.headers().firstValue("location").get());

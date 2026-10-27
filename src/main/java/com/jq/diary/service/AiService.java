@@ -30,7 +30,6 @@ import org.springframework.web.client.RestClient;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.Ticket;
-import com.jq.diary.util.Utilities;
 
 @Service
 public class AiService {
@@ -89,37 +88,16 @@ public class AiService {
 				messages.add(new UserMessage(text.toString()));
 		}
 		final ChatClient chatClient = this.client();
-		Exception ex = null;
-		String answer = null;
-		final long time = System.nanoTime();
+		ChatClientRequestSpec client = chatClient.prompt().messages(messages);
+		if (callbacks)
+			client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
+		final String answer = client.call().content();
 		this.adminService.createTicket(new Ticket(
-				"chat " + time + ": " + conversation.stream().map(e -> e.text()).collect(Collectors.joining("\n\n"))));
-		for (int i = 1; i < 4; i++) {
-			ChatClientRequestSpec client = chatClient.prompt().messages(messages);
-			if (callbacks)
-				client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
-			try {
-				answer = client.call().content();
-				if (answer != null && !answer.isBlank())
-					break;
-				try {
-					Thread.sleep(2000L * i * i);
-				} catch (final InterruptedException interrupted) {
-					Thread.currentThread().interrupt();
-					break;
-				}
-			} catch (final Exception requestException) {
-				ex = requestException;
-			}
-		}
-		this.adminService.createTicket(new Ticket("chat " + time + ": "
-				+ (System.nanoTime() - start) / 1_000_000 + " ms\n" + answer));
+				"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + answer + "\n-----------\n"
+						+ conversation.stream().map(e -> e.text()).collect(Collectors.joining("\n\n"))));
 		if (answer != null && !answer.isBlank())
 			return answer.trim();
-		final Exception failure = ex == null ? new IllegalStateException("AI returned an empty response.") : ex;
-		this.adminService.createTicket(
-				new Ticket(Ticket.ERROR + Utilities.stackTraceToString(failure)));
-		throw new IllegalStateException("Spring AI chat request failed.", failure);
+		throw new IllegalStateException("Spring AI chat request failed.");
 	}
 
 	private ChatClient client() {

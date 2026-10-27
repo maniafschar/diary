@@ -74,6 +74,7 @@ public class ChatService {
 		if (input.length() > Utilities.MAX_TEXT_LENGTH)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Die Nachricht ist zu lang.");
 
+		this.completeProfile(contact);
 		final List<ChatMessage> messages = new ArrayList<>(this.list(contact));
 		final Set<ChatSummary.Category> previousCategories = this.activeCategories(messages);
 		final ChatMessage userMessage = this.createMessage(contact, AiService.ACTOR_USER, input);
@@ -99,7 +100,6 @@ public class ChatService {
 
 		final String answer = this.aiService.chat(conversation, true);
 		this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, answer));
-		this.completeProfile(contact, messages);
 		return answer;
 	}
 
@@ -174,11 +174,11 @@ public class ChatService {
 				.collect(java.util.stream.Collectors.joining(","));
 	}
 
-	private void completeProfile(final Contact contact, final List<ChatMessage> messages) {
+	private void completeProfile(final Contact contact) {
 		if (contact.getLanguage() != null && contact.getSexualOrientation() != null)
 			return;
 		final List<String> texts = new ArrayList<>();
-		texts.addAll(messages.stream()
+		texts.addAll(this.list(contact).stream()
 				.filter(e -> AiService.ACTOR_USER.equals(e.getRole()) && e.getNote() != null && !e.getNote().isBlank())
 				.map(e -> e.getNote()).toList());
 		try {
