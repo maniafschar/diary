@@ -214,7 +214,7 @@ public class Utilities {
 	}
 
 	public static String markDown(final String html, final URI baseUrl) {
-		String converted = toText(html, baseUrl);
+		String converted = replaceLinks(html, baseUrl);
 		converted = convertBlockquote(convertOl(converted));
 		converted = replaceIgnoreCase(converted, "<p>", "\n");
 		converted = replaceIgnoreCase(converted, "</p>", "\n");
@@ -256,7 +256,7 @@ public class Utilities {
 		return replaceWhitespace(converted);
 	}
 
-	private static String toText(final String html, final URI base) {
+	private static String replaceLinks(final String html, final URI base) {
 		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ").trim();
 		final Matcher anchors = ANCHOR.matcher(withoutIgnored);
 		final StringBuilder withLinks = new StringBuilder();
@@ -264,7 +264,8 @@ public class Utilities {
 			final String href = link(anchors.group(1), base);
 			final String label = anchors.group(2);
 			anchors.appendReplacement(withLinks,
-					Matcher.quoteReplacement(href == null ? label : "[" + label + "](" + href + ")"));
+					Matcher.quoteReplacement(
+							href == null ? label : "[" + label.replace('\n', ' ').trim() + "](" + href.trim() + ")"));
 		}
 		anchors.appendTail(withLinks);
 		return withLinks.toString();
