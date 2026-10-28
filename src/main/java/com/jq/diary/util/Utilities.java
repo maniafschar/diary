@@ -270,7 +270,7 @@ public class Utilities {
 					Matcher.quoteReplacement(href == null ? label : "[" + label + "](" + href + ")"));
 		}
 		anchors.appendTail(withLinks);
-		return withLinks.to;
+		return withLinks.toString();
 	}
 
 	private static String link(final String attributes, final URI base) {
