@@ -57,23 +57,28 @@
 					<img src="image/login.svg" />
 					<span>Einloggen</span>
 				</button>
-				<button class="icon selected" data-nav-index="0" data-type="loggedIn" onclick="ui.navigate(0)">
+				<button class="icon selected" data-nav-index="0" data-type="loggedIn" onclick="ui.navigate(event)">
 					<img src="image/list.svg" />
 					<span>Events</span>
 				</button>
-				<button class="icon" data-nav-index="1" onclick="ui.navigate(1)" data-type="loggedIn">
+				<button class="icon" data-nav-index="1" onclick="ui.navigate(event)" data-type="loggedIn">
 					<img src="image/calendar.svg" />
 					<span>Kalender</span>
 				</button>
-				<button class="icon" data-nav-index="2" onclick="ui.navigate(2)" data-type="loggedIn">
+				<button class="icon" data-nav-index="2" onclick="ui.navigate(event)" data-type="loggedIn">
 					<img src="image/location.svg" />
 					<span>Karte</span>
 				</button>
-				<button class="icon" data-nav-index="3" onclick="ui.navigate(3)" data-type="loggedIn">
+				<button class="icon" data-nav-index="3" onclick="ui.navigate(event)" data-type="loggedInAuthor">
+					<img src="image/ai.svg" />
+					<span>KI-Chat</span>
+				</button>
+				<button class="icon mobile-more-item" data-nav-index="4" onclick="ui.navigate(event)"
+					data-type="loggedIn">
 					<img src="image/statistics.svg" />
 					<span>Statistik</span>
 				</button>
-				<button class="icon mobile-more-item" class="icon" data-nav-index="4" onclick="ui.navigate(4)"
+				<button class="icon mobile-more-item" class="icon" data-nav-index="5" onclick="ui.navigate(event)"
 					data-type="loggedInAuthor">
 					<img src="image/user.svg" />
 					<span>Teilnehmer</span>
@@ -88,10 +93,6 @@
 				<button class="icon export mobile-more-item" onclick="dialog.email()" data-type="loggedInAuthor">
 					<img src="image/email.svg" />
 					<span>Teilen</span>
-				</button>
-				<button class="icon mobile-more-item" onclick="dialog.aiChat()" data-type="loggedInAuthor">
-					<img src="image/ai.svg" />
-					<span>KI-Chat</span>
 				</button>
 				<button onclick="action.logoff()" name="logoff" class="icon mobile-more-item" data-type="loggedIn">
 					<img src="image/logoff.svg" />
@@ -119,6 +120,9 @@
 					</element>
 					<element class="map">
 						<view-map></view-map>
+					</element>
+					<element class="ai">
+						<view-chat></view-chat>
 					</element>
 					<element class="statistics">
 						<view-statistics></view-statistics>

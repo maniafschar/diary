@@ -10,6 +10,7 @@ import { InputSelection } from './element/InputSelection';
 import { InputTextarea } from './element/InputTextarea';
 import { ProgressBar } from './element/ProgressBar';
 import { ViewCalendar } from './element/ViewCalendar';
+import { ViewChat } from './element/ViewChat';
 import { ViewImage } from './element/ViewImage';
 import { ViewMap } from './element/ViewMap';
 import { ViewStatistics } from './element/ViewStatistics';
@@ -475,6 +476,10 @@ class action {
 		}, 600);
 	}
 
+	static aiChat() {
+		api.chat.getMessages(messages => document.querySelector('view-chat').init(messages));
+	}
+
 	static export(type) {
 		var content = document.querySelector('dialog-popup').content();
 		var error = content.querySelector('error');
@@ -518,6 +523,7 @@ customElements.define('input-selection', InputSelection);
 customElements.define('input-textarea', InputTextarea);
 customElements.define('progress-bar', ProgressBar);
 customElements.define('view-calendar', ViewCalendar);
+customElements.define('view-chat', ViewChat);
 customElements.define('view-image', ViewImage);
 customElements.define('view-map', ViewMap);
 customElements.define('view-statistics', ViewStatistics);

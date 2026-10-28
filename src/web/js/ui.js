@@ -55,7 +55,8 @@ class ui {
 		return ui.day[date.getDay()] + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear() - 2000) + ' ' + date.getHours() + ':' + date.getMinutes() + suffix;
 	}
 
-	static navigate(i) {
+	static navigate(event) {
+		var i = event.target.getAttribute('data-nav-index');
 		var buttons = [...document.querySelectorAll('body navigation button[data-nav-index]')]
 			.sort((a, b) => Number(a.dataset.navIndex) - Number(b.dataset.navIndex));
 		buttons.forEach(e => e.classList.remove('selected'));
