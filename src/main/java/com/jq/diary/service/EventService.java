@@ -35,10 +35,7 @@ public class EventService {
 	private EmailService emailService;
 
 	@Autowired
-	private AiService aiService;
-
-	@Autowired
-	private ContactContextService eventContextService;
+	private ContextService contextService;
 
 	@Autowired
 	private Repository repository;
@@ -77,7 +74,7 @@ public class EventService {
 	}
 
 	public void delete(final Event event) {
-		this.eventContextService.markDirty(event.getId());
+		this.contextService.markDirty(event.getId());
 		event.getContactEvents().forEach(e -> this.repository.delete(e));
 		event.getEventImages().forEach(e -> this.repository.delete(e));
 		event.getEventRatings().forEach(e -> this.repository.delete(e));
@@ -106,7 +103,7 @@ public class EventService {
 			contactEvent.setEvent(event);
 			this.repository.save(contactEvent);
 		}
-		this.eventContextService.markDirty(event.getId());
+		this.contextService.markDirty(event.getId());
 	}
 
 	public EventRating putRating(final BigInteger eventId, final BigInteger contactId, final Double rating) {
@@ -122,7 +119,7 @@ public class EventService {
 		}
 		eventRating.setRating(rating);
 		this.repository.save(eventRating);
-		this.eventContextService.markDirty(eventId);
+		this.contextService.markDirty(eventId);
 		return eventRating;
 	}
 

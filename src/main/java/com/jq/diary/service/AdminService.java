@@ -26,12 +26,9 @@ public class AdminService {
 	@Autowired
 	private Repository repository;
 
-	@Autowired
-	private LocationService locationService;
-
 	@Lazy
 	@Autowired
-	private ContactContextService eventContextService;
+	private ContextService contextService;
 
 	@Value("${app.admin.buildScript}")
 	private String buildScript;
@@ -110,7 +107,7 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
-		this.eventContextService.refreshDaily();
+		this.contextService.refreshDaily();
 		return "ok";
 	}
 
