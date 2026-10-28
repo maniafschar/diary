@@ -11,8 +11,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -27,16 +25,6 @@ import com.jq.diary.util.Utilities;
 /** Internet access for the chat model via Spring AI tool calling. */
 @Component
 public class WebTool {
-	private static final int MAX_CHARS = 6000;
-	private static final int MAX_BYTES = 1_000_000;
-	// quoted attribute values may contain '>', so they are matched as units
-	private static final String ATTRS = "(?:[^>\"']|\"[^\"]*\"|'[^']*')*";
-	private static final Pattern IGNORED = Pattern
-			.compile("(?is)<!--.*?-->|<(script|style|noscript|template|\\!DOCTYPE)" + ATTRS + ">.*?</\\1\\s*>");
-	private static final Pattern ANCHOR = Pattern.compile("(?is)<a\\b(" + ATTRS + ")>(.*?)</a\\s*>");
-	private static final Pattern HREF = Pattern
-			.compile("(?i)\\bhref\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'>]+))");
-	private static final Pattern TAG = Pattern.compile("</?[a-zA-Z][a-zA-Z0-9-]*" + ATTRS + ">");
 	private final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5))
 			.followRedirects(HttpClient.Redirect.NEVER).build();
 	@Autowired
@@ -47,7 +35,7 @@ public class WebTool {
 		if (query == null || query.isBlank())
 			return "Leere Suchanfrage.";
 		return this
-				.get("https://html.duckduckgo.com/html/?q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
+				.get("https://duckduckgo.com?format=json&q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
 	}
 
 	@Tool(description = "Lädt eine öffentliche Webseite (http/https) und liefert ihren Text.")
@@ -87,7 +75,7 @@ public class WebTool {
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
 				final byte[] body = this.decodeBody(response);
-				final String text = toText(new String(body, StandardCharsets.UTF_8), uri);
+				final String text = Utilities.markDown(new String(body, StandardCharsets.UTF_8), uri);
 				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + text));
 				return text;
 			}
@@ -108,7 +96,7 @@ public class WebTool {
 			stream = new InflaterInputStream(stream);
 		final InputStream decodedStream = stream;
 		try (decodedStream) {
-			return decodedStream.readNBytes(MAX_BYTES);
+			return decodedStream.readAllBytes();
 		}
 	}
 
@@ -121,38 +109,4 @@ public class WebTool {
 				throw new IllegalArgumentException("Interne Adressen sind nicht erlaubt.");
 	}
 
-	static String toText(final String html, final URI base) {
-		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ").trim();
-		final Matcher anchors = ANCHOR.matcher(withoutIgnored);
-		final StringBuilder withLinks = new StringBuilder();
-		while (anchors.find()) {
-			final String href = link(anchors.group(1), base);
-			final String label = anchors.group(2);
-			anchors.appendReplacement(withLinks,
-					Matcher.quoteReplacement(href == null ? label : label + " " + href + "\n"));
-		}
-		anchors.appendTail(withLinks);
-		final String text = decodeEntities(TAG.matcher(withLinks).replaceAll(" ")).replaceAll("\\s+", " ").trim();
-		return text.length() > MAX_CHARS ? text.substring(0, MAX_CHARS) : text;
-	}
-
-	private static String link(final String attributes, final URI base) {
-		final Matcher href = HREF.matcher(attributes);
-		if (!href.find())
-			return null;
-		String raw = href.group(1) != null ? href.group(1) : href.group(2) != null ? href.group(2) : href.group(3);
-		raw = decodeEntities(raw).trim();
-		if (raw.isEmpty() || raw.startsWith("#") || raw.regionMatches(true, 0, "javascript:", 0, 11))
-			return null;
-		try {
-			return base == null ? raw : base.resolve(raw).toString();
-		} catch (final IllegalArgumentException ex) {
-			return raw;
-		}
-	}
-
-	private static String decodeEntities(final String text) {
-		return text.replace("&nbsp;", " ").replace("&quot;", "\"").replace("&#39;", "'").replace("&#x27;", "'")
-				.replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
-	}
 }

@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.net.URI;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
@@ -30,6 +32,14 @@ import com.jq.diary.entity.BaseEntity;
 import com.jq.diary.entity.Contact;
 
 public class Utilities {
+	private static final int MAX_CHARS = 6000;
+	private static final String ATTRS = "(?:[^>\"']|\"[^\"]*\"|'[^']*')*";
+	private static final Pattern IGNORED = Pattern
+			.compile("(?is)<!--.*?-->|<(script|style|noscript|template|\\!doctype)" + ATTRS + ">.*?</\\1\\s*>",
+					Pattern.CASE_INSENSITIVE);
+	private static final Pattern ANCHOR = Pattern.compile("(?is)<a\\b(" + ATTRS + ")>(.*?)</a\\s*>");
+	private static final Pattern HREF = Pattern
+			.compile("(?i)\\bhref\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'>]+))");
 	public static final int MAX_TEXT_LENGTH = 65000;
 	public static final Pattern EMAIL = Pattern.compile("([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})",
 			Pattern.CASE_INSENSITIVE);
@@ -201,5 +211,124 @@ public class Utilities {
 			graphics.dispose();
 		}
 		return rotated;
+	}
+
+	public static String markDown(final String html, final URI baseUrl) {
+		String converted = toText(html, baseUrl);
+		converted = convertBlockquote(convertOl(converted));
+		converted = replaceIgnoreCase(converted, "<p>", "\n");
+		converted = replaceIgnoreCase(converted, "</p>", "\n");
+		converted = replaceIgnoreCase(converted, "><(strong|b)>", "> **");
+		converted = replaceIgnoreCase(converted, "</(strong|b)><", "** <");
+		converted = replaceIgnoreCase(converted, "</?(strong|b)>", "**");
+		converted = replaceIgnoreCase(converted, "><(em|i)>", "> _");
+		converted = replaceIgnoreCase(converted, "</(em|i)><", "_ <");
+		converted = replaceIgnoreCase(converted, "</?(em|i)>", "_");
+		converted = replaceIgnoreCase(converted, "</?ul>", "\n");
+		converted = replaceIgnoreCase(converted, "<li>", "* ");
+		converted = replaceIgnoreCase(converted, "</li>", "");
+		converted = replaceIgnoreCase(converted, "<h1\\s+id=\"([-\\w]+)\">(.*?)</h1>", "\n# $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h2\\s+id=\"([-\\w]+)\">(.*?)</h2>", "\n## $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h3\\s+id=\"([-\\w]+)\">(.*?)</h3>", "\n### $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h4\\s+id=\"([-\\w]+)\">(.*?)</h4>", "\n#### $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h5\\s+id=\"([-\\w]+)\">(.*?)</h5>", "\n##### $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h6\\s+id=\"([-\\w]+)\">(.*?)</h6>", "\n###### $2 {#$1}\n");
+		converted = replaceIgnoreCase(converted, "<h1>", "\n# ");
+		converted = replaceIgnoreCase(converted, "<h2>", "\n## ");
+		converted = replaceIgnoreCase(converted, "<h3>", "\n### ");
+		converted = replaceIgnoreCase(converted, "<h4>", "\n#### ");
+		converted = replaceIgnoreCase(converted, "<h5>", "\n##### ");
+		converted = replaceIgnoreCase(converted, "<h6>", "\n###### ");
+		converted = replaceIgnoreCase(converted, "</h[123456]>", "\n");
+		converted = converted.replaceFirst("<hr ?/?>", "\n- - -\n");
+		converted = replaceIgnoreCase(converted, "\\s*<table([^>]*)>", "\n\n<div$1>");
+		converted = replaceIgnoreCase(converted, "\\s*<colgroup([^>]*)>.*?</colgroup>\\s*", "");
+		converted = replaceIgnoreCase(converted, "\\s*</?thead([^>]*)>\\s*", "");
+		converted = replaceIgnoreCase(converted, "\\s*</?tbody([^>]*)>\\s*", "");
+		converted = replaceIgnoreCase(converted, "\\s*<tr>\\s*<th>", "\n");
+		converted = replaceIgnoreCase(converted, "</th>\\s*<th>", " | ");
+		converted = replaceIgnoreCase(converted, "</th>\\s*</tr>", "\n - | -\n");
+		converted = replaceIgnoreCase(converted, "\\s*<tr>\\s*<td>", "\n");
+		converted = replaceIgnoreCase(converted, "</td>\\s*<td>", " | ");
+		converted = replaceIgnoreCase(converted, "</td>\\s*</tr>", "");
+		converted = replaceIgnoreCase(converted, "\\s*</table>", "\n</div>");
+		converted = replaceIgnoreCase(converted, "</?font[^>]*>", "");
+		converted = replaceIgnoreCase(converted, "<br ?/?>", "  \n");
+		converted = converted.replaceAll("\\n{3,}", "\n\n");
+		converted = converted.replaceAll("(^\\n+|\\n+$)", "");
+		return decodeEntities(converted);
+	}
+
+	private static String toText(final String html, final URI base) {
+		final String withoutIgnored = IGNORED.matcher(html).replaceAll(" ").trim();
+		final Matcher anchors = ANCHOR.matcher(withoutIgnored);
+		final StringBuilder withLinks = new StringBuilder();
+		while (anchors.find()) {
+			final String href = link(anchors.group(1), base);
+			final String label = anchors.group(2);
+			anchors.appendReplacement(withLinks,
+					Matcher.quoteReplacement(href == null ? label : "["+label + "](" + href+")");
+		}
+		anchors.appendTail(withLinks);
+		return withLinks.to;
+	}
+
+	private static String link(final String attributes, final URI base) {
+		final Matcher href = HREF.matcher(attributes);
+		if (!href.find())
+			return null;
+		String raw = href.group(1) != null ? href.group(1) : href.group(2) != null ? href.group(2) : href.group(3);
+		raw = decodeEntities(raw).trim();
+		if (raw.isEmpty() || raw.startsWith("#") || raw.regionMatches(true, 0, "javascript:", 0, 11))
+			return null;
+		try {
+			return base == null ? raw : base.resolve(raw).toString();
+		} catch (final IllegalArgumentException ex) {
+			return raw;
+		}
+	}
+
+	private static String decodeEntities(final String text) {
+		return text.replace("&nbsp;", " ").replace("&quot;", "\"").replace("&#39;", "'").replace("&#x27;", "'")
+				.replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+	}
+
+	private static String replaceIgnoreCase(final String input, final String regex, final String replacement) {
+		return Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(input)
+				.replaceAll(replacement);
+	}
+
+	private static String convertOl(final String str) {
+		String r = str;
+		final Pattern pat = Pattern.compile("<ol>([\\s\\S]*?)</ol>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+		final Pattern lipat = Pattern.compile("<li>", Pattern.CASE_INSENSITIVE);
+		while (true) {
+			final Matcher m = pat.matcher(r);
+			if (!m.find())
+				return r;
+			final String mat = m.group(1).replaceAll("(?i)</li>", "");
+			final Matcher li = lipat.matcher(mat);
+			final StringBuilder numbered = new StringBuilder();
+			for (int c = 1; li.find(); c++)
+				li.appendReplacement(numbered, c + ". ");
+			li.appendTail(numbered);
+			r = r.substring(0, m.start()) + "\n" + numbered + "\n" + r.substring(m.end());
+		}
+	}
+
+	private static String convertBlockquote(final String str) {
+		String r = str;
+		final Pattern pat = Pattern.compile("<blockquote>\\n?([\\s\\S]*?)\\n?</blockquote>",
+				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+		while (true) {
+			final Matcher m = pat.matcher(r);
+			if (!m.find())
+				return r;
+			String mat = m.group(1).replace("\n", "\n> ");
+			mat = replaceIgnoreCase(mat, "<p>", "\n> ");
+			mat = replaceIgnoreCase(mat, "</p>", "\n> \n> ");
+			mat = mat.replaceAll("(\\n> ?){3,}", "\n> \n> ");
+			r = r.substring(0, m.start()) + "\n" + mat + "\n" + r.substring(m.end());
+		}
 	}
 }
