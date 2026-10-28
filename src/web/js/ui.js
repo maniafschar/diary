@@ -65,7 +65,7 @@ class ui {
 			button.classList.add('selected');
 		var elements = [...document.querySelectorAll('eventContainer>element')];
 		elements.forEach((element, index) => element.classList.toggle('active', index == i));
-		elements[i]?.dispatchEvent(new CustomEvent('visible', { detail: { tag: elements[i].tagName } }));
+		elements[i]?.dispatchEvent(new CustomEvent('visible'));
 	}
 
 	static freeze(freeze) {
