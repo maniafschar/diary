@@ -42,6 +42,9 @@ public class AiService {
 	@Autowired
 	private WebTool webTool;
 
+	@Autowired
+	private ChatContextTool chatContextTool;
+
 	@Value("${app.chatGPT.key}")
 	private String chatGpt;
 
@@ -86,7 +89,7 @@ public class AiService {
 		final ChatClient chatClient = this.client();
 		ChatClientRequestSpec client = chatClient.prompt().messages(messages);
 		if (callbacks)
-			client = client.toolCallbacks(ToolCallbacks.from(this.webTool));
+			client = client.toolCallbacks(ToolCallbacks.from(this.webTool, this.chatContextTool));
 		final String answer = client.call().content();
 		this.adminService.createTicket(new Ticket(
 				"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + answer + "\n-----------\n"
