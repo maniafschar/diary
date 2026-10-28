@@ -87,8 +87,9 @@ public class ContextService {
 				contact.setLanguage(language);
 				changed = true;
 			}
-			if (contact.getSexualOrientation() == null) {
-				contact.setSexualOrientation(SexualOrientation.valueOf(json.path("orientation").asText("")));
+			if (contact.getSexualOrientation() == null && json.has("orientation")
+					&& !json.path("orientation").isNull()) {
+				contact.setSexualOrientation(SexualOrientation.valueOf(json.path("orientation").asText()));
 				changed = true;
 			}
 			if (changed)
