@@ -1,4 +1,4 @@
-package com.jq.diary.service;
+package com.jq.diary.service.tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jq.diary.entity.Ticket;
+import com.jq.diary.service.AdminService;
 import com.jq.diary.util.Utilities;
 
 @Component

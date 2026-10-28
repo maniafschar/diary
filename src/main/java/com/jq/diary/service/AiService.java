@@ -26,6 +26,8 @@ import org.springframework.web.client.RestClient;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.Ticket;
+import com.jq.diary.service.tools.ChatContextTool;
+import com.jq.diary.service.tools.WebTool;
 
 @Service
 public class AiService {

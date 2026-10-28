@@ -1,4 +1,4 @@
-package com.jq.diary.service;
+package com.jq.diary.service.tools;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.jq.diary.entity.ChatSummary;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.service.AdminService;
 
 @Component
 public class ChatContextTool {
@@ -27,8 +28,8 @@ public class ChatContextTool {
 				"from ChatSummary where contact.id=?1 and category=?2",
 				ChatSummary.class, contactId, category);
 		this.adminService.createTicket(
-				new Ticket(Ticket.ERROR + "chatContextTool\n" + contactId + " - " + category + ": "
-						+ chatSummaries.size()));
+				new Ticket("chatContextTool\ncontact: " + contactId + "\ncategory: " + category +
+						"\nentries found: " + chatSummaries.size()));
 		return chatSummaries.size() == 0 ? null : chatSummaries.get(0).getNote();
 	}
 }
