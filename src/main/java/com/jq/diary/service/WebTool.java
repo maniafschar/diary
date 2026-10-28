@@ -35,7 +35,7 @@ public class WebTool {
 		if (query == null || query.isBlank())
 			return "Leere Suchanfrage.";
 		return this
-				.get("https://duckduckgo.com?format=json&q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
+				.get("https://html.duckduckgo.com/html/?q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
 	}
 
 	@Tool(description = "Lädt eine öffentliche Webseite (http/https) und liefert ihren Text.")
