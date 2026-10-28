@@ -267,7 +267,7 @@ public class Utilities {
 			final String href = link(anchors.group(1), base);
 			final String label = anchors.group(2);
 			anchors.appendReplacement(withLinks,
-					Matcher.quoteReplacement(href == null ? label : "["+label + "](" + href+")");
+					Matcher.quoteReplacement(href == null ? label : "[" + label + "](" + href + ")"));
 		}
 		anchors.appendTail(withLinks);
 		return withLinks.to;
