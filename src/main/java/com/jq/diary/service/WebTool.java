@@ -73,8 +73,8 @@ public class WebTool {
 				}
 				if (response.statusCode() / 100 != 2)
 					return "Fehler: HTTP " + response.statusCode();
-				final byte[] body = this.decodeBody(response);
-				final String text = Utilities.markDown(new String(body, StandardCharsets.UTF_8), uri);
+				final String text = Utilities.markDown(new String(this.decodeBody(response), StandardCharsets.UTF_8),
+						uri);
 				this.adminService.createTicket(new Ticket("webtool\n" + url + "\n" + text));
 				return text;
 			}

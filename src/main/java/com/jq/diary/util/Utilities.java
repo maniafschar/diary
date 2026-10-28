@@ -233,15 +233,10 @@ public class Utilities {
 		converted = replaceIgnoreCase(converted, "<h4\\s+id=\"([-\\w]+)\">(.*?)</h4>", "\n#### $2 {#$1}\n");
 		converted = replaceIgnoreCase(converted, "<h5\\s+id=\"([-\\w]+)\">(.*?)</h5>", "\n##### $2 {#$1}\n");
 		converted = replaceIgnoreCase(converted, "<h6\\s+id=\"([-\\w]+)\">(.*?)</h6>", "\n###### $2 {#$1}\n");
-		converted = replaceIgnoreCase(converted, "<h1>", "\n# ");
-		converted = replaceIgnoreCase(converted, "<h2>", "\n## ");
-		converted = replaceIgnoreCase(converted, "<h3>", "\n### ");
-		converted = replaceIgnoreCase(converted, "<h4>", "\n#### ");
-		converted = replaceIgnoreCase(converted, "<h5>", "\n##### ");
-		converted = replaceIgnoreCase(converted, "<h6>", "\n###### ");
+		converted = replaceHeadingTags(converted);
 		converted = replaceIgnoreCase(converted, "</h[123456]>", "\n");
-		converted = converted.replaceFirst("<hr ?/?>", "\n- - -\n");
-		converted = replaceIgnoreCase(converted, "\\s*<table([^>]*)>", "\n\n<div$1>");
+		converted = replaceIgnoreCase(converted, "<hr\\s*/?>", "\n- - -\n");
+		converted = replaceIgnoreCase(converted, "\\s*<table[^>]*>", "\n\n");
 		converted = replaceIgnoreCase(converted, "\\s*<colgroup([^>]*)>.*?</colgroup>\\s*", "");
 		converted = replaceIgnoreCase(converted, "\\s*</?thead([^>]*)>\\s*", "");
 		converted = replaceIgnoreCase(converted, "\\s*</?tbody([^>]*)>\\s*", "");
@@ -251,12 +246,14 @@ public class Utilities {
 		converted = replaceIgnoreCase(converted, "\\s*<tr>\\s*<td>", "\n");
 		converted = replaceIgnoreCase(converted, "</td>\\s*<td>", " | ");
 		converted = replaceIgnoreCase(converted, "</td>\\s*</tr>", "");
-		converted = replaceIgnoreCase(converted, "\\s*</table>", "\n</div>");
+		converted = replaceIgnoreCase(converted, "\\s*</table>", "\n");
 		converted = replaceIgnoreCase(converted, "</?font[^>]*>", "");
 		converted = replaceIgnoreCase(converted, "<br ?/?>", "  \n");
+		converted = replaceIgnoreCase(converted, "</?[a-z][^>]*>|<!doctype[^>]*>", "");
 		converted = converted.replaceAll("\\n{3,}", "\n\n");
 		converted = converted.replaceAll("(^\\n+|\\n+$)", "");
-		return decodeEntities(converted);
+		converted = decodeEntities(converted);
+		return replaceWhitespace(converted);
 	}
 
 	private static String toText(final String html, final URI base) {
@@ -296,6 +293,22 @@ public class Utilities {
 	private static String replaceIgnoreCase(final String input, final String regex, final String replacement) {
 		return Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(input)
 				.replaceAll(replacement);
+	}
+
+	private static String replaceHeadingTags(final String input) {
+		return Pattern.compile("<h([1-6])(?:\\s[^>]*)?>", Pattern.CASE_INSENSITIVE).matcher(input)
+				.replaceAll(m -> "\n" + "#".repeat(Integer.parseInt(m.group(1))) + " ");
+	}
+
+	private static String replaceWhitespace(String text) {
+		text = text.replaceAll("\t", " ");
+		while (text.contains("  "))
+			text = text.replaceAll("  ", " ");
+		while (text.contains("\n \n"))
+			text = text.replaceAll("\n \n", "\n");
+		while (text.contains("\n\n"))
+			text = text.replaceAll("\n\n", "\n");
+		return text.trim();
 	}
 
 	private static String convertOl(final String str) {
