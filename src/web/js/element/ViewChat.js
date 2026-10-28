@@ -1,3 +1,6 @@
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+
 export { ViewChat };
 
 class ViewChat extends HTMLElement {
