@@ -68,9 +68,12 @@ public class ContextService {
 				if (event.getNote() != null && !event.getNote().isBlank())
 					texts.add(event.getNote());
 			}
-			final String answer = this.aiService.chat(List.of(Content.builder().role(AiService.ACTOR_USER)
-					.parts(Part.fromText(String.join("\n---\n", texts))).role(AiService.ACTOR_SYSTEM)
-					.parts(Part.fromText(PROFILE_PROMPT)).build()), false);
+			final List<Content> conversation = new ArrayList<>();
+			conversation
+					.add(Content.builder().role(AiService.ACTOR_SYSTEM).parts(Part.fromText(PROFILE_PROMPT)).build());
+			conversation.add(Content.builder().role(AiService.ACTOR_USER)
+					.parts(Part.fromText(String.join("\n---\n", texts))).build());
+			final String answer = this.aiService.chat(conversation, false);
 			if (answer == null || answer.isBlank())
 				return;
 			final int start = answer.indexOf('{');
