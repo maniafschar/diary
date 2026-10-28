@@ -26,8 +26,6 @@ import org.springframework.web.client.RestClient;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.Ticket;
-import com.jq.diary.service.tools.ChatContextTool;
-import com.jq.diary.service.tools.WebTool;
 
 @Service
 public class AiService {
@@ -42,10 +40,7 @@ public class AiService {
 	private AdminService adminService;
 
 	@Autowired
-	private WebTool webTool;
-
-	@Autowired
-	private ChatContextTool chatContextTool;
+	private AiContextTool aiContextTool;
 
 	@Value("${app.chatGPT.key}")
 	private String chatGpt;
@@ -91,7 +86,7 @@ public class AiService {
 		final ChatClient chatClient = this.client();
 		ChatClientRequestSpec client = chatClient.prompt().messages(messages);
 		if (callbacks)
-			client = client.toolCallbacks(ToolCallbacks.from(this.webTool, this.chatContextTool));
+			client = client.toolCallbacks(ToolCallbacks.from(this.aiContextTool));
 		final String answer = client.call().content();
 		this.adminService.createTicket(new Ticket(
 				"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + answer + "\n-----------\n"
