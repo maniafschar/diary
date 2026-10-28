@@ -56,7 +56,7 @@ class ui {
 	}
 
 	static navigate(event) {
-		var i = event.target.getAttribute('data-nav-index');
+		var i = event ? event.target.getAttribute('data-nav-index') : 0;
 		var buttons = [...document.querySelectorAll('body navigation button[data-nav-index]')]
 			.sort((a, b) => Number(a.dataset.navIndex) - Number(b.dataset.navIndex));
 		buttons.forEach(e => e.classList.remove('selected'));

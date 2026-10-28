@@ -307,7 +307,7 @@ class action {
 		document.querySelectorAll('body navigation button[data-type="loggedInAuthor"]').forEach(e => e.classList.remove('visible'));
 		document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.add('visible'));
 		document.dispatchEvent(new CustomEvent('popup'));
-		ui.navigate(0);
+		ui.navigate();
 		document.querySelector('html').classList.remove('loggedIn');
 	}
 

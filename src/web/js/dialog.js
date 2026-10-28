@@ -485,7 +485,7 @@ div.toggle>div {
 	}
 
 	static export(action, label, fields) {
-		ui.navigate(0);
+		ui.navigate();
 		var table = document.querySelector('event view-table');
 		table.setAttribute('mode', 'selection');
 		var popup = document.createElement('div');
