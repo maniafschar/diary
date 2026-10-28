@@ -15,9 +15,6 @@ public class ChatMessage extends BaseEntity {
 	@Column(length = 16)
 	private String role;
 
-	@Column(length = 128)
-	private String summaryCategories;
-
 	public Contact getContact() {
 		return this.contact;
 	}
@@ -40,13 +37,5 @@ public class ChatMessage extends BaseEntity {
 
 	public void setRole(final String role) {
 		this.role = role;
-	}
-
-	public String getSummaryCategories() {
-		return this.summaryCategories;
-	}
-
-	public void setSummaryCategories(final String summaryCategories) {
-		this.summaryCategories = summaryCategories;
 	}
 }

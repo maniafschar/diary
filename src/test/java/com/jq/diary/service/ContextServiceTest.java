@@ -28,7 +28,7 @@ import com.jq.diary.entity.Event;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository;
 
-class EventContextServiceTest {
+class ContextServiceTest {
 	@Test
 	void formatsAllEventDetailsForChatContext() {
 		final Event first = new Event();
@@ -48,7 +48,7 @@ class EventContextServiceTest {
 		second.setDate(Date.from(Instant.parse("2025-04-13T09:00:00Z")));
 		second.setNote("Frühstück mit Freunden.");
 
-		final String context = ContactContextService.formatEventContext(List.of(first, second));
+		final String context = ContextService.formatEventContext(List.of(first, second));
 
 		assertTrue(context.contains("2025-04-12T14:30:00Z"));
 		assertTrue(context.contains("Ort: Am See"));
@@ -63,20 +63,25 @@ class EventContextServiceTest {
 
 	@Test
 	void omitsEventContextWhenNoEventsExist() {
-		assertEquals("", ContactContextService.formatEventContext(List.of()));
+		assertEquals("", ContextService.formatEventContext(List.of()));
 	}
 
 	@Test
 	void summariesAreRecomputedOnlyDuringRefresh() {
 		final InMemoryRepository repository = new InMemoryRepository();
+		final AdminService adminService = mock(AdminService.class);
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chat(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
 				"Aktualisierte Zusammenfassung");
-		final ContactContextService service = new ContactContextService();
+		final ContextService service = new ContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
+		ReflectionTestUtils.setField(service, "adminService", adminService);
 		final Contact contact = new Contact();
 		contact.setId(BigInteger.ONE);
+		// complete profile, so the profile detection makes no additional AI call
+		contact.setLanguage("de");
+		contact.setSexualOrientation(Contact.SexualOrientation.HETERO);
 		final Event event = new Event();
 		event.setContact(contact);
 		event.setNote("Ein Spaziergang am See.");
@@ -91,7 +96,7 @@ class EventContextServiceTest {
 
 		final EventService eventService = new EventService();
 		ReflectionTestUtils.setField(eventService, "repository", repository);
-		ReflectionTestUtils.setField(eventService, "eventContextService", service);
+		ReflectionTestUtils.setField(eventService, "contextService", service);
 		eventService.save(event);
 
 		verify(aiService, never()).chat(anyList(), eq(false));
@@ -109,11 +114,13 @@ class EventContextServiceTest {
 	@Test
 	void chatSummaryIsComputedFromChatMessages() {
 		final InMemoryRepository repository = new InMemoryRepository();
+		final AdminService adminService = mock(AdminService.class);
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chat(anyList(), eq(false))).thenReturn("Chat Zusammenfassung");
-		final ContactContextService service = new ContactContextService();
+		final ContextService service = new ContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
+		ReflectionTestUtils.setField(service, "adminService", adminService);
 		final Contact contact = new Contact();
 		contact.setId(BigInteger.ONE);
 		final ChatMessage message = new ChatMessage();

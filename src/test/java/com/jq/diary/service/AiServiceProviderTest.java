@@ -32,7 +32,7 @@ class AiServiceProviderTest {
 	@Test
 	void ollamaProviderBuildsLocalChatModelWithoutApiKey() throws Exception {
 		final AiService service = this.serviceWithProvider(AiProvider.Ollama);
-		final Method chatModel = AiService.class.getDeclaredMethod("chatModel");
+		final Method chatModel = AiService.class.getDeclaredMethod("model");
 		chatModel.setAccessible(true);
 
 		assertInstanceOf(OpenAiChatModel.class, chatModel.invoke(service));
