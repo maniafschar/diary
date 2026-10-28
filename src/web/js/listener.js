@@ -464,6 +464,9 @@ images img {
 		});
 		document.addEventListener('contact', listener.updateContacts);
 		document.addEventListener('event', listener.updateEvents);
+		document.querySelector('view-chat').addEventListener('visible', () => {
+			api.chat.getMessages(messages => document.querySelector('view-chat').init(messages));
+		});
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
 		var style = `
 thead {

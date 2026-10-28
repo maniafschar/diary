@@ -476,10 +476,6 @@ class action {
 		}, 600);
 	}
 
-	static aiChat() {
-		api.chat.getMessages(messages => document.querySelector('view-chat').init(messages));
-	}
-
 	static export(type) {
 		var content = document.querySelector('dialog-popup').content();
 		var error = content.querySelector('error');
