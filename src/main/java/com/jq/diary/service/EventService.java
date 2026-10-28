@@ -38,7 +38,7 @@ public class EventService {
 	private AiService aiService;
 
 	@Autowired
-	private EventContextService eventContextService;
+	private ContactContextService eventContextService;
 
 	@Autowired
 	private Repository repository;

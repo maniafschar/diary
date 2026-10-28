@@ -31,7 +31,7 @@ public class AdminService {
 
 	@Lazy
 	@Autowired
-	private EventContextService eventContextService;
+	private ContactContextService eventContextService;
 
 	@Value("${app.admin.buildScript}")
 	private String buildScript;

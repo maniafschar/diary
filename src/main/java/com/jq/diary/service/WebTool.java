@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import com.jq.diary.entity.Ticket;
 import com.jq.diary.util.Utilities;
 
-/** Internet access for the chat model via Spring AI tool calling. */
 @Component
 public class WebTool {
 	private final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5))

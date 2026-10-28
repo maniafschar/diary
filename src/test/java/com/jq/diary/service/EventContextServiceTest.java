@@ -48,7 +48,7 @@ class EventContextServiceTest {
 		second.setDate(Date.from(Instant.parse("2025-04-13T09:00:00Z")));
 		second.setNote("Frühstück mit Freunden.");
 
-		final String context = EventContextService.formatEventContext(List.of(first, second));
+		final String context = ContactContextService.formatEventContext(List.of(first, second));
 
 		assertTrue(context.contains("2025-04-12T14:30:00Z"));
 		assertTrue(context.contains("Ort: Am See"));
@@ -63,7 +63,7 @@ class EventContextServiceTest {
 
 	@Test
 	void omitsEventContextWhenNoEventsExist() {
-		assertEquals("", EventContextService.formatEventContext(List.of()));
+		assertEquals("", ContactContextService.formatEventContext(List.of()));
 	}
 
 	@Test
@@ -72,7 +72,7 @@ class EventContextServiceTest {
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chat(anyList(), eq(false))).thenReturn("Erste Zusammenfassung",
 				"Aktualisierte Zusammenfassung");
-		final EventContextService service = new EventContextService();
+		final ContactContextService service = new ContactContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
 		final Contact contact = new Contact();
@@ -111,7 +111,7 @@ class EventContextServiceTest {
 		final InMemoryRepository repository = new InMemoryRepository();
 		final AiService aiService = mock(AiService.class);
 		when(aiService.chat(anyList(), eq(false))).thenReturn("Chat Zusammenfassung");
-		final EventContextService service = new EventContextService();
+		final ContactContextService service = new ContactContextService();
 		ReflectionTestUtils.setField(service, "repository", repository);
 		ReflectionTestUtils.setField(service, "aiService", aiService);
 		final Contact contact = new Contact();
