@@ -46,6 +46,7 @@ bubble>content {
 	background: var(--background-content);
 	position: relative;
 	display: block;
+	min-height: 1.4em;
 }
 bubble preview {
 	display: block;
@@ -55,6 +56,7 @@ bubble preview {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	width: calc(100% - 1.5em);
 }
 bubble message {
 	display: grid;
