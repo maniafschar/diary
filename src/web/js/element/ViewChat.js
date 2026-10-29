@@ -27,8 +27,7 @@ class ViewChat extends HTMLElement {
 }
 bubble {
 	position: relative;
-	display: grid;
-	grid-template-rows: auto 0fr minmax(0, 1fr);
+	display: inline-block;
 	white-space: normal;
 	padding: 0.75em;
 	margin: 0.5em 0;
@@ -36,7 +35,6 @@ bubble {
 	border-radius: 0.5em;
 	text-align: left;
 	cursor: pointer;
-	transition: all .4s ease-out;
 }
 bubble date {
 	display: block;
@@ -51,12 +49,14 @@ bubble preview {
 	transition: opacity .4s ease-out;
 }
 bubble message {
+	display: grid;
+	grid-template-rows: 1fr minmax(0, 1fr);
 	min-height: 0;
 	overflow: hidden;
-	transition: opacity .4s ease-out;
+	transition: all .4s ease-out;
 }
-bubble.collapsed {
-	grid-template-rows: auto minmax(0, 1fr) 0fr;
+bubble.collapsed message {
+	grid-template-rows: 0fr;
 }
 bubble.collapsed preview {
 	opacity: 1;
@@ -194,9 +194,7 @@ button:hover {
 	init(messages) {
 		var history = this._root.querySelector('history');
 		history.textContent = '';
-		messages.forEach(message => {
-			history.appendChild(this.createBubble(message));
-		});
+		messages.forEach(message => history.appendChild(this.createBubble(message)));
 		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
 	}
