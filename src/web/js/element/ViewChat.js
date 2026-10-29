@@ -35,7 +35,7 @@ bubble {
 	cursor: pointer;
 }
 bubble > label {
-	display: block;
+	display: inline-block;
 	font-size: 0.8em;
 	padding: 0.5em 1em;
 	border-radius: 0.5em 0.5em 0 0;
@@ -45,6 +45,8 @@ bubble>content {
 	border-radius: 0 0.5em 0.5em 0.5em;
 	padding: 0.5em 0.75em;
 	background: var(--background-content);
+	position: relative;
+	display: block;
 }
 bubble preview {
 	overflow: hidden;
@@ -80,13 +82,15 @@ bubble:focus-visible {
 }
 bubble.model {
 	margin-left: 0;
-	background: var(--background-content);
 	color: inherit;
 }
 bubble.user {
 	margin-left: auto;
-	background: var(--background-clickable);
 	color: white;
+}
+bubble.user>label,
+bubble.user>content {
+	background: var(--background-clickable);
 }
 p {
 	margin-block-start: 0;
