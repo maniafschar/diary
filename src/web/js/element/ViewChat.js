@@ -51,19 +51,21 @@ bubble preview {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	display: block;
-	height: 0;
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: all .4s ease-out;
 }
 bubble message {
 	display: grid;
 	overflow: hidden;
 	transition: all .4s ease-out;
+	grid-template-rows: 1fr;
 }
 bubble message>div {
 	min-height: 0;
 }
 bubble.collapsed preview {
-	height: initial;
+	grid-template-rows: 1fr;
 }
 bubble.collapsed message {
 	grid-template-rows: 0fr;
