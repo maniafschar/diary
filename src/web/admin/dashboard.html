@@ -225,12 +225,12 @@
             cursor: pointer;
         }
 
-        .todo-text {
+        .todo-note {
             flex: 1;
             overflow-wrap: anywhere;
         }
 
-        .todo-item.completed .todo-text {
+        .todo-item.completed .todo-note {
             color: #6b7280;
             text-decoration: line-through;
         }
@@ -251,7 +251,7 @@
             color: #b42318;
         }
 
-        .link-remark {
+        .link-note {
             color: #6b7280;
         }
 
@@ -306,8 +306,8 @@
                     <input id="link-title" type="text" maxlength="200" placeholder="Titel ..." required>
                     <label class="sr-only" for="link-url">URL</label>
                     <input id="link-url" type="url" placeholder="https://..." required>
-                    <label class="sr-only" for="link-remark">Bemerkung</label>
-                    <input id="link-remark" type="text" maxlength="500" placeholder="Bemerkung ...">
+                    <label class="sr-only" for="link-note">Bemerkung</label>
+                    <input id="link-note" type="text" maxlength="500" placeholder="Bemerkung ...">
                     <button type="submit">Hinzufügen</button>
                 </form>
                 <form class="todo-form" id="search-form" style="margin-top:10px" onsubmit="return false">
@@ -364,8 +364,8 @@
                 throw new Error('Zugang abgelehnt');
             }
             if (!response.ok) throw new Error('Fehler ' + response.status);
-            const text = await response.text();
-            return text ? JSON.parse(text) : null;
+            const note = await response.note();
+            return note ? JSON.parse(note) : null;
         }
 
         function fail(error) {
@@ -398,7 +398,7 @@
                 item.className = 'todo-item';
 
                 const text = document.createElement('span');
-                text.className = 'todo-text';
+                text.className = 'todo-note';
                 const anchor = document.createElement('a');
                 anchor.href = link.url;
                 anchor.target = '_blank';
@@ -423,11 +423,11 @@
                     }
                 });
 
-                const remark = document.createElement('span');
-                remark.className = 'todo-text link-remark';
-                remark.textContent = link.remark || '';
+                const note = document.createElement('span');
+                note.className = 'todo-note link-note';
+                note.textContent = link.note || '';
 
-                item.append(text, remark, deleteButton);
+                item.append(text, note, deleteButton);
                 linkList.appendChild(item);
             });
 
@@ -445,13 +445,13 @@
             const form = event.target;
             const title = document.getElementById('link-title').value.trim();
             const url = document.getElementById('link-url').value.trim();
-            const remark = document.getElementById('link-remark').value.trim();
+            const note = document.getElementById('link-note').value.trim();
             if (!title || !validLink({ title, url })) {
                 alert('Bitte einen Titel und eine gültige http(s)-URL angeben.');
                 return;
             }
             try {
-                links.push(await api('POST', '/link', { title, url, remark }));
+                links.push(await api('POST', '/link', { title, url, note }));
                 renderLinks();
                 form.reset();
             } catch (error) {
@@ -469,7 +469,7 @@
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = todo.completed;
-                checkbox.setAttribute('aria-label', `Aufgabe erledigt: ${todo.text}`);
+                checkbox.setAttribute('aria-label', `Aufgabe erledigt: ${todo.note}`);
                 checkbox.addEventListener('change', async () => {
                     try {
                         await api('PUT', '/todo/' + todo.id, { completed: checkbox.checked });
@@ -480,15 +480,15 @@
                     renderTodos();
                 });
 
-                const text = document.createElement('span');
-                text.className = 'todo-text';
-                text.textContent = todo.text;
+                const note = document.createElement('span');
+                note.className = 'todo-note';
+                note.textContent = todo.note;
 
                 const deleteButton = document.createElement('button');
                 deleteButton.className = 'todo-delete';
                 deleteButton.type = 'button';
                 deleteButton.textContent = '×';
-                deleteButton.setAttribute('aria-label', `Aufgabe löschen: ${todo.text}`);
+                deleteButton.setAttribute('aria-label', `Aufgabe löschen: ${todo.note}`);
                 deleteButton.title = 'Aufgabe löschen';
                 deleteButton.addEventListener('click', async () => {
                     try {
@@ -500,7 +500,7 @@
                     }
                 });
 
-                item.append(checkbox, text, deleteButton);
+                item.append(checkbox, note, deleteButton);
                 todoList.appendChild(item);
             });
 
@@ -517,10 +517,10 @@
 
         todoForm.addEventListener('submit', async event => {
             event.preventDefault();
-            const text = todoInput.value.trim();
-            if (!text) return;
+            const note = todoInput.value.trim();
+            if (!note) return;
             try {
-                todos.push(await api('POST', '/todo', { text }));
+                todos.push(await api('POST', '/todo', { note }));
                 renderTodos();
                 todoForm.reset();
                 todoInput.focus();
@@ -537,7 +537,7 @@
             if (!infoDirty) return;
             infoDirty = false;
             try {
-                await api('PUT', '/info', { content: infoEditor.innerText });
+                await api('PUT', '/info', { note: infoEditor.innerText });
             } catch (error) {
                 infoDirty = true;
                 console.error(error);
