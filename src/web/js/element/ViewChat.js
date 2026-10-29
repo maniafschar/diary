@@ -56,6 +56,9 @@ bubble message {
 	overflow: hidden;
 	transition: all .4s ease-out;
 }
+bubble message>div {
+	min-height: 0;
+}
 bubble.collapsed message {
 	grid-template-rows: 0fr;
 }
@@ -65,6 +68,8 @@ bubble.collapsed preview {
 bubble:not(.collapsed) preview,
 bubble.collapsed message {
 	opacity: 0;
+}
+bubble:not(.collapsed) preview {
 	height: 0;
 }
 bubble:focus-visible {
@@ -160,7 +165,7 @@ button:hover {
 		var rawText = message.note;
 		var preview = bubble.appendChild(document.createElement('preview'));
 		preview.textContent = rawText.trim();
-		var content = bubble.appendChild(document.createElement('message'));
+		var content = bubble.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		var toggle = () => {
 			var collapsed = bubble.classList.toggle('collapsed');
