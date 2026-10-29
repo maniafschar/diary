@@ -200,7 +200,6 @@ button:hover {
 	renderMessage(message) {
 		var history = this._root.querySelector('history');
 		history.appendChild(this.createBubble(message));
-		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
 	}
 	init(messages) {
