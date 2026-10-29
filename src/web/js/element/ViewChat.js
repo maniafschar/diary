@@ -29,18 +29,22 @@ bubble {
 	position: relative;
 	display: block;
 	white-space: normal;
-	padding: 0.75em;
 	margin: 0.5em 0;
 	max-width: 85%;
-	border-radius: 0.5em;
 	text-align: left;
 	cursor: pointer;
 }
 bubble > label {
 	display: block;
-	font-size: 0.75em;
-	opacity: 0.65;
-	margin-bottom: 0.4em;
+	font-size: 0.8em;
+	padding: 0.5em 1em;
+	border-radius: 0.5em 0.5em 0 0;
+	background: var(--background-content);
+}
+bubble>content {
+	border-radius: 0 0.5em 0.5em 0.5em;
+	padding: 0.5em 0.75em;
+	background: var(--background-content);
 }
 bubble preview {
 	overflow: hidden;
@@ -161,10 +165,11 @@ button:hover {
 		bubble.setAttribute('aria-expanded', 'true');
 		var label = bubble.appendChild(document.createElement('label'));
 		label.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
+		var content = bubble.appendChild(document.createElement('content'));
 		var rawText = message.note;
-		var preview = bubble.appendChild(document.createElement('preview'));
+		var preview = content.appendChild(document.createElement('preview'));
 		preview.textContent = rawText.trim();
-		var content = bubble.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
+		var content = content.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		var toggle = () => {
 			var collapsed = bubble.classList.toggle('collapsed');
