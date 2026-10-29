@@ -54,7 +54,7 @@ controls {
 history {
 	position: relative;
 	display: block;
-	max-height: 45vh;
+	height: calc(100% - 8em);
 	overflow-y: auto;
 	margin-bottom: 1em;
 }
@@ -63,6 +63,22 @@ status {
 	display: block;
 	min-height: 1.5em;
 	text-align: center;
+}
+button {
+	border-radius: 2em;
+	border: none;
+	background: var(--background-clickable);
+	padding: 0.75em 1.5em;
+	outline: none;
+	cursor: pointer;
+	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0 0.5em;
+	color: white;
+	font-size: 1em;
+	transition: var(--transition-clickable)
+}
+button:hover {
+	background: var(--background-clickable-highlight);
 }`;
 		this._root.appendChild(document.createElement('history'));
 		var status = this._root.appendChild(document.createElement('status'));
