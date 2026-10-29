@@ -48,12 +48,14 @@ bubble>content {
 	display: block;
 }
 bubble preview {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 	display: grid;
 	grid-template-rows: 0fr;
 	transition: all .4s ease-out;
+}
+bubble preview>div {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 bubble message {
 	display: grid;
