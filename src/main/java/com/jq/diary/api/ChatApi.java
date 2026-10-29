@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class ChatApi extends ApplicationApi {
 		return Utilities.filter(this.chatService.list(contact));
 	}
 
-	@PostMapping("messages")
+	@PostMapping(path = "messages", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ChatMessage postMessage(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestBody final String text) {
 		return Utilities
