@@ -27,7 +27,7 @@ class ViewChat extends HTMLElement {
 }
 bubble {
 	position: relative;
-	display: inline-block;
+	display: block;
 	white-space: normal;
 	padding: 0.75em;
 	margin: 0.5em 0;
@@ -46,6 +46,7 @@ bubble preview {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	display: block;
 	transition: opacity .4s ease-out;
 }
 bubble message {
@@ -64,6 +65,7 @@ bubble.collapsed preview {
 bubble:not(.collapsed) preview,
 bubble.collapsed message {
 	opacity: 0;
+	height: 0;
 }
 bubble:focus-visible {
 	outline: 0.15em solid currentColor;
