@@ -1,10 +1,7 @@
 package com.jq.diary.service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,9 @@ public class ContactService {
 	private Repository repository;
 
 	public List<Contact> list(final Client client) {
-		return this.repository.list("from Contact as contact inner join contact.clients as clients where clients.id=?1 order by contact.name", Contact.class, client.getId());
+		return this.repository.list(
+				"from Contact as contact inner join contact.clients as clients where clients.id=?1 order by contact.name",
+				Contact.class, client.getId());
 	}
 
 	public List<ContactEvent> listEvent(final BigInteger eventId) {

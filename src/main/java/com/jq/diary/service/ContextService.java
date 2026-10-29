@@ -1,6 +1,7 @@
 package com.jq.diary.service;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -153,7 +154,7 @@ public class ContextService {
 					Event.class, contact.getId());
 			if (events.size() == 0)
 				return new ChatSummary();
-			text = formatEventContext(events);
+			text = this.formatEventContext(events);
 		}
 		final List<Content> content = new ArrayList<>();
 		content.add(Content.builder().role(AiService.ACTOR_SYSTEM)
@@ -185,7 +186,7 @@ public class ContextService {
 		return context.toString();
 	}
 
-	static String formatEventContext(final List<Event> events) {
+	String formatEventContext(final List<Event> events) {
 		if (events.isEmpty())
 			return "";
 		final StringBuilder context = new StringBuilder("\n\n").append(EVENT_CONTEXT_PROMPT);
@@ -215,5 +216,31 @@ public class ContextService {
 	private static void appendField(final StringBuilder context, final String label, final String value) {
 		if (value != null && !value.isBlank())
 			context.append('\n').append(label).append(": ").append(value.trim().replace('\n', ' '));
+	}
+
+	public String context(final Contact contact) {
+		final String language = contact.getLanguage() == null ? "Deutsch"
+				: Locale.forLanguageTag(contact.getLanguage()).getDisplayLanguage(Locale.GERMAN);
+		final SexualOrientation orientation = contact.getSexualOrientation() == null ? SexualOrientation.HETERO
+				: contact.getSexualOrientation();
+		final StringBuilder context = new StringBuilder(
+				"\nBeachte folgenden Kontext:" +
+						"\n* Der Benutzer möchte die Antwort in der Sprache " + language +
+						" und zusätzlich Vorschläge bevorzugt " +
+						language.toLowerCase() + "sprachig" +
+						"\n* Er ist " + orientation.getLabel() + " und möchte bevorzugt dazu passende Vorschläge" +
+						"\n* Das aktuelle Datum/Uhrzeit ist " + Instant.now() +
+						"\n* contactId: " + contact.getId() + " (beim Tooling mitgeben)");
+		final List<Event> events = this.repository.list(
+				"from Event where contact.id=?1 order by date desc, id desc",
+				Event.class, contact.getId());
+		if (!events.isEmpty())
+			context.append("\n* Sein letzter bekannter Aufenthaltsort am ")
+					.append(events.get(0).getDate()).append(" ist: ")
+					.append(" Adresse: " + events.get(0).getLocation().getAddress().replace('\n', ' '))
+					.append(", Name der Location: " + events.get(0).getLocation().getName())
+					.append(", Longitude: " + events.get(0).getLocation().getLongitude())
+					.append(", Latitude: " + events.get(0).getLocation().getLatitude());
+		return context.toString();
 	}
 }
