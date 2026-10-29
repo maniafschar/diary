@@ -145,10 +145,10 @@ button:hover {
 			sending = true;
 			send.disabled = true;
 			input.value = '';
-			this.renderMessage({ role: 'user', text: text, createdAt: new Date().toUTCString() });
+			this.renderMessage({ role: 'user', note: text, createdAt: new Date().toUTCString() });
 			status.innerText = 'Antwort wird erstellt ...';
 			api.chat.postMessage(text, response => {
-				this.renderMessage({ role: 'model', text: response.answer });
+				this.renderMessage({ role: 'model', note: response.answer });
 				status.innerText = '';
 				sending = false;
 				send.disabled = false;
