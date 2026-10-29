@@ -61,7 +61,7 @@ public class ContextService {
 				.map(e -> e.getNote()).toList());
 		try {
 			final List<Event> events = this.repository.list(
-					"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
+					"select distinct e from Event e where e.contact.id=?1 order by e.date asc",
 					Event.class, contact.getId());
 			for (int i = 0; i < events.size(); i++) {
 				final Event event = events.get(i);
@@ -103,7 +103,7 @@ public class ContextService {
 		if (eventId == null)
 			return;
 		this.repository.list(
-				"select distinct s from ChatSummary s, ContactEvent ce where ce.event.id=?1 and s.contact.id=ce.contact.id",
+				"select distinct s from ChatSummary s, Event e where e.id=?1 and s.contact.id=e.contact.id",
 				ChatSummary.class, eventId).forEach(s -> {
 					s.setDirty(true);
 					this.repository.save(s);
@@ -111,9 +111,9 @@ public class ContextService {
 	}
 
 	@Scheduled(cron = "0 0 * * * *")
-	public void refreshDaily() {
+	public void refreshPeriodically() {
 		final List<Contact> contacts = this.repository.list(
-				"select distinct c from Contact c, ContactEvent ce where ce.contact.id=c.id", Contact.class);
+				"select distinct c from Contact c, Event e where e.contact.id=c.id", Contact.class);
 		for (final Contact contact : contacts)
 			try {
 				this.refresh(contact);
@@ -149,7 +149,7 @@ public class ContextService {
 			text = formatMessageContext(messages);
 		} else {
 			final List<Event> events = this.repository.list(
-					"select distinct e from Event e, ContactEvent ce where ce.contact.id=?1 and ce.event.id=e.id order by e.date asc",
+					"select distinct e from Event e where e.contact.id=?1 order by e.date asc",
 					Event.class, contact.getId());
 			if (events.size() == 0)
 				return new ChatSummary();
