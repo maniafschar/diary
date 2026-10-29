@@ -36,7 +36,7 @@ bubble {
 	border-radius: 0.5em;
 	text-align: left;
 	cursor: pointer;
-	transition: grid-template-rows .4s ease-out;
+	transition: all .4s ease-out;
 }
 bubble date {
 	display: block;
@@ -45,16 +45,15 @@ bubble date {
 	margin-bottom: 0.4em;
 }
 bubble preview {
-	height: 1em;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	transition: opacity .25s ease-out;
+	transition: opacity .4s ease-out;
 }
 bubble message {
 	min-height: 0;
 	overflow: hidden;
-	transition: opacity .25s ease-out;
+	transition: opacity .4s ease-out;
 }
 bubble.collapsed {
 	grid-template-rows: auto minmax(0, 1fr) 0fr;
@@ -118,12 +117,6 @@ button {
 }
 button:hover {
 	background: var(--background-clickable-highlight);
-}
-@media (prefers-reduced-motion: reduce) {
-	bubble,
-	bubble message {
-		transition: none;
-	}
 }`;
 		this._root.appendChild(document.createElement('history'));
 		var status = this._root.appendChild(document.createElement('status'));
