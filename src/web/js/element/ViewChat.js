@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { ui } from '../ui';
+import { InputDate } from './InputDate';
 
 export { ViewChat };
 
@@ -148,7 +149,7 @@ button:hover {
 			sending = true;
 			send.disabled = true;
 			input.value = '';
-			this.renderMessage({ role: 'user', note: text, createdAt: new Date().toUTCString() });
+			this.renderMessage({ role: 'user', note: text, createdAt: InputDate.local2server(new Date()) });
 			status.innerText = 'Antwort wird erstellt ...';
 			api.chat.postMessage(text, response => {
 				this.renderMessage(response);
