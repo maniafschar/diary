@@ -155,8 +155,11 @@ public class ContextService {
 				return new ChatSummary();
 			text = formatEventContext(events);
 		}
-		text = this.aiService.chat(List.of(Content.builder().role(AiService.ACTOR_USER)
-				.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX + text)).build()), false);
+		final List<Content> content = new ArrayList<>();
+		content.add(Content.builder().role(AiService.ACTOR_SYSTEM)
+				.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX)).build());
+		content.add(Content.builder().role(AiService.ACTOR_USER).parts(Part.fromText(text)).build());
+		text = this.aiService.chat(content, false);
 		final ChatSummary summary = existing == null ? new ChatSummary() : existing;
 		summary.setContact(contact);
 		summary.setCategory(category);
@@ -188,7 +191,7 @@ public class ContextService {
 		final StringBuilder context = new StringBuilder("\n\n").append(EVENT_CONTEXT_PROMPT);
 		for (int i = 0; i < events.size(); i++) {
 			final Event event = events.get(i);
-			context.append("\n\nEintrag ").append(i + 1).append(':');
+			context.append("\n---\nEintrag ").append(i + 1).append(':');
 			if (event.getDate() != null)
 				context.append("\nZeitpunkt: ").append(event.getDate().toInstant());
 			final Location location = event.getLocation();
