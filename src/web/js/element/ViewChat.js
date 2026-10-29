@@ -145,7 +145,7 @@ button:hover {
 			sending = true;
 			send.disabled = true;
 			input.value = '';
-			this.renderMessage({ role: 'user', text: text });
+			this.renderMessage({ role: 'user', text: text, createdAt: new Date().toUTCString() });
 			status.innerText = 'Antwort wird erstellt ...';
 			api.chat.postMessage(text, response => {
 				this.renderMessage({ role: 'model', text: response.answer });
