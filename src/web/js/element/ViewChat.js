@@ -36,7 +36,7 @@ bubble {
 	text-align: left;
 	cursor: pointer;
 }
-bubble date {
+bubble > label {
 	display: block;
 	font-size: 0.75em;
 	opacity: 0.65;
@@ -51,8 +51,6 @@ bubble preview {
 }
 bubble message {
 	display: grid;
-	grid-template-rows: 1fr minmax(0, 1fr);
-	min-height: 0;
 	overflow: hidden;
 	transition: all .4s ease-out;
 }
@@ -161,7 +159,8 @@ button:hover {
 		bubble.setAttribute('role', 'button');
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
-		bubble.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
+		var label = bubble.appendChild(document.createElement('label'));
+		label.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
 		var rawText = message.note;
 		var preview = bubble.appendChild(document.createElement('preview'));
 		preview.textContent = rawText.trim();
