@@ -26,13 +26,31 @@ class ViewChat extends HTMLElement {
 }
 bubble {
 	position: relative;
-	display: block;
+	display: grid;
+	grid-template-rows: minmax(0, 1fr);
 	white-space: normal;
 	padding: 0.75em;
 	margin: 0.5em 0;
 	max-width: 85%;
 	border-radius: 0.5em;
 	text-align: left;
+	cursor: pointer;
+	transition: grid-template-rows .4s ease-out;
+}
+bubble message {
+	min-height: 0;
+	overflow: hidden;
+	transition: opacity .25s ease-out;
+}
+bubble.collapsed {
+	grid-template-rows: 0fr;
+}
+bubble.collapsed message {
+	opacity: 0;
+}
+bubble:focus-visible {
+	outline: 0.15em solid currentColor;
+	outline-offset: 0.15em;
 }
 bubble.model {
 	margin-left: 0;
@@ -82,6 +100,12 @@ button {
 }
 button:hover {
 	background: var(--background-clickable-highlight);
+}
+@media (prefers-reduced-motion: reduce) {
+	bubble,
+	bubble message {
+		transition: none;
+	}
 }`;
 		this._root.appendChild(document.createElement('history'));
 		var status = this._root.appendChild(document.createElement('status'));
@@ -113,13 +137,42 @@ button:hover {
 			});
 		};
 	}
+	createBubble(message) {
+		var bubble = document.createElement('bubble');
+		bubble.classList.add(message.role);
+		bubble.setAttribute('role', 'button');
+		bubble.setAttribute('tabindex', '0');
+		bubble.setAttribute('aria-expanded', 'true');
+		bubble.setAttribute('aria-label', 'Nachricht ein- oder ausblenden');
+		var content = bubble.appendChild(document.createElement('message'));
+		content.innerHTML = DOMPurify.sanitize(marked.parse(message.text ?? message.note ?? ''));
+		var toggle = () => {
+			var collapsed = bubble.classList.toggle('collapsed');
+			bubble.setAttribute('aria-expanded', String(!collapsed));
+		};
+		bubble.addEventListener('click', event => {
+			if (event.target.closest('a, button'))
+				return;
+			toggle();
+		});
+		bubble.addEventListener('keydown', event => {
+			if (event.key !== 'Enter' && event.key !== ' ')
+				return;
+			event.preventDefault();
+			toggle();
+		});
+		return bubble;
+	}
+	renderMessage(message) {
+		var history = this._root.querySelector('history');
+		history.appendChild(this.createBubble(message));
+		history.scrollTop = history.scrollHeight;
+	}
 	init(messages) {
 		var history = this._root.querySelector('history');
 		history.textContent = '';
 		messages.forEach(message => {
-			var bubble = history.appendChild(document.createElement('bubble'));
-			bubble.classList.add(message.role);
-			bubble.innerHTML = DOMPurify.sanitize(marked.parse(message.note || ''));
+			history.appendChild(this.createBubble(message));
 		});
 		history.scrollTop = history.scrollHeight;
 	}
