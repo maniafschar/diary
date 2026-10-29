@@ -161,7 +161,7 @@ button:hover {
 			});
 		};
 	}
-	createBubble(message) {
+	createBubble(message, collapsed) {
 		var bubble = document.createElement('bubble');
 		bubble.classList.add(message.role);
 		bubble.setAttribute('role', 'button');
@@ -191,6 +191,10 @@ button:hover {
 				event.preventDefault();
 				toggle();
 			});
+			if (collapsed) {
+				bubble.classList.add('collapsed');
+				bubble.setAttribute('aria-expanded', false);
+			}
 		}
 		return bubble;
 	}
@@ -203,7 +207,7 @@ button:hover {
 	init(messages) {
 		var history = this._root.querySelector('history');
 		history.textContent = '';
-		messages.forEach(message => history.appendChild(this.createBubble(message)));
+		messages.forEach(message => history.appendChild(this.createBubble(message, true)));
 		history.scrollTop = history.scrollHeight;
 	}
 	initialized() {
