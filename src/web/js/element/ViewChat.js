@@ -12,6 +12,15 @@ class ViewChat extends HTMLElement {
 
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
+:host(*) {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: block;
+	border-left: solid 1em transparent;
+	border-bottom: solid 1em transparent;
+	border-right: solid 1em transparent;
+}
 bubble {
 	position: relative;
 	display: block;
@@ -20,6 +29,7 @@ bubble {
 	margin: 0.5em 0;
 	max-width: 85%;
 	border-radius: 0.5em;
+	text-align: left;
 }
 bubble.model {
 	margin-left: 0;
