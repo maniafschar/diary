@@ -61,6 +61,7 @@ bubble message {
 	transition: all .4s ease-out;
 	grid-template-rows: 1fr;
 }
+bubble preview>div,
 bubble message>div {
 	min-height: 0;
 }
@@ -167,11 +168,11 @@ button:hover {
 		var content = bubble.appendChild(document.createElement('content'));
 		var rawText = message.note;
 		if (message.role == 'model')
-			content.appendChild(document.createElement('preview'));
+			content.appendChild(document.createElement('preview')).appendChild(document.createElement('div'));
 		var content = content.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		if (message.role == 'model') {
-			bubble.querySelector('preview').textContent = content.innerText;
+			bubble.querySelector('preview>div').textContent = content.innerText;
 			var toggle = () => {
 				var collapsed = bubble.classList.toggle('collapsed');
 				bubble.setAttribute('aria-expanded', String(!collapsed));
