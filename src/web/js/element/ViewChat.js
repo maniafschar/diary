@@ -161,11 +161,7 @@ button:hover {
 		bubble.setAttribute('role', 'button');
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
-		var date = bubble.appendChild(document.createElement('date'));
-		var createdAt = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
-		date.textContent = Number.isNaN(createdAt.getTime())
-			? String(message.createdAt || '')
-			: new Intl.DateTimeFormat('de-DE', { dateStyle: 'short', timeStyle: 'short' }).format(createdAt);
+		bubble.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
 		var rawText = message.note;
 		var preview = bubble.appendChild(document.createElement('preview'));
 		preview.textContent = rawText.trim();
