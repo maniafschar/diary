@@ -32,7 +32,6 @@ bubble {
 	margin: 0.5em 0;
 	max-width: 85%;
 	text-align: left;
-	cursor: pointer;
 }
 bubble > label {
 	display: inline-block;
@@ -83,6 +82,7 @@ bubble:focus-visible {
 bubble.model {
 	margin-left: 0;
 	color: inherit;
+	cursor: pointer;
 }
 bubble.user {
 	margin-left: auto;
@@ -172,10 +172,11 @@ button:hover {
 		var content = bubble.appendChild(document.createElement('content'));
 		var rawText = message.note;
 		if (message.role == 'model')
-			content.appendChild(document.createElement('preview')).textContent = rawText.trim();
+			content.appendChild(document.createElement('preview'));
 		var content = content.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		if (message.role == 'model') {
+			bubble.querySelector('preview').textContent = content.innerText;
 			var toggle = () => {
 				var collapsed = bubble.classList.toggle('collapsed');
 				bubble.setAttribute('aria-expanded', String(!collapsed));
