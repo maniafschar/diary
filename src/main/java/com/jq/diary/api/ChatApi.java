@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jq.diary.entity.ChatMessage;
@@ -36,7 +36,7 @@ public class ChatApi extends ApplicationApi {
 
 	@PostMapping(path = "messages", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ChatMessage postMessage(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId, @RequestBody final String text) {
+			@RequestHeader final BigInteger clientId, @RequestParam("text") final String text) {
 		return Utilities
 				.filter(this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text));
 	}
