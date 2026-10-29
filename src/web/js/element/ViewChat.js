@@ -27,7 +27,7 @@ class ViewChat extends HTMLElement {
 bubble {
 	position: relative;
 	display: grid;
-	grid-template-rows: minmax(0, 1fr);
+	grid-template-rows: auto 0fr minmax(0, 1fr);
 	white-space: normal;
 	padding: 0.75em;
 	margin: 0.5em 0;
@@ -37,14 +37,30 @@ bubble {
 	cursor: pointer;
 	transition: grid-template-rows .4s ease-out;
 }
+bubble date {
+	display: block;
+	font-size: 0.75em;
+	opacity: 0.65;
+	margin-bottom: 0.4em;
+}
+bubble preview {
+	min-height: 0;
+	overflow: hidden;
+	white-space: pre-wrap;
+	transition: opacity .25s ease-out;
+}
 bubble message {
 	min-height: 0;
 	overflow: hidden;
 	transition: opacity .25s ease-out;
 }
 bubble.collapsed {
-	grid-template-rows: 0fr;
+	grid-template-rows: auto minmax(0, 1fr) 0fr;
 }
+bubble.collapsed preview {
+	opacity: 1;
+}
+bubble:not(.collapsed) preview,
 bubble.collapsed message {
 	opacity: 0;
 }
@@ -144,8 +160,16 @@ button:hover {
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
 		bubble.setAttribute('aria-label', 'Nachricht ein- oder ausblenden');
+		var date = bubble.appendChild(document.createElement('date'));
+		var createdAt = message.createdAt ? new Date(message.createdAt) : new Date();
+		date.textContent = Number.isNaN(createdAt.getTime())
+			? String(message.createdAt || '')
+			: new Intl.DateTimeFormat('de-DE', { dateStyle: 'short', timeStyle: 'short' }).format(createdAt);
+		var rawText = message.text ?? message.note ?? '';
+		var preview = bubble.appendChild(document.createElement('preview'));
+		preview.textContent = rawText;
 		var content = bubble.appendChild(document.createElement('message'));
-		content.innerHTML = DOMPurify.sanitize(marked.parse(message.text ?? message.note ?? ''));
+		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		var toggle = () => {
 			var collapsed = bubble.classList.toggle('collapsed');
 			bubble.setAttribute('aria-expanded', String(!collapsed));
