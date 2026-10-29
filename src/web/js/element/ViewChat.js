@@ -52,7 +52,7 @@ bubble preview {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	display: block;
-	transition: opacity .4s ease-out;
+	height: 0;
 }
 bubble message {
 	display: grid;
@@ -62,18 +62,11 @@ bubble message {
 bubble message>div {
 	min-height: 0;
 }
+bubble.collapsed preview {
+	height: initial;
+}
 bubble.collapsed message {
 	grid-template-rows: 0fr;
-}
-bubble.collapsed preview {
-	opacity: 1;
-}
-bubble:not(.collapsed) preview,
-bubble.collapsed message {
-	opacity: 0;
-}
-bubble:not(.collapsed) preview {
-	height: 0;
 }
 bubble:focus-visible {
 	outline: 0.15em solid currentColor;
