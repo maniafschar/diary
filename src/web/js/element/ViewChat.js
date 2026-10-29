@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import { ui } from '../ui';
 
 export { ViewChat };
 
@@ -44,9 +45,10 @@ bubble date {
 	margin-bottom: 0.4em;
 }
 bubble preview {
-	min-height: 0;
+	height: 1em;
 	overflow: hidden;
-	white-space: pre-wrap;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 	transition: opacity .25s ease-out;
 }
 bubble message {
@@ -159,15 +161,14 @@ button:hover {
 		bubble.setAttribute('role', 'button');
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
-		bubble.setAttribute('aria-label', 'Nachricht ein- oder ausblenden');
 		var date = bubble.appendChild(document.createElement('date'));
-		var createdAt = message.createdAt ? new Date(message.createdAt) : new Date();
+		var createdAt = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
 		date.textContent = Number.isNaN(createdAt.getTime())
 			? String(message.createdAt || '')
 			: new Intl.DateTimeFormat('de-DE', { dateStyle: 'short', timeStyle: 'short' }).format(createdAt);
-		var rawText = message.text ?? message.note ?? '';
+		var rawText = message.note;
 		var preview = bubble.appendChild(document.createElement('preview'));
-		preview.textContent = rawText;
+		preview.textContent = rawText.trim();
 		var content = bubble.appendChild(document.createElement('message'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		var toggle = () => {
@@ -190,7 +191,16 @@ button:hover {
 	renderMessage(message) {
 		var history = this._root.querySelector('history');
 		history.appendChild(this.createBubble(message));
+		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
+	}
+	keepLastBubblesExpanded(history) {
+		var bubbles = [...history.children];
+		bubbles.forEach((bubble, index) => {
+			var expanded = index >= bubbles.length - 4;
+			bubble.classList.toggle('collapsed', !expanded);
+			bubble.setAttribute('aria-expanded', String(expanded));
+		});
 	}
 	init(messages) {
 		var history = this._root.querySelector('history');
@@ -198,6 +208,7 @@ button:hover {
 		messages.forEach(message => {
 			history.appendChild(this.createBubble(message));
 		});
+		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
 	}
 	initialized() {
