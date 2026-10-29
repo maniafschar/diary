@@ -123,4 +123,7 @@ button:hover {
 		});
 		history.scrollTop = history.scrollHeight;
 	}
+	initialized() {
+		return this._root.querySelector('history').childElementCount > 0;
+	}
 }
