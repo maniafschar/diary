@@ -265,7 +265,9 @@ public class Utilities {
 			final String label = anchors.group(2);
 			anchors.appendReplacement(withLinks,
 					Matcher.quoteReplacement(
-							href == null ? label : "[" + label.replace('\n', ' ').trim() + "](" + href.trim() + ")"));
+							href == null ? label
+									: "[" + label.replaceAll("\\s+", " ").replace("  ", " ").trim() + "]("
+											+ href.trim() + ")"));
 		}
 		anchors.appendTail(withLinks);
 		return withLinks.toString();
