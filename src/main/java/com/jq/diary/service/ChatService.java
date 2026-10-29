@@ -45,8 +45,10 @@ public class ChatService {
 		if (input.length() > Utilities.MAX_TEXT_LENGTH)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Die Nachricht ist zu lang.");
 
+		final ChatMessage userMessage = this.createMessage(contact, AiService.ACTOR_USER, input);
+		this.repository.save(userMessage);
 		final List<ChatMessage> messages = new ArrayList<>(this.list(contact));
-		messages.add(this.createMessage(contact, AiService.ACTOR_USER, input));
+		messages.add(userMessage);
 		int firstMessage = Math.max(0, messages.size() - MAX_HISTORY_MESSAGES);
 		while (firstMessage < messages.size() && AiService.ACTOR_MODEL.equals(messages.get(firstMessage).getRole()))
 			firstMessage++;

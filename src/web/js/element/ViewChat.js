@@ -110,8 +110,11 @@ history {
 status {
 	position: relative;
 	display: block;
-	min-height: 1.5em;
+	height: 1.5em;
 	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 button {
 	border-radius: 2em;
@@ -148,7 +151,7 @@ button:hover {
 			this.renderMessage({ role: 'user', note: text, createdAt: new Date().toUTCString() });
 			status.innerText = 'Antwort wird erstellt ...';
 			api.chat.postMessage(text, response => {
-				this.renderMessage({ role: 'model', note: response.answer });
+				this.renderMessage(response);
 				status.innerText = '';
 				sending = false;
 				send.disabled = false;
