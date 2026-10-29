@@ -21,6 +21,9 @@ class ViewChat extends HTMLElement {
 	border-bottom: solid 1em transparent;
 	border-right: solid 1em transparent;
 }
+*::-webkit-scrollbar {
+	display: none;
+}
 bubble {
 	position: relative;
 	display: block;
@@ -54,7 +57,7 @@ controls {
 history {
 	position: relative;
 	display: block;
-	height: calc(100% - 8em);
+	height: calc(100% - 10.5em);
 	overflow-y: auto;
 	margin-bottom: 1em;
 }

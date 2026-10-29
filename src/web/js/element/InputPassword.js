@@ -14,7 +14,7 @@ class InputPassword extends HTMLElement {
 
 *::-webkit-scrollbar {
 	display: none;
-}	
+}
 
 input {
 	display: block;
