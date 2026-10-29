@@ -364,7 +364,7 @@
                 throw new Error('Zugang abgelehnt');
             }
             if (!response.ok) throw new Error('Fehler ' + response.status);
-            const note = await response.note();
+            const note = await response.text();
             return note ? JSON.parse(note) : null;
         }
 
