@@ -22,11 +22,11 @@ public class DashboardRepository {
 		return this.em.createQuery("from Link order by title, id", Link.class).getResultList();
 	}
 
-	public Link addLink(final String title, final String url, final String remark) {
+	public Link addLink(final String title, final String url, final String note) {
 		final Link link = new Link();
 		link.setTitle(title);
 		link.setUrl(url);
-		link.setRemark(remark);
+		link.setNote(note);
 		link.setCreatedAt(now());
 		this.em.persist(link);
 		return link;
@@ -40,9 +40,9 @@ public class DashboardRepository {
 		return this.em.createQuery("from Todo order by id", Todo.class).getResultList();
 	}
 
-	public Todo addTodo(final String text) {
+	public Todo addTodo(final String note) {
 		final Todo todo = new Todo();
-		todo.setText(text);
+		todo.setNote(note);
 		todo.setCreatedAt(now());
 		this.em.persist(todo);
 		return todo;
@@ -63,18 +63,18 @@ public class DashboardRepository {
 
 	public String info() {
 		final Info info = this.infoEntity();
-		return info == null ? "" : info.getContent();
+		return info == null ? "" : info.getNote();
 	}
 
-	public void saveInfo(final String content) {
+	public void saveInfo(final String note) {
 		final Info info = this.infoEntity();
 		if (info == null) {
 			final Info created = new Info();
 			created.setCreatedAt(now());
-			created.setContent(content);
+			created.setNote(note);
 			this.em.persist(created);
 		} else {
-			info.setContent(content);
+			info.setNote(note);
 			info.setModifiedAt(now());
 		}
 	}

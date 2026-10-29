@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jq.diary.dashboard.DashboardRepository;
 import com.jq.diary.dashboard.HybridEncryption;
+import com.jq.diary.dashboard.Info;
 import com.jq.diary.dashboard.Link;
 import com.jq.diary.dashboard.Todo;
 
@@ -43,15 +44,6 @@ public class DashboardApi {
 	@Autowired
 	private ObjectMapper mapper;
 
-	public record LinkDto(String title, String url, String remark) {
-	}
-
-	public record TodoDto(String text, Boolean completed) {
-	}
-
-	public record InfoDto(String content) {
-	}
-
 	@GetMapping
 	public HybridEncryption.Encrypted get(@RequestHeader("publicKey") final String publicKey) {
 		try {
@@ -66,12 +58,12 @@ public class DashboardApi {
 	}
 
 	@PostMapping("link")
-	public Link postLink(@RequestBody final LinkDto link) {
-		final String title = this.text(link.title(), MAX_TITLE);
-		final String url = this.text(link.url(), MAX_URL);
+	public Link postLink(@RequestBody final Link link) {
+		final String title = this.text(link.getTitle(), MAX_TITLE);
+		final String url = this.text(link.getUrl(), MAX_URL);
 		if (!this.isHttpUrl(url))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid url");
-		return this.repository.addLink(title, url, this.optionalText(link.remark(), MAX_REMARK));
+		return this.repository.addLink(title, url, this.optionalText(link.getNote(), MAX_REMARK));
 	}
 
 	@DeleteMapping("link/{id}")
@@ -80,15 +72,13 @@ public class DashboardApi {
 	}
 
 	@PostMapping("todo")
-	public Todo postTodo(@RequestBody final TodoDto todo) {
-		return this.repository.addTodo(this.text(todo.text(), MAX_TODO));
+	public Todo postTodo(@RequestBody final Todo todo) {
+		return this.repository.addTodo(this.text(todo.getNote(), MAX_TODO));
 	}
 
 	@PutMapping("todo/{id}")
-	public void putTodo(@PathVariable final BigInteger id, @RequestBody final TodoDto todo) {
-		if (todo.completed() == null)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "completed missing");
-		this.found(this.repository.setTodoCompleted(id, todo.completed()));
+	public void putTodo(@PathVariable final BigInteger id, @RequestBody final Todo todo) {
+		this.found(this.repository.setTodoCompleted(id, todo.isCompleted()));
 	}
 
 	@DeleteMapping("todo/{id}")
@@ -97,8 +87,8 @@ public class DashboardApi {
 	}
 
 	@PutMapping("info")
-	public void putInfo(@RequestBody final InfoDto info) {
-		final String content = info.content() == null ? "" : info.content();
+	public void putInfo(@RequestBody final Info info) {
+		final String content = info.getNote() == null ? "" : info.getNote();
 		if (content.length() > MAX_INFO)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "info too long");
 		this.repository.saveInfo(content);

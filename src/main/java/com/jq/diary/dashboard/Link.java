@@ -14,7 +14,7 @@ public class Link extends BaseEntity {
 	private String url;
 
 	@Column(length = 500)
-	private String remark;
+	private String note;
 
 	public String getTitle() {
 		return this.title;
@@ -32,11 +32,11 @@ public class Link extends BaseEntity {
 		this.url = url;
 	}
 
-	public String getRemark() {
-		return this.remark;
+	public String getNote() {
+		return this.note;
 	}
 
-	public void setRemark(final String remark) {
-		this.remark = remark;
+	public void setNote(final String note) {
+		this.note = note;
 	}
 }

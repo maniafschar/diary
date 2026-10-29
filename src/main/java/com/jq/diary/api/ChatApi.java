@@ -1,9 +1,7 @@
 package com.jq.diary.api;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +15,7 @@ import com.jq.diary.entity.ChatMessage;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.ChatService;
+import com.jq.diary.util.Utilities;
 
 @RestController
 @RequestMapping("api/chat")
@@ -28,25 +27,15 @@ public class ChatApi extends ApplicationApi {
 	private ChatService chatService;
 
 	@GetMapping("messages")
-	public List<MessageResponse> getMessages(@RequestHeader final BigInteger contactId,
+	public List<ChatMessage> getMessages(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId) {
 		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
-		return this.chatService.list(contact).stream().map(MessageResponse::new).toList();
+		return Utilities.filter(this.chatService.list(contact));
 	}
 
 	@PostMapping("messages")
-	public Map<String, String> postMessage(@RequestHeader final BigInteger contactId,
-			@RequestHeader final BigInteger clientId, @RequestBody final MessageRequest request) {
-		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
-		return Map.of("answer", this.chatService.send(contact, request == null ? null : request.text()));
-	}
-
-	public record MessageRequest(String text) {
-	}
-
-	public record MessageResponse(BigInteger id, String role, String text, Timestamp createdAt) {
-		private MessageResponse(final ChatMessage message) {
-			this(message.getId(), message.getRole(), message.getNote(), message.getCreatedAt());
-		}
+	public void postMessage(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId, @RequestBody final String text) {
+		this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text);
 	}
 }

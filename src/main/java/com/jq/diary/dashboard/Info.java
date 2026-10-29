@@ -9,13 +9,13 @@ import jakarta.persistence.Entity;
 @Entity
 public class Info extends BaseEntity {
 	@Column(nullable = false, length = 1_000_000)
-	private String content = "";
+	private String note = "";
 
-	public String getContent() {
-		return this.content;
+	public String getNote() {
+		return this.note;
 	}
 
-	public void setContent(final String content) {
-		this.content = content;
+	public void setNote(final String note) {
+		this.note = note;
 	}
 }

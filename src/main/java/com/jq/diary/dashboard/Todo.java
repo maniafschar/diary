@@ -8,17 +8,17 @@ import jakarta.persistence.Entity;
 @Entity
 public class Todo extends BaseEntity {
 	@Column(nullable = false, length = 200)
-	private String text;
+	private String note;
 
 	@Column(nullable = false)
 	private boolean completed;
 
-	public String getText() {
-		return this.text;
+	public String getNote() {
+		return this.note;
 	}
 
-	public void setText(final String text) {
-		this.text = text;
+	public void setNote(final String note) {
+		this.note = note;
 	}
 
 	public boolean isCompleted() {

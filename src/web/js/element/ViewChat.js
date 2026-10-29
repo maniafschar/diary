@@ -119,7 +119,7 @@ button:hover {
 		messages.forEach(message => {
 			var bubble = history.appendChild(document.createElement('bubble'));
 			bubble.classList.add(message.role);
-			bubble.innerHTML = DOMPurify.sanitize(marked.parse(message.text || ''));
+			bubble.innerHTML = DOMPurify.sanitize(marked.parse(message.note || ''));
 		});
 		history.scrollTop = history.scrollHeight;
 	}
