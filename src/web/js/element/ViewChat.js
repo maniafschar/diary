@@ -171,25 +171,27 @@ button:hover {
 		label.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
 		var content = bubble.appendChild(document.createElement('content'));
 		var rawText = message.note;
-		var preview = content.appendChild(document.createElement('preview'));
-		preview.textContent = rawText.trim();
+		if (message.role == 'model')
+			content.appendChild(document.createElement('preview')).textContent = rawText.trim();
 		var content = content.appendChild(document.createElement('message')).appendChild(document.createElement('div'));
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
-		var toggle = () => {
-			var collapsed = bubble.classList.toggle('collapsed');
-			bubble.setAttribute('aria-expanded', String(!collapsed));
-		};
-		bubble.addEventListener('click', event => {
-			if (event.target.closest('a, button'))
-				return;
-			toggle();
-		});
-		bubble.addEventListener('keydown', event => {
-			if (event.key !== 'Enter' && event.key !== ' ')
-				return;
-			event.preventDefault();
-			toggle();
-		});
+		if (message.role == 'model') {
+			var toggle = () => {
+				var collapsed = bubble.classList.toggle('collapsed');
+				bubble.setAttribute('aria-expanded', String(!collapsed));
+			};
+			bubble.addEventListener('click', event => {
+				if (event.target.closest('a, button'))
+					return;
+				toggle();
+			});
+			bubble.addEventListener('keydown', event => {
+				if (event.key !== 'Enter' && event.key !== ' ')
+					return;
+				event.preventDefault();
+				toggle();
+			});
+		}
 		return bubble;
 	}
 	renderMessage(message) {
@@ -198,19 +200,10 @@ button:hover {
 		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
 	}
-	keepLastBubblesExpanded(history) {
-		var bubbles = [...history.children];
-		bubbles.forEach((bubble, index) => {
-			var expanded = index >= bubbles.length - 4;
-			bubble.classList.toggle('collapsed', !expanded);
-			bubble.setAttribute('aria-expanded', String(expanded));
-		});
-	}
 	init(messages) {
 		var history = this._root.querySelector('history');
 		history.textContent = '';
 		messages.forEach(message => history.appendChild(this.createBubble(message)));
-		this.keepLastBubblesExpanded(history);
 		history.scrollTop = history.scrollHeight;
 	}
 	initialized() {
