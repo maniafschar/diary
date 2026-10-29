@@ -298,10 +298,12 @@ class api {
 		},
 
 		postMessage(text, success, error) {
+			var formData = new FormData();
+			formData.append('text', text);
 			api.ajax({
 				url: 'chat/messages',
 				method: 'POST',
-				body: { text: text },
+				body: formData,
 				success: success,
 				error: error
 			});

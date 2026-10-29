@@ -38,7 +38,7 @@ public class ChatService {
 				contact.getId());
 	}
 
-	public String send(final Contact contact, final String text) {
+	public ChatMessage send(final Contact contact, final String text) {
 		final String input = text == null ? "" : text.trim();
 		if (input.isEmpty())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bitte gib eine Nachricht ein.");
@@ -59,8 +59,9 @@ public class ChatService {
 		}
 
 		final String answer = this.aiService.chat(conversation, true);
-		this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, answer));
-		return answer;
+		final ChatMessage chatMessage = this.createMessage(contact, AiService.ACTOR_MODEL, answer);
+		this.repository.save(chatMessage);
+		return chatMessage;
 	}
 
 	private String context(final Contact contact) {

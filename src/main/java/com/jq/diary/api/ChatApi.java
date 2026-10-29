@@ -34,8 +34,9 @@ public class ChatApi extends ApplicationApi {
 	}
 
 	@PostMapping("messages")
-	public void postMessage(@RequestHeader final BigInteger contactId,
+	public ChatMessage postMessage(@RequestHeader final BigInteger contactId,
 			@RequestHeader final BigInteger clientId, @RequestBody final String text) {
-		this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text);
+		return Utilities
+				.filter(this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text));
 	}
 }
