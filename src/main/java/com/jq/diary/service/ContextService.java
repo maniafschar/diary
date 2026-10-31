@@ -125,9 +125,36 @@ public class ContextService {
 
 	void refresh(final Contact contact) {
 		for (final Category category : Category.values()) {
-			final ChatSummary summary = this.find(contact, category);
+			ChatSummary summary = this.find(contact, category);
 			if (summary == null || summary.isDirty()) {
-				this.compute(contact, category, summary);
+				String text;
+				if (category == Category.CHAT) {
+					final List<ChatMessage> messages = this.repository.list(
+							"select m from ChatMessage m where m.contact.id=?1 order by m.createdAt asc",
+							ChatMessage.class, contact.getId());
+					if (messages.size() == 0)
+						return;
+					text = this.formatMessageContext(messages);
+				} else {
+					final List<Event> events = this.repository.list(
+							"select distinct e from Event e where e.contact.id=?1 order by e.date asc",
+							Event.class, contact.getId());
+					if (events.size() == 0)
+						return;
+					text = this.formatEventContext(events);
+				}
+				final List<Content> content = new ArrayList<>();
+				content.add(Content.builder().role(AiService.ACTOR_SYSTEM)
+						.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX)).build());
+				content.add(Content.builder().role(AiService.ACTOR_USER).parts(Part.fromText(text)).build());
+				text = this.aiService.chat(content, false);
+				if (summary == null)
+					summary = new ChatSummary();
+				summary.setContact(contact);
+				summary.setCategory(category);
+				summary.setNote(text);
+				summary.setDirty(false);
+				this.repository.save(summary);
 				this.completeProfile(contact);
 			}
 		}
@@ -139,38 +166,7 @@ public class ContextService {
 		return list.isEmpty() ? null : list.get(0);
 	}
 
-	private ChatSummary compute(final Contact contact, final Category category, final ChatSummary existing) {
-		String text;
-		if (category == Category.CHAT) {
-			final List<ChatMessage> messages = this.repository.list(
-					"select m from ChatMessage m where m.contact.id=?1 order by m.createdAt asc",
-					ChatMessage.class, contact.getId());
-			if (messages.size() == 0)
-				return new ChatSummary();
-			text = formatMessageContext(messages);
-		} else {
-			final List<Event> events = this.repository.list(
-					"select distinct e from Event e where e.contact.id=?1 order by e.date asc",
-					Event.class, contact.getId());
-			if (events.size() == 0)
-				return new ChatSummary();
-			text = this.formatEventContext(events);
-		}
-		final List<Content> content = new ArrayList<>();
-		content.add(Content.builder().role(AiService.ACTOR_SYSTEM)
-				.parts(Part.fromText(category.getPrompt() + PROMPT_SUFFIX)).build());
-		content.add(Content.builder().role(AiService.ACTOR_USER).parts(Part.fromText(text)).build());
-		text = this.aiService.chat(content, false);
-		final ChatSummary summary = existing == null ? new ChatSummary() : existing;
-		summary.setContact(contact);
-		summary.setCategory(category);
-		summary.setNote(text);
-		summary.setDirty(false);
-		this.repository.save(summary);
-		return summary;
-	}
-
-	static String formatMessageContext(final List<ChatMessage> messages) {
+	private String formatMessageContext(final List<ChatMessage> messages) {
 		if (messages.isEmpty())
 			return "";
 		final StringBuilder context = new StringBuilder("\n\n").append(MESSAGE_CONTEXT_PROMPT);
