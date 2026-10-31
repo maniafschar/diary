@@ -107,7 +107,7 @@ public class AdminService {
 	}
 
 	public String execute() throws Exception {
-		this.contextService.refreshDaily();
+		this.contextService.refreshPeriodically();
 		return "ok";
 	}
 
