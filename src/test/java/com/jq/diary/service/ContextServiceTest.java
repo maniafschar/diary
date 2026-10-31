@@ -48,7 +48,7 @@ class ContextServiceTest {
 		second.setDate(Date.from(Instant.parse("2025-04-13T09:00:00Z")));
 		second.setNote("Frühstück mit Freunden.");
 
-		final String context = ContextService.formatEventContext(List.of(first, second));
+		final String context = new ContextService().formatEventContext(List.of(first, second));
 
 		assertTrue(context.contains("2025-04-12T14:30:00Z"));
 		assertTrue(context.contains("Ort: Am See"));
@@ -63,7 +63,7 @@ class ContextServiceTest {
 
 	@Test
 	void omitsEventContextWhenNoEventsExist() {
-		assertEquals("", ContextService.formatEventContext(List.of()));
+		assertEquals("", new ContextService().formatEventContext(List.of()));
 	}
 
 	@Test
