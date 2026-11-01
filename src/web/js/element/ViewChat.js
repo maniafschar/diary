@@ -49,6 +49,55 @@ bubble>content {
 	display: block;
 	min-height: 1.4em;
 }
+bubble.loading>content {
+	padding-right: 3em;
+}
+bubble loader {
+	position: absolute;
+	top: 0.25em;
+	right: 0.5em;
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+	perspective: 800px;
+}
+bubble loader div {
+	position: absolute;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+bubble loader .one {
+	left: 0%;
+	top: 0%;
+	animation: rotate-one 1s linear infinite;
+	border-bottom: 2px solid #b55;
+}
+bubble loader .two {
+	right: 0%;
+	top: 0%;
+	animation: rotate-two 1s linear infinite;
+	border-right: 2px solid #8d8;
+}
+bubble loader .three {
+	right: 0%;
+	bottom: 0%;
+	animation: rotate-three 1s linear infinite;
+	border-top: 2px solid #aaf;
+}
+@keyframes rotate-one {
+	0% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg); }
+	100% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg); }
+}
+@keyframes rotate-two {
+	0% { transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg); }
+	100% { transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg); }
+}
+@keyframes rotate-three {
+	0% { transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg); }
+	100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg); }
+}
 bubble preview {
 	display: block;
 	position: absolute;
@@ -154,14 +203,17 @@ button:hover {
 			var bubble = this.renderMessage(response);
 			var streamedText = '';
 			status.innerText = 'Antwort wird erstellt ...';
+			this.setLoading(bubble, true);
 			api.chat.postMessageStream(text, chunk => {
-				streamedText += chunk;
+				streamedText += ' ' + chunk;
 				this.updateBubble(bubble, streamedText);
 			}, () => {
+				this.setLoading(bubble, false);
 				status.innerText = '';
 				sending = false;
 				send.disabled = false;
 			}, error => {
+				this.setLoading(bubble, false);
 				status.innerText = error.streamError || error.responseText || 'Die Antwort konnte nicht erstellt werden.';
 				if (!streamedText)
 					bubble.remove();
@@ -209,9 +261,24 @@ button:hover {
 		return bubble;
 	}
 	updateBubble(bubble, rawText) {
+		var history = this._root.querySelector('history');
+		var atBottom = history.scrollHeight - history.scrollTop - history.clientHeight < 100;
 		var content = bubble.querySelector('message > div');
 		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
 		bubble.querySelector('preview').textContent = content.innerText;
+		if (atBottom)
+			history.scrollTo({ top: history.scrollHeight, behavior: 'smooth' });
+	}
+	setLoading(bubble, loading) {
+		bubble.classList.toggle('loading', loading);
+		var content = bubble.querySelector('content');
+		if (loading && !content.querySelector('loader')) {
+			var loader = content.appendChild(document.createElement('loader'));
+			loader.appendChild(document.createElement('div')).classList.add('one');
+			loader.appendChild(document.createElement('div')).classList.add('two');
+			loader.appendChild(document.createElement('div')).classList.add('three');
+		} else if (!loading)
+			content.querySelector('loader')?.remove();
 	}
 	renderMessage(message) {
 		var history = this._root.querySelector('history');
