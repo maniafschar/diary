@@ -37,7 +37,10 @@ class InputMap extends HTMLElement {
 .leaflet-container .leaflet-control-attribution {
 	background: transparent !important;
 }
-div {
+.leaflet-touch .leaflet-bar, .leaflet-touch .leaflet-control-layers {
+	border: none !important;
+}
+div.map {
 	width: 100%;
 	height: 100%;
 }`;
@@ -45,6 +48,7 @@ div {
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css');
 		var container = this._root.appendChild(document.createElement('div'));
+		container.className = 'map';
 		InputMap.load().then(() => {
 			var latitude = parseFloat(this.getAttribute('latitude'));
 			var longitude = parseFloat(this.getAttribute('longitude'));

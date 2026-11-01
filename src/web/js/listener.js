@@ -219,6 +219,7 @@ img.speak {
 }
 address {
 	cursor: pointer;
+	font-style: normal;
 }`);
 	}
 
