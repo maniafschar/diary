@@ -382,9 +382,10 @@ element {
 			});
 			dialog.createButton(element, 'action.locationPut()');
 		} else {
-			name.readonly = true;
-			address.readonly = true;
-			map.readonly = true;
+			name.setAttribute('readonly', true);
+			address.setAttribute('readonly', true);
+			name.style.background = 'transparent';
+			address.style.background = 'transparent';
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
