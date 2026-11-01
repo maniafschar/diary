@@ -98,8 +98,8 @@ class listener {
 				label: (ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + ' ' + (events[i].location.name || '')).trim(),
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ?
-						'<span onclick="dialog.location(' + JSON.stringify(events[i].location).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + ')">' +
-						events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</span>' : '') +
+						'<address onclick="dialog.location(' + JSON.stringify(events[i].location).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + ')">' +
+						events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</address>' : '') +
 					'<br/><br/><separator></separator>' +
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
@@ -216,6 +216,9 @@ img.speak {
 	width: 2em;
 	height: 2em;
 	padding: 0 1em 2em 2em;
+}
+address {
+	cursor: pointer;
 }`);
 	}
 

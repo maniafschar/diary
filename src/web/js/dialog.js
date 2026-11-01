@@ -370,7 +370,7 @@ element {
 			input.setAttribute('name', fieldName);
 			input.value = value ?? '';
 		};
-		if (api.user?.id == location.contact?.id) {
+		if (api.user?.admin) {
 			hidden('id', location.id);
 			hidden('latitude', location.latitude);
 			hidden('longitude', location.longitude);

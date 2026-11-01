@@ -34,6 +34,9 @@ class InputMap extends HTMLElement {
 	overflow: hidden;
 	margin-bottom: 1em;
 }
+.leaflet-container .leaflet-control-attribution {
+	background: transparent !important;
+}
 div {
 	width: 100%;
 	height: 100%;
