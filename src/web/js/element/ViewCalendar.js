@@ -81,13 +81,13 @@ button.icon {
 
 .cal-weekdays {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	grid-template-columns: repeat(7, minmax(0, 1fr));
 	height: 1.5em;
 }
 
 .cal-weekday {
 	font-size: 0.8em;
-	width: 14.25vw;
+	min-width: 0;
 	border-right: 1px solid rgba(0, 0, 0, 0.02);
 }
 	
@@ -99,7 +99,7 @@ button.icon {
 
 .cal-days {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	grid-template-columns: repeat(7, minmax(0, 1fr));
 	height: calc(100% - 1.5em);
 }
 
@@ -111,7 +111,7 @@ button.icon {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	width: 14.25vw;
+	min-width: 0;
 	font-size: 0.8em;
 	min-height: 5em;
 }

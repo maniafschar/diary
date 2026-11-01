@@ -50,7 +50,6 @@ element {
 }
 
 button.location {
-	background-image: url(image/location.svg);
 	background-size: 1.4em;
 	top: 0.4em;
 	right: 0.4em;
@@ -130,7 +129,9 @@ ${dialog.stylePictures}`;
 		input.setAttribute('name', 'altitude');
 		if (navigator.geolocation) {
 			var locationButton = address.parentElement.appendChild(document.createElement('button'));
-			locationButton.src = 'image/location.svg';
+			var locationIcon = locationButton.appendChild(document.createElement('img'));
+			locationIcon.src = 'image/location.svg';
+			locationIcon.style.filter = 'invert(1)';
 			locationButton.classList.add('icon');
 			locationButton.classList.add('location');
 			locationButton.onclick = () => {
