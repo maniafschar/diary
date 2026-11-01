@@ -349,7 +349,7 @@ button.confirmed::after {
 		document.dispatchEvent(new CustomEvent('location', { detail: { id: event.location.id } }));
 	}
 
-	static location(location) {
+	static location(location, owner) {
 		var popup = document.createElement('div');
 		popup.appendChild(document.createElement('style')).textContent = `
 element {
@@ -371,7 +371,7 @@ element {
 			input.setAttribute('name', fieldName);
 			input.value = value ?? '';
 		};
-		if (api.user?.admin) {
+		if (owner) {
 			hidden('id', location.id);
 			hidden('latitude', location.latitude);
 			hidden('longitude', location.longitude);
