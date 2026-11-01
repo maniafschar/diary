@@ -326,7 +326,7 @@ class api {
 					if (line.startsWith('event:'))
 						eventName = line.substring(6).trim();
 					else if (line.startsWith('data:'))
-						data.push(line.substring(5).replace(/^ /, ''));
+						data.push(line.substring(5));
 				});
 				if (eventName == 'done')
 					completed = true;

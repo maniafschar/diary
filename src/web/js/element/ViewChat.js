@@ -205,7 +205,7 @@ button:hover {
 			status.innerText = 'Antwort wird erstellt ...';
 			this.setLoading(bubble, true);
 			api.chat.postMessageStream(text, chunk => {
-				streamedText += ' ' + chunk;
+				streamedText += chunk;
 				this.updateBubble(bubble, streamedText);
 			}, () => {
 				this.setLoading(bubble, false);
