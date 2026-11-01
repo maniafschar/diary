@@ -386,6 +386,8 @@ element {
 			address.setAttribute('readonly', true);
 			name.style.background = 'transparent';
 			address.style.background = 'transparent';
+			name.style.paddingLeft = 0;
+			address.style.paddingLeft = 0;
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
