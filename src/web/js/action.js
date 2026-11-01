@@ -4,6 +4,7 @@ import { DialogPopup } from './element/DialogPopup';
 import { InputCheckbox } from './element/InputCheckbox';
 import { InputDate } from './element/InputDate';
 import { InputImage } from './element/InputImage';
+import { InputMap } from './element/InputMap';
 import { InputPassword } from './element/InputPassword';
 import { InputRating } from './element/InputRating';
 import { InputSelection } from './element/InputSelection';
@@ -360,6 +361,26 @@ class action {
 			e.appendChild(document.createElement('delete')).innerText = 'Löschen?';
 	}
 
+	static locationPut() {
+		var popup = document.querySelector('dialog-popup').content();
+		var name = popup.querySelector('input[name="locationName"]').value.trim();
+		if (!name)
+			return;
+		var address = popup.querySelector('textarea[name="address"]').value.trim();
+		var moved = popup.querySelector('input-map').moved;
+		var keepCoordinates = moved || address == popup.querySelector('input[name="addressOriginal"]').value.trim();
+		api.location.put({
+			id: popup.querySelector('input[name="id"]').value,
+			name: name,
+			address: address,
+			latitude: keepCoordinates ? popup.querySelector('input[name="latitude"]').value || null : null,
+			longitude: keepCoordinates ? popup.querySelector('input[name="longitude"]').value || null : null
+		}, () => {
+			document.dispatchEvent(new CustomEvent('event'));
+			document.dispatchEvent(new CustomEvent('popup'));
+		});
+	}
+
 	static eventPatch() {
 		var popup = document.querySelector('dialog-popup').content();
 		var date = popup.querySelector('element input-date').getAttribute('value');
@@ -513,6 +534,7 @@ customElements.define('dialog-popup', DialogPopup);
 customElements.define('input-checkbox', InputCheckbox);
 customElements.define('input-date', InputDate);
 customElements.define('input-image', InputImage);
+customElements.define('input-map', InputMap);
 customElements.define('input-password', InputPassword);
 customElements.define('input-rating', InputRating);
 customElements.define('input-selection', InputSelection);

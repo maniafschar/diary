@@ -97,8 +97,10 @@ class listener {
 				text: events[i].note,
 				label: (ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + ' ' + (events[i].location.name || '')).trim(),
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
-					(events[i].location.address ? '<a href="https://maps.google.com/maps/place/' + encodeURIComponent(events[i].location.address.replace(/\n/g, ', ')) + '" target="_blank">' + events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</a>' : events[i].location.name) + '<br/><br/>' +
-					'<separator></separator>' +
+					(events[i].location.address ?
+						'<span onclick="dialog.location(' + JSON.stringify(events[i].location).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + ')">' +
+						events[i].location.name + '<br/>' + events[i].location.address.replace(/\n/g, '<br/>') + '</span>' : '') +
+					'<br/><br/><separator></separator>' +
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +

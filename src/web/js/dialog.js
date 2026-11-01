@@ -348,6 +348,47 @@ button.confirmed::after {
 		document.dispatchEvent(new CustomEvent('location', { detail: { id: event.location.id } }));
 	}
 
+	static location(location) {
+		var popup = document.createElement('div');
+		popup.appendChild(document.createElement('style')).textContent = `
+element {
+	width: 40em;
+	max-width: 100%;
+	display: block;
+}`;
+		var element = popup.appendChild(document.createElement('element'));
+		var map = element.appendChild(document.createElement('input-map'));
+		if (location.latitude != null && location.longitude != null) {
+			map.setAttribute('latitude', location.latitude);
+			map.setAttribute('longitude', location.longitude);
+		}
+		var name = dialog.createField(element, 'Ortname', 'locationName', 'input', location.name);
+		var address = dialog.createField(element, 'Adresse', 'address', 'textarea', location.address);
+		var hidden = (fieldName, value) => {
+			var input = address.parentElement.appendChild(document.createElement('input'));
+			input.setAttribute('type', 'hidden');
+			input.setAttribute('name', fieldName);
+			input.value = value ?? '';
+		};
+		if (api.user?.id == location.contact?.id) {
+			hidden('id', location.id);
+			hidden('latitude', location.latitude);
+			hidden('longitude', location.longitude);
+			hidden('addressOriginal', location.address);
+			map.addEventListener('changed', event => {
+				var content = document.querySelector('dialog-popup').content();
+				content.querySelector('input[name="latitude"]').value = event.detail.latitude;
+				content.querySelector('input[name="longitude"]').value = event.detail.longitude;
+			});
+			dialog.createButton(element, 'action.locationPut()');
+		} else {
+			name.readonly = true;
+			address.readonly = true;
+			map.readonly = true;
+		}
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+	}
+
 	static createField(element, label, name, type, value) {
 		if (label)
 			element.appendChild(document.createElement('label')).innerText = label;

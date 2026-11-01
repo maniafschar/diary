@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Contact;
@@ -59,6 +62,16 @@ public class LocationApi extends ApplicationApi {
 		location.setClient(this.repository.one(Client.class, clientId));
 		this.locationService.save(location);
 		return location.getId();
+	}
+
+	@PutMapping("{id}")
+	public void put(@PathVariable final BigInteger id, @RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId, @RequestBody final Location location) {
+		final Contact contact = this.authorizationService.requireContact(contactId, clientId);
+		final Location stored = this.locationService.one(id);
+		if (stored == null || stored.getContact() == null || !stored.getContact().getId().equals(contact.getId()))
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		this.locationService.update(stored, location);
 	}
 
 	@GetMapping("list")

@@ -415,6 +415,15 @@ class api {
 				url: 'location/list',
 				success: success
 			});
+		},
+
+		put(location, success) {
+			api.ajax({
+				url: 'location/' + location.id,
+				method: 'PUT',
+				body: location,
+				success: success
+			});
 		}
 	}
 

@@ -66,6 +66,24 @@ public class LocationService {
 		}
 	}
 
+	public void update(final Location stored, final Location changes) {
+		if (changes.getName() == null || changes.getName().isBlank())
+			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
+		stored.setName(changes.getName().trim());
+		stored.setAddress(changes.getAddress() == null ? "" : changes.getAddress().trim());
+		stored.setLatitude(changes.getLatitude());
+		stored.setLongitude(changes.getLongitude());
+		stored.setAltitude(changes.getAltitude());
+		if (stored.getLongitude() == null || stored.getLatitude() == null) {
+			stored.setLatitude(null);
+			stored.setLongitude(null);
+			stored.setAltitude(null);
+			if (!stored.getAddress().isBlank())
+				this.addGeoData(stored);
+		}
+		this.repository.save(stored);
+	}
+
 	public void addGeoData(Location location) {
 		final Double[] geoData = externalService.geoData(location.getAddress().replace("\n", ", "));
 		if (geoData != null) {
