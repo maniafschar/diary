@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import reactor.core.publisher.Flux;
+
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.ChatMessage;
@@ -38,14 +40,32 @@ public class ChatService {
 	}
 
 	public ChatMessage send(final Contact contact, final String text) {
-		final String input = text == null ? "" : text.trim();
-		if (input.isEmpty())
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bitte gib eine Nachricht ein.");
-		if (input.length() > Utilities.MAX_TEXT_LENGTH)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Die Nachricht ist zu lang.");
-
+		final String input = this.validateInput(text);
 		final ChatMessage userMessage = this.createMessage(contact, AiService.ACTOR_USER, input);
 		this.repository.save(userMessage);
+		final String answer = this.aiService.chat(this.conversation(contact, userMessage), true);
+		final ChatMessage chatMessage = this.createMessage(contact, AiService.ACTOR_MODEL, answer);
+		this.repository.save(chatMessage);
+		return chatMessage;
+	}
+
+	public Flux<String> stream(final Contact contact, final String text) {
+		final String input = this.validateInput(text);
+		final ChatMessage userMessage = this.createMessage(contact, AiService.ACTOR_USER, input);
+		this.repository.save(userMessage);
+		final StringBuilder answer = new StringBuilder();
+		return this.aiService.stream(this.conversation(contact, userMessage), true)
+				.doOnNext(answer::append)
+				.concatWith(Flux.defer(() -> {
+					final String response = answer.toString().trim();
+					if (response.isBlank())
+						return Flux.error(new IllegalStateException("Spring AI chat request failed."));
+					this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, response));
+					return Flux.empty();
+				}));
+	}
+
+	private List<Content> conversation(final Contact contact, final ChatMessage userMessage) {
 		final List<ChatMessage> messages = new ArrayList<>(this.list(contact));
 		messages.add(userMessage);
 		int firstMessage = Math.max(0, messages.size() - MAX_HISTORY_MESSAGES);
@@ -58,11 +78,16 @@ public class ChatService {
 			final ChatMessage message = messages.get(i);
 			conversation.add(Content.builder().role(message.getRole()).parts(Part.fromText(message.getNote())).build());
 		}
+		return conversation;
+	}
 
-		final String answer = this.aiService.chat(conversation, true);
-		final ChatMessage chatMessage = this.createMessage(contact, AiService.ACTOR_MODEL, answer);
-		this.repository.save(chatMessage);
-		return chatMessage;
+	private String validateInput(final String text) {
+		final String input = text == null ? "" : text.trim();
+		if (input.isEmpty())
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bitte gib eine Nachricht ein.");
+		if (input.length() > Utilities.MAX_TEXT_LENGTH)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Die Nachricht ist zu lang.");
+		return input;
 	}
 
 	private ChatMessage createMessage(final Contact contact, final String role, final String text) {

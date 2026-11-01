@@ -23,6 +23,8 @@ import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import reactor.core.publisher.Flux;
+
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.Ticket;
@@ -68,6 +70,42 @@ public class AiService {
 		if (this.provider == AiProvider.None)
 			return null;
 		final long start = System.nanoTime();
+		final ChatClient chatClient = this.client();
+		ChatClientRequestSpec client = chatClient.prompt().messages(this.messages(conversation));
+		if (callbacks)
+			client = client.toolCallbacks(ToolCallbacks.from(this.aiContextTool));
+		final String answer = client.call().content();
+		this.adminService.createTicket(new Ticket(
+				"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + answer + "\n-----------\n"
+						+ conversation.stream().map(e -> e.text()).collect(Collectors.joining("\n\n"))));
+		if (answer != null && !answer.isBlank())
+			return answer.trim();
+		throw new IllegalStateException("Spring AI chat request failed.");
+	}
+
+	public Flux<String> stream(final List<Content> conversation, final boolean callbacks) {
+		if (this.provider == AiProvider.None)
+			return Flux.error(new IllegalStateException("No AI chat provider is configured."));
+		final long start = System.nanoTime();
+		ChatClientRequestSpec client = this.client().prompt().messages(this.messages(conversation));
+		if (callbacks)
+			client = client.toolCallbacks(ToolCallbacks.from(this.aiContextTool));
+		final StringBuilder answer = new StringBuilder();
+		return client.stream().content()
+				.doOnNext(answer::append)
+				.concatWith(Flux.defer(() -> {
+					final String text = answer.toString();
+					this.adminService.createTicket(new Ticket(
+							"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + text
+									+ "\n-----------\n"
+									+ conversation.stream().map(Content::text).collect(Collectors.joining("\n\n"))));
+					if (text.isBlank())
+						return Flux.error(new IllegalStateException("Spring AI chat request failed."));
+					return Flux.empty();
+				}));
+	}
+
+	private List<Message> messages(final List<Content> conversation) {
 		final List<Message> messages = new ArrayList<>();
 		for (final Content content : conversation) {
 			if (content.parts().isEmpty())
@@ -83,17 +121,7 @@ public class AiService {
 			else
 				messages.add(new UserMessage(text.toString()));
 		}
-		final ChatClient chatClient = this.client();
-		ChatClientRequestSpec client = chatClient.prompt().messages(messages);
-		if (callbacks)
-			client = client.toolCallbacks(ToolCallbacks.from(this.aiContextTool));
-		final String answer = client.call().content();
-		this.adminService.createTicket(new Ticket(
-				"chat\n" + (System.nanoTime() - start) / 1_000_000 + "ms\n" + answer + "\n-----------\n"
-						+ conversation.stream().map(e -> e.text()).collect(Collectors.joining("\n\n"))));
-		if (answer != null && !answer.isBlank())
-			return answer.trim();
-		throw new IllegalStateException("Spring AI chat request failed.");
+		return messages;
 	}
 
 	private ChatClient client() {

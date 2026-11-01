@@ -86,11 +86,6 @@ class ContextServiceTest {
 		event.setContact(contact);
 		event.setNote("Ein Spaziergang am See.");
 		repository.events = List.of(event);
-		final ChatMessage chatMessage = new ChatMessage();
-		chatMessage.setContact(contact);
-		chatMessage.setNote("Hi");
-		chatMessage.setCreatedAt(new Timestamp(0));
-		repository.chatMessages = List.of(chatMessage);
 
 		verify(aiService, never()).chat(anyList(), eq(false));
 
@@ -103,8 +98,8 @@ class ContextServiceTest {
 
 		service.refresh(contact);
 
-		// without chat messages the CHAT summary is skipped, every other category is
-		// computed
+		// without chat messages the CHAT summary is skipped,
+		// every other category is computed
 		final int eventCategories = Category.values().length - 1;
 		verify(aiService, times(eventCategories)).chat(anyList(), eq(false));
 		assertEquals(eventCategories, repository.summaries.size());
@@ -128,7 +123,7 @@ class ContextServiceTest {
 		message.setRole(AiService.ACTOR_USER);
 		message.setNote("Hallo");
 		message.setCreatedAt(new Timestamp(Instant.parse("2025-04-12T14:30:00Z").toEpochMilli()));
-		repository.messages = List.of(message);
+		repository.chatMessages = List.of(message);
 
 		service.refresh(contact);
 
@@ -151,11 +146,9 @@ class ContextServiceTest {
 				return found == null ? List.of() : (List<T>) List.of(found);
 			}
 			if (clazz == ChatMessage.class)
-				return (List<T>) this.messages;
+				return (List<T>) (hql.startsWith("select m from ChatMessage") ? this.chatMessages : this.messages);
 			if (clazz == Event.class)
 				return (List<T>) this.events;
-			if (clazz == ChatMessage.class)
-				return (List<T>) this.chatMessages;
 			return List.of();
 		}
 

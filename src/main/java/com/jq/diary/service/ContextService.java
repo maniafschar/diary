@@ -133,14 +133,14 @@ public class ContextService {
 							"select m from ChatMessage m where m.contact.id=?1 order by m.createdAt asc",
 							ChatMessage.class, contact.getId());
 					if (messages.size() == 0)
-						return;
+						continue;
 					text = this.formatMessageContext(messages);
 				} else {
 					final List<Event> events = this.repository.list(
 							"select distinct e from Event e where e.contact.id=?1 order by e.date asc",
 							Event.class, contact.getId());
 					if (events.size() == 0)
-						return;
+						continue;
 					text = this.formatEventContext(events);
 				}
 				final List<Content> content = new ArrayList<>();

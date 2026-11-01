@@ -150,14 +150,21 @@ button:hover {
 			send.disabled = true;
 			input.value = '';
 			this.renderMessage({ role: 'user', note: text, createdAt: InputDate.local2server(new Date()) });
+			var response = { role: 'model', note: '', createdAt: InputDate.local2server(new Date()) };
+			var bubble = this.renderMessage(response);
+			var streamedText = '';
 			status.innerText = 'Antwort wird erstellt ...';
-			api.chat.postMessage(text, response => {
-				this.renderMessage(response);
+			api.chat.postMessageStream(text, chunk => {
+				streamedText += chunk;
+				this.updateBubble(bubble, streamedText);
+			}, () => {
 				status.innerText = '';
 				sending = false;
 				send.disabled = false;
 			}, error => {
-				status.innerText = error.responseText || 'Die Antwort konnte nicht erstellt werden.';
+				status.innerText = error.streamError || error.responseText || 'Die Antwort konnte nicht erstellt werden.';
+				if (!streamedText)
+					bubble.remove();
 				sending = false;
 				send.disabled = false;
 			});
@@ -201,10 +208,17 @@ button:hover {
 		}
 		return bubble;
 	}
+	updateBubble(bubble, rawText) {
+		var content = bubble.querySelector('message > div');
+		content.innerHTML = DOMPurify.sanitize(marked.parse(rawText));
+		bubble.querySelector('preview').textContent = content.innerText;
+	}
 	renderMessage(message) {
 		var history = this._root.querySelector('history');
-		history.appendChild(this.createBubble(message));
+		var bubble = this.createBubble(message);
+		history.appendChild(bubble);
 		history.scrollTop = history.scrollHeight;
+		return bubble;
 	}
 	init(messages) {
 		var history = this._root.querySelector('history');

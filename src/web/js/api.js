@@ -307,6 +307,83 @@ class api {
 				success: success,
 				error: error
 			});
+		},
+
+		postMessageStream(text, onChunk, success, error) {
+			if (!api.user?.id && api.user?.id != 0)
+				return;
+			var formData = new FormData();
+			formData.append('text', text);
+			var xhr = new XMLHttpRequest();
+			var pending = '';
+			var received = 0;
+			var completed = false;
+			var finished = false;
+			var dispatch = frame => {
+				var eventName = 'message';
+				var data = [];
+				frame.split(/\r?\n/).forEach(line => {
+					if (line.startsWith('event:'))
+						eventName = line.substring(6).trim();
+					else if (line.startsWith('data:'))
+						data.push(line.substring(5).replace(/^ /, ''));
+				});
+				if (eventName == 'done')
+					completed = true;
+				else if (data.length)
+					onChunk(data.join('\n'));
+			};
+			var consume = final => {
+				pending += xhr.responseText.substring(received);
+				received = xhr.responseText.length;
+				var separator;
+				while ((separator = pending.search(/\r?\n\r?\n/)) >= 0) {
+					var frame = pending.substring(0, separator);
+					pending = pending.substring(separator).replace(/^\r?\n\r?\n/, '');
+					dispatch(frame);
+				}
+				if (final && pending.trim()) {
+					dispatch(pending);
+					pending = '';
+				}
+			};
+			var fail = message => {
+				if (finished)
+					return;
+				finished = true;
+				xhr.streamError = message;
+				error(xhr);
+			};
+			xhr.open('POST', api.url + 'chat/messages/stream', true);
+			xhr.setRequestHeader('Accept', 'text/event-stream');
+			if (api.user?.id || api.user?.id == 0) {
+				var d = new Date();
+				var salt = ('' + (d.getTime() + d.getTimezoneOffset() * 60 * 1000) + Math.random()).replace(/[01]\./, '.');
+				xhr.setRequestHeader('contactId', api.user.id);
+				xhr.setRequestHeader('salt', salt);
+				xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
+				if (api.user.currentClientId)
+					xhr.setRequestHeader('clientId', api.user.currentClientId);
+			}
+			xhr.onprogress = () => {
+				if (xhr.status >= 200 && xhr.status < 300)
+					consume(false);
+			};
+			xhr.onreadystatechange = () => {
+				if (xhr.readyState != 4 || finished)
+					return;
+				if (xhr.status >= 200 && xhr.status < 300) {
+					consume(true);
+					if (completed) {
+						finished = true;
+						success();
+					} else
+						fail('Die Antwort wurde unterbrochen.');
+				} else
+					fail(xhr.responseText || 'Die Antwort konnte nicht erstellt werden.');
+			};
+			xhr.onerror = () => fail('Die Verbindung wurde unterbrochen.');
+			xhr.send(formData);
 		}
 	}
 

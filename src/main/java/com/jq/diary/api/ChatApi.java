@@ -5,12 +5,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import reactor.core.publisher.Flux;
 
 import com.jq.diary.entity.ChatMessage;
 import com.jq.diary.entity.Contact;
@@ -39,5 +42,14 @@ public class ChatApi extends ApplicationApi {
 			@RequestHeader final BigInteger clientId, @RequestParam("text") final String text) {
 		return Utilities
 				.filter(this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text));
+	}
+
+	@PostMapping(path = "messages/stream", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+			produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<ServerSentEvent<String>> streamMessage(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId, @RequestParam("text") final String text) {
+		return this.chatService.stream(this.authorizationService.requireContact(contactId, clientId), text)
+				.map(chunk -> ServerSentEvent.builder(chunk).build())
+				.concatWithValues(ServerSentEvent.builder("done").event("done").build());
 	}
 }
