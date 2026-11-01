@@ -490,9 +490,9 @@ tr {
 td.column1 {
 	grid-column: 1;
 	grid-row: 1;
-	font-weight: bold;
+	font-size: 0.8em;
 	background: var(--background-content);
-	padding: 0.5em 1em 0 0.5em;
+	padding: 0.5em 1em 0 0.75em;
 	border-radius: 0.5em 0.5em 0 0;
 	width: fit-content !important;
 	max-width: 85vw;
