@@ -46,7 +46,12 @@ public class LogFilter implements Filter {
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
 		final ContentCachingRequestWrapper req = new ContentCachingRequestWrapper((HttpServletRequest) request);
-		final ContentCachingResponseWrapper res = new ContentCachingResponseWrapper((HttpServletResponse) response);
+		// event streams must not be buffered, otherwise the client receives nothing
+		final String accept = req.getHeader("Accept");
+		final boolean stream = accept != null && accept.contains("text/event-stream");
+		final ContentCachingResponseWrapper wrapper = stream ? null
+				: new ContentCachingResponseWrapper((HttpServletResponse) response);
+		final HttpServletResponse res = stream ? (HttpServletResponse) response : wrapper;
 		final Log log = new Log();
 		long time = 0;
 		try {
@@ -90,10 +95,12 @@ public class LogFilter implements Filter {
 			byte[] b = req.getContentAsByteArray();
 			if (b != null && b.length > 0)
 				log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
-			b = res.getContentAsByteArray();
-			if (b != null && b.length > 0)
-				log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
-			res.copyBodyToResponse();
+			if (wrapper != null) {
+				b = wrapper.getContentAsByteArray();
+				if (b != null && b.length > 0)
+					log.setBody((log.getBody() + '\n' + new String(b, StandardCharsets.UTF_8).trim()));
+				wrapper.copyBodyToResponse();
+			}
 			try {
 				this.repository.save(log);
 			} catch (final Exception e) {

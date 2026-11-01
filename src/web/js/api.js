@@ -356,15 +356,12 @@ class api {
 			};
 			xhr.open('POST', api.url + 'chat/messages/stream', true);
 			xhr.setRequestHeader('Accept', 'text/event-stream');
-			if (api.user?.id || api.user?.id == 0) {
-				var d = new Date();
-				var salt = ('' + (d.getTime() + d.getTimezoneOffset() * 60 * 1000) + Math.random()).replace(/[01]\./, '.');
-				xhr.setRequestHeader('contactId', api.user.id);
-				xhr.setRequestHeader('salt', salt);
-				xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
-				if (api.user.currentClientId)
-					xhr.setRequestHeader('clientId', api.user.currentClientId);
-			}
+			var d = new Date();
+			var salt = ('' + (d.getTime() + d.getTimezoneOffset() * 60 * 1000) + Math.random()).replace(/[01]\./, '.');
+			xhr.setRequestHeader('contactId', api.user.id);
+			xhr.setRequestHeader('salt', salt);
+			xhr.setRequestHeader('password', Encryption.hash(api.user.password + salt + api.user.id));
+			xhr.setRequestHeader('clientId', api.user.currentClientId);
 			xhr.onprogress = () => {
 				if (xhr.status >= 200 && xhr.status < 300)
 					consume(false);
