@@ -118,6 +118,10 @@ class ViewCalendar extends HTMLElement {
 	min-height: 10rem;
 }
 
+.cal-day.last-row {
+	min-height: 0;
+}
+
 .cal-day:nth-child(7n),
 .cal-weekday:nth-child(7n) {
 	border-right: none;
@@ -322,6 +326,10 @@ class ViewCalendar extends HTMLElement {
 			days.appendChild(this.createEmptyDayCell());
 		for (let day = 1; day <= lastDay.getDate(); day++)
 			days.appendChild(this.createDayCell(year, month, day, false, bankholidays));
+		const lastRowSize = (startOffset + lastDay.getDate()) % 7;
+		if (lastRowSize) {
+			Array.from(days.children).slice(-lastRowSize).forEach(day => day.classList.add('last-row'));
+		}
 		return monthEl;
 	}
 
