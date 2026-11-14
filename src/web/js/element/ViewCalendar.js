@@ -10,6 +10,9 @@ class ViewCalendar extends HTMLElement {
 	current = { year: this.today.getFullYear(), month: this.today.getMonth() };
 	_activeDate = null;
 	openDetail = null;
+	_monthsBefore = 3;
+	_monthsAfter = 3;
+	_scrollFrame = null;
 
 	constructor() {
 		super();
@@ -36,48 +39,28 @@ class ViewCalendar extends HTMLElement {
 	position: relative;
 }
 
-.cal-header {
+.cal-months {
 	display: block;
-	position: relative;
-	text-align: center;
-	height: 1em;
-	line-height: 1;
 }
 
-button {
-	background: var(--background-clickable);
-	transition: var(--transition-clickable);
-	border: none;
-	padding: 0.5em 1em;
-	border-radius: 1em;
-	outline: none;
-	cursor: pointer;
-	font: inherit;
-	margin: 0 0.5em;
-	font-size: 1em;
-	height: 2em;
-	color: white;
-	line-height: 1;
+.cal-month {
+	display: block;
+}
+
+.cal-month-title {
+	position: sticky;
+	top: 0;
 	z-index: 2;
-}
-
-button:hover {
-	background: var(--background-clickable-highlight);
-}
-
-button.icon {
-	position: absolute;
-	font-size: 1.3em;
-	width: 2em;
-	padding: 0;
-	bottom: 0.5em;
-	left: 50%;
+	text-align: center;
+	padding: 0.3em 0;
+	background: var(--background-content, rgba(255, 255, 255, 0.95));
+	line-height: 1;
 }
 
 .cal-grid-outer {
 	overflow-x: hidden;
 	overflow-y: auto;
-	height: calc(100% - 1em);
+	height: 100%;
 	min-height: 0;
 	-webkit-overflow-scrolling: touch;
 	scroll-behavior: smooth;
@@ -89,9 +72,6 @@ button.icon {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
 	height: 1.5em;
-	position: sticky;
-	top: 0;
-	z-index: 1;
 	background: var(--background-content, rgba(255, 255, 255, 0.95));
 }
 
@@ -215,43 +195,10 @@ button.icon {
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
-		var header = wrapper.appendChild(document.createElement('div'));
-		header.classList.add('cal-header');
-		header.onclick = () => {
-			this.current = { year: this.today.getFullYear(), month: this.today.getMonth() };
-			this.render();
-		};
-		var button = wrapper.appendChild(document.createElement('button'));
-		button.classList.add('icon');
-		button.onclick = () => {
-			this.current.month--;
-			if (this.current.month < 0) {
-				this.current.month = 11;
-				this.current.year--;
-			}
-			this.render();
-		};
-		button.innerText = '<';
-		button.style.marginLeft = '-5em';
-		button = wrapper.appendChild(document.createElement('button'));
-		button.classList.add('icon');
-		button.onclick = () => {
-			this.current.month++;
-			if (this.current.month > 11) {
-				this.current.month = 0;
-				this.current.year++;
-			}
-			this.render();
-		};
-		button.innerText = '>';
-		button.style.marginLeft = '3em';
-
 		var body = wrapper.appendChild(document.createElement('div'));
 		body.classList.add('cal-grid-outer');
-		var div = body.appendChild(document.createElement('div'));
-		div.classList.add('cal-weekdays');
-		div = body.appendChild(document.createElement('div'));
-		div.classList.add('cal-days');
+		body.addEventListener('scroll', () => this.handleScroll(body), { passive: true });
+		body.appendChild(document.createElement('div')).classList.add('cal-months');
 		this._root.appendChild(wrapper);
 		this.render();
 	}
@@ -269,39 +216,91 @@ button.icon {
 	}
 
 	render() {
-		const { year, month } = this.current;
-		this._root.querySelector('.cal-header').innerText =
-			`${ViewCalendar.MONTHS_DE[month]} ${year}`;
-		var bankholidays = InputDate.bankholidays(year);
-		const wdEl = this._root.querySelector('.cal-weekdays');
-		if (!wdEl.children.length) {
-			ViewCalendar.WEEKDAYS.forEach((d, i) => {
-				const el = document.createElement('div');
-				el.className = 'cal-weekday' + (i >= 5 ? ' weekend' : '');
-				el.appendChild(document.createElement('span')).textContent = d;
-				wdEl.appendChild(el);
-			});
+		const months = this._root.querySelector('.cal-months');
+		months.innerHTML = '';
+		for (let offset = -this._monthsBefore; offset <= this._monthsAfter; offset++) {
+			const date = new Date(this.current.year, this.current.month + offset, 1);
+			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
 		}
+		requestAnimationFrame(() => this.scrollToMonth(this.current.year, this.current.month, false));
+	}
 
+	createMonth(year, month) {
+		const monthEl = document.createElement('section');
+		monthEl.className = 'cal-month';
+		monthEl.dataset.year = year;
+		monthEl.dataset.month = month;
+		monthEl.appendChild(document.createElement('div')).className = 'cal-month-title';
+		monthEl.lastChild.textContent = `${ViewCalendar.MONTHS_DE[month]} ${year}`;
+
+		const weekdays = monthEl.appendChild(document.createElement('div'));
+		weekdays.className = 'cal-weekdays';
+		ViewCalendar.WEEKDAYS.forEach((day, i) => {
+			const weekday = weekdays.appendChild(document.createElement('div'));
+			weekday.className = 'cal-weekday' + (i >= 5 ? ' weekend' : '');
+			weekday.appendChild(document.createElement('span')).textContent = day;
+		});
+
+		const days = monthEl.appendChild(document.createElement('div'));
+		days.className = 'cal-days';
+		const bankholidays = InputDate.bankholidays(year);
 		const firstDay = new Date(year, month, 1);
 		const lastDay = new Date(year, month + 1, 0);
-		const totalDays = lastDay.getDate();
-		let startOffset = (firstDay.getDay() + 6) % 7;
+		const startOffset = (firstDay.getDay() + 6) % 7;
 		const prevLast = new Date(year, month, 0).getDate();
 
-		const daysEl = this._root.querySelector('.cal-days');
-		daysEl.innerHTML = '';
-
 		for (let i = startOffset - 1; i >= 0; i--)
-			daysEl.appendChild(this.createDayCell(year, month - 1, prevLast - i, true, bankholidays));
+			days.appendChild(this.createDayCell(year, month - 1, prevLast - i, true, bankholidays));
+		for (let day = 1; day <= lastDay.getDate(); day++)
+			days.appendChild(this.createDayCell(year, month, day, false, bankholidays));
 
-		for (let d = 1; d <= totalDays; d++)
-			daysEl.appendChild(this.createDayCell(year, month, d, false, bankholidays));
-
-		const filled = startOffset + totalDays;
+		const filled = startOffset + lastDay.getDate();
 		const remaining = filled % 7 === 0 ? 0 : 7 - (filled % 7);
-		for (let d = 1; d <= remaining; d++)
-			daysEl.appendChild(this.createDayCell(year, month + 1, d, true, bankholidays));
+		for (let day = 1; day <= remaining; day++)
+			days.appendChild(this.createDayCell(year, month + 1, day, true, bankholidays));
+		return monthEl;
+	}
+
+	handleScroll(container) {
+		if (this._scrollFrame)
+			return;
+		this._scrollFrame = requestAnimationFrame(() => {
+			this._scrollFrame = null;
+			if (container.scrollTop < 300)
+				this.prependMonths(container, 3);
+			else if (container.scrollHeight - container.scrollTop - container.clientHeight < 300)
+				this.appendMonths(3);
+		});
+	}
+
+	prependMonths(container, count) {
+		const months = this._root.querySelector('.cal-months');
+		const first = months.firstElementChild;
+		const firstDate = new Date(Number(first.dataset.year), Number(first.dataset.month) - count, 1);
+		const oldHeight = container.scrollHeight;
+		const fragment = document.createDocumentFragment();
+		for (let i = 0; i < count; i++) {
+			const date = new Date(firstDate.getFullYear(), firstDate.getMonth() + i, 1);
+			fragment.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
+		}
+		months.prepend(fragment);
+		container.scrollTop += container.scrollHeight - oldHeight;
+	}
+
+	appendMonths(count) {
+		const months = this._root.querySelector('.cal-months');
+		const last = months.lastElementChild;
+		const lastDate = new Date(Number(last.dataset.year), Number(last.dataset.month) + 1, 1);
+		for (let i = 0; i < count; i++) {
+			const date = new Date(lastDate.getFullYear(), lastDate.getMonth() + i, 1);
+			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
+		}
+	}
+
+	scrollToMonth(year, month, smooth = true) {
+		const monthEl = this._root.querySelector(`.cal-month[data-year="${year}"][data-month="${month}"]`);
+		if (monthEl)
+			monthEl.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
 	}
 
 	createDayCell(year, month, day, otherMonth, bankholidays) {
