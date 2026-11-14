@@ -42,11 +42,14 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-months {
-	display: block;
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	grid-auto-rows: minmax(0, auto);
+	align-items: stretch;
 }
 
 .cal-month {
-	display: block;
+	display: contents;
 }
 
 .cal-month:not(.active) .cal-day:not(.empty) {
@@ -100,10 +103,7 @@ class ViewCalendar extends HTMLElement {
 .cal-weekday.weekend { color: #8b4513; }
 
 .cal-days {
-	display: grid;
-	grid-template-columns: repeat(7, minmax(0, 1fr));
-	grid-auto-rows: minmax(0, auto);
-	align-items: stretch;
+	display: contents;
 }
 
 .cal-day {
@@ -282,7 +282,7 @@ class ViewCalendar extends HTMLElement {
 		const endMonth = Math.min(this._lastMonth, currentMonth + this._monthsAfter);
 		for (let monthNumber = startMonth; monthNumber <= endMonth; monthNumber++) {
 			const date = this.monthDate(monthNumber);
-			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
+			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth(), monthNumber === startMonth));
 		}
 		requestAnimationFrame(() => {
 			this.scrollToMonth(this.current.year, this.current.month, false);
@@ -309,7 +309,7 @@ class ViewCalendar extends HTMLElement {
 		return weekdays;
 	}
 
-	createMonth(year, month) {
+	createMonth(year, month, includeLeadingEmptyDays) {
 		const monthEl = document.createElement('section');
 		monthEl.className = 'cal-month';
 		monthEl.dataset.year = year;
@@ -322,11 +322,13 @@ class ViewCalendar extends HTMLElement {
 		const lastDay = new Date(year, month + 1, 0);
 		const startOffset = (firstDay.getDay() + 6) % 7;
 
-		for (let i = startOffset - 1; i >= 0; i--)
-			days.appendChild(this.createEmptyDayCell());
+		if (includeLeadingEmptyDays) {
+			for (let i = startOffset - 1; i >= 0; i--)
+				days.appendChild(this.createEmptyDayCell());
+		}
 		for (let day = 1; day <= lastDay.getDate(); day++)
 			days.appendChild(this.createDayCell(year, month, day, false, bankholidays));
-		const lastRowSize = (startOffset + lastDay.getDate()) % 7;
+		const lastRowSize = ((includeLeadingEmptyDays ? startOffset : 0) + lastDay.getDate()) % 7;
 		if (lastRowSize) {
 			Array.from(days.children).slice(-lastRowSize).forEach(day => day.classList.add('last-row'));
 		}
@@ -353,7 +355,12 @@ class ViewCalendar extends HTMLElement {
 		const top = Math.max(viewport.top, header.getBoundingClientRect().bottom);
 		let activeMonth = null;
 		container.querySelectorAll('.cal-month').forEach(month => {
-			const rect = month.getBoundingClientRect();
+			const days = month.querySelector('.cal-days');
+			const firstDay = days.firstElementChild;
+			const lastDay = days.lastElementChild;
+			const firstRect = firstDay.getBoundingClientRect();
+			const lastRect = lastDay.getBoundingClientRect();
+			const rect = { top: firstRect.top, bottom: lastRect.bottom };
 			if (!activeMonth && rect.bottom > top)
 				activeMonth = month;
 			month.classList.remove('active');
@@ -373,10 +380,13 @@ class ViewCalendar extends HTMLElement {
 		if (!monthsToAdd)
 			return;
 		const oldHeight = container.scrollHeight;
+		const firstDays = first.querySelector('.cal-days');
+		while (firstDays.firstElementChild?.classList.contains('empty'))
+			firstDays.firstElementChild.remove();
 		const fragment = document.createDocumentFragment();
 		for (let i = monthsToAdd; i > 0; i--) {
 			const date = this.monthDate(firstMonth - i);
-			fragment.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
+			fragment.appendChild(this.createMonth(date.getFullYear(), date.getMonth(), i === monthsToAdd));
 		}
 		months.prepend(fragment);
 		container.scrollTop += container.scrollHeight - oldHeight;
@@ -389,14 +399,15 @@ class ViewCalendar extends HTMLElement {
 		const monthsToAdd = Math.min(count, this._lastMonth - lastMonth);
 		for (let i = 1; i <= monthsToAdd; i++) {
 			const date = this.monthDate(lastMonth + i);
-			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
+			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth(), false));
 		}
 	}
 
 	scrollToMonth(year, month, smooth = true) {
 		const monthEl = this._root.querySelector(`.cal-month[data-year="${year}"][data-month="${month}"]`);
-		if (monthEl)
-			monthEl.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+		const firstDay = monthEl?.querySelector('.cal-days').firstElementChild;
+		if (firstDay)
+			firstDay.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
 	}
 
 	createEmptyDayCell() {
