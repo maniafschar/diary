@@ -110,7 +110,7 @@ button.icon {
 .cal-days {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
-	grid-auto-rows: minmax(7em, auto);
+	grid-auto-rows: minmax(10rem, auto);
 	align-items: stretch;
 }
 
@@ -123,7 +123,7 @@ button.icon {
 	flex-direction: column;
 	min-width: 0;
 	font-size: 0.8em;
-	min-height: 7em;
+	min-height: 10rem;
 }
 
 .cal-day:nth-child(7n),
