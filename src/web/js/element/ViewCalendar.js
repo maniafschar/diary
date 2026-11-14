@@ -102,7 +102,7 @@ class ViewCalendar extends HTMLElement {
 .cal-days {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
-	grid-auto-rows: minmax(10rem, auto);
+	grid-auto-rows: minmax(0, auto);
 	align-items: stretch;
 }
 
