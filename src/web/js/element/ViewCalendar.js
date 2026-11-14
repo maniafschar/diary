@@ -47,8 +47,6 @@ class ViewCalendar extends HTMLElement {
 
 .cal-month {
 	display: block;
-	margin-bottom: 1em;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .cal-month:not(.active) .cal-day:not(.empty) {
