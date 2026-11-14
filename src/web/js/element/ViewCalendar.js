@@ -17,7 +17,7 @@ class ViewCalendar extends HTMLElement {
 	}
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
-*, *::before, *:::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :host(*) {
 	font-family: Comfortaa;
@@ -75,14 +75,24 @@ button.icon {
 }
 
 .cal-grid-outer {
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	height: calc(100% - 1em);
+	min-height: 0;
+	-webkit-overflow-scrolling: touch;
+	scroll-behavior: smooth;
+	overscroll-behavior-y: contain;
+	scrollbar-width: none;
 }
 
 .cal-weekdays {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
 	height: 1.5em;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: var(--background-content, rgba(255, 255, 255, 0.95));
 }
 
 .cal-weekday {
@@ -100,11 +110,11 @@ button.icon {
 .cal-days {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
-	height: calc(100% - 1.5em);
+	grid-auto-rows: minmax(7em, auto);
+	align-items: stretch;
 }
 
 .cal-day {
-	min-height: 12vh;
 	border-right: 1px solid rgba(0, 0, 0, 0.02);
 	cursor: pointer;
 	transition: background .12s;
@@ -113,7 +123,7 @@ button.icon {
 	flex-direction: column;
 	min-width: 0;
 	font-size: 0.8em;
-	min-height: 5em;
+	min-height: 7em;
 }
 
 .cal-day:nth-child(7n),
@@ -159,9 +169,8 @@ button.icon {
 }
 
 .event-list {
-	overflow-x: hidden;
-	overflow-y: auto;
-	height: calc(100% - 1em);
+	overflow: visible;
+	height: auto;
 	position: relative;
 	display: block;
 }
