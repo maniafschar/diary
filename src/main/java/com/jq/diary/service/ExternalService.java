@@ -26,28 +26,52 @@ public class ExternalService {
 	}
 
 	public Map<String, String> address(final double latitude, final double longitude) {
-		final Response response = WebClient
-				.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + latitude + "&lon=" + longitude)
-				.get()
-				.accept(MediaType.APPLICATION_JSON)
-				.header("user-agent",
-						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
-				.retrieve().toEntity(Response.class)
-				.block().getBody();
-		final Address address = response.address;
 		final Map<String, String> result = new HashMap<>();
-		result.put("name", response.name);
-		result.put("address", (((address.road == null ? "" : address.road)
-				+ (address.house_number == null ? "" : " " + address.house_number)).trim() + "\n" +
-				((address.postcode == null ? "" : address.postcode)
-						+ " " + (address.city == null
-								? (address.town == null ? (address.village == null ? "" : address.village)
-										: address.town)
-								: address.city))
-						.trim()
-				+ "\n" +
-				(address.country == null ? "" : address.country)).trim());
-		result.put("countryCode", address.country_code);
+		try {
+			final Response response = WebClient
+					.create("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + latitude + "&lon="
+							+ longitude)
+					.get()
+					.accept(MediaType.APPLICATION_JSON)
+					.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
+					.retrieve().toEntity(Response.class)
+					.block().getBody();
+			final Address address = response.address;
+			result.put("name", response.name);
+			result.put("address", (((address.road == null ? "" : address.road)
+					+ (address.house_number == null ? "" : " " + address.house_number)).trim() + "\n" +
+					((address.postcode == null ? "" : address.postcode)
+							+ " " + (address.city == null
+									? (address.town == null ? (address.village == null ? "" : address.village)
+											: address.town)
+									: address.city))
+							.trim()
+					+ "\n" +
+					(address.country == null ? "" : address.country)).trim());
+			result.put("countryCode", address.country_code);
+		} catch (final Exception ex) {
+			final String value = WebClient.create("https://maps.googleapis.com/maps/api/geocode/json?latlng="
+					+ latitude + ',' + longitude + "&key=" + this.googleKey)
+					.get().retrieve().toEntity(String.class).block().getBody();
+			final JsonNode address = Json.toNode(value);
+			if ("OK".equals(address.get("status").asText()) && address.get("results") != null) {
+				for (int i = 0; i < address.get("results").size(); i++) {
+					final JsonNode a = address.get("results").get(i);
+					if (!result.containsKey("address") && a.has("formatted_address"))
+						result.put("address", a.get("formatted_address").asText()
+								.replace(", ", "\n"));
+					if (!result.containsKey("name") && a.has("name"))
+						result.put("name", a.get("name").asText());
+					final JsonNode data = a.get("address_components");
+					if (data != null) {
+						for (int i2 = 0; i2 < data.size(); i2++) {
+							if (!result.containsKey("countryCode"))
+								result.put("countryCode", data.get(i2).get("short_name").asText());
+						}
+					}
+				}
+			}
+		}
 		return result;
 	}
 
