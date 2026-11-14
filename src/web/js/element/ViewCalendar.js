@@ -13,6 +13,8 @@ class ViewCalendar extends HTMLElement {
 	_monthsBefore = 3;
 	_monthsAfter = 3;
 	_scrollFrame = null;
+	_firstMonth = 0;
+	_lastMonth = 0;
 
 	constructor() {
 		super();
@@ -218,11 +220,32 @@ class ViewCalendar extends HTMLElement {
 	render() {
 		const months = this._root.querySelector('.cal-months');
 		months.innerHTML = '';
-		for (let offset = -this._monthsBefore; offset <= this._monthsAfter; offset++) {
-			const date = new Date(this.current.year, this.current.month + offset, 1);
+		const todayMonth = this.monthNumber(this.today.getFullYear(), this.today.getMonth());
+		const eventMonths = Object.keys(this.events)
+			.map(dateKey => {
+				const match = /^(\d{4})-(\d{2})-\d{2}$/.exec(dateKey);
+				return match ? this.monthNumber(Number(match[1]), Number(match[2]) - 1) : null;
+			})
+			.filter(month => month !== null);
+		this._firstMonth = eventMonths.length ? Math.min(...eventMonths) : todayMonth;
+		this._lastMonth = Math.max(todayMonth, eventMonths.length ? Math.max(...eventMonths) : todayMonth);
+
+		const currentMonth = this.monthNumber(this.current.year, this.current.month);
+		const startMonth = Math.max(this._firstMonth, currentMonth - this._monthsBefore);
+		const endMonth = Math.min(this._lastMonth, currentMonth + this._monthsAfter);
+		for (let monthNumber = startMonth; monthNumber <= endMonth; monthNumber++) {
+			const date = this.monthDate(monthNumber);
 			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
 		}
 		requestAnimationFrame(() => this.scrollToMonth(this.current.year, this.current.month, false));
+	}
+
+	monthNumber(year, month) {
+		return year * 12 + month;
+	}
+
+	monthDate(monthNumber) {
+		return new Date(Math.floor(monthNumber / 12), monthNumber % 12, 1);
 	}
 
 	createMonth(year, month) {
@@ -276,11 +299,14 @@ class ViewCalendar extends HTMLElement {
 	prependMonths(container, count) {
 		const months = this._root.querySelector('.cal-months');
 		const first = months.firstElementChild;
-		const firstDate = new Date(Number(first.dataset.year), Number(first.dataset.month) - count, 1);
+		const firstMonth = this.monthNumber(Number(first.dataset.year), Number(first.dataset.month));
+		const monthsToAdd = Math.min(count, firstMonth - this._firstMonth);
+		if (!monthsToAdd)
+			return;
 		const oldHeight = container.scrollHeight;
 		const fragment = document.createDocumentFragment();
-		for (let i = 0; i < count; i++) {
-			const date = new Date(firstDate.getFullYear(), firstDate.getMonth() + i, 1);
+		for (let i = monthsToAdd; i > 0; i--) {
+			const date = this.monthDate(firstMonth - i);
 			fragment.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
 		}
 		months.prepend(fragment);
@@ -290,9 +316,10 @@ class ViewCalendar extends HTMLElement {
 	appendMonths(count) {
 		const months = this._root.querySelector('.cal-months');
 		const last = months.lastElementChild;
-		const lastDate = new Date(Number(last.dataset.year), Number(last.dataset.month) + 1, 1);
-		for (let i = 0; i < count; i++) {
-			const date = new Date(lastDate.getFullYear(), lastDate.getMonth() + i, 1);
+		const lastMonth = this.monthNumber(Number(last.dataset.year), Number(last.dataset.month));
+		const monthsToAdd = Math.min(count, this._lastMonth - lastMonth);
+		for (let i = 1; i <= monthsToAdd; i++) {
+			const date = this.monthDate(lastMonth + i);
 			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth()));
 		}
 	}
