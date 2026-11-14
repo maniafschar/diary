@@ -322,11 +322,6 @@ class ViewCalendar extends HTMLElement {
 			days.appendChild(this.createEmptyDayCell());
 		for (let day = 1; day <= lastDay.getDate(); day++)
 			days.appendChild(this.createDayCell(year, month, day, false, bankholidays));
-
-		const filled = startOffset + lastDay.getDate();
-		const remaining = filled % 7 === 0 ? 0 : 7 - (filled % 7);
-		for (let day = 1; day <= remaining; day++)
-			days.appendChild(this.createEmptyDayCell());
 		return monthEl;
 	}
 
@@ -349,14 +344,10 @@ class ViewCalendar extends HTMLElement {
 		const header = container.querySelector('.cal-sticky-header');
 		const top = Math.max(viewport.top, header.getBoundingClientRect().bottom);
 		let activeMonth = null;
-		let mostVisible = 0;
 		container.querySelectorAll('.cal-month').forEach(month => {
 			const rect = month.getBoundingClientRect();
-			const visible = Math.max(0, Math.min(rect.bottom, viewport.bottom) - Math.max(rect.top, top));
-			if (visible > mostVisible) {
-				mostVisible = visible;
+			if (!activeMonth && rect.bottom > top)
 				activeMonth = month;
-			}
 			month.classList.remove('active');
 		});
 		if (!activeMonth)
