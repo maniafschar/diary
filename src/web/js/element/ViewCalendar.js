@@ -47,6 +47,8 @@ class ViewCalendar extends HTMLElement {
 
 .cal-month {
 	display: block;
+	margin-bottom: 1em;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .cal-month-title {
@@ -54,8 +56,11 @@ class ViewCalendar extends HTMLElement {
 	top: 0;
 	z-index: 2;
 	text-align: center;
-	padding: 0.3em 0;
-	background: var(--background-content, rgba(255, 255, 255, 0.95));
+	padding: 0.45em 0;
+	background: linear-gradient(90deg, rgba(221, 243, 255, 0.96), rgba(255, 250, 247, 0.96));
+	color: rgba(0, 0, 80, 0.75);
+	font-size: 1.05em;
+	font-weight: bold;
 	line-height: 1;
 }
 
@@ -74,7 +79,6 @@ class ViewCalendar extends HTMLElement {
 	display: grid;
 	grid-template-columns: repeat(7, minmax(0, 1fr));
 	height: 1.5em;
-	background: var(--background-content, rgba(255, 255, 255, 0.95));
 }
 
 .cal-weekday {
@@ -132,7 +136,7 @@ class ViewCalendar extends HTMLElement {
 	background: rgba(0, 0, 0, 0.02);
 }
 	
-.day-num span {
+.day-num span.holiday {
 	font-size: 0.7em;
 	margin-left: 0.4em;
 }
@@ -148,6 +152,35 @@ class ViewCalendar extends HTMLElement {
 
 .cal-day.weekend .day-num {
 	color: #8b4513;
+}
+
+.cal-day.weekend:not(.empty) {
+	background: rgba(139, 69, 19, 0.035);
+}
+
+.day-number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.6em;
+	min-height: 1.6em;
+}
+
+.cal-day.today .day-number {
+	border-radius: 50%;
+	background: rgba(255, 190, 40, 0.75);
+	color: #4a3200;
+}
+
+.cal-day.has-events .day-num::after {
+	content: '';
+	position: absolute;
+	left: 0.35em;
+	bottom: 0.2em;
+	width: 0.35em;
+	height: 0.35em;
+	border-radius: 50%;
+	background: var(--background-clickable-highlight, rgba(0, 0, 120, 0.7));
 }
 
 .event-list {
@@ -349,13 +382,19 @@ class ViewCalendar extends HTMLElement {
 
 		const numEl = document.createElement('div');
 		numEl.className = 'day-num';
-		numEl.textContent = d;
-		if (bankholidays[d + '.' + (m + 1)])
-			numEl.appendChild(document.createElement('span')).innerText = bankholidays[d + '.' + (m + 1)];
+		const numberEl = numEl.appendChild(document.createElement('span'));
+		numberEl.className = 'day-number';
+		numberEl.textContent = d;
+		if (bankholidays[d + '.' + (m + 1)]) {
+			const holidayEl = numEl.appendChild(document.createElement('span'));
+			holidayEl.className = 'holiday';
+			holidayEl.innerText = bankholidays[d + '.' + (m + 1)];
+		}
 		cell.appendChild(numEl);
 
 		const dayEvents = this.events[dateKey] || [];
 		if (dayEvents.length) {
+			cell.classList.add('has-events');
 			const list = document.createElement('div');
 			list.className = 'event-list';
 			dayEvents.forEach(ev => {
