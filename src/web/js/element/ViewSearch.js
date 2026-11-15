@@ -46,34 +46,30 @@ td.column2 input-rating {
 	font-size: 0.8em;
 	margin-right: 0;
 }
-td.column2 note,
-td.column2 address {
+td.column2 note {
 	position: relative;
 	display: block;
 	padding: 0.5em 0.5em 0 0.5em;
 	white-space: pre-line;
 	word-break: break-word;
 }
-td.column2 address {
-	font-style: normal;
-}
-td.column2 feedback {
+td.column2 images {
+	max-height: initial;
+	text-align: center;
+	height: 8em;
+	position: relative;
 	display: block;
-	margin: 0.5em;
-	padding-top: 0.5em;
-	border-top: solid 1px rgba(0, 0, 0, 0.1);
-	white-space: pre-line;
-	word-break: break-word;
+	margin: 1em 0 0.5em 0;
+	white-space: nowrap;
+    overflow-x: auto;
+	overflow-y: hidden;
+    box-sizing: border-box;
+	width: 100%;
 }
-td.column2 feedback > span {
-	display: block;
-	font-size: 0.8em;
-}
-type {
-	display: block;
-	font-size: 0.9em;
-	font-weight: bold;
-	color: var(--color-clickable);
+td.column2 images img {
+	height: 100%;
+	padding: 0 0.25em;
+	border-radius: 0.5em;
 }
 td.column2 bubble {
 	display: block;
