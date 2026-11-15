@@ -74,8 +74,9 @@ td.column2 images img {
 tr.chat td.column1 {
 	width: 100% !important;
 	background: transparent;
-	padding: 0;
+	padding: 0.5em;
 	max-height: initial;
+	font-size: 1.25em;
 }
 tr.chat td.column2 {
 	display: none;
@@ -83,7 +84,6 @@ tr.chat td.column2 {
 td.column1 bubble {
 	display: block;
 	max-width: 85%;
-	margin: 0.5em;
 	text-align: left;
 	white-space: normal;
 }
