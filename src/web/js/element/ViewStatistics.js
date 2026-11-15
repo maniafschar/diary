@@ -36,6 +36,36 @@ trend svg {
 	height: 3.5em;
 	margin-top: 0.5em;
 	overflow: visible;
+	touch-action: pan-y;
+	cursor: pointer;
+}
+trend tip {
+	position: absolute;
+	top: 4.2em;
+	left: 0;
+	display: none;
+	pointer-events: none;
+	white-space: nowrap;
+	font-size: 0.75em;
+	padding: 0.3em 0.6em;
+	border-radius: 0.4em;
+	background: var(--background-content);
+	box-shadow: 0 0.1em 0.4em rgba(0, 0, 0, 0.25);
+	color: rgba(0, 0, 0, 0.75);
+	z-index: 1;
+}
+trend tip::before {
+	content: '';
+	position: absolute;
+	top: -0.4em;
+	left: var(--arrow, 50%);
+	transform: translateX(-50%);
+	border: 0.4em solid transparent;
+	border-top: none;
+	border-bottom-color: var(--background-content);
+}
+trend tip.visible {
+	display: block;
 }
 trend polyline {
 	fill: none;
@@ -140,6 +170,7 @@ chart bar {
 		this._root.appendChild(document.createElement('wordcloud'));
 		const trend = this._root.appendChild(document.createElement('trend'));
 		trend.appendChild(document.createElement('info'));
+		trend.appendChild(document.createElement('tip'));
 		this._root.appendChild(document.createElement('chart'));
 	}
 
@@ -158,6 +189,8 @@ chart bar {
 		const trend = this._root.querySelector('trend');
 		trend.querySelector('svg')?.remove();
 		const info = trend.querySelector('info');
+		const tip = trend.querySelector('tip');
+		tip.classList.remove('visible');
 		const DAY = 864e5;
 		const WINDOW = 30 * DAY;
 		const points = (this.rating || [])
@@ -219,16 +252,28 @@ chart bar {
 			line.setAttribute('points', toPoints(key));
 			svg.appendChild(line);
 		});
-		svg.addEventListener('click', event => {
+		const showAt = clientX => {
 			const rect = svg.getBoundingClientRect();
-			const x = (event.clientX - rect.left) / rect.width * width;
-			const nearest = points.reduce((best, point) => Math.abs((point.time - t0) / span * width - x) < Math.abs((best.time - t0) / span * width - x) ? point : best);
-			this.dispatchEvent(new CustomEvent('details', {
-				detail: nearest.entry,
-				bubbles: true,
-				composed: true
-			}));
+			const px = Math.max(0, Math.min(width, (clientX - rect.left) / rect.width * width));
+			const dayX = point => (point.time - t0) / span * width;
+			const nearest = points.reduce((best, point) => Math.abs(dayX(point) - px) < Math.abs(dayX(best) - px) ? point : best);
+			const entry = nearest.entry;
+			const x = svg.offsetLeft + dayX(nearest) / width * svg.offsetWidth;
+			tip.textContent = `${new Date(entry.date).toLocaleDateString('de-DE')} · ${entry.ids.length} ${entry.ids.length == 1 ? 'Eintrag' : 'Einträge'} · Ø ${format(entry.rating / 20, 1)} Sterne`;
+			tip.classList.add('visible');
+			const left = Math.max(0, Math.min(trend.clientWidth - tip.offsetWidth, x - tip.offsetWidth / 2));
+			tip.style.left = left + 'px';
+			tip.style.setProperty('--arrow', (x - left) + 'px');
+		};
+		const hide = () => tip.classList.remove('visible');
+		svg.addEventListener('pointerdown', event => {
+			svg.setPointerCapture(event.pointerId);
+			showAt(event.clientX);
 		});
+		svg.addEventListener('pointermove', event => showAt(event.clientX));
+		svg.addEventListener('pointerup', event => event.pointerType != 'mouse' && hide());
+		svg.addEventListener('pointercancel', hide);
+		svg.addEventListener('pointerleave', event => event.pointerType == 'mouse' && hide());
 		trend.insertBefore(svg, info);
 	}
 
