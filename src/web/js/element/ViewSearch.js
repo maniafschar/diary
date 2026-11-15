@@ -165,7 +165,8 @@ results {
 	display: block;
 	overflow-y: auto;
 	height: calc(100% - 4em);
-	padding-bottom: 1em;
+	padding-bottom: 2em;
+	box-sizing: border-box;
 }`;
 		var row = this._root.appendChild(document.createElement('search-row'));
 		var input = row.appendChild(document.createElement('input'));
