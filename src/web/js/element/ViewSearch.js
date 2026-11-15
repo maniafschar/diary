@@ -80,6 +80,9 @@ tr.chat td.column1 {
 tr.chat td.column2 {
 	display: none;
 }
+tr.selected td {
+	background-color: transparent !important;
+}
 td.column1 bubble {
 	display: block;
 	max-width: 85%;
@@ -101,12 +104,9 @@ td.column1 bubble label {
 td.column1 bubble content {
 	display: block;
 	padding: 0.5em 0.75em;
-	border-radius: 0.5em;
+	border-radius: 0 0.5em 0.5em 0.5em;
 	background: var(--background-clickable);
 	color: white;
-	word-break: break-word;
-	max-height: 10em;
-	overflow: auto;
 	font-size: 1.25em;
 }
 td.column1 bubble.model content,
