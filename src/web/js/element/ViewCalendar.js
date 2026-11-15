@@ -52,10 +52,6 @@ class ViewCalendar extends HTMLElement {
 	display: contents;
 }
 
-.cal-month:not(.active) .cal-day:not(.empty) {
-	filter: brightness(0.82);
-}
-
 .cal-sticky-header {
 	position: sticky;
 	top: 0;
@@ -116,7 +112,7 @@ class ViewCalendar extends HTMLElement {
 	min-width: 0;
 	font-size: 0.8em;
 	min-height: 10rem;
-	margin: 0.075em;
+	margin: 0.2em;
 	border-radius: 1em;
 	background: rgba(0, 0, 0, 0.025);
 }
@@ -130,7 +126,7 @@ class ViewCalendar extends HTMLElement {
 	border-right: none;
 }
 
-.cal-day:hover:not {
+.cal-day:hover {
 	background: rgba(255, 170, 120, 0.1);
 }
 
@@ -182,7 +178,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .event-pill {
-	padding: 0.3em;
+	padding: 0.25em 0 0.25em 0.5em;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
