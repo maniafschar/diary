@@ -337,7 +337,7 @@ class ViewCalendar extends HTMLElement {
 		if (!activeMonth)
 			return;
 		activeMonth.classList.add('active');
-		header.querySelector('.cal-month-title').textContent =
+		container.querySelector('.cal-month-title').textContent =
 			`${ViewCalendar.MONTHS_DE[Number(activeMonth.dataset.month)]} ${activeMonth.dataset.year}`;
 	}
 
