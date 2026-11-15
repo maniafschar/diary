@@ -81,9 +81,6 @@ tr.chat td.column1 {
 tr.chat td.column2 {
 	display: none;
 }
-tbody tr.selected td {
-	background-color: transparent !important;
-}
 td.column1 bubble {
 	display: block;
 	max-width: 85%;
