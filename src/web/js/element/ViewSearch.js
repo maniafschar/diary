@@ -80,7 +80,7 @@ tr.chat td.column1 {
 tr.chat td.column2 {
 	display: none;
 }
-tr.selected td {
+tbody tr.selected td {
 	background-color: transparent !important;
 }
 td.column1 bubble {
@@ -113,6 +113,10 @@ td.column1 bubble.model content,
 td.column1 bubble.model label {
 	background: var(--background-content);
 	color: inherit;
+}
+tbody tr:hover td.column1 bubble content,
+tbody tr:hover td.column1 bubble label {
+	background-color: var(--background-hover);
 }`;
 
 class ViewSearch extends HTMLElement {

@@ -125,7 +125,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day:hover {
-	background: rgba(255, 170, 120, 0.1) !important;
+	background: var(--background-hover) !important;
 }
 
 .day-num {

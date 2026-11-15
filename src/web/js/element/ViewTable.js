@@ -118,7 +118,7 @@ td.image img {
 }
 
 tbody tr:hover td {
-	background-color: rgba(255, 170, 120, 0.1);
+	background-color: var(--background-hover);
 }
 
 th.asc::before {

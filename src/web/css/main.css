@@ -2,6 +2,7 @@
 	--transition-clickable: ease .4s all;
 	--background-clickable: rgba(0, 0, 120, 0.4);
 	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
+	--background-hover: rgba(255, 170, 120, 0.1);
 	--background-content: rgba(255, 255, 255, 0.6);
 	--background-input: rgba(255, 255, 255, 0.85);
 	--background-app: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9);
