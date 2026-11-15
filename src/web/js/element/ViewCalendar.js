@@ -328,7 +328,7 @@ class ViewCalendar extends HTMLElement {
 	updateActiveMonth(container) {
 		const viewport = container.getBoundingClientRect();
 		const header = container.querySelector('.cal-month-title');
-		const top = viewport.top + header.parentElement.clientHeight;
+		const top = viewport.top + header.parentElement.clientHeight + 20;
 		let activeMonth = null;
 		container.querySelectorAll('.cal-month').forEach(month => {
 			if (!activeMonth && month.querySelector('.cal-days').lastElementChild.getBoundingClientRect().top > top)
