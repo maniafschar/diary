@@ -71,17 +71,20 @@ td.column2 images img {
 	padding: 0 0.25em;
 	border-radius: 0.5em;
 }
-td.column2 bubble {
+tr.chat td.column1 {
+	width: 100% !important;
+}
+td.column1 bubble {
 	display: block;
 	max-width: 85%;
 	margin: 0.5em;
 	text-align: left;
 	white-space: normal;
 }
-td.column2 bubble.user {
+td.column1 bubble.user {
 	margin-left: auto;
 }
-td.column2 bubble content {
+td.column1 bubble content {
 	display: block;
 	padding: 0.5em 0.75em;
 	border-radius: 0.5em;
@@ -91,19 +94,13 @@ td.column2 bubble content {
 	max-height: 10em;
 	overflow: auto;
 }
-td.column2 bubble.model content {
+td.column1 bubble.model content {
 	background: var(--background-content);
 	color: inherit;
 }
-td.column2 bubble p {
+td.column1 bubble p {
 	margin-block-start: 0;
 	margin-block-end: 0;
-}
-mark {
-	background: rgba(255, 210, 0, 0.5);
-	color: inherit;
-	border-radius: 0.2em;
-	padding: 0 0.1em;
 }`;
 
 class ViewSearch extends HTMLElement {
@@ -333,7 +330,7 @@ results {
 	}
 
 	chatRow(hit) {
-		var row = [{ text: '<label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content>' }];
+		var row = [{ text: '<bubble><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
 		row.row = { class: 'chat ' + hit.item.role };
 		return row;
 	}
