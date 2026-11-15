@@ -88,6 +88,10 @@ td.column1 bubble {
 td.column1 bubble.user {
 	margin-left: auto;
 }
+td.column1 bubble label {
+	background: var(--background-clickable);
+	color: white;
+}
 td.column1 bubble content {
 	display: block;
 	padding: 0.5em 0.75em;
@@ -98,7 +102,8 @@ td.column1 bubble content {
 	max-height: 10em;
 	overflow: auto;
 }
-td.column1 bubble.model content {
+td.column1 bubble.model content,
+td.column1 bubble.model label {
 	background: var(--background-content);
 	color: inherit;
 }`;
