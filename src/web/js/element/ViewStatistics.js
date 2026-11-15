@@ -4,6 +4,7 @@ class ViewStatistics extends HTMLElement {
 	MAX_WORDS = 100;
 	text;
 	rating;
+	trendDays = 90;
 
 	constructor() {
 		super();
@@ -22,11 +23,50 @@ class ViewStatistics extends HTMLElement {
 *::-webkit-scrollbar {
 	display: none;
 }
+trend {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 7em;
+	box-sizing: border-box;
+	padding: 0 0.5em;
+}
+trend select {
+	position: absolute;
+	right: 0.5em;
+	top: 0;
+	font-size: 0.8em;
+}
+trend svg {
+	display: block;
+	width: 100%;
+	height: 3.5em;
+	margin-top: 1.5em;
+	overflow: visible;
+}
+trend polyline {
+	fill: none;
+	vector-effect: non-scaling-stroke;
+	stroke-width: 2;
+}
+trend polyline.raw {
+	stroke: rgba(0, 0, 0, 0.25);
+	stroke-width: 1;
+}
+trend polyline.avg {
+	stroke: hsl(210 80% 45%);
+}
+trend info {
+	display: block;
+	font-size: 0.8em;
+	text-align: center;
+	color: rgba(0, 0, 0, 0.7);
+}
 wordcloud {
 	position: relative;
 	display: block;
 	width: 100%;
-	height: calc(100% - 6em);
+	height: calc(100% - 13em);
 	overflow: hidden;
 	text-align: center;
 }
@@ -105,6 +145,16 @@ chart bar {
 	width: 100%;
 }`;
 		this._root.appendChild(document.createElement('wordcloud'));
+		const trend = this._root.appendChild(document.createElement('trend'));
+		const select = trend.appendChild(document.createElement('select'));
+		[[30, '30 Tage'], [90, '90 Tage'], [365, '1 Jahr'], [0, 'Gesamt']]
+			.forEach(([days, label]) => select.add(new Option(label, days)));
+		select.value = this.trendDays;
+		select.addEventListener('change', () => {
+			this.trendDays = Number(select.value);
+			this.renderTrend();
+		});
+		trend.appendChild(document.createElement('info'));
 		this._root.appendChild(document.createElement('chart'));
 	}
 
@@ -116,6 +166,79 @@ chart bar {
 			tokens = tokens.slice(0, this.MAX_WORDS);
 		this.renderWordcloud(tokens);
 		this.renderRating();
+		this.renderTrend();
+	}
+
+	renderTrend() {
+		const trend = this._root.querySelector('trend');
+		trend.querySelector('svg')?.remove();
+		const info = trend.querySelector('info');
+		const DAY = 864e5;
+		const WINDOW = 30 * DAY;
+		const from = new Date();
+		from.setHours(0, 0, 0, 0);
+		from.setDate(from.getDate() - this.trendDays);
+		const points = (this.rating || [])
+			.map(entry => {
+				const date = new Date(entry.date);
+				date.setHours(0, 0, 0, 0);
+				return { time: date.getTime(), value: Math.max(0, Math.min(100, entry.rating)) };
+			})
+			.filter(point => this.trendDays == 0 || point.time >= from.getTime())
+			.sort((a, b) => a.time - b.time);
+		if (points.length < 2) {
+			info.textContent = 'Zu wenig Einträge für eine Trendanalyse';
+			return;
+		}
+
+		// Gleitender Durchschnitt über die letzten 30 Tage, bezogen auf die Tage mit Eintrag.
+		let start = 0;
+		let sum = 0;
+		points.forEach((point, i) => {
+			sum += point.value;
+			while (points[start].time <= point.time - WINDOW) {
+				sum -= points[start].value;
+				start++;
+			}
+			point.average = sum / (i - start + 1);
+		});
+
+		// Lineare Regression über die Tagesbewertungen.
+		const t0 = points[0].time;
+		const xs = points.map(point => (point.time - t0) / DAY);
+		const n = points.length;
+		const meanX = xs.reduce((a, b) => a + b, 0) / n;
+		const meanY = points.reduce((a, point) => a + point.value, 0) / n;
+		let cov = 0;
+		let varX = 0;
+		points.forEach((point, i) => {
+			cov += (xs[i] - meanX) * (point.value - meanY);
+			varX += (xs[i] - meanX) ** 2;
+		});
+		const slopePerDay = varX > 0 ? cov / varX : 0;
+		const starsPerMonth = slopePerDay * 30 / 20;
+		const format = (value, digits) => value.toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+		const direction = Math.abs(starsPerMonth) < 0.05 ? '→ stabil'
+			: starsPerMonth > 0 ? '↑ steigend' : '↓ fallend';
+		info.textContent = `${direction} (${starsPerMonth > 0 ? '+' : ''}${format(starsPerMonth, 2)} Sterne/Monat) · Ø ${format(meanY / 20, 1)} Sterne · ${n} Tage mit Eintrag`;
+
+		const ns = 'http://www.w3.org/2000/svg';
+		const width = 1000;
+		const height = 100;
+		const span = points[n - 1].time - t0;
+		const svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+		svg.setAttribute('preserveAspectRatio', 'none');
+		const toPoints = key => points
+			.map(point => `${((point.time - t0) / span * width).toFixed(1)},${(height - point[key] / 100 * height).toFixed(1)}`)
+			.join(' ');
+		[['raw', 'value'], ['avg', 'average']].forEach(([cls, key]) => {
+			const line = document.createElementNS(ns, 'polyline');
+			line.setAttribute('class', cls);
+			line.setAttribute('points', toPoints(key));
+			svg.appendChild(line);
+		});
+		trend.insertBefore(svg, info);
 	}
 
 	renderWordcloud(tokens) {
