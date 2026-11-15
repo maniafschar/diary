@@ -116,10 +116,13 @@ class ViewCalendar extends HTMLElement {
 	min-width: 0;
 	font-size: 0.8em;
 	min-height: 10rem;
+	margin: 0.075em;
+	border-radius: 1em;
+	background: rgba(0, 0, 0, 0.025);
 }
 
-.cal-day.last-row {
-	min-height: 0;
+.cal-day.has-events {
+	background: rgba(0, 0, 0, 0.05);
 }
 
 .cal-day:nth-child(7n),
@@ -143,7 +146,6 @@ class ViewCalendar extends HTMLElement {
 	text-overflow: ellipsis;
 	position: relative;
 	padding: 0.2em;
-	background: rgba(0, 0, 0, 0.02);
 }
 	
 .day-num span.holiday {
@@ -180,17 +182,6 @@ class ViewCalendar extends HTMLElement {
 	border-radius: 50%;
 	background: rgba(255, 190, 40, 0.75);
 	color: #4a3200;
-}
-
-.cal-day.has-events .day-num::after {
-	content: '';
-	position: absolute;
-	left: 0.35em;
-	bottom: 0.2em;
-	width: 0.35em;
-	height: 0.35em;
-	border-radius: 50%;
-	background: var(--background-clickable-highlight, rgba(0, 0, 120, 0.7));
 }
 
 .event-list {
