@@ -473,7 +473,7 @@ next::after {
 		const weihnachten = new Date(year, 11, 25);
 		const wochentag = weihnachten.getDay();
 		const tageBis4Advent = wochentag === 0 ? 7 : wochentag;
-		const advent4 = new Date(jahr, 11, 25 - tageBis4Advent);
+		const advent4 = new Date(year, 11, 25 - tageBis4Advent);
 		const advent3 = new Date(advent4);
 		advent3.setDate(advent4.getDate() - 7);
 		const advent2 = new Date(advent4);
