@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import { markdown, marked } from 'marked';
+import { marked } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
@@ -74,6 +74,7 @@ td.column2 images img {
 tr.chat td.column1 {
 	width: 100% !important;
 	background: transparent;
+	padding: 0;
 }
 tr.chat td.column2 {
 	display: none;
@@ -91,6 +92,11 @@ td.column1 bubble.user {
 td.column1 bubble label {
 	background: var(--background-clickable);
 	color: white;
+	padding: 0.5em 1em 0 1.2em;
+	border-radius: 0.5em 0.5em 0 0;
+	border: none;
+	position: relative;
+	display: inline-block;
 }
 td.column1 bubble content {
 	display: block;
@@ -342,7 +348,7 @@ results {
 
 	removeMarkdown(text) {
 		var div = document.createElement('div');
-		div.innerHTML = DOMPurify.sanitize(marked.parse(markdown ?? ''));
+		div.innerHTML = DOMPurify.sanitize(marked.parse(text));
 		return div.textContent;
 	}
 
