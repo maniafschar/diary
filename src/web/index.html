@@ -83,6 +83,10 @@
 					<img src="image/user.svg" />
 					<span>Teilnehmer</span>
 				</button>
+				<button class="icon" data-nav-index="6" onclick="ui.navigate(event)" data-type="loggedIn">
+					<img src="image/search.svg" />
+					<span>Suche</span>
+				</button>
 				<button class="icon add" onclick="dialog.add()" data-type="loggedInAuthor">
 					<img src="image/add.svg" />
 					<span>Neuer Eintrag</span>
@@ -135,6 +139,9 @@
 						<user>
 							<view-table></view-table>
 						</user>
+					</element>
+					<element class="search">
+						<view-search></view-search>
 					</element>
 				</eventContainer>
 			</element>

@@ -117,6 +117,10 @@ bubble message {
 bubble message>div {
 	min-height: 0;
 }
+bubble.highlight>content {
+	box-shadow: 0 0 0 2px var(--color-primary, #b55);
+	transition: box-shadow 0.3s;
+}
 bubble.collapsed preview {
 	opacity: 1;
 }
@@ -225,6 +229,8 @@ button:hover {
 	createBubble(message, collapsed) {
 		var bubble = document.createElement('bubble');
 		bubble.classList.add(message.role);
+		if (message.id)
+			bubble.dataset.id = message.id;
 		bubble.setAttribute('role', 'button');
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
@@ -292,6 +298,31 @@ button:hover {
 		history.textContent = '';
 		messages.forEach(message => history.appendChild(this.createBubble(message, true)));
 		history.scrollTop = history.scrollHeight;
+		this.focusPending(false);
+	}
+	focusMessage(id) {
+		var bubble = this._root.querySelector('bubble[data-id="' + id + '"]');
+		if (!bubble)
+			return false;
+		this.pendingFocus = null;
+		if (bubble.classList.contains('collapsed')) {
+			bubble.classList.remove('collapsed');
+			bubble.setAttribute('aria-expanded', 'true');
+		}
+		this._root.querySelector('history').scrollTo({ top: bubble.offsetTop - 16, behavior: 'smooth' });
+		bubble.classList.add('highlight');
+		bubble.focus({ preventScroll: true });
+		clearTimeout(this.highlightTimeout);
+		this.highlightTimeout = setTimeout(() => bubble.classList.remove('highlight'), 2000);
+		return true;
+	}
+	focusPending(allowReload) {
+		if (!this.pendingFocus || this.focusMessage(this.pendingFocus))
+			return;
+		if (allowReload)
+			api.chat.getMessages(messages => this.init(messages));
+		else
+			this.pendingFocus = null;
 	}
 	initialized() {
 		return this._root.querySelector('history').childElementCount > 0;

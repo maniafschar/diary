@@ -12,6 +12,7 @@ import { InputTextarea } from './element/InputTextarea';
 import { ProgressBar } from './element/ProgressBar';
 import { ViewCalendar } from './element/ViewCalendar';
 import { ViewChat } from './element/ViewChat';
+import { ViewSearch } from './element/ViewSearch';
 import { ViewImage } from './element/ViewImage';
 import { ViewMap } from './element/ViewMap';
 import { ViewStatistics } from './element/ViewStatistics';
@@ -544,6 +545,7 @@ customElements.define('view-calendar', ViewCalendar);
 customElements.define('view-chat', ViewChat);
 customElements.define('view-image', ViewImage);
 customElements.define('view-map', ViewMap);
+customElements.define('view-search', ViewSearch);
 customElements.define('view-statistics', ViewStatistics);
 customElements.define('view-table', ViewTable);
 

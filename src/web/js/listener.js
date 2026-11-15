@@ -31,6 +31,21 @@ class listener {
 		});
 	}
 
+	static openSearchHit(event) {
+		if (event.detail.type == 'chat')
+			listener.openChatMessage(event.detail.id);
+		else
+			listener.updateViewImage(event.detail.id);
+	}
+
+	static openChatMessage(id) {
+		var chat = document.querySelector('view-chat');
+		chat.pendingFocus = id;
+		ui.navigateTo(3);
+		if (chat.initialized())
+			chat.focusPending(true);
+	}
+
 	static updateViewImage(index) {
 		var events = document.querySelector('event view-table').list;
 		var list = [];
@@ -474,6 +489,8 @@ images img {
 			if (!document.querySelector('view-chat').initialized())
 				api.chat.getMessages(messages => document.querySelector('view-chat').init(messages));
 		});
+		document.querySelector('view-search').addEventListener('open', listener.openSearchHit);
+		document.querySelector('view-search').parentElement.addEventListener('visible', () => document.querySelector('view-search').show());
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
 		var style = `
 thead {
