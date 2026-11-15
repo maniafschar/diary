@@ -74,9 +74,8 @@ td.column2 images img {
 tr.chat td.column1 {
 	width: 100% !important;
 	background: transparent;
-	padding: 0.5em;
+	padding: 0;
 	max-height: initial;
-	font-size: 1.25em;
 }
 tr.chat td.column2 {
 	display: none;
@@ -108,6 +107,7 @@ td.column1 bubble content {
 	word-break: break-word;
 	max-height: 10em;
 	overflow: auto;
+	font-size: 1.25em;
 }
 td.column1 bubble.model content,
 td.column1 bubble.model label {
