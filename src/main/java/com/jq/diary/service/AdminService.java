@@ -137,7 +137,7 @@ public class AdminService {
 				.start().waitFor();
 	}
 
-	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(cron = "0 0 0 * * *")
 	private void demoData() {
 		final List<Event> list = this.repository.list("from Event where client.id=2", Event.class);
 		for (final Event event : list) {

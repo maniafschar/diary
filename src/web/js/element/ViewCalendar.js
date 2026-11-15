@@ -11,7 +11,6 @@ class ViewCalendar extends HTMLElement {
 	_activeDate = null;
 	openDetail = null;
 	_monthsBefore = 3;
-	_monthsAfter = 3;
 	_scrollFrame = null;
 	_firstMonth = 0;
 	_lastMonth = 0;
@@ -255,7 +254,7 @@ class ViewCalendar extends HTMLElement {
 
 		const currentMonth = this.monthNumber(this.current.year, this.current.month);
 		const startMonth = Math.max(this._firstMonth, currentMonth - this._monthsBefore);
-		const endMonth = Math.min(this._lastMonth, currentMonth + this._monthsAfter);
+		const endMonth = this._lastMonth;
 		for (let monthNumber = startMonth; monthNumber <= endMonth; monthNumber++) {
 			const date = this.monthDate(monthNumber);
 			months.appendChild(this.createMonth(date.getFullYear(), date.getMonth(), monthNumber === startMonth));
