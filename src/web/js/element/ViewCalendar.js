@@ -89,6 +89,7 @@ class ViewCalendar extends HTMLElement {
 	font-size: 0.8em;
 	min-width: 0;
 	border-right: 1px solid rgba(0, 0, 0, 0.02);
+	background: rgba(0, 0, 0, 0.06);
 }
 	
 .cal-weekday span {
