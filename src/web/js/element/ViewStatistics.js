@@ -4,7 +4,6 @@ class ViewStatistics extends HTMLElement {
 	MAX_WORDS = 100;
 	text;
 	rating;
-	trendDays = 90;
 
 	constructor() {
 		super();
@@ -31,17 +30,11 @@ trend {
 	box-sizing: border-box;
 	padding: 0 0.5em;
 }
-trend select {
-	position: absolute;
-	right: 0.5em;
-	top: 0;
-	font-size: 0.8em;
-}
 trend svg {
 	display: block;
 	width: 100%;
 	height: 3.5em;
-	margin-top: 1.5em;
+	margin-top: 0.5em;
 	overflow: visible;
 }
 trend polyline {
@@ -146,14 +139,6 @@ chart bar {
 }`;
 		this._root.appendChild(document.createElement('wordcloud'));
 		const trend = this._root.appendChild(document.createElement('trend'));
-		const select = trend.appendChild(document.createElement('select'));
-		[[30, '30 Tage'], [90, '90 Tage'], [365, '1 Jahr'], [0, 'Gesamt']]
-			.forEach(([days, label]) => select.add(new Option(label, days)));
-		select.value = this.trendDays;
-		select.addEventListener('change', () => {
-			this.trendDays = Number(select.value);
-			this.renderTrend();
-		});
 		trend.appendChild(document.createElement('info'));
 		this._root.appendChild(document.createElement('chart'));
 	}
@@ -175,16 +160,12 @@ chart bar {
 		const info = trend.querySelector('info');
 		const DAY = 864e5;
 		const WINDOW = 30 * DAY;
-		const from = new Date();
-		from.setHours(0, 0, 0, 0);
-		from.setDate(from.getDate() - this.trendDays);
 		const points = (this.rating || [])
 			.map(entry => {
 				const date = new Date(entry.date);
 				date.setHours(0, 0, 0, 0);
 				return { time: date.getTime(), value: Math.max(0, Math.min(100, entry.rating)) };
 			})
-			.filter(point => this.trendDays == 0 || point.time >= from.getTime())
 			.sort((a, b) => a.time - b.time);
 		if (points.length < 2) {
 			info.textContent = 'Zu wenig Einträge für eine Trendanalyse';
