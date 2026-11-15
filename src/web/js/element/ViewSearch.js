@@ -75,6 +75,7 @@ tr.chat td.column1 {
 	width: 100% !important;
 	background: transparent;
 	padding: 0;
+	max-height: initial;
 }
 tr.chat td.column2 {
 	display: none;
