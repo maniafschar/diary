@@ -245,7 +245,7 @@ results {
 		if (!this.stars)
 			(this.chatMessages || []).forEach(message => add('chat', message, message.createdAt, message.note, 0));
 		hits.sort((a, b) => b.score - a.score || (b.date.getTime() || 0) - (a.date.getTime() || 0));
-		return hits.slice(0, 100);
+		return hits;
 	}
 
 	eventText(event) {
