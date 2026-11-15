@@ -176,6 +176,7 @@ results {
 		var r = document.createElement('input-rating');
 		r.setAttribute('type', 'edit');
 		this.rating = row.appendChild(r);
+		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		this.table = this.results.appendChild(document.createElement('view-table'));
