@@ -470,6 +470,19 @@ next::after {
 			return date.getDate() + '.' + (date.getMonth() + 1);
 		};
 
+		const weihnachten = new Date(year, 11, 25);
+		const wochentag = weihnachten.getDay();
+		const tageBis4Advent = wochentag === 0 ? 7 : wochentag;
+		const advent4 = new Date(jahr, 11, 25 - tageBis4Advent);
+		const advent3 = new Date(advent4);
+		advent3.setDate(advent4.getDate() - 7);
+		const advent2 = new Date(advent4);
+		advent2.setDate(advent4.getDate() - 14);
+		const advent1 = new Date(advent4);
+		advent1.setDate(advent4.getDate() - 21);
+		const bussUndBettag = new Date(advent1);
+		bussUndBettag.setDate(advent1.getDate() - 11);
+
 		var holidays = {};
 		holidays['1.1'] = 'Neujahr';
 		holidays['6.1'] = 'Hl. 3 Könige';
@@ -478,6 +491,11 @@ next::after {
 		holidays['3.10'] = 'Tag der Deutschen Einheit';
 		holidays['31.10'] = 'Reformationstag';
 		holidays['1.11'] = 'Allerheiligen';
+		holidays[bussUndBettag.getDate() + '.11'] = 'Buß- und Bettag';
+		holidays[advent1.getDate() + '.12'] = '1. Advent';
+		holidays[advent2.getDate() + '.12'] = '2. Advent';
+		holidays[advent3.getDate() + '.12'] = '3. Advent';
+		holidays[advent4.getDate() + '.12'] = '4. Advent';
 		holidays['24.12'] = 'Weihnachten';
 		holidays['25.12'] = '1. Weihnachtstag';
 		holidays['26.12'] = '2. Weihnachtstag';
