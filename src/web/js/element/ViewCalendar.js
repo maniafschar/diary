@@ -104,7 +104,7 @@ class ViewCalendar extends HTMLElement {
 	flex-direction: column;
 	min-width: 0;
 	font-size: 0.8em;
-	min-height: 10rem;
+	min-height: 6rem;
 	margin: 0.2em;
 	border-radius: 1em;
 	background: rgba(0, 0, 0, 0.03);
