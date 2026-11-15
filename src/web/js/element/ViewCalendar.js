@@ -108,8 +108,16 @@ class ViewCalendar extends HTMLElement {
 	min-height: 10rem;
 	margin: 0.2em;
 	border-radius: 1em;
-	background: rgba(0, 0, 0, 0.05);
+	background: rgba(0, 0, 0, 0.03);
 	transition: all .4s ease-out;
+}
+
+.cal-month.active .cal-day {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.cal-day.empty {
+	background: transparent;
 }
 
 .cal-day:nth-child(7n),
