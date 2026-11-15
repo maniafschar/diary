@@ -178,10 +178,6 @@ results {
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		this.table = this.results.appendChild(document.createElement('view-table'));
-		this.table.columns.push({ label: 'Datum/Ort', width: 30, style: 'overflow-y:hidden;' }, { label: 'Bemerkung', width: 55 });
-		this.table.setConvert(list => list.map(hit => hit.type == 'chat' ? this.chatRow(hit) : this.eventRow(hit)));
-		this.table.setOpenDetail(event => this.openHit(event));
-		this.table.setStyle(tableStyle);
 		var timeout;
 		input.addEventListener('input', () => {
 			clearTimeout(timeout);
@@ -259,12 +255,23 @@ results {
 		return parts.filter(part => part).join('\n');
 	}
 
+	setupTable() {
+		if (this.table.columns.length)
+			return;
+		this.table.columns.push({ label: 'Datum/Ort', width: 30, style: 'overflow-y:hidden;' }, { label: 'Bemerkung', width: 55 });
+		this.table.setConvert(list => list.map(hit => hit.type == 'chat' ? this.chatRow(hit) : this.eventRow(hit)));
+		this.table.setOpenDetail(event => this.openHit(event));
+		this.table.setStyle(tableStyle);
+	}
+
 	clearResults() {
+		this.setupTable();
 		this.table.list = [];
 		this.table.renderTable();
 	}
 
 	render(hits, terms) {
+		this.setupTable();
 		this.status.textContent = hits.length ? '' : 'Keine Treffer.';
 		this.table.list = hits;
 		this.table.renderTable();
