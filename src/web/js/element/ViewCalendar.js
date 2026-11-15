@@ -327,7 +327,8 @@ class ViewCalendar extends HTMLElement {
 
 	updateActiveMonth(container) {
 		const viewport = container.getBoundingClientRect();
-		const top = viewport.top;
+		const header = container.querySelector('.cal-month-title');
+		const top = viewport.top + header.clientHeight;
 		let activeMonth = null;
 		container.querySelectorAll('.cal-month').forEach(month => {
 			if (!activeMonth && month.querySelector('.cal-days').lastElementChild.getBoundingClientRect().top > top)
@@ -337,7 +338,7 @@ class ViewCalendar extends HTMLElement {
 		if (!activeMonth)
 			return;
 		activeMonth.classList.add('active');
-		container.querySelector('.cal-month-title').textContent =
+		header.textContent =
 			`${ViewCalendar.MONTHS_DE[Number(activeMonth.dataset.month)]} ${activeMonth.dataset.year}`;
 	}
 
