@@ -140,6 +140,11 @@ search-row {
 	align-items: center;
 	gap: 0.5em;
 }
+input-rating {
+	flex: none;
+	overflow: visible;
+	font-size: 1.4em;
+}
 input {
 	flex: 1;
 	min-width: 0;
