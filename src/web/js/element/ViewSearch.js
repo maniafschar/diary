@@ -138,6 +138,12 @@ hit p {
 	margin-block-start: 0;
 	margin-block-end: 0;
 }
+hit mark {
+	background: rgba(255, 210, 0, 0.5);
+	color: inherit;
+	border-radius: 0.2em;
+	padding: 0 0.1em;
+}
 `;
 		var row = this._root.appendChild(document.createElement('search-row'));
 		var input = row.appendChild(document.createElement('input'));
@@ -179,7 +185,7 @@ hit p {
 		}
 		this.loadChat(text, () => {
 			if (id == this.requestId)
-				this.render(this.hits(text));
+			this.render(this.hits(text), FuzzyMatcher.terms(text.slice(0, 200)));
 		});
 	}
 
@@ -229,7 +235,7 @@ hit p {
 		return parts.filter(part => part).join('\n');
 	}
 
-	render(hits) {
+	render(hits, terms) {
 		this.status.textContent = hits.length ? '' : 'Keine Treffer.';
 		hits.forEach(hit => {
 			var item = this.results.appendChild(document.createElement('hit'));
@@ -240,6 +246,7 @@ hit p {
 				this.renderChat(item, hit.item);
 			else
 				this.renderEvent(item, hit);
+			this.highlight(item, terms);
 			var open = () => this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.item.id }, bubbles: true, composed: true }));
 			item.addEventListener('click', open);
 			item.addEventListener('keydown', e => {
@@ -248,6 +255,34 @@ hit p {
 					open();
 				}
 			});
+		});
+	}
+
+	highlight(element, terms) {
+		if (!terms.length)
+			return;
+		var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+		var nodes = [];
+		while (walker.nextNode())
+			nodes.push(walker.currentNode);
+		nodes.forEach(node => {
+			if (node.parentElement.closest('span, label, date'))
+				return;
+			var parts = node.nodeValue.split(/([\p{L}\p{N}]+)/u);
+			if (parts.length < 2)
+				return;
+			var fragment = document.createDocumentFragment();
+			parts.forEach((part, i) => {
+				if (!part)
+					return;
+				if (i % 2 && terms.some(term => FuzzyMatcher.wordScore(term, FuzzyMatcher.normalize(part)) > 0)) {
+					var mark = document.createElement('mark');
+					mark.textContent = part;
+					fragment.appendChild(mark);
+				} else
+					fragment.appendChild(document.createTextNode(part));
+			});
+			node.replaceWith(fragment);
 		});
 	}
 
