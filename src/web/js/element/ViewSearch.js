@@ -335,55 +335,15 @@ results {
 	}
 
 	chatRow(hit) {
-		var row = [{ text: '<label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.removeMarkdown(hit.item.note) + '</content>' }];
+		var row = [{ text: '<label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content>' }];
 		row.row = { class: 'chat ' + hit.item.role };
 		return row;
 	}
 
-	removeMarkdown(markdown) {
-		// Replace bold text with plain text
-		markdown = markdown.replace(/\*\*(.+?)\*\*/g, '$1');
-		markdown = markdown.replace(/__(.+?)__/g, '$1');
-
-		// Replace italicized text with plain text
-		markdown = markdown.replace(/_(.+?)_/g, '$1');
-		markdown = markdown.replace(/\*(.+?)\*/g, '$1');
-
-		// Replace strikethrough text with plain text
-		markdown = markdown.replace(/~~(.+?)~~/g, '$1');
-
-		// Replace inline code blocks with plain text
-		markdown = markdown.replace(/`(.+?)`/g, '$1');
-
-		// Replace code blocks with plain text
-		markdown =
-			markdown.replaceAll(/```[\s\S]*?```/m, '');
-		markdown =
-			markdown.replaceAll(/```[\s\S]*?```/m, '');
-
-		// Remove links
-		markdown = markdown.replace(/\[(.+?)\]\((.+?)\)/g, '$1');
-
-		// Remove images
-		markdown = markdown.replace(/!\[(.+?)\]\((.+?)\)/g, '');
-
-		// Remove headings
-		markdown =
-			markdown.replaceAll(/^#+\s+(.+?)\s*$/m, '');
-		markdown = markdown.replaceAll(/^\s*=+\s*$/m, '');
-		markdown = markdown.replaceAll(/^\s*-+\s*$/m, '');
-
-		// Remove blockquotes
-		markdown = markdown.replaceAll(/^\s*>\s+(.+?)\s*$/m, '');
-
-		// Remove lists
-		markdown = markdown.replaceAll(/^\s*[\*\+-]\s+(.+?)\s*$/m, '');
-		markdown = markdown.replaceAll(/^\s*\d+\.\s+(.+?)\s*$/m, '');
-
-		// Remove horizontal lines
-		markdown = markdown.replaceAll(/^\s*[-*_]{3,}\s*$/m, '');
-
-		return markdown;
+	removeMarkdown(text) {
+		var div = document.createElement('div');
+		div.innerHTML = DOMPurify.sanitize(marked.parse(markdown ?? ''));
+		return div.textContent;
 	}
 
 	parseDate(value) {
