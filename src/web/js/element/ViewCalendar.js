@@ -130,13 +130,8 @@ class ViewCalendar extends HTMLElement {
 	border-right: none;
 }
 
-.cal-day:hover:not(.empty) {
-	background: #f0ebe2;
-}
-
-.cal-day.empty {
-	background: #faf8f4;
-	cursor: default;
+.cal-day:hover:not {
+	background: rgba(255, 170, 120, 0.1);
 }
 
 .day-num {
@@ -159,15 +154,10 @@ class ViewCalendar extends HTMLElement {
 
 .cal-day.today .day-num {
 	font-weight: bold;
-	background: rgba(255, 200, 50, 0.1);
 }
 
 .cal-day.weekend .day-num {
 	color: #8b4513;
-}
-
-.cal-day.weekend:not(.empty) {
-	background: rgba(139, 69, 19, 0.035);
 }
 
 .day-number {
@@ -179,7 +169,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day.today .day-number {
-	border-radius: 50%;
+	border-radius: 50% 0;
 	background: rgba(255, 190, 40, 0.75);
 	color: #4a3200;
 }
