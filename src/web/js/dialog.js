@@ -180,8 +180,7 @@ ${dialog.stylePictures}`;
 			item.onclick = () => {
 				menu.classList.remove('open');
 				setTimeout(() => menu.remove(), 220);
-				if (button.onclick)
-					button.onclick();
+				button.click();
 			};
 			var icon = button.querySelector('img, svg');
 			if (icon)
