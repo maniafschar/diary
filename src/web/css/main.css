@@ -113,7 +113,6 @@ body>main {
 }
 
 body>main>navigation {
-	background: var(--background-content);
 	display: flex;
 	flex-direction: column;
 }
