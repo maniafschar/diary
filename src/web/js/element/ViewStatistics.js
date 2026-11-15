@@ -164,7 +164,7 @@ chart bar {
 			.map(entry => {
 				const date = new Date(entry.date);
 				date.setHours(0, 0, 0, 0);
-				return { time: date.getTime(), value: Math.max(0, Math.min(100, entry.rating)) };
+				return { time: date.getTime(), value: Math.max(0, Math.min(100, entry.rating)), entry: entry };
 			})
 			.sort((a, b) => a.time - b.time);
 		if (points.length < 2) {
@@ -218,6 +218,16 @@ chart bar {
 			line.setAttribute('class', cls);
 			line.setAttribute('points', toPoints(key));
 			svg.appendChild(line);
+		});
+		svg.addEventListener('click', event => {
+			const rect = svg.getBoundingClientRect();
+			const x = (event.clientX - rect.left) / rect.width * width;
+			const nearest = points.reduce((best, point) => Math.abs((point.time - t0) / span * width - x) < Math.abs((best.time - t0) / span * width - x) ? point : best);
+			this.dispatchEvent(new CustomEvent('details', {
+				detail: nearest.entry,
+				bubbles: true,
+				composed: true
+			}));
 		});
 		trend.insertBefore(svg, info);
 	}
