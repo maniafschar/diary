@@ -62,7 +62,6 @@ class ViewCalendar extends HTMLElement {
 .cal-month-title {
 	text-align: center;
 	padding: 0.45em 0;
-	background: linear-gradient(90deg, rgba(221, 243, 255, 0.96), rgba(255, 250, 247, 0.96));
 	color: rgba(0, 0, 80, 0.75);
 	font-size: 1.05em;
 	font-weight: bold;
@@ -115,6 +114,7 @@ class ViewCalendar extends HTMLElement {
 	margin: 0.2em;
 	border-radius: 1em;
 	background: rgba(0, 0, 0, 0.025);
+	transition: all .4s ease-out;
 }
 
 .cal-day.has-events {
