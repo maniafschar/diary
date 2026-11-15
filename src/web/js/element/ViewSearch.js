@@ -76,6 +76,7 @@ tr.chat td.column1 {
 	background: transparent;
 	padding: 0;
 	max-height: initial;
+	border: none;
 }
 tr.chat td.column2 {
 	display: none;
@@ -108,6 +109,7 @@ td.column1 bubble content {
 	background: var(--background-clickable);
 	color: white;
 	font-size: 1.25em;
+	padding-left: 1em;
 }
 td.column1 bubble.model content,
 td.column1 bubble.model label {
@@ -117,6 +119,7 @@ td.column1 bubble.model label {
 tbody tr:hover td.column1 bubble content,
 tbody tr:hover td.column1 bubble label {
 	background-color: var(--background-hover);
+	transition: all .4s ease-out;
 }`;
 
 class ViewSearch extends HTMLElement {
