@@ -274,7 +274,11 @@ results {
 
 	render(hits, terms) {
 		this.setupTable();
-		this.status.textContent = hits.length ? '' : 'Keine Treffer.';
+		var events = hits.filter(hit => hit.type == 'event').length;
+		var chats = hits.length - events;
+		this.status.textContent = hits.length
+			? 'Treffer: ' + hits.length + ' (Tagebuch: ' + events + ', KI-Chat: ' + chats + ')'
+			: 'Keine Treffer.';
 		this.table.list = hits;
 		this.table.renderTable();
 		this.table.table().querySelectorAll('tbody td').forEach(cell => this.highlight(cell, terms));
