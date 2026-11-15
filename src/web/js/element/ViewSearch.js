@@ -6,6 +6,114 @@ import { ui } from '../ui';
 
 export { ViewSearch };
 
+const tableStyle = `
+thead {
+	display: none;
+}
+tbody {
+	height: 100%;
+}
+tr {
+	padding: 0 0.5em 0.5em 0.5em;
+	display: grid;
+	box-sizing: border-box;
+}
+td.column1 {
+	grid-column: 1;
+	grid-row: 1;
+	font-size: 0.8em;
+	background: var(--background-content);
+	padding: 0.5em 1em 0 0.8em;
+	border-radius: 0.5em 0.5em 0 0;
+	width: fit-content !important;
+	max-width: 85vw;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+td.column2 {
+	grid-column: 1;
+	grid-row: 2;
+	background: var(--background-content);
+	width: 100% !important;
+	max-width: calc(100vw - 1em) !important;
+	max-height: initial;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	overflow: hidden;
+}
+td.column2 input-rating {
+	position: absolute;
+	right: 0;
+	font-size: 0.8em;
+	margin-right: 0;
+}
+td.column2 note,
+td.column2 address {
+	position: relative;
+	display: block;
+	padding: 0.5em 0.5em 0 0.5em;
+	white-space: pre-line;
+	word-break: break-word;
+}
+td.column2 address {
+	font-style: normal;
+}
+td.column2 feedback {
+	display: block;
+	margin: 0.5em;
+	padding-top: 0.5em;
+	border-top: solid 1px rgba(0, 0, 0, 0.1);
+	white-space: pre-line;
+	word-break: break-word;
+}
+td.column2 feedback > span {
+	display: block;
+	font-size: 0.8em;
+}
+type {
+	display: block;
+	font-size: 0.9em;
+	font-weight: bold;
+	color: var(--color-clickable);
+}
+td.column2 bubble {
+	display: block;
+	max-width: 85%;
+	margin: 0.5em;
+	text-align: left;
+	white-space: normal;
+}
+td.column2 bubble.user {
+	margin-left: auto;
+}
+td.column2 bubble content {
+	display: block;
+	padding: 0.5em 0.75em;
+	border-radius: 0.5em;
+	background: var(--background-clickable);
+	color: white;
+	word-break: break-word;
+	max-height: 10em;
+	overflow: auto;
+}
+td.column2 bubble.model content {
+	background: var(--background-content);
+	color: inherit;
+}
+td.column2 bubble p {
+	margin-block-start: 0;
+	margin-block-end: 0;
+}
+mark {
+	background: rgba(255, 210, 0, 0.5);
+	color: inherit;
+	border-radius: 0.2em;
+	padding: 0 0.1em;
+}`;
+
+function escapeHtml(text) {
+	return String(text ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+}
+
 class ViewSearch extends HTMLElement {
 
 	constructor() {
@@ -23,6 +131,9 @@ class ViewSearch extends HTMLElement {
 	padding: 1em;
 	box-sizing: border-box;
 	overflow: hidden;
+}
+*::-webkit-scrollbar {
+	display: none;
 }
 search-row {
 	display: flex;
@@ -52,98 +163,6 @@ results {
 	overflow-y: auto;
 	height: calc(100% - 4em);
 }
-hit {
-	display: block;
-	padding: 0.75em;
-	margin-bottom: 0.5em;
-	border-radius: 0.5em;
-	background: var(--background-content);
-	cursor: pointer;
-	white-space: normal;
-}
-hit:hover, hit:focus {
-	outline: 2px solid var(--color-primary, #b55);
-}
-hit.chat {
-	padding: 0;
-	background: none;
-}
-hit.chat:hover, hit.chat:focus {
-	outline: none;
-}
-hit date {
-	display: block;
-	font-size: 0.8em;
-	opacity: 0.8;
-}
-hit address {
-	display: block;
-	font-style: normal;
-	white-space: pre-line;
-}
-hit note {
-	display: block;
-	margin: 0.5em 0;
-	white-space: pre-line;
-	word-break: break-word;
-}
-hit feedback {
-	display: block;
-	padding-top: 0.75em;
-	border-top: solid 1px rgba(0, 0, 0, 0.1);
-	margin-top: 0.75em;
-	white-space: pre-line;
-	word-break: break-word;
-}
-hit feedback > span {
-	display: block;
-	font-size: 0.8em;
-}
-hit bubble {
-	position: relative;
-	display: block;
-	white-space: normal;
-	margin: 0.5em 0;
-	max-width: 85%;
-	text-align: left;
-}
-hit bubble > label {
-	display: inline-block;
-	font-size: 0.8em;
-	padding: 0.5em 1em;
-	border-radius: 0.5em 0.5em 0 0;
-	background: var(--background-content);
-}
-hit bubble > content {
-	display: block;
-	border-radius: 0 0.5em 0.5em 0.5em;
-	padding: 0.5em 0.75em;
-	background: var(--background-content);
-	min-height: 1.4em;
-	word-break: break-word;
-}
-hit bubble.model {
-	margin-left: 0;
-	cursor: pointer;
-}
-hit bubble.user {
-	margin-left: auto;
-	color: white;
-}
-hit bubble.user > label,
-hit bubble.user > content {
-	background: var(--background-clickable);
-}
-hit p {
-	margin-block-start: 0;
-	margin-block-end: 0;
-}
-hit mark {
-	background: rgba(255, 210, 0, 0.5);
-	color: inherit;
-	border-radius: 0.2em;
-	padding: 0 0.1em;
-}
 `;
 		var row = this._root.appendChild(document.createElement('search-row'));
 		var input = row.appendChild(document.createElement('input'));
@@ -158,6 +177,11 @@ hit mark {
 		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
+		this.table = this.results.appendChild(document.createElement('view-table'));
+		this.table.columns.push({ label: 'Datum/Ort', width: 30, style: 'overflow-y:hidden;' }, { label: 'Bemerkung', width: 55 });
+		this.table.setConvert(list => list.map(hit => hit.type == 'chat' ? this.chatRow(hit) : this.eventRow(hit)));
+		this.table.setOpenDetail(event => this.openHit(event));
+		this.table.setStyle(tableStyle);
 		var timeout;
 		input.addEventListener('input', () => {
 			clearTimeout(timeout);
@@ -178,14 +202,14 @@ hit mark {
 	search() {
 		var id = ++this.requestId;
 		var text = this.input.value.trim();
-		this.results.textContent = '';
+		this.clearResults();
 		if (text.length < 2 && !this.stars) {
 			this.status.textContent = '';
 			return;
 		}
 		this.loadChat(text, () => {
 			if (id == this.requestId)
-			this.render(this.hits(text), FuzzyMatcher.terms(text.slice(0, 200)));
+				this.render(this.hits(text), FuzzyMatcher.terms(text.slice(0, 200)));
 		});
 	}
 
@@ -235,27 +259,21 @@ hit mark {
 		return parts.filter(part => part).join('\n');
 	}
 
+	clearResults() {
+		this.table.list = [];
+		this.table.renderTable();
+	}
+
 	render(hits, terms) {
 		this.status.textContent = hits.length ? '' : 'Keine Treffer.';
-		hits.forEach(hit => {
-			var item = this.results.appendChild(document.createElement('hit'));
-			item.classList.add(hit.type);
-			item.setAttribute('tabindex', '0');
-			item.setAttribute('role', 'button');
-			if (hit.type == 'chat')
-				this.renderChat(item, hit.item);
-			else
-				this.renderEvent(item, hit);
-			this.highlight(item, terms);
-			var open = () => this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.item.id }, bubbles: true, composed: true }));
-			item.addEventListener('click', open);
-			item.addEventListener('keydown', e => {
-				if (e.key == 'Enter' || e.key == ' ') {
-					e.preventDefault();
-					open();
-				}
-			});
-		});
+		this.table.list = hits;
+		this.table.renderTable();
+		this.table.table().querySelectorAll('tbody td').forEach(cell => this.highlight(cell, terms));
+	}
+
+	openHit(event) {
+		var hit = this.table.list[ui.parents(event.target, 'tr').getAttribute('i')];
+		this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.item.id }, bubbles: true, composed: true }));
 	}
 
 	highlight(element, terms) {
@@ -266,7 +284,7 @@ hit mark {
 		while (walker.nextNode())
 			nodes.push(walker.currentNode);
 		nodes.forEach(node => {
-			if (node.parentElement.closest('span, label, date'))
+			if (node.parentElement.closest('span, label, date, type'))
 				return;
 			var parts = node.nodeValue.split(/([\p{L}\p{N}]+)/u);
 			if (parts.length < 2)
@@ -286,34 +304,33 @@ hit mark {
 		});
 	}
 
-	renderEvent(element, hit) {
-		var event = hit.item;
-		element.appendChild(document.createElement('date')).textContent = ui.formatTime(hit.date);
-		var location = event.location;
-		if (location && (location.name || location.address)) {
-			var address = element.appendChild(document.createElement('address'));
-			address.textContent = [location.name, location.address].filter(part => part).join('\n');
-		}
-		if (event.rating) {
-			var rating = element.appendChild(document.createElement('input-rating'));
-			rating.classList.add('line');
-			rating.setAttribute('value', hit.rating);
-		}
+	eventRow(hit) {
+		var event = hit.item, location = event.location;
+		var first = '<type>Tagebuch</type>' + escapeHtml(ui.formatTime(hit.date)) + (location?.name ? '<br/>' + escapeHtml(location.name) : '');
+		var text = '';
+		if (location?.address)
+			text += '<address>' + escapeHtml(location.address) + '</address>';
 		if (event.note)
-			element.appendChild(document.createElement('note')).textContent = event.note;
+			text += '<note>' + escapeHtml(event.note) + '</note>';
+		if (hit.rating)
+			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		(event.eventFeedbacks || []).forEach(feedback => {
-			var box = element.appendChild(document.createElement('feedback'));
-			box.appendChild(document.createElement('span')).textContent = ui.extractPseudonyms()[feedback.contact.id] + ' · ' + ui.formatTime(this.parseDate(feedback.createdAt));
-			box.appendChild(document.createTextNode(feedback.note));
+			var author = ui.extractPseudonyms()[feedback.contact.id] + ' · ' + ui.formatTime(this.parseDate(feedback.createdAt));
+			text += '<feedback><span>' + escapeHtml(author) + '</span>' + escapeHtml(feedback.note) + '</feedback>';
 		});
+		var row = [{ text: first }, { text: text }];
+		row.row = { class: 'event' };
+		return row;
 	}
 
-	renderChat(element, message) {
-		var bubble = element.appendChild(document.createElement('bubble'));
-		bubble.classList.add(message.role);
-		bubble.appendChild(document.createElement('label')).textContent = ui.formatTime(this.parseDate(message.createdAt));
-		var content = bubble.appendChild(document.createElement('content'));
-		content.innerHTML = DOMPurify.sanitize(marked.parse(message.note));
+	chatRow(hit) {
+		var message = hit.item;
+		var role = message.role == 'user' ? 'user' : 'model';
+		var first = '<type>KI-Chat</type>' + escapeHtml(ui.formatTime(hit.date));
+		var content = DOMPurify.sanitize(marked.parse(message.note));
+		var row = [{ text: first }, { text: '<bubble class="' + role + '"><content>' + content + '</content></bubble>' }];
+		row.row = { class: 'chat' };
+		return row;
 	}
 
 	parseDate(value) {
