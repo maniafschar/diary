@@ -1,5 +1,3 @@
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
@@ -110,10 +108,6 @@ mark {
 	padding: 0 0.1em;
 }`;
 
-function escapeHtml(text) {
-	return String(text ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-}
-
 class ViewSearch extends HTMLElement {
 
 	constructor() {
@@ -196,6 +190,10 @@ results {
 	setStars(stars) {
 		this.stars = stars || null;
 		this.search();
+	}
+
+	escapeHtml(text) {
+		return String(text ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 	}
 
 	search() {
@@ -319,32 +317,82 @@ results {
 	}
 
 	eventRow(hit) {
-		var event = hit.item, location = event.location;
-		var first = '<type>Tagebuch</type>' + escapeHtml(ui.formatTime(hit.date)) + (location?.name ? '<br/>' + escapeHtml(location.name) : '');
+		var event = hit.item;
 		var text = '';
-		if (location?.address)
-			text += '<address>' + escapeHtml(location.address) + '</address>';
 		if (event.note)
-			text += '<note>' + escapeHtml(event.note) + '</note>';
+			text += '<note>' + this.escapeHtml(event.note) + '</note>';
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
-		(event.eventFeedbacks || []).forEach(feedback => {
-			var author = ui.extractPseudonyms()[feedback.contact.id] + ' · ' + ui.formatTime(this.parseDate(feedback.createdAt));
-			text += '<feedback><span>' + escapeHtml(author) + '</span>' + escapeHtml(feedback.note) + '</feedback>';
-		});
-		var row = [{ text: first }, { text: text }];
+		var images = '';
+		if (event.eventImages) {
+			for (var i2 = 0; i2 < event.eventImages.length; i2++)
+				images += '<img src="' + api.mediaUrl(event.eventImages[i2].imageThumbnail) + '" />';
+			text += '<images>' + images + '</images>';
+		}
+		var row = [this.escapeHtml(ui.formatTime(hit.date)) + (event.location?.name ? ' ' + this.escapeHtml(event.location.name) : ''), { text: text }];
 		row.row = { class: 'event' };
 		return row;
 	}
 
 	chatRow(hit) {
-		var message = hit.item;
-		var role = message.role == 'user' ? 'user' : 'model';
-		var first = '<type>KI-Chat</type>' + escapeHtml(ui.formatTime(hit.date));
-		var content = DOMPurify.sanitize(marked.parse(message.note));
-		var row = [{ text: first }, { text: '<bubble class="' + role + '"><content>' + content + '</content></bubble>' }];
-		row.row = { class: 'chat' };
+		var row = [{ text: '<label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.removeMarkdown(hit.item.note) + '</content>' }];
+		row.row = { class: 'chat ' + message.role };
 		return row;
+	}
+
+	removeMarkdown(markdown) {
+
+		// Replace bold text with plain text
+		markdown = markdown.replaceAll(/\*\*(.+?)\*\*/r, match => match.group(1) ?? '');
+		markdown = markdown.replaceAll(/__(.+?)__/r, match => match.group(1) ?? '');
+
+		// Replace italicized text with plain text
+		markdown = markdown.replaceAll(/_(.+?)_/r, match => match.group(1) ?? '');
+		markdown = markdown.replaceAll(/\*(.+?)\*/r, match => match.group(1) ?? '');
+
+		// Replace strikethrough text with plain text
+		markdown = markdown.replaceAll(RegExp('~~(.+?)~~'), match => match.group(1) ?? '');
+
+		// Replace inline code blocks with plain text
+		markdown = markdown.replaceAll(RegExp('`(.+?)`'), match => match.group(1) ?? '');
+
+		// Replace code blocks with plain text
+		markdown =
+			markdown.replaceAll(/```[\s\S]*?```/m, '');
+		markdown =
+			markdown.replaceAll(/```[\s\S]*?```/m, '');
+
+		// Remove links
+		markdown = markdown.replaceAll(/\[(.+?)\]\((.+?)\)/r, '');
+
+		// Remove images
+		markdown = markdown.replaceAll(/!\[(.+?)\]\((.+?)\)/, '');
+
+		// Remove headings
+		markdown =
+			markdown.replaceAll(/^#+\s+(.+?)\s*$/m, '');
+		markdown = markdown.replaceAll(/^\s*=+\s*$/m, '');
+		markdown = markdown.replaceAll(/^\s*-+\s*$/m, '');
+
+		// Remove blockquotes
+		markdown =
+			markdown.replaceAll(/^\s*>\s+(.+?)\s*$/m, '');
+
+		// Remove lists
+		markdown = markdown.replaceAll(
+			/^\s*[\*\+-]\s+(.+?)\s*$/m,
+			'',
+		);
+		markdown = markdown.replaceAll(
+			/^\s*\d+\.\s+(.+?)\s*$/m,
+			'',
+		);
+
+		// Remove horizontal lines
+		markdown =
+			markdown.replaceAll(/^\s*[-*_]{3,}\s*$/m, '');
+
+		return markdown;
 	}
 
 	parseDate(value) {

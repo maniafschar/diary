@@ -234,8 +234,7 @@ button:hover {
 		bubble.setAttribute('role', 'button');
 		bubble.setAttribute('tabindex', '0');
 		bubble.setAttribute('aria-expanded', 'true');
-		var label = bubble.appendChild(document.createElement('label'));
-		label.appendChild(document.createElement('date')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
+		bubble.appendChild(document.createElement('label')).textContent = ui.formatTime(new Date(message.createdAt.replace('+00:00', '')));
 		var content = bubble.appendChild(document.createElement('content'));
 		var rawText = message.note;
 		if (message.role == 'model')
