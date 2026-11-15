@@ -142,8 +142,6 @@ search-row {
 }
 input-rating {
 	flex: none;
-	overflow: visible;
-	font-size: 1.4em;
 }
 input {
 	flex: 1;
@@ -175,8 +173,9 @@ results {
 		input.placeholder = 'Tagebuch und KI-Chat durchsuchen';
 		input.setAttribute('aria-label', 'Suche');
 		this.input = input;
-		this.rating = row.innerHTML = '<input-rating type="edit"></input-rating>';
-		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
+		var r = document.createElement('input-rating');
+		r.setAttribute('type', 'edit');
+		this.rating = row.appendChild(r);
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		this.table = this.results.appendChild(document.createElement('view-table'));
