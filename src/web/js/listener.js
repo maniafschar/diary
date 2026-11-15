@@ -366,6 +366,11 @@ address {
 			api.activateProgressbar();
 	}
 
+	static statisticOpenDay(event) {
+		var list = document.querySelector('event view-table').list;
+		listener.updateViewImage(list[event.detail.ids[0]].id);
+	}
+
 	static statisticDetail(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
@@ -496,6 +501,7 @@ images img {
 		document.querySelector('view-search').addEventListener('open', listener.openSearchHit);
 		document.querySelector('view-search').parentElement.addEventListener('visible', () => document.querySelector('view-search').show());
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
+		document.querySelector('view-statistics').addEventListener('openday', listener.statisticOpenDay);
 		var style = `
 thead {
 	display: none;

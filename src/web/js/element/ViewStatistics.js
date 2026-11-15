@@ -252,13 +252,17 @@ chart bar {
 			line.setAttribute('points', toPoints(key));
 			svg.appendChild(line);
 		});
-		const showAt = clientX => {
+		const nearestAt = clientX => {
 			const rect = svg.getBoundingClientRect();
 			const px = Math.max(0, Math.min(width, (clientX - rect.left) / rect.width * width));
 			const dayX = point => (point.time - t0) / span * width;
-			const nearest = points.reduce((best, point) => Math.abs(dayX(point) - px) < Math.abs(dayX(best) - px) ? point : best);
-			const entry = nearest.entry;
-			const x = svg.offsetLeft + dayX(nearest) / width * svg.offsetWidth;
+			return points.reduce((best, point) => Math.abs(dayX(point) - px) < Math.abs(dayX(best) - px) ? point : best);
+		};
+		const showAt = clientX => {
+			const svgRect = svg.getBoundingClientRect();
+			const trendRect = trend.getBoundingClientRect();
+			const entry = nearestAt(clientX).entry;
+			const x = svgRect.left - trendRect.left + (nearestAt(clientX).time - t0) / span * svgRect.width;
 			tip.textContent = `${new Date(entry.date).toLocaleDateString('de-DE')} · ${entry.ids.length} ${entry.ids.length == 1 ? 'Eintrag' : 'Einträge'} · Ø ${format(entry.rating / 20, 1)} Sterne`;
 			tip.classList.add('visible');
 			const left = Math.max(0, Math.min(trend.clientWidth - tip.offsetWidth, x - tip.offsetWidth / 2));
@@ -274,6 +278,11 @@ chart bar {
 		svg.addEventListener('pointerup', event => event.pointerType != 'mouse' && hide());
 		svg.addEventListener('pointercancel', hide);
 		svg.addEventListener('pointerleave', event => event.pointerType == 'mouse' && hide());
+		svg.addEventListener('click', event => this.dispatchEvent(new CustomEvent('openday', {
+			detail: nearestAt(event.clientX).entry,
+			bubbles: true,
+			composed: true
+		})));
 		trend.insertBefore(svg, info);
 	}
 
