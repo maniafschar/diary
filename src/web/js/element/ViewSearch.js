@@ -22,7 +22,14 @@ class ViewSearch extends HTMLElement {
 	box-sizing: border-box;
 	overflow: hidden;
 }
+search-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
 input {
+	flex: 1;
+	min-width: 0;
 	width: 100%;
 	box-sizing: border-box;
 	padding: 0.6em 0.8em;
@@ -45,65 +52,102 @@ results {
 }
 hit {
 	display: block;
-	padding: 0.6em 0.8em;
+	padding: 0.75em;
 	margin-bottom: 0.5em;
 	border-radius: 0.5em;
 	background: var(--background-content);
 	cursor: pointer;
+	white-space: normal;
 }
 hit:hover, hit:focus {
 	outline: 2px solid var(--color-primary, #b55);
 }
-hit header {
-	display: flex;
-	gap: 0.5em;
-	align-items: center;
+hit.chat {
+	padding: 0;
+	background: none;
+}
+hit.chat:hover, hit.chat:focus {
+	outline: none;
+}
+hit date {
+	display: block;
 	font-size: 0.8em;
 	opacity: 0.8;
 }
-hit badge {
-	padding: 0.1em 0.5em;
-	border-radius: 1em;
-	background: var(--color-primary, #b55);
-	color: #fff;
-	white-space: nowrap;
-}
-hit snippet {
+hit address {
 	display: block;
-	margin-top: 0.3em;
-	white-space: normal;
+	font-style: normal;
+	white-space: pre-line;
+}
+hit note {
+	display: block;
+	margin: 0.5em 0;
+	white-space: pre-line;
 	word-break: break-word;
 }
-hit stars {
+hit feedback {
+	display: block;
+	padding-top: 0.75em;
+	border-top: solid 1px rgba(0, 0, 0, 0.1);
+	margin-top: 0.75em;
+	white-space: pre-line;
+	word-break: break-word;
+}
+hit feedback > span {
+	display: block;
+	font-size: 0.8em;
+}
+hit bubble {
+	position: relative;
+	display: block;
+	white-space: normal;
+	margin: 0.5em 0;
+	max-width: 85%;
+	text-align: left;
+}
+hit bubble > label {
+	display: inline-block;
+	font-size: 0.8em;
+	padding: 0.5em 1em;
+	border-radius: 0.5em 0.5em 0 0;
+	background: var(--background-content);
+}
+hit bubble > content {
+	display: block;
+	border-radius: 0 0.5em 0.5em 0.5em;
+	padding: 0.5em 0.75em;
+	background: var(--background-content);
+	min-height: 1.4em;
+	word-break: break-word;
+}
+hit bubble.model {
+	margin-left: 0;
 	cursor: pointer;
+}
+hit bubble.user {
 	margin-left: auto;
+	color: white;
 }
-hit stars input-rating {
-	pointer-events: none;
+hit bubble.user > label,
+hit bubble.user > content {
+	background: var(--background-clickable);
 }
-filter {
-	display: none;
-	align-items: center;
-	gap: 0.5em;
-	margin: 0.75em 0.25em 0;
-	font-size: 0.9em;
-	cursor: pointer;
-}
-filter.active {
-	display: flex;
-}
-filter input-rating {
-	pointer-events: none;
+hit p {
+	margin-block-start: 0;
+	margin-block-end: 0;
 }
 `;
-		var input = this._root.appendChild(document.createElement('input'));
+		var row = this._root.appendChild(document.createElement('search-row'));
+		var input = row.appendChild(document.createElement('input'));
 		input.type = 'search';
 		input.placeholder = 'Tagebuch und KI-Chat durchsuchen';
 		input.setAttribute('aria-label', 'Suche');
 		this.input = input;
-		this.filter = this._root.appendChild(document.createElement('filter'));
-		this.filter.setAttribute('title', 'Sterne-Filter aufheben');
-		this.filter.addEventListener('click', () => this.setStars(null));
+		this.rating = row.appendChild(document.createElement('input-rating'));
+		this.rating.setAttribute('type', 'edit');
+		this.rating.setAttribute('title', 'Nach Sternen filtern');
+		this.rating.classList.add('line');
+		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		var timeout;
@@ -119,16 +163,7 @@ filter input-rating {
 	}
 
 	setStars(stars) {
-		this.stars = this.stars == stars ? null : stars;
-		this.filter.textContent = '';
-		if (this.stars) {
-			this.filter.classList.add('active');
-			this.filter.appendChild(document.createTextNode('Sterne:'));
-			var rating = this.filter.appendChild(document.createElement('input-rating'));
-			rating.setAttribute('value', this.stars * 20);
-			this.filter.appendChild(document.createTextNode('✕'));
-		} else
-			this.filter.classList.remove('active');
+		this.stars = stars || null;
 		this.search();
 	}
 
@@ -161,26 +196,24 @@ filter input-rating {
 		if (!terms.length && !this.stars)
 			return [];
 		var hits = [];
-		var add = (type, id, date, note, rating) => {
+		var add = (type, item, date, note, rating) => {
 			var score = 1;
-			var start = 0;
 			if (terms.length) {
 				var match = FuzzyMatcher.match(terms, note);
 				if (!match)
 					return;
 				score = match.score;
-				start = match.start;
 			}
-			hits.push({ type: type, id: id, score: score, date: this.parseDate(date), snippet: this.snippet(note, start), rating: rating });
+			hits.push({ type: type, item: item, score: score, date: this.parseDate(date), rating: rating });
 		};
 		document.querySelector('event view-table').list.forEach(event => {
 			var rating = event.ratingCount ? event.rating / event.ratingCount : 0;
 			if (this.stars && Math.round(rating / 20) != this.stars)
 				return;
-			add('event', event.id, event.date, this.eventText(event), rating);
+			add('event', event, event.date, this.eventText(event), rating);
 		});
 		if (!this.stars)
-			(this.chatMessages || []).forEach(message => add('chat', message.id, message.createdAt, message.note, 0));
+			(this.chatMessages || []).forEach(message => add('chat', message, message.createdAt, message.note, 0));
 		hits.sort((a, b) => b.score - a.score || (b.date.getTime() || 0) - (a.date.getTime() || 0));
 		return hits.slice(0, 100);
 	}
@@ -194,39 +227,18 @@ filter input-rating {
 		return parts.filter(part => part).join('\n');
 	}
 
-	snippet(text, matchStart) {
-		var from = Math.max(0, matchStart - 60);
-		var to = Math.min(text.length, matchStart + 90);
-		if (from > 0 && /[\uDC00-\uDFFF]/.test(text.charAt(from)))
-			from++;
-		if (to < text.length && /[\uD800-\uDBFF]/.test(text.charAt(to - 1)))
-			to--;
-		var part = text.substring(from, to).replace(/\s+/g, ' ').trim();
-		return (from > 0 ? '…' : '') + part + (to < text.length ? '…' : '');
-	}
-
 	render(hits) {
 		this.status.textContent = hits.length ? '' : 'Keine Treffer.';
 		hits.forEach(hit => {
 			var item = this.results.appendChild(document.createElement('hit'));
+			item.classList.add(hit.type);
 			item.setAttribute('tabindex', '0');
 			item.setAttribute('role', 'button');
-			var header = item.appendChild(document.createElement('header'));
-			var badge = header.appendChild(document.createElement('badge'));
-			badge.textContent = hit.type == 'chat' ? 'KI-Chat' : 'Tagebuch';
-			var date = header.appendChild(document.createElement('span'));
-			date.textContent = ui.formatTime(hit.date);
-			if (hit.rating) {
-				var stars = header.appendChild(document.createElement('stars'));
-				stars.setAttribute('title', 'Nur diese Bewertung anzeigen');
-				stars.appendChild(document.createElement('input-rating')).setAttribute('value', hit.rating);
-				stars.addEventListener('click', e => {
-					e.stopPropagation();
-					this.setStars(Math.round(hit.rating / 20));
-				});
-			}
-			item.appendChild(document.createElement('snippet')).textContent = hit.snippet;
-			var open = () => this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.id }, bubbles: true, composed: true }));
+			if (hit.type == 'chat')
+				this.renderChat(item, hit.item);
+			else
+				this.renderEvent(item, hit);
+			var open = () => this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.item.id }, bubbles: true, composed: true }));
 			item.addEventListener('click', open);
 			item.addEventListener('keydown', e => {
 				if (e.key == 'Enter' || e.key == ' ') {
@@ -235,6 +247,36 @@ filter input-rating {
 				}
 			});
 		});
+	}
+
+	renderEvent(element, hit) {
+		var event = hit.item;
+		element.appendChild(document.createElement('date')).textContent = ui.formatTime(hit.date);
+		var location = event.location;
+		if (location && (location.name || location.address)) {
+			var address = element.appendChild(document.createElement('address'));
+			address.textContent = [location.name, location.address].filter(part => part).join('\n');
+		}
+		if (event.rating) {
+			var rating = element.appendChild(document.createElement('input-rating'));
+			rating.classList.add('line');
+			rating.setAttribute('value', hit.rating);
+		}
+		if (event.note)
+			element.appendChild(document.createElement('note')).textContent = event.note;
+		(event.eventFeedbacks || []).forEach(feedback => {
+			var box = element.appendChild(document.createElement('feedback'));
+			box.appendChild(document.createElement('span')).textContent = ui.extractPseudonyms()[feedback.contact.id] + ' · ' + ui.formatTime(this.parseDate(feedback.createdAt));
+			box.appendChild(document.createTextNode(feedback.note));
+		});
+	}
+
+	renderChat(element, message) {
+		var bubble = element.appendChild(document.createElement('bubble'));
+		bubble.classList.add(message.role);
+		bubble.appendChild(document.createElement('label')).textContent = ui.formatTime(this.parseDate(message.createdAt));
+		var content = bubble.appendChild(document.createElement('content'));
+		content.innerHTML = DOMPurify.sanitize(marked.parse(message.note));
 	}
 
 	parseDate(value) {
