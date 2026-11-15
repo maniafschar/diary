@@ -330,8 +330,8 @@ results {
 	}
 
 	chatRow(hit) {
-		var row = [{ text: '<bubble class="' + hit.role + '"><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
-		row.row = { class: 'chat ' + hit.item.role };
+		var row = [{ text: '<bubble class="' + hit.item.role + '"><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
+		row.row = { class: 'chat' };
 		return row;
 	}
 
