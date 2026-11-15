@@ -129,11 +129,11 @@ input {
 	font-size: 1em;
 	font-weight: normal;
 	outline: none !important;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-family: var(--font-family) !important;
 	height: 2em;
 	padding: 0em 0.75em;
 	border-radius: 0.5em;
-	background: rgba(255, 255, 255, 0.85);
+	background: var(--background-input);
 	vertical-align: top;
 	border: none;
 	width: 100%;
@@ -176,7 +176,7 @@ button {
 	padding: 0.75em 1.5em;
 	outline: none;
 	cursor: pointer;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-family);
 	margin: 0 0.5em;
 	color: white;
 	font-size: 1em;

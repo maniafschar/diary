@@ -64,12 +64,8 @@ images {
 	display: grid;
 }
 .leaflet-popup-content-wrapper {
-	background: var(--panel);
-	color: var(--text);
+	color: black;
 	border-radius: 0.5em;
-}
-.leaflet-popup-tip {
-	background: var(--panel);
 }
 .popup-box {
 	min-width: 10em;
@@ -87,7 +83,7 @@ images {
 	white-space: nowrap;
 }
 .popup-box .addr {
-	color: var(--muted);
+	color: black;
 	margin-bottom:  0.5em;
 	overflow-x: auto;
 	white-space: nowrap;

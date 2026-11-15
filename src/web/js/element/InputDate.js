@@ -78,7 +78,7 @@ cell.holiday {
 	color: rgb(200, 100, 80);
 }
 cell.selected {
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: var(--background-content);
 }
 prev,
 next {

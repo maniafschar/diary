@@ -3,7 +3,12 @@
 	--background-clickable: rgba(0, 0, 120, 0.4);
 	--background-clickable-highlight: rgba(0, 0, 120, 0.7);
 	--background-content: rgba(255, 255, 255, 0.6);
+	--background-input: rgba(255, 255, 255, 0.85);
+	--background-app: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9);
 	--color-clickable: white;
+	--color-weekend: #8b4513;
+	--font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--shadow-icon: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
 }
 
 @font-face {
@@ -49,8 +54,8 @@ body {
 	text-align: center;
 	overflow: visible;
 	line-height: 1.4;
-	background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background: var(--background-app) 50% fixed;
+	font-family: var(--font-family);
 }
 
 body>intro,
@@ -264,7 +269,7 @@ body>imprint.open>.imprint-panel {
 		gap: 0.35rem;
 		min-width: 10rem;
 		padding: 0.5rem;
-		background: linear-gradient(135deg, #fff, #fffaf7 10%, #fff3ea 20%, #f5f3f0 33%, #ddf3ff 66%, #d0f1c9) 50% fixed;
+		background: var(--background-app) 50% fixed;
 		border-radius: 1em 0 0 1em;
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.18);
 		position: fixed;
@@ -293,7 +298,7 @@ body>imprint.open>.imprint-panel {
 		background: transparent;
 		color: black;
 		font-size: 0.75rem;
-		font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-family: var(--font-family);
 		text-align: left;
 	}
 
@@ -489,7 +494,7 @@ body>button {
 	right: 0.3em;
 	top: 0.3em;
 	position: fixed !important;
-	filter: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
+	filter: var(--shadow-icon);
 	z-index: 4;
 }
 
@@ -506,7 +511,7 @@ body>h2 {
 	margin: 0;
 	text-overflow: ellipsis;
 	text-align: left;
-	filter: drop-shadow(0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3));
+	filter: var(--shadow-icon);
 	z-index: 4;
 	max-width: 100%;
 	font-size: 1.3em;
@@ -523,10 +528,10 @@ button {
 	cursor: pointer;
 	margin: 0 0.5em 0.5em 0.5em;
 	font-size: 1em;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-family);
 	z-index: 2;
 	color: white;
-	transition: ease .4s all;
+	transition: var(--transition-clickable);
 }
 
 button.selected,
@@ -608,11 +613,11 @@ input {
 	font-size: 1em;
 	font-weight: normal;
 	outline: none !important;
-	font-family: Comfortaa, Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-family: var(--font-family) !important;
 	height: 2em;
 	padding: 0em 0.75em;
 	border-radius: 0.5em;
-	background: rgba(255, 255, 255, 0.85);
+	background: var(--background-input);
 	vertical-align: top;
 	border: none;
 	width: 100%;
@@ -677,7 +682,7 @@ value item {
 }
 
 value item.selected {
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: var(--background-content);
 }
 
 value item.selected::after {

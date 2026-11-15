@@ -89,7 +89,7 @@ class ViewCalendar extends HTMLElement {
 	padding: 0.3em 0 0 0.25em;
 }
 
-.cal-weekday.weekend { color: #8b4513; }
+.cal-weekday.weekend { color: var(--color-weekend); }
 
 .cal-days {
 	display: contents;
@@ -125,7 +125,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day:hover {
-	background: rgba(255, 170, 120, 0.1);
+	background: rgba(255, 170, 120, 0.1) !important;
 }
 
 .day-num {
@@ -151,7 +151,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day.weekend .day-num {
-	color: #8b4513;
+	color: var(--color-weekend);
 }
 
 .day-number {
