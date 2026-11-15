@@ -140,6 +140,11 @@ class ViewSearch extends HTMLElement {
 	box-sizing: border-box;
 	overflow: hidden;
 }
+@media (max-width: 700px) {
+	:host(*) {
+		padding: 0;
+	}
+}
 *::-webkit-scrollbar {
 	display: none;
 }
@@ -179,11 +184,13 @@ results {
 		var row = this._root.appendChild(document.createElement('search-row'));
 		var input = row.appendChild(document.createElement('input'));
 		input.type = 'search';
+		input.style.margin = '0.5em 0 0 0.5em';
 		input.placeholder = 'Tagebuch und KI-Chat durchsuchen';
 		input.setAttribute('aria-label', 'Suche');
 		this.input = input;
 		var r = document.createElement('input-rating');
 		r.setAttribute('type', 'edit');
+		r.style.fontSize = '0.7em';
 		this.rating = row.appendChild(r);
 		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
 		this.status = this._root.appendChild(document.createElement('status'));
