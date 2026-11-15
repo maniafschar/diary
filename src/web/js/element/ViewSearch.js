@@ -74,18 +74,42 @@ hit snippet {
 	white-space: normal;
 	word-break: break-word;
 }
+hit stars {
+	cursor: pointer;
+	margin-left: auto;
+}
+hit stars input-rating {
+	pointer-events: none;
+}
+filter {
+	display: none;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0.75em 0.25em 0;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+filter.active {
+	display: flex;
+}
+filter input-rating {
+	pointer-events: none;
+}
 `;
 		var input = this._root.appendChild(document.createElement('input'));
 		input.type = 'search';
 		input.placeholder = 'Tagebuch und KI-Chat durchsuchen';
 		input.setAttribute('aria-label', 'Suche');
 		this.input = input;
+		this.filter = this._root.appendChild(document.createElement('filter'));
+		this.filter.setAttribute('title', 'Sterne-Filter aufheben');
+		this.filter.addEventListener('click', () => this.setStars(null));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		var timeout;
 		input.addEventListener('input', () => {
 			clearTimeout(timeout);
-			timeout = setTimeout(() => this.search(input.value.trim()), 300);
+			timeout = setTimeout(() => this.search(), 300);
 		});
 	}
 
@@ -94,21 +118,36 @@ hit snippet {
 		this.input?.focus();
 	}
 
-	search(text) {
+	setStars(stars) {
+		this.stars = this.stars == stars ? null : stars;
+		this.filter.textContent = '';
+		if (this.stars) {
+			this.filter.classList.add('active');
+			this.filter.appendChild(document.createTextNode('Sterne:'));
+			var rating = this.filter.appendChild(document.createElement('input-rating'));
+			rating.setAttribute('value', this.stars * 20);
+			this.filter.appendChild(document.createTextNode('✕'));
+		} else
+			this.filter.classList.remove('active');
+		this.search();
+	}
+
+	search() {
 		var id = ++this.requestId;
+		var text = this.input.value.trim();
 		this.results.textContent = '';
-		if (text.length < 2) {
+		if (text.length < 2 && !this.stars) {
 			this.status.textContent = '';
 			return;
 		}
-		this.loadChat(() => {
+		this.loadChat(text, () => {
 			if (id == this.requestId)
 				this.render(this.hits(text));
 		});
 	}
 
-	loadChat(success) {
-		if (!api.user?.admin || this.chatMessages)
+	loadChat(text, success) {
+		if (!api.user?.admin || this.chatMessages || text.length < 2 || this.stars)
 			return success();
 		this.status.textContent = 'Suche läuft …';
 		api.chat.getMessages(messages => {
@@ -119,18 +158,40 @@ hit snippet {
 
 	hits(text) {
 		var terms = FuzzyMatcher.terms(text.slice(0, 200));
-		if (!terms.length)
+		if (!terms.length && !this.stars)
 			return [];
 		var hits = [];
-		var add = (type, id, date, note) => {
-			var match = FuzzyMatcher.match(terms, note);
-			if (match)
-				hits.push({ type: type, id: id, score: match.score, date: this.parseDate(date), snippet: this.snippet(note, match.start) });
+		var add = (type, id, date, note, rating) => {
+			var score = 1;
+			var start = 0;
+			if (terms.length) {
+				var match = FuzzyMatcher.match(terms, note);
+				if (!match)
+					return;
+				score = match.score;
+				start = match.start;
+			}
+			hits.push({ type: type, id: id, score: score, date: this.parseDate(date), snippet: this.snippet(note, start), rating: rating });
 		};
-		document.querySelector('event view-table').list.forEach(event => add('event', event.id, event.date, event.note));
-		(this.chatMessages || []).forEach(message => add('chat', message.id, message.createdAt, message.note));
+		document.querySelector('event view-table').list.forEach(event => {
+			var rating = event.ratingCount ? event.rating / event.ratingCount : 0;
+			if (this.stars && Math.round(rating / 20) != this.stars)
+				return;
+			add('event', event.id, event.date, this.eventText(event), rating);
+		});
+		if (!this.stars)
+			(this.chatMessages || []).forEach(message => add('chat', message.id, message.createdAt, message.note, 0));
 		hits.sort((a, b) => b.score - a.score || (b.date.getTime() || 0) - (a.date.getTime() || 0));
 		return hits.slice(0, 100);
+	}
+
+	eventText(event) {
+		var parts = [event.note];
+		(event.eventFeedbacks || []).forEach(feedback => parts.push(feedback.note));
+		var location = event.location;
+		if (location)
+			parts.push(location.name, location.address, location.note, location.phone, location.email);
+		return parts.filter(part => part).join('\n');
 	}
 
 	snippet(text, matchStart) {
@@ -155,6 +216,15 @@ hit snippet {
 			badge.textContent = hit.type == 'chat' ? 'KI-Chat' : 'Tagebuch';
 			var date = header.appendChild(document.createElement('span'));
 			date.textContent = ui.formatTime(hit.date);
+			if (hit.rating) {
+				var stars = header.appendChild(document.createElement('stars'));
+				stars.setAttribute('title', 'Nur diese Bewertung anzeigen');
+				stars.appendChild(document.createElement('input-rating')).setAttribute('value', hit.rating);
+				stars.addEventListener('click', e => {
+					e.stopPropagation();
+					this.setStars(Math.round(hit.rating / 20));
+				});
+			}
 			item.appendChild(document.createElement('snippet')).textContent = hit.snippet;
 			var open = () => this.dispatchEvent(new CustomEvent('open', { detail: { type: hit.type, id: hit.id }, bubbles: true, composed: true }));
 			item.addEventListener('click', open);

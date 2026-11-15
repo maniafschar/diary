@@ -268,9 +268,26 @@ public class EventApi extends ApplicationApi {
 			filteredEvent.getLocation().setId(event.getLocation().getId());
 			filteredEvent.getLocation().setAddress(event.getLocation().getAddress());
 			filteredEvent.getLocation().setAltitude(event.getLocation().getAltitude());
+			filteredEvent.getLocation().setEmail(event.getLocation().getEmail());
 			filteredEvent.getLocation().setLatitude(event.getLocation().getLatitude());
 			filteredEvent.getLocation().setLongitude(event.getLocation().getLongitude());
 			filteredEvent.getLocation().setName(event.getLocation().getName());
+			filteredEvent.getLocation().setNote(event.getLocation().getNote());
+			filteredEvent.getLocation().setPhone(event.getLocation().getPhone());
+
+			if (event.getEventFeedbacks() != null) {
+				filteredEvent.setEventFeedbacks(new ArrayList<EventFeedback>());
+				for (final EventFeedback eventFeedback : event.getEventFeedbacks()) {
+					final EventFeedback filteredEventFeedback = new EventFeedback();
+					filteredEventFeedback.setId(eventFeedback.getId());
+					filteredEventFeedback.setCreatedAt(eventFeedback.getCreatedAt());
+					filteredEventFeedback.setNote(eventFeedback.getNote());
+					filteredEventFeedback.setContact(new Contact());
+					filteredEventFeedback.getContact().setId(eventFeedback.getContact().getId());
+					filteredEventFeedback.getContact().setName(eventFeedback.getContact().getName());
+					filteredEvent.getEventFeedbacks().add(filteredEventFeedback);
+				}
+			}
 
 			if (event.getEventImages() != null) {
 				filteredEvent.setEventImages(new ArrayList<EventImage>());
