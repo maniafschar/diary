@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+import { markdown } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
