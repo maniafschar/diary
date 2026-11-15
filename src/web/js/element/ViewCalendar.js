@@ -113,11 +113,11 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-month.active .cal-day {
-	background: rgba(0, 0, 0, 0.05);
+	background: rgba(0, 0, 0, 0.06);
 }
 
 .cal-day.empty {
-	background: transparent;
+	background: transparent !important;
 }
 
 .cal-day:nth-child(7n),
@@ -327,17 +327,10 @@ class ViewCalendar extends HTMLElement {
 
 	updateActiveMonth(container) {
 		const viewport = container.getBoundingClientRect();
-		const header = container.querySelector('.cal-sticky-header');
-		const top = Math.max(viewport.top, header.getBoundingClientRect().bottom);
+		const top = viewport.top;
 		let activeMonth = null;
 		container.querySelectorAll('.cal-month').forEach(month => {
-			const days = month.querySelector('.cal-days');
-			const firstDay = days.firstElementChild;
-			const lastDay = days.lastElementChild;
-			const firstRect = firstDay.getBoundingClientRect();
-			const lastRect = lastDay.getBoundingClientRect();
-			const rect = { top: firstRect.top, bottom: lastRect.bottom };
-			if (!activeMonth && rect.bottom > top)
+			if (!activeMonth && month.querySelector('.cal-days').lastElementChild.getBoundingClientRect().top > top)
 				activeMonth = month;
 			month.classList.remove('active');
 		});
