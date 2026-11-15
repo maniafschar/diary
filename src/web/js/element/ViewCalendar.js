@@ -85,12 +85,6 @@ class ViewCalendar extends HTMLElement {
 	height: 1.5em;
 }
 
-.cal-weekday {
-	font-size: 0.8em;
-	min-width: 0;
-	border-right: 1px solid rgba(0, 0, 0, 0.02);
-	background: rgba(0, 0, 0, 0.06);
-}
 	
 .cal-weekday span {
 	padding: 0.3em 0 0 0.25em;
@@ -114,12 +108,8 @@ class ViewCalendar extends HTMLElement {
 	min-height: 10rem;
 	margin: 0.2em;
 	border-radius: 1em;
-	background: rgba(0, 0, 0, 0.025);
-	transition: all .4s ease-out;
-}
-
-.cal-day.has-events {
 	background: rgba(0, 0, 0, 0.05);
+	transition: all .4s ease-out;
 }
 
 .cal-day:nth-child(7n),
