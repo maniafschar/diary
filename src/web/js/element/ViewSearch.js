@@ -73,6 +73,10 @@ td.column2 images img {
 }
 tr.chat td.column1 {
 	width: 100% !important;
+	background: transparent;
+}
+tr.chat td.column2 {
+	display: none;
 }
 td.column1 bubble {
 	display: block;
@@ -97,10 +101,6 @@ td.column1 bubble content {
 td.column1 bubble.model content {
 	background: var(--background-content);
 	color: inherit;
-}
-td.column1 bubble p {
-	margin-block-start: 0;
-	margin-block-end: 0;
 }`;
 
 class ViewSearch extends HTMLElement {
@@ -330,7 +330,7 @@ results {
 	}
 
 	chatRow(hit) {
-		var row = [{ text: '<bubble><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
+		var row = [{ text: '<bubble class="' + hit.role + '"><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
 		row.row = { class: 'chat ' + hit.item.role };
 		return row;
 	}
