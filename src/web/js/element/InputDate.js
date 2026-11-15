@@ -486,7 +486,9 @@ next::after {
 		var holidays = {};
 		holidays['1.1'] = 'Neujahr';
 		holidays['6.1'] = 'Hl. 3 Könige';
+		holidays['8.3'] = 'Internationaler Frauentag';
 		holidays['1.5'] = 'Maifeiertag - Tag der Arbeit';
+		holidays['8.8'] = 'Augsburger Friedensfest';
 		holidays['15.8'] = 'Maria Himmelfahrt';
 		holidays['3.10'] = 'Tag der Deutschen Einheit';
 		holidays['31.10'] = 'Reformationstag';
