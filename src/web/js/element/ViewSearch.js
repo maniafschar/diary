@@ -175,10 +175,7 @@ results {
 		input.placeholder = 'Tagebuch und KI-Chat durchsuchen';
 		input.setAttribute('aria-label', 'Suche');
 		this.input = input;
-		this.rating = row.appendChild(document.createElement('input-rating'));
-		this.rating.setAttribute('type', 'edit');
-		this.rating.setAttribute('title', 'Nach Sternen filtern');
-		this.rating.classList.add('line');
+		this.rating = row.innerHTML = '<input-rating type="edit"></input-rating>';
 		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
