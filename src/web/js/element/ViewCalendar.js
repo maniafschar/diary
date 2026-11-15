@@ -39,6 +39,8 @@ class ViewCalendar extends HTMLElement {
 	width: 100%;
 	height: 100%;
 	position: relative;
+	display: flex;
+	flex-direction: column;
 }
 
 .cal-months {
@@ -53,10 +55,8 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-sticky-header {
-	position: sticky;
-	top: 0;
-	z-index: 3;
-	background: var(--background-content, rgba(255, 255, 255, 0.96));
+	flex: none;
+	background: transparent;
 }
 
 .cal-month-title {
@@ -71,7 +71,7 @@ class ViewCalendar extends HTMLElement {
 .cal-grid-outer {
 	overflow-x: hidden;
 	overflow-y: auto;
-	height: 100%;
+	flex: 1;
 	min-height: 0;
 	-webkit-overflow-scrolling: touch;
 	scroll-behavior: smooth;
@@ -216,13 +216,13 @@ class ViewCalendar extends HTMLElement {
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
-		var body = wrapper.appendChild(document.createElement('div'));
-		body.classList.add('cal-grid-outer');
-		body.addEventListener('scroll', () => this.handleScroll(body), { passive: true });
-		const stickyHeader = body.appendChild(document.createElement('div'));
+		const stickyHeader = wrapper.appendChild(document.createElement('div'));
 		stickyHeader.className = 'cal-sticky-header';
 		stickyHeader.appendChild(document.createElement('div')).className = 'cal-month-title';
 		stickyHeader.appendChild(this.createWeekdays());
+		var body = wrapper.appendChild(document.createElement('div'));
+		body.classList.add('cal-grid-outer');
+		body.addEventListener('scroll', () => this.handleScroll(body), { passive: true });
 		body.appendChild(document.createElement('div')).classList.add('cal-months');
 		this._root.appendChild(wrapper);
 		this.render();
@@ -327,8 +327,8 @@ class ViewCalendar extends HTMLElement {
 
 	updateActiveMonth(container) {
 		const viewport = container.getBoundingClientRect();
-		const header = container.querySelector('.cal-month-title');
-		const top = viewport.top + header.parentElement.clientHeight + 20;
+		const header = this._root.querySelector('.cal-month-title');
+		const top = viewport.top + 20;
 		let activeMonth = null;
 		container.querySelectorAll('.cal-month').forEach(month => {
 			if (!activeMonth && month.querySelector('.cal-days').lastElementChild.getBoundingClientRect().top > top)
