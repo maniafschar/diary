@@ -73,8 +73,6 @@ class ViewCalendar extends HTMLElement {
 	flex: 1;
 	min-height: 0;
 	-webkit-overflow-scrolling: touch;
-	scroll-behavior: smooth;
-	overscroll-behavior-y: contain;
 	scrollbar-width: none;
 }
 
