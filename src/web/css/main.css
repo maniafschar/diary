@@ -419,15 +419,18 @@ body>main>container eventContainer>element {
 	bottom: 0;
 	width: 100%;
 	opacity: 0;
-	visibility: hidden;
 	pointer-events: none;
-	transition: opacity 0.4s ease, visibility 0.4s;
+	transition: opacity 0.4s ease;
 }
 
 body>main>container eventContainer>element.active {
 	opacity: 1;
-	visibility: visible;
 	pointer-events: auto;
+}
+
+/* Inaktive Suche komplett aus dem Layout nehmen, sonst blockiert sie auf iOS das Scrollen */
+body>main>container eventContainer>element.search:not(.active) {
+	display: none;
 }
 
 body>main>container buttons {
