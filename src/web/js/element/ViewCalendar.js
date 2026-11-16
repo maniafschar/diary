@@ -94,7 +94,6 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day {
-	border-right: 1px solid rgba(0, 0, 0, 0.02);
 	cursor: pointer;
 	transition: background .12s;
 	position: relative;
@@ -105,12 +104,12 @@ class ViewCalendar extends HTMLElement {
 	min-height: 6rem;
 	margin: 0.2em;
 	border-radius: 1em;
-	background: rgba(0, 0, 0, 0.03);
-	transition: all .4s ease-out;
+	background: rgba(255, 255, 255, 0.5);
 }
 
-.cal-month.active .cal-day {
-	background: rgba(0, 0, 0, 0.06);
+.cal-month.active .cal-day .day-num {
+	background: rgba(180, 255, 255, 0.5);
+	transition: all .4s ease-out;
 }
 
 .cal-day.empty {
@@ -132,6 +131,7 @@ class ViewCalendar extends HTMLElement {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	position: relative;
+	border-radius: 1em;
 	padding: 0.2em;
 }
 	
