@@ -160,9 +160,11 @@ class ViewCalendar extends HTMLElement {
 	min-height: 1.6em;
 }
 
-.cal-day.today .day-number {
-	border-radius: 50% 0 0.5em 0;
+.cal-day.today .day-num {
 	background: rgba(255, 190, 40, 0.75);
+}
+
+.cal-day.today .day-number {
 	color: #4a3200;
 }
 
