@@ -117,6 +117,9 @@ tbody tr:hover td.column1 bubble content,
 tbody tr:hover td.column1 bubble label {
 	background-color: var(--background-hover);
 	transition: all .4s ease-out;
+}
+tbody tr.selected td {
+    background-color: transparent !important;
 }`;
 
 class ViewSearch extends HTMLElement {
