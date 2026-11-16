@@ -128,8 +128,29 @@ places details {
 	background: #fff;
 	box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.2);
 }
+places summary::before {
+	content: '>';
+	color: rgba(0, 0, 0, 0.3);
+	position: absolute;
+	margin-left: -1em;
+	transition: all 0.4s ease-out;
+}
+
+places summary.open {
+	font-weight: bold;
+}
+
+places summary.open::before {
+	transform: rotate(90deg);
+	color: black;
+}
+
 places summary {
-	padding: 0.5em 0.75em;
+	text-align: left;
+	margin: 0.5em;
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.4s ease-out;
 	line-height: 1.5;
 	cursor: pointer;
 	user-select: none;
