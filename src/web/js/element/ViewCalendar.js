@@ -109,7 +109,6 @@ class ViewCalendar extends HTMLElement {
 
 .cal-month.active .cal-day .day-num {
 	background: rgba(180, 255, 255, 0.5);
-	transition: all .4s ease-out;
 }
 
 .cal-day.empty {
@@ -133,6 +132,7 @@ class ViewCalendar extends HTMLElement {
 	position: relative;
 	border-radius: 1em;
 	padding: 0.2em;
+	transition: all .4s ease-out;
 }
 	
 .day-num span.holiday {
