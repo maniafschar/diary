@@ -42,6 +42,13 @@ public class Repository {
 		return query.getResultList();
 	}
 
+	public <T extends BaseEntity> List<T> listFirst(final String hql, final Class<T> clazz, final Object... params) {
+		final jakarta.persistence.TypedQuery<T> query = this.em.createQuery(hql, clazz);
+		for (int i = 0; params != null && i < params.length; i++)
+			query.setParameter(i + 1, params[i]);
+		return query.setMaxResults(1).getResultList();
+	}
+
 	public <T extends BaseEntity> T one(final Class<T> clazz, final BigInteger id) {
 		final T entity = this.em.find(clazz, id);
 		if (entity != null)

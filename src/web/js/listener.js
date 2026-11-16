@@ -301,6 +301,7 @@ address {
 			var map = [];
 			var rating = [];
 			var text = [];
+			var places = new Map();
 			var ratingSum = 0, ratingCountSum = 0, ids = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -310,6 +311,13 @@ address {
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
+				var place = listener.placeName(events[i].location);
+				if (place) {
+					if (!places.has(place.key))
+						places.set(place.key, { text: place.name, count: 0, ids: [] });
+					places.get(place.key).count++;
+					places.get(place.key).ids.push(i);
+				}
 				if (events[i].rating) {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
@@ -338,6 +346,7 @@ address {
 			}
 			viewCalendar.render();
 			document.querySelector('view-statistics').rating = rating;
+			document.querySelector('view-statistics').places = [...places.values()].sort((a, b) => b.count - a.count);
 			document.querySelector('view-statistics').text = text;
 			var viewMap = document.querySelector('view-map');
 			viewMap.setLocations(map);
@@ -364,6 +373,36 @@ address {
 			listener.updateContacts();
 		else
 			api.activateProgressbar();
+	}
+
+	static placeName(location) {
+		const aliases = {
+			munich: 'München', muenchen: 'München', vienna: 'Wien', cologne: 'Köln', koeln: 'Köln',
+			nuremberg: 'Nürnberg', nuernberg: 'Nürnberg', duesseldorf: 'Düsseldorf', hanover: 'Hannover',
+			rome: 'Rom', roma: 'Rom', venice: 'Venedig', venezia: 'Venedig', florence: 'Florenz', firenze: 'Florenz',
+			milan: 'Mailand', milano: 'Mailand', naples: 'Neapel', napoli: 'Neapel', prague: 'Prag', praha: 'Prag',
+			zurich: 'Zürich', zuerich: 'Zürich', geneva: 'Genf', geneve: 'Genf', basel: 'Basel', lisbon: 'Lissabon',
+			lisboa: 'Lissabon', athens: 'Athen', brussels: 'Brüssel', bruxelles: 'Brüssel', copenhagen: 'Kopenhagen',
+			kobenhavn: 'Kopenhagen', warsaw: 'Warschau', warszawa: 'Warschau', moscow: 'Moskau', london: 'London',
+			seville: 'Sevilla', cracow: 'Krakau', krakow: 'Krakau', gothenburg: 'Göteborg', goteborg: 'Göteborg'
+		};
+		const toKey = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+			.replace(/ß/g, 'ss').replace(/ae|oe|ue/g, m => m[0]).replace(/\s+/g, ' ').trim();
+		if (location?.city?.trim())
+			return { key: toKey(location.city), name: location.city.trim() };
+		const lines = (location?.address || '').split('\n').map(e => e.trim()).filter(e => e);
+		var line = lines.find((e, i) => i > 0 && /^(?:[A-Z]{1,2}[- ]?)?\d{4,5}(?:[- ]?\d{3})?\s+\S/.test(e))
+			|| lines.find((e, i) => i == 0 && lines.length > 1 && /^\d{4,5}\s+\S/.test(e))
+			|| (lines.length > 2 ? lines[lines.length - 2] : lines.length == 2 ? lines[1] : null);
+		var name = line?.replace(/^(?:[A-Z]{1,2}[- ]?)?\d{4,5}(?:[- ]?\d{3})?\s+/, '')
+			.replace(/\(.*?\)/g, '').replace(/^(?:Landeshauptstadt|Stadt|Gemeinde|Hansestadt)\s+/i, '')
+			.replace(/,.*$/, '').trim();
+		if (!name || /\d/.test(name))
+			name = location?.name?.trim();
+		if (!name)
+			return null;
+		const canonical = Object.entries(aliases).find(([alias]) => toKey(alias) == toKey(name))?.[1] || name;
+		return { key: toKey(canonical), name: canonical };
 	}
 
 	static statisticOpenDay(event) {
@@ -435,7 +474,7 @@ images img {
 			}
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
-			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
+			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
 			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
