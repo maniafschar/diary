@@ -292,6 +292,7 @@ results {
 
 	render(hits, terms) {
 		this.setupTable();
+		this.terms = terms;
 		var events = hits.filter(hit => hit.type == 'event').length;
 		var chats = hits.length - events;
 		this.status.textContent = hits.length
@@ -339,7 +340,7 @@ results {
 		var event = hit.item;
 		var text = '';
 		if (event.note)
-			text += '<note>' + this.escapeHtml(event.note) + '</note>';
+			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		var images = '';
@@ -354,9 +355,29 @@ results {
 	}
 
 	chatRow(hit) {
-		var row = [{ text: '<bubble class="' + hit.item.role + '"><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.removeMarkdown(hit.item.note)) + '</content></bubble>' }];
+		var row = [{ text: '<bubble class="' + hit.item.role + '"><label>' + this.escapeHtml(ui.formatTime(hit.date)) + '</label><content>' + this.escapeHtml(this.snippet(this.removeMarkdown(hit.item.note), this.terms)) + '</content></bubble>' }];
 		row.row = { class: 'chat' };
 		return row;
+	}
+
+	snippet(text, terms = []) {
+		const max = 100;
+		const parts = (text || '').match(/\s+|\S+/g) || [];
+		const words = parts.map((part, i) => i).filter(i => /\S/.test(parts[i]));
+		if (words.length <= max)
+			return text || '';
+		const matches = words.map((_, n) => n).filter(n => this.isMatch(parts[words[n]], terms));
+		let start = matches.length ? Math.max(0, matches[0] - 20) : 0;
+		let end = Math.min(words.length, start + max);
+		if (matches.length && matches[matches.length - 1] >= end)
+			end = Math.min(words.length, matches[matches.length - 1] + 1);
+		if (end == words.length)
+			start = Math.min(start, Math.max(0, end - max));
+		return (start > 0 ? '… ' : '') + parts.slice(words[start], words[end - 1] + 1).join('') + (end < words.length ? ' …' : '');
+	}
+
+	isMatch(word, terms) {
+		return word.split(/([\p{L}\p{N}]+)/u).some((part, i) => i % 2 && terms.some(term => FuzzyMatcher.wordScore(term, FuzzyMatcher.normalize(part)) > 0));
 	}
 
 	removeMarkdown(text) {
