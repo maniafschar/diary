@@ -104,7 +104,7 @@ class ViewCalendar extends HTMLElement {
 	min-height: 6rem;
 	margin: 0.2em;
 	border-radius: 1em;
-	background: rgba(255, 255, 255, 0.5);
+	background: rgba(255, 255, 255, 0.3);
 }
 
 .cal-month.active .cal-day .day-num {
