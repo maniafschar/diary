@@ -361,19 +361,29 @@ results {
 	}
 
 	snippet(text, terms = []) {
-		const max = 100;
 		const parts = (text || '').match(/\s+|\S+/g) || [];
 		const words = parts.map((part, i) => i).filter(i => /\S/.test(parts[i]));
-		if (words.length <= max)
+		const keep = new Set();
+		const addRange = (from, to) => {
+			for (let n = Math.max(0, from); n <= Math.min(words.length - 1, to); n++)
+				keep.add(n);
+		};
+		addRange(0, 9);
+		words.forEach((_, n) => {
+			if (this.isMatch(parts[words[n]], terms))
+				addRange(n - 8, n + 8);
+		});
+		if (keep.size == words.length)
 			return text || '';
-		const matches = words.map((_, n) => n).filter(n => this.isMatch(parts[words[n]], terms));
-		let start = matches.length ? Math.max(0, matches[0] - 20) : 0;
-		let end = Math.min(words.length, start + max);
-		if (matches.length && matches[matches.length - 1] >= end)
-			end = Math.min(words.length, matches[matches.length - 1] + 1);
-		if (end == words.length)
-			start = Math.min(start, Math.max(0, end - max));
-		return (start > 0 ? '… ' : '') + parts.slice(words[start], words[end - 1] + 1).join('') + (end < words.length ? ' …' : '');
+		let result = '';
+		let previous = null;
+		[...keep].sort((a, b) => a - b).forEach(n => {
+			if (previous !== null)
+				result += n == previous + 1 ? parts.slice(words[previous] + 1, words[n]).join('') : ' … ';
+			result += parts[words[n]];
+			previous = n;
+		});
+		return result + (previous < words.length - 1 ? ' …' : '');
 	}
 
 	isMatch(word, terms) {
