@@ -123,7 +123,7 @@ chart axis {
 }
 chart plot {
 	align-items: end;
-	height: 70%;
+	height: 55%;
 }
 chart axis {
 	height: 20%;
