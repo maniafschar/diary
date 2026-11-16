@@ -419,12 +419,14 @@ body>main>container eventContainer>element {
 	bottom: 0;
 	width: 100%;
 	opacity: 0;
+	visibility: hidden;
 	pointer-events: none;
-	transition: opacity 0.4s ease;
+	transition: opacity 0.4s ease, visibility 0.4s;
 }
 
 body>main>container eventContainer>element.active {
 	opacity: 1;
+	visibility: visible;
 	pointer-events: auto;
 }
 

@@ -198,9 +198,6 @@ results {
 			clearTimeout(timeout);
 			timeout = setTimeout(() => this.search(), 300);
 		});
-		var scrollY = 0;
-		input.addEventListener('focus', () => scrollY = window.scrollY);
-		input.addEventListener('blur', () => setTimeout(() => window.scrollTo({ top: scrollY, behavior: 'instant' }), 300));
 	}
 
 	show() {
