@@ -18,7 +18,8 @@ class ViewStatistics extends HTMLElement {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	display: block;
+	display: flex;
+	flex-direction: column;
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -26,6 +27,7 @@ class ViewStatistics extends HTMLElement {
 trend {
 	position: relative;
 	display: block;
+	flex: none;
 	width: 100%;
 	height: 7em;
 	box-sizing: border-box;
@@ -90,7 +92,8 @@ wordcloud {
 	position: relative;
 	display: block;
 	width: 100%;
-	height: calc(100% - 13em);
+	flex: 1;
+	min-height: 0;
 	overflow: hidden;
 	text-align: center;
 }
@@ -105,20 +108,42 @@ word.vertical {
 	transform-origin: 100% 0;
 }
 places {
-	position: absolute;
-	top: 0.5em;
-	left: 0.5em;
+	position: relative;
 	z-index: 1;
 	display: block;
-	max-height: 40%;
-	max-width: 40%;
-	overflow-y: auto;
+	flex: none;
+	height: 3em;
 	text-align: left;
+}
+places[hidden] {
+	display: none;
+}
+places details {
+	position: absolute;
+	top: 0.25em;
+	left: 0.5em;
+	width: min(22em, calc(100% - 1em));
+	box-sizing: border-box;
+	border-radius: 0.5em;
+	background: #fff;
+	box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.2);
+}
+places summary {
+	padding: 0.5em 0.75em;
+	line-height: 1.5;
+	cursor: pointer;
+	user-select: none;
+}
+places list {
+	display: block;
+	max-height: min(40vh, 20em);
+	overflow-y: auto;
+	padding: 0 0.75em 0.5em;
 }
 places place {
 	display: block;
 	cursor: pointer;
-	white-space: nowrap;
+	overflow-wrap: anywhere;
 	line-height: 1.3;
 }
 places place no {
@@ -130,6 +155,7 @@ chart {
 	position: relative;
 	height: 6em;
 	display: block;
+	flex: none;
 	width: 100%;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -190,8 +216,8 @@ chart bar {
 	justify-self: center;
 	width: 100%;
 }`;
-		this._root.appendChild(document.createElement('wordcloud'));
 		this._root.appendChild(document.createElement('places'));
+		this._root.appendChild(document.createElement('wordcloud'));
 		const trend = this._root.appendChild(document.createElement('trend'));
 		trend.appendChild(document.createElement('info'));
 		trend.appendChild(document.createElement('tip'));
@@ -204,8 +230,8 @@ chart bar {
 		var tokens = this.extract();
 		if (tokens.length > this.MAX_WORDS)
 			tokens = tokens.slice(0, this.MAX_WORDS);
-		this.renderWordcloud(tokens);
 		this.renderPlaces();
+		this.renderWordcloud(tokens);
 		this.renderRating();
 		this.renderTrend();
 	}
@@ -313,16 +339,22 @@ chart bar {
 
 	renderPlaces() {
 		const container = this._root.querySelector('places');
+		const open = container.querySelector('details')?.open || false;
 		container.textContent = '';
 		const places = this.places || [];
+		container.hidden = !places.length;
 		if (!places.length)
 			return;
+		const dropdown = container.appendChild(document.createElement('details'));
+		dropdown.open = open;
+		dropdown.appendChild(document.createElement('summary')).textContent = 'Orte';
+		const list = dropdown.appendChild(document.createElement('list'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
 		const min = places[places.length - 1].count;
 		const max = places[0].count;
 		places.forEach(token => {
 			const ratio = max == min ? 1 : (token.count - min) / (max - min);
-			const place = container.appendChild(document.createElement('place'));
+			const place = list.appendChild(document.createElement('place'));
 			place.innerText = token.text;
 			place.appendChild(document.createElement('no')).innerText = token.count;
 			place.style.fontSize = ((ratio + 0.7) * fontSize) + 'px';
