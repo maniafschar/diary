@@ -161,7 +161,7 @@ class ViewCalendar extends HTMLElement {
 }
 
 .cal-day.today .day-num {
-	background: rgba(255, 190, 40, 0.75);
+	background: rgba(255, 190, 40, 0.75) !important;
 }
 
 .cal-day.today .day-number {
