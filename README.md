@@ -7,6 +7,12 @@ By [**Mani Afschar Yazdi**](https://diary.cafe)
 
 diary is the **Java/HTML5/JavaScript** implemented in pure Java Spring/itext and JavaScript/CSS because of performance, purity of code, ease of developing and maintaining.
 
+## Location address details
+
+Before deploying, apply `src/main/resources/db/location-address-details.sql` to the main database. If the `location` table does not yet have the `city` column from the preceding statistics change, also run `ALTER TABLE location ADD COLUMN city VARCHAR(255) NULL;`. These migrations are not applied automatically.
+
+The `addressDetails` property in Location and Event API responses contains the complete address object returned by Nominatim, using its original field names, such as `road`, `house_number`, `postcode`, `city`, `state_district`, `state`, `country` and `country_code`. Fields vary by location and may be absent. The existing `address` is unchanged. Existing locations and new locations with coordinates are enriched in the background, at most once every 15 seconds; missing coordinates cannot be enriched. Failures are logged and retried. Nominatim receives the coordinates; no request is sent for locations without them. Run background enrichment on only one application instance (set `APP_LOCATION_ADDRESS_ENRICHMENT_ENABLED=false` on the others), and account for other applications sharing the same Nominatim usage limit.
+
 ## Cordova mobile app
 
 The same web client can be built into native iOS and Android WebView apps. Run `npm install` once, then use a simulator or connected device with:

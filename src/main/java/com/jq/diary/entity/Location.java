@@ -1,5 +1,10 @@
 package com.jq.diary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.jq.diary.util.Json;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -11,6 +16,9 @@ public class Location extends BaseEntity {
 	private String name;
 	private String address;
 	private String city;
+	@JsonIgnore
+	@Column(columnDefinition = "TEXT")
+	private String addressDetailsJson;
 	private String email;
 	private String phone;
 	private String image;
@@ -45,6 +53,21 @@ public class Location extends BaseEntity {
 
 	public void setCity(final String city) {
 		this.city = city;
+	}
+
+	@JsonIgnore
+	public String getAddressDetailsJson() {
+		return this.addressDetailsJson;
+	}
+
+	@JsonIgnore
+	public void setAddressDetailsJson(final String addressDetailsJson) {
+		this.addressDetailsJson = addressDetailsJson;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	public JsonNode getAddressDetails() {
+		return this.addressDetailsJson == null ? null : Json.toNode(this.addressDetailsJson);
 	}
 
 	public String getImage() {

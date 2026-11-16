@@ -3,18 +3,28 @@ package com.jq.diary.service;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jq.diary.entity.Client;
 import com.jq.diary.entity.Location;
 import com.jq.diary.repository.Repository;
-import com.jq.diary.service.ExternalService;
 
 @Service
 public class LocationService {
+	private static final Logger log = LoggerFactory.getLogger(LocationService.class);
+	private BigInteger lastResolvedId = BigInteger.ZERO;
+
+	@Value("${app.location.address-enrichment-enabled:true}")
+	private boolean addressEnrichmentEnabled = true;
+
 	@Autowired
 	private Repository repository;
 
@@ -72,9 +82,11 @@ public class LocationService {
 			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
 		stored.setName(changes.getName().trim());
 		stored.setAddress(changes.getAddress() == null ? "" : changes.getAddress().trim());
-		if (!java.util.Objects.equals(stored.getLatitude(), changes.getLatitude())
-				|| !java.util.Objects.equals(stored.getLongitude(), changes.getLongitude()))
+		if (!Objects.equals(stored.getLatitude(), changes.getLatitude())
+				|| !Objects.equals(stored.getLongitude(), changes.getLongitude())) {
 			stored.setCity(null);
+			stored.setAddressDetailsJson(null);
+		}
 		stored.setLatitude(changes.getLatitude());
 		stored.setLongitude(changes.getLongitude());
 		stored.setAltitude(changes.getAltitude());
@@ -97,18 +109,37 @@ public class LocationService {
 		}
 	}
 
-	// Ermittelt den Ort je Location einzeln, um das Nominatim-Limit (1 Anfrage/s) einzuhalten.
-	@Scheduled(fixedDelay = 1500, initialDelay = 20000)
-	private void resolveCity() {
-		final List<Location> list = this.repository.list(
-				"from Location where city is null and latitude is not null and longitude is not null", Location.class);
+	@Scheduled(fixedDelay = 15000, initialDelay = 20000)
+	void resolveAddressDetails() {
+		if (!this.addressEnrichmentEnabled)
+			return;
+		List<Location> list = this.repository.listFirst(
+				"from Location where addressDetailsJson is null and latitude is not null and longitude is not null and id > ?1 order by id",
+				Location.class, this.lastResolvedId);
+		if (list.isEmpty() && this.lastResolvedId.signum() != 0) {
+			this.lastResolvedId = BigInteger.ZERO;
+			list = this.repository.listFirst(
+					"from Location where addressDetailsJson is null and latitude is not null and longitude is not null and id > ?1 order by id",
+					Location.class, this.lastResolvedId);
+		}
 		if (list.isEmpty())
 			return;
 		final Location location = list.get(0);
-		final String city = this.externalService.city(location.getLatitude(), location.getLongitude());
-		if (city != null) {
-			location.setCity(city);
-			this.repository.save(location);
+		this.lastResolvedId = location.getId();
+		try {
+			final JsonNode details = this.externalService.addressDetails(location.getLatitude(), location.getLongitude());
+			String city = "";
+			for (final String key : new String[] { "city", "town", "village", "municipality", "hamlet" }) {
+				if (details.path(key).isTextual() && !details.path(key).asText().isBlank()) {
+					city = details.path(key).asText().trim();
+					break;
+				}
+			}
+			this.repository.executeUpdate(
+					"update Location set city=?1, addressDetailsJson=?2 where id=?3 and latitude=?4 and longitude=?5 and addressDetailsJson is null",
+					city, details.toString(), location.getId(), location.getLatitude(), location.getLongitude());
+		} catch (final RuntimeException ex) {
+			log.warn("Adressbestandteile für Location {} konnten nicht ermittelt werden", location.getId(), ex);
 		}
 	}
 }

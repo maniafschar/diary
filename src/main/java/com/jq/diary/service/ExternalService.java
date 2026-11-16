@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,28 +76,22 @@ public class ExternalService {
 		return result;
 	}
 
-	/** Ortsname auf Deutsch (z.B. München statt Munich); null bei Fehler, leer wenn nicht ermittelbar. */
-	public String city(final double latitude, final double longitude) {
-		try {
-			final Response response = WebClient
-					.create("https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&lat=" + latitude + "&lon="
-							+ longitude)
-					.get()
-					.accept(MediaType.APPLICATION_JSON)
-					.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
-					.header("Accept-Language", "de")
-					.retrieve().toEntity(Response.class)
-					.block().getBody();
-			final Address a = response.address;
-			if (a == null)
-				return "";
-			for (final String value : new String[] { a.city, a.town, a.village, a.municipality, a.hamlet })
-				if (value != null && !value.isBlank())
-					return value.trim();
-			return "";
-		} catch (final Exception ex) {
-			return null;
-		}
+	public JsonNode addressDetails(final double latitude, final double longitude) {
+		final String response = WebClient.create("https://nominatim.openstreetmap.org").get()
+				.uri(uri -> uri.path("/reverse").queryParam("format", "jsonv2")
+						.queryParam("addressdetails", 1).queryParam("zoom", 18)
+						.queryParam("lat", latitude).queryParam("lon", longitude).build())
+				.accept(MediaType.APPLICATION_JSON)
+				.header("user-agent", "diary.cafe/1.0 (mani.afschar@jq-consulting.de)")
+				.header("Accept-Language", "de")
+				.retrieve().bodyToMono(String.class).block(Duration.ofSeconds(20));
+		if (response == null)
+			throw new IllegalStateException("Leere Antwort von Nominatim");
+		final JsonNode result = Json.toNode(response);
+		final JsonNode address = result.get("address");
+		if (address == null || !address.isObject())
+			throw new IllegalStateException("Nominatim lieferte keine Adressbestandteile: " + result.path("error").asText());
+		return address;
 	}
 
 	public Double[] geoData(final String address) {
