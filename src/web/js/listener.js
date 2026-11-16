@@ -391,10 +391,11 @@ address {
 		if (location?.city?.trim())
 			return { key: toKey(location.city), name: location.city.trim() };
 		const lines = (location?.address || '').split('\n').map(e => e.trim()).filter(e => e);
-		var line = lines.find((e, i) => i > 0 && /^(?:[A-Z]{1,2}[- ]?)?\d{4,5}(?:[- ]?\d{3})?\s+\S/.test(e))
-			|| lines.find((e, i) => i == 0 && lines.length > 1 && /^\d{4,5}\s+\S/.test(e))
+		const postcode = /^(?:[A-Z]{1,2}[- ]?)?(?:\d{4}\s?[A-Z]{2}|\d{4,5}(?:[- ]?\d{3})?)\s+/;
+		var line = lines.find((e, i) => i > 0 && postcode.test(e))
+			|| lines.find((e, i) => i == 0 && lines.length > 1 && postcode.test(e))
 			|| (lines.length > 2 ? lines[lines.length - 2] : lines.length == 2 ? lines[1] : null);
-		var name = line?.replace(/^(?:[A-Z]{1,2}[- ]?)?\d{4,5}(?:[- ]?\d{3})?\s+/, '')
+		var name = line?.replace(postcode, '')
 			.replace(/\(.*?\)/g, '').replace(/^(?:Landeshauptstadt|Stadt|Gemeinde|Hansestadt)\s+/i, '')
 			.replace(/,.*$/, '').trim();
 		if (!name || /\d/.test(name))
