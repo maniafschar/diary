@@ -10,6 +10,7 @@ public class Location extends BaseEntity {
 	private String note;
 	private String name;
 	private String address;
+	private String city;
 	private String email;
 	private String phone;
 	private String image;
@@ -36,6 +37,14 @@ public class Location extends BaseEntity {
 
 	public void setAddress(final String address) {
 		this.address = address;
+	}
+
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(final String city) {
+		this.city = city;
 	}
 
 	public String getImage() {

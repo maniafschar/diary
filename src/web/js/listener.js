@@ -388,6 +388,8 @@ address {
 		};
 		const toKey = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 			.replace(/ß/g, 'ss').replace(/ae|oe|ue/g, m => m[0]).replace(/\s+/g, ' ').trim();
+		if (location?.city?.trim())
+			return { key: toKey(location.city), name: location.city.trim() };
 		const lines = (location?.address || '').split('\n').map(e => e.trim()).filter(e => e);
 		var line = lines.find((e, i) => i > 0 && /^(?:[A-Z]{1,2}[- ]?)?\d{4,5}(?:[- ]?\d{3})?\s+\S/.test(e))
 			|| lines.find((e, i) => i == 0 && lines.length > 1 && /^\d{4,5}\s+\S/.test(e))

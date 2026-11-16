@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.jq.diary.entity.Client;
@@ -71,6 +72,9 @@ public class LocationService {
 			throw new IllegalArgumentException("Der Name der Location darf nicht leer sein.");
 		stored.setName(changes.getName().trim());
 		stored.setAddress(changes.getAddress() == null ? "" : changes.getAddress().trim());
+		if (!java.util.Objects.equals(stored.getLatitude(), changes.getLatitude())
+				|| !java.util.Objects.equals(stored.getLongitude(), changes.getLongitude()))
+			stored.setCity(null);
 		stored.setLatitude(changes.getLatitude());
 		stored.setLongitude(changes.getLongitude());
 		stored.setAltitude(changes.getAltitude());
@@ -90,6 +94,21 @@ public class LocationService {
 			location.setLatitude(geoData[0]);
 			location.setLongitude(geoData[1]);
 			location.setAltitude(geoData[2]);
+		}
+	}
+
+	// Ermittelt den Ort je Location einzeln, um das Nominatim-Limit (1 Anfrage/s) einzuhalten.
+	@Scheduled(fixedDelay = 1500, initialDelay = 20000)
+	private void resolveCity() {
+		final List<Location> list = this.repository.list(
+				"from Location where city is null and latitude is not null and longitude is not null", Location.class);
+		if (list.isEmpty())
+			return;
+		final Location location = list.get(0);
+		final String city = this.externalService.city(location.getLatitude(), location.getLongitude());
+		if (city != null) {
+			location.setCity(city);
+			this.repository.save(location);
 		}
 	}
 }
