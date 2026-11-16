@@ -61,6 +61,10 @@ class ui {
 	}
 
 	static navigateTo(i) {
+		var focused = document.activeElement;
+		while (focused?.shadowRoot?.activeElement)
+			focused = focused.shadowRoot.activeElement;
+		focused?.blur?.();
 		var buttons = [...document.querySelectorAll('body navigation button[data-nav-index]')]
 			.sort((a, b) => Number(a.dataset.navIndex) - Number(b.dataset.navIndex));
 		buttons.forEach(e => e.classList.remove('selected'));
