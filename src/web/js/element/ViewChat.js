@@ -117,9 +117,10 @@ bubble message {
 bubble message>div {
 	min-height: 0;
 }
+bubble.highlight>label,
 bubble.highlight>content {
-	box-shadow: 0 0 0 2px var(--color-primary, #b55);
-	transition: box-shadow 0.3s;
+    background: var(--background-hover);
+	transition: all 0.4s;
 }
 bubble.collapsed preview {
 	opacity: 1;
