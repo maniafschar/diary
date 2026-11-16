@@ -98,6 +98,7 @@ td.column1 bubble label {
 	border: none;
 	position: relative;
 	display: inline-block;
+	transition: all .4s ease-out;
 }
 td.column1 bubble content {
 	display: block;
@@ -107,6 +108,7 @@ td.column1 bubble content {
 	color: white;
 	font-size: 1.25em;
 	padding-left: 1em;
+	transition: all .4s ease-out;
 }
 td.column1 bubble.model content,
 td.column1 bubble.model label {
@@ -116,7 +118,7 @@ td.column1 bubble.model label {
 tbody tr:hover td.column1 bubble content,
 tbody tr:hover td.column1 bubble label {
 	background-color: var(--background-hover);
-	transition: all .4s ease-out;
+	color: black;
 }
 tbody tr.selected td {
     background-color: transparent !important;
