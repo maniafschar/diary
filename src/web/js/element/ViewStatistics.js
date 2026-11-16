@@ -4,6 +4,7 @@ class ViewStatistics extends HTMLElement {
 	MAX_WORDS = 100;
 	text;
 	rating;
+	places;
 
 	constructor() {
 		super();
@@ -103,6 +104,28 @@ word.vertical {
 	transform: translate(-100%, 0) rotate(-90deg);
 	transform-origin: 100% 0;
 }
+places {
+	position: absolute;
+	top: 0.5em;
+	left: 0.5em;
+	z-index: 1;
+	display: block;
+	max-height: 40%;
+	max-width: 40%;
+	overflow-y: auto;
+	text-align: left;
+}
+places place {
+	display: block;
+	cursor: pointer;
+	white-space: nowrap;
+	line-height: 1.3;
+}
+places place no {
+	font-size: 0.7em;
+	margin-left: 0.4em;
+	opacity: 0.6;
+}
 chart {
 	position: relative;
 	height: 6em;
@@ -168,6 +191,7 @@ chart bar {
 	width: 100%;
 }`;
 		this._root.appendChild(document.createElement('wordcloud'));
+		this._root.appendChild(document.createElement('places'));
 		const trend = this._root.appendChild(document.createElement('trend'));
 		trend.appendChild(document.createElement('info'));
 		trend.appendChild(document.createElement('tip'));
@@ -181,6 +205,7 @@ chart bar {
 		if (tokens.length > this.MAX_WORDS)
 			tokens = tokens.slice(0, this.MAX_WORDS);
 		this.renderWordcloud(tokens);
+		this.renderPlaces();
 		this.renderRating();
 		this.renderTrend();
 	}
@@ -284,6 +309,31 @@ chart bar {
 			composed: true
 		})));
 		trend.insertBefore(svg, info);
+	}
+
+	renderPlaces() {
+		const container = this._root.querySelector('places');
+		container.textContent = '';
+		const places = this.places || [];
+		if (!places.length)
+			return;
+		const fontSize = parseInt(document.body.style.fontSize) || 16;
+		const min = places[places.length - 1].count;
+		const max = places[0].count;
+		places.forEach(token => {
+			const ratio = max == min ? 1 : (token.count - min) / (max - min);
+			const place = container.appendChild(document.createElement('place'));
+			place.innerText = token.text;
+			place.appendChild(document.createElement('no')).innerText = token.count;
+			place.style.fontSize = ((ratio + 0.7) * fontSize) + 'px';
+			place.style.color = this.createColor(ratio);
+			place.style.opacity = 0.45 + ratio * 0.55;
+			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
+				detail: token,
+				bubbles: true,
+				composed: true
+			})));
+		});
 	}
 
 	renderWordcloud(tokens) {

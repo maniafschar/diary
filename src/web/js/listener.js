@@ -301,6 +301,7 @@ address {
 			var map = [];
 			var rating = [];
 			var text = [];
+			var places = new Map();
 			var ratingSum = 0, ratingCountSum = 0, ids = [];
 			var formatAddress = address => {
 				if (address && address.split('\n').length > 2)
@@ -310,6 +311,13 @@ address {
 			for (var i = events.length - 1; i >= 0; i--) {
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
+				var placeName = events[i].location?.name?.trim();
+				if (placeName) {
+					if (!places.has(placeName))
+						places.set(placeName, { text: placeName, count: 0, ids: [] });
+					places.get(placeName).count++;
+					places.get(placeName).ids.push(i);
+				}
 				if (events[i].rating) {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
@@ -338,6 +346,7 @@ address {
 			}
 			viewCalendar.render();
 			document.querySelector('view-statistics').rating = rating;
+			document.querySelector('view-statistics').places = [...places.values()].sort((a, b) => b.count - a.count);
 			document.querySelector('view-statistics').text = text;
 			var viewMap = document.querySelector('view-map');
 			viewMap.setLocations(map);
@@ -435,7 +444,7 @@ images img {
 			}
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
-			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
+			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
 			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
