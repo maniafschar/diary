@@ -202,7 +202,8 @@ results {
 
 	show() {
 		this.chatMessages = null;
-		this.input?.focus();
+		if (!window.matchMedia('(pointer: coarse)').matches)
+			this.input?.focus();
 	}
 
 	setStars(stars) {
