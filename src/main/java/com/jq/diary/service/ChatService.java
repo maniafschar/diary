@@ -1,5 +1,6 @@
 package com.jq.diary.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,14 @@ public class ChatService {
 		final ChatMessage chatMessage = this.createMessage(contact, AiService.ACTOR_MODEL, answer);
 		this.repository.save(chatMessage);
 		return chatMessage;
+	}
+
+	public void deleteUnanswered(final Contact contact, final BigInteger id) {
+		final List<ChatMessage> messages = this.list(contact);
+		final ChatMessage last = messages.isEmpty() ? null : messages.get(messages.size() - 1);
+		if (last == null || !last.getId().equals(id) || !AiService.ACTOR_USER.equals(last.getRole()))
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Die Frage kann nicht gelöscht werden.");
+		this.repository.delete(last);
 	}
 
 	public Flux<String> stream(final Contact contact, final String text) {

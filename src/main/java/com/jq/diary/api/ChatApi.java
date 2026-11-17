@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +44,12 @@ public class ChatApi extends ApplicationApi {
 			@RequestHeader final BigInteger clientId, @RequestParam("text") final String text) {
 		return Utilities
 				.filter(this.chatService.send(this.authorizationService.requireContact(contactId, clientId), text));
+	}
+
+	@DeleteMapping("messages/{id}")
+	public void deleteUnanswered(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId, @PathVariable final BigInteger id) {
+		this.chatService.deleteUnanswered(this.authorizationService.requireContact(contactId, clientId), id);
 	}
 
 	@PostMapping(path = "messages/stream", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,

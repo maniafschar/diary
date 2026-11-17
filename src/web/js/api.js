@@ -309,6 +309,15 @@ class api {
 			});
 		},
 
+		deleteMessage(id, success, error) {
+			api.ajax({
+				url: 'chat/messages/' + id,
+				method: 'DELETE',
+				success: success,
+				error: error
+			});
+		},
+
 		postMessageStream(text, onChunk, success, error) {
 			if (!api.user?.id && api.user?.id != 0)
 				return;

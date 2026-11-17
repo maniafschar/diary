@@ -145,6 +145,17 @@ bubble.user>label,
 bubble.user>content {
 	background: var(--background-clickable);
 }
+bubble>actions {
+	display: flex;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	margin-top: 0.25em;
+}
+bubble>actions button {
+	padding: 0.4em 1em;
+	font-size: 0.9em;
+	margin: 0.25em 0 0 0.5em;
+}
 p {
 	margin-block-start: 0;
 	margin-block-end: 0;
@@ -196,14 +207,10 @@ button:hover {
 		var send = controls.appendChild(document.createElement('button'));
 		send.innerText = 'Senden';
 		var sending = false;
-		send.onclick = () => {
-			var text = input.value?.trim();
-			if (!text || sending)
-				return;
+		var ask = text => {
 			sending = true;
 			send.disabled = true;
-			input.value = '';
-			this.renderMessage({ role: 'user', note: text, createdAt: InputDate.local2server(new Date()) });
+			var questionBubble = this.renderMessage({ role: 'user', note: text, createdAt: InputDate.local2server(new Date()) });
 			var response = { role: 'model', note: '', createdAt: InputDate.local2server(new Date()) };
 			var bubble = this.renderMessage(response);
 			var streamedText = '';
@@ -219,13 +226,52 @@ button:hover {
 				send.disabled = false;
 			}, error => {
 				this.setLoading(bubble, false);
-				status.innerText = error.streamError || error.responseText || 'Die Antwort konnte nicht erstellt werden.';
 				if (!streamedText)
 					bubble.remove();
+				status.innerText = error.streamError || error.responseText || 'Die Antwort konnte nicht erstellt werden.';
 				sending = false;
 				send.disabled = false;
+				this.addRetryActions(questionBubble, text);
 			});
 		};
+		this.ask = ask;
+		send.onclick = () => {
+			var text = input.value?.trim();
+			if (!text || sending)
+				return;
+			input.value = '';
+			ask(text);
+		};
+	}
+	addRetryActions(questionBubble, text) {
+		var status = this._root.querySelector('status');
+		var actions = questionBubble.appendChild(document.createElement('actions'));
+		var resend = actions.appendChild(document.createElement('button'));
+		resend.innerText = 'Erneut senden';
+		var remove = actions.appendChild(document.createElement('button'));
+		remove.innerText = 'Löschen';
+		if (!questionBubble.dataset.id) {
+			resend.disabled = remove.disabled = true;
+			api.chat.getMessages(messages => {
+				var last = messages[messages.length - 1];
+				if (last?.role == 'user' && last.note == text)
+					questionBubble.dataset.id = last.id;
+				resend.disabled = remove.disabled = false;
+			});
+		}
+		var discard = done => {
+			var removeBubbles = () => {
+				if (questionBubble.nextElementSibling?.matches('bubble.model'))
+					questionBubble.nextElementSibling.remove();
+				questionBubble.remove();
+				done();
+			};
+			if (!questionBubble.dataset.id)
+				return removeBubbles();
+			api.chat.deleteMessage(questionBubble.dataset.id, removeBubbles, () => status.innerText = 'Die Frage konnte nicht gelöscht werden.');
+		};
+		resend.onclick = () => discard(() => this.ask(text));
+		remove.onclick = () => discard(() => status.innerText = '');
 	}
 	createBubble(message, collapsed) {
 		var bubble = document.createElement('bubble');
@@ -254,7 +300,7 @@ button:hover {
 				toggle();
 			});
 			bubble.addEventListener('keydown', event => {
-				if (event.key !== 'Enter' && event.key !== ' ')
+				if ((event.key !== 'Enter' && event.key !== ' ') || event.target.closest('button'))
 					return;
 				event.preventDefault();
 				toggle();
@@ -297,6 +343,9 @@ button:hover {
 		var history = this._root.querySelector('history');
 		history.textContent = '';
 		messages.forEach(message => history.appendChild(this.createBubble(message, true)));
+		var last = messages[messages.length - 1];
+		if (last?.role == 'user')
+			this.addRetryActions(history.lastElementChild, last.note);
 		history.scrollTop = history.scrollHeight;
 		this.focusPending(false);
 	}
