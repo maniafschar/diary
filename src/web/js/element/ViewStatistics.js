@@ -129,7 +129,7 @@ places details {
 	box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.2);
 }
 
-places summary::before {
+places label::before {
 	content: '>';
 	color: rgba(0, 0, 0, 0.3);
 	position: absolute;
@@ -137,16 +137,16 @@ places summary::before {
 	transition: all 0.4s ease-out;
 }
 
-places.open summary {
+places.open label {
 	font-weight: bold;
 }
 
-places.open summary::before {
+places.open label::before {
 	transform: rotate(90deg);
 	color: black;
 }
 
-places summary {
+places label {
 	text-align: left;
 	margin: 0.5em;
 	display: grid;
@@ -368,7 +368,6 @@ chart bar {
 
 	renderPlaces() {
 		const container = this._root.querySelector('places');
-		const open = container.querySelector('details')?.classList.contains('open') || false;
 		container.textContent = '';
 		const places = this.places || [];
 		container.hidden = !places.length;
@@ -376,7 +375,15 @@ chart bar {
 			return;
 		container.classList.add('open');
 		const dropdown = container.appendChild(document.createElement('details'));
-		dropdown.appendChild(document.createElement('summary')).textContent = 'Orte';
+		const label = document.createElement('label');
+		label.textContent = 'Orte';
+		label.addEventListener('click', () => {
+			if (container.querySelector('details')?.classList.contains('open'))
+				container.classList.remove('open');
+			else
+				container.classList.add('open');
+		});
+		dropdown.appendChild(label);
 		const list = dropdown.appendChild(document.createElement('list'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
 		const min = places[places.length - 1].count;
