@@ -120,6 +120,7 @@ places {
 	margin: 0.5em;
 	border-radius: 1em;
 	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+	max-width: calc(100% - 1em);
 }
 places[hidden] {
 	display: none;
