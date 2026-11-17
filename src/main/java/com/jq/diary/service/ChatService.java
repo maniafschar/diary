@@ -36,6 +36,9 @@ public class ChatService {
 	@Autowired
 	private ContextService contextService;
 
+	@Autowired
+	private AiContextTool aiContextTool;
+
 	public List<ChatMessage> list(final Contact contact) {
 		return this.repository.list("from ChatMessage where contact.id=?1 order by id asc", ChatMessage.class,
 				contact.getId());
