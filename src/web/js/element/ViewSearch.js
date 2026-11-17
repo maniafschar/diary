@@ -122,6 +122,9 @@ tbody tr:hover td.column1 bubble label {
 }
 tbody tr.selected td {
     background-color: var(--background-content) !important;
+}
+tbody tr.chat.selected td {
+    background-color: transparent !important;
 }`;
 
 class ViewSearch extends HTMLElement {
