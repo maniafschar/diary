@@ -96,6 +96,7 @@ wordcloud {
 	min-height: 0;
 	overflow: hidden;
 	text-align: center;
+	margin-top: 3em;
 }
 word {
 	position: absolute;
@@ -115,7 +116,7 @@ places {
 	text-align: left;
 	width: fit-content;
 	background: rgba(255, 255, 255, 0.7);
-	padding: 0.5em;
+	padding: 0.25em 0.5em;
 	margin: 0.5em;
 	border-radius: 1em;
 	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
@@ -171,6 +172,7 @@ places list>div {
 	display: inline-block;
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
+	padding: 0 0.75em;
 }
 places place {
 	display: block;
