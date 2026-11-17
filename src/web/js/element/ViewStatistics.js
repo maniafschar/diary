@@ -180,8 +180,10 @@ places place {
 }
 places place no {
 	font-size: 0.7em;
-	margin-left: 0.4em;
 	opacity: 0.6;
+	position: relative;
+	display: inline-block;
+	width: 2.2em;
 }
 chart {
 	position: relative;
@@ -386,14 +388,13 @@ chart bar {
 		});
 		container.appendChild(label);
 		const list = container.appendChild(document.createElement('list')).appendChild(document.createElement('div'));
-		const fontSize = parseInt(document.body.style.fontSize) || 16;
 		const min = places[places.length - 1].count;
 		const max = places[0].count;
 		places.forEach(token => {
 			const ratio = max == min ? 1 : (token.count - min) / (max - min);
 			const place = list.appendChild(document.createElement('place'));
-			place.innerText = token.text;
 			place.appendChild(document.createElement('no')).innerText = token.count;
+			place.appendChild(document.createTextNode(token.text));
 			place.style.opacity = 0.45 + ratio * 0.55;
 			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
 				detail: token,
