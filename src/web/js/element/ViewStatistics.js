@@ -96,7 +96,7 @@ wordcloud {
 	min-height: 0;
 	overflow: hidden;
 	text-align: center;
-	margin-top: 3em;
+	margin-top: 4em;
 }
 word {
 	position: absolute;
@@ -115,7 +115,7 @@ places {
 	flex: none;
 	text-align: left;
 	width: fit-content;
-	background: rgba(255, 255, 255, 0.7);
+	background: rgba(255, 255, 255, 0.95);
 	padding: 0.25em 0.5em;
 	margin: 0.5em;
 	border-radius: 1em;
