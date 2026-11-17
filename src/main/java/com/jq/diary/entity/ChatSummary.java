@@ -21,9 +21,10 @@ public class ChatSummary extends BaseEntity {
 	private String note;
 
 	public enum Category {
-		CHAT("Fasse die folgenden Tagebucheinträge knapp als persönlichen Hintergrund für einen Chat zusammen, "
+		CHAT("Fasse die folgenden Tagebucheinträge möglichst vollständig als persönlichen Hintergrund für einen Chat zusammen, "
 				+ "mit dem Du den Chat zielgerichteter führen kannst. Berücksichtige zeitliche Entwicklung, Orte, "
-				+ "Beschreibungen und Bewertungen."),
+				+ "Beschreibungen und Bewertungen. Erfinde nichts, Deine Antwort dienst später als System-Prompt, um "
+				+ "bessere, zielgerichtetere Antworten geben zu können."),
 		GUIDE("Du bist ein Guide für die aktuelle Umgebung des Nutzers. Fasse aus den folgenden Tagebucheinträgen "
 				+ "zusammen, welche Arten von Ereignissen und Aktivitäten der Nutzer mag, "
 				+ "damit später mit diesem erzeugtn Input passende Vorschläge für seinen aktuelle Events und "
