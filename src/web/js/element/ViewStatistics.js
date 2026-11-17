@@ -160,6 +160,7 @@ places list {
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
 	padding: 0 0.75em 0.5em;
+	transition: all .4s ease-out;
 }
 places place {
 	display: block;
@@ -360,14 +361,14 @@ chart bar {
 
 	renderPlaces() {
 		const container = this._root.querySelector('places');
-		const open = container.querySelector('details')?.open || false;
+		const open = container.querySelector('details')?.classList.contains('open') || false;
 		container.textContent = '';
 		const places = this.places || [];
 		container.hidden = !places.length;
 		if (!places.length)
 			return;
 		const dropdown = container.appendChild(document.createElement('details'));
-		dropdown.open = open;
+		dropdown.classList.add('open');
 		dropdown.appendChild(document.createElement('summary')).textContent = 'Orte';
 		const list = dropdown.appendChild(document.createElement('list'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
