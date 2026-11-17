@@ -25,7 +25,7 @@ final class ChatContextCategoryMatcher {
 			int score = 0;
 			int categoryFirstMatch = Integer.MAX_VALUE;
 			for (final String keyword : KEYWORDS.get(category)) {
-				final int match = normalized.indexOf(" " + normalize(keyword) + " ");
+				final int match = normalized.indexOf(normalize(keyword));
 				if (match >= 0) {
 					score++;
 					categoryFirstMatch = Math.min(categoryFirstMatch, match);
@@ -43,28 +43,24 @@ final class ChatContextCategoryMatcher {
 	private static Map<Category, List<String>> keywords() {
 		final Map<Category, List<String>> keywords = new EnumMap<>(Category.class);
 		keywords.put(Category.CHAT, List.of(
-				"chatverlauf", "tagebuch", "tagebucheintrag", "früher", "damals", "schon erzählt",
+				"chatverlauf", "tagebuch", "früher", "damals", "schon erzählt",
 				"bereits erzählt", "weißt du noch", "erinnerst du dich", "was habe ich dir erzählt",
-				"was weißt du über mich", "was weisst du ueber mich",
-				"persönlich", "persoenlich"));
+				"was weisst du über mich", "persönlich"));
 		keywords.put(Category.GUIDE, List.of(
-				"guide", "umgebung", "nähe", "in der nähe", "restaurant", "restaurants", "cafe",
-				"cafes", "bar", "bars", "museum", "museen", "kino", "kinos", "theater",
-				"konzert", "konzerte", "veranstaltung", "veranstaltungen", "event", "events", "ausgehen",
-				"aktivität", "aktivitäten", "was kann man machen", "empfehlung", "empfehlungen",
-				"vorschlag", "vorschläge", "heute abend", "essen gehen"));
+				"guide", "umgebung", "nähe", "in der nähe", "restaurant", "cafe",
+				"bar", "museum", "museen", "kino", "theater",
+				"konzert", "veranstaltung", "event", "ausgehen",
+				"aktivität", "was kann man machen", "empfehlung",
+				"vorschlag", "heute abend", "essen gehen"));
 		keywords.put(Category.PSYCHOLOGY, List.of(
-				"psychologie", "psychologisch", "psychologe", "therapie", "therapeut", "gefühl", "gefühle",
-				"emotion", "emotionen", "stress", "stressig", "gestresst", "angespannt", "nervös", "angst",
-				"ängstlich", "sorge", "sorgen", "traurig", "traurigkeit", "einsam", "einsamkeit", "belastet",
+				"psychologie", "psychologisch", "psychologe", "therapie", "therapeut", "gefühl",
+				"emotion", "stress", "angespannt", "nervös", "angst",
+				"sorge", "traurig", "einsam", "belastet",
 				"belastung", "überfordert", "verzweifelt", "mentale gesundheit", "depression", "depressiv",
 				"selbstwert", "beziehung", "konflikt", "motivation"));
 		keywords.put(Category.TRAVEL, List.of(
-				"reise", "reisen", "reiseplanung", "reiseziel", "reiseziele", "urlaub", "ferien",
-				"verreisen", "verreist", "reisetipp", "reisetipps", "reiseroute", "auslandsreise", "rundreise",
-				"kreuzfahrt", "hotel", "hotels", "flug", "flüge", "flugreise", "roadtrip", "backpacking",
-				"wanderurlaub", "unterkunft", "sightseeing", "wohin fahren", "wohin reisen", "wohin fliegen",
-				"urlaub machen", "reise planen"));
+				"reise", "urlaub", "ferien", "kreuzfahrt", "hotel", "flug", "roadtrip", "backpacking",
+				"unterkunft", "sightseeing", "wohin fahren", "wohin reisen", "wohin fliegen"));
 		return Map.copyOf(keywords);
 	}
 
