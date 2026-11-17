@@ -162,8 +162,6 @@ places.open list {
 	grid-template-rows: 1fr;
 }
 places list {
-	max-height: min(40vh, 20em);
-	overflow-y: auto;
 	transition: all .4s ease-out;
 	display: grid;
 	grid-template-rows: 0fr;
@@ -171,6 +169,8 @@ places list {
 places list>div {
 	min-height: 0;
 	display: inline-block;
+	max-height: min(40vh, 20em);
+	overflow-y: auto;
 }
 places place {
 	display: block;
