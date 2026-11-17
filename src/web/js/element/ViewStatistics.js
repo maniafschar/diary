@@ -376,7 +376,6 @@ chart bar {
 		container.hidden = !places.length;
 		if (!places.length)
 			return;
-		container.classList.add('open');
 		const label = document.createElement('label');
 		label.textContent = 'Orte';
 		label.addEventListener('click', () => {
@@ -395,8 +394,6 @@ chart bar {
 			const place = list.appendChild(document.createElement('place'));
 			place.innerText = token.text;
 			place.appendChild(document.createElement('no')).innerText = token.count;
-			place.style.fontSize = ((ratio + 0.7) * fontSize) + 'px';
-			place.style.color = this.createColor(ratio);
 			place.style.opacity = 0.45 + ratio * 0.55;
 			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
 				detail: token,
