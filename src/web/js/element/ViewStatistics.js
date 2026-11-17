@@ -108,12 +108,17 @@ word.vertical {
 	transform-origin: 100% 0;
 }
 places {
-	position: relative;
+	position: absolute;
 	z-index: 1;
-	display: block;
+	display: inline-block;
 	flex: none;
-	height: 3em;
 	text-align: left;
+	width: fit-content;
+	background: rgba(255, 255, 255, 0.7);
+	padding: 0.5em;
+	margin: 0.5em;
+	border-radius: 1em;
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
 }
 places[hidden] {
 	display: none;
@@ -128,7 +133,6 @@ places details {
 	background: #fff;
 	box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.2);
 }
-
 places label::before {
 	content: '>';
 	color: rgba(0, 0, 0, 0.3);
@@ -136,16 +140,13 @@ places label::before {
 	margin-left: -1em;
 	transition: all 0.4s ease-out;
 }
-
 places.open label {
 	font-weight: bold;
 }
-
 places.open label::before {
 	transform: rotate(90deg);
 	color: black;
 }
-
 places label {
 	text-align: left;
 	margin: 0.5em;
@@ -155,13 +156,11 @@ places label {
 	line-height: 1.5;
 	cursor: pointer;
 	user-select: none;
-	padding-left: 1.2em;
+	padding-left: 1em;
 }
-
 places.open list {
 	grid-template-rows: 1fr;
 }
-
 places list {
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
@@ -169,7 +168,6 @@ places list {
 	display: grid;
 	grid-template-rows: 0fr;
 }
-
 places list>div {
 	min-height: 0;
 	display: inline-block;
