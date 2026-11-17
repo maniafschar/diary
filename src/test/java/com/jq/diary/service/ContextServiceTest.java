@@ -130,6 +130,24 @@ class ContextServiceTest {
 		assertEquals("Chat Zusammenfassung", repository.summaries.get(Category.CHAT).getNote());
 	}
 
+	@Test
+	void retrievesChatSummaryForContactAndCategory() {
+		final InMemoryRepository repository = new InMemoryRepository();
+		final AdminService adminService = mock(AdminService.class);
+		final ContextService service = new ContextService();
+		ReflectionTestUtils.setField(service, "repository", repository);
+		ReflectionTestUtils.setField(service, "adminService", adminService);
+		final Contact contact = new Contact();
+		contact.setId(BigInteger.ONE);
+		final ChatSummary summary = new ChatSummary();
+		summary.setContact(contact);
+		summary.setCategory(Category.TRAVEL);
+		summary.setNote("Bevorzugt Bahnreisen.");
+		repository.summaries.put(Category.TRAVEL, summary);
+
+		assertEquals("Bevorzugt Bahnreisen.", service.chatContext(contact.getId(), Category.TRAVEL));
+	}
+
 	private static class InMemoryRepository extends Repository {
 		private List<ChatMessage> messages = List.of();
 		private final java.util.Map<Category, ChatSummary> summaries = new java.util.EnumMap<>(Category.class);
