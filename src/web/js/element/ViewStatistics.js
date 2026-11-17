@@ -128,6 +128,7 @@ places details {
 	background: #fff;
 	box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.2);
 }
+
 places summary::before {
 	content: '>';
 	color: rgba(0, 0, 0, 0.3);
@@ -136,11 +137,11 @@ places summary::before {
 	transition: all 0.4s ease-out;
 }
 
-places summary.open {
+places.open summary {
 	font-weight: bold;
 }
 
-places summary.open::before {
+places.open summary::before {
 	transform: rotate(90deg);
 	color: black;
 }
@@ -155,12 +156,18 @@ places summary {
 	cursor: pointer;
 	user-select: none;
 }
+
+places.open list {
+	grid-template-rows: 1fr;
+}
+
 places list {
-	display: block;
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
 	padding: 0 0.75em 0.5em;
 	transition: all .4s ease-out;
+	display: grid;
+	grid-template-rows: 0fr;
 }
 places place {
 	display: block;
@@ -367,8 +374,8 @@ chart bar {
 		container.hidden = !places.length;
 		if (!places.length)
 			return;
+		container.classList.add('open');
 		const dropdown = container.appendChild(document.createElement('details'));
-		dropdown.classList.add('open');
 		dropdown.appendChild(document.createElement('summary')).textContent = 'Orte';
 		const list = dropdown.appendChild(document.createElement('list'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
