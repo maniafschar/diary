@@ -77,6 +77,7 @@ tr.chat td.column1 {
 	padding: 0;
 	max-height: initial;
 	border: none;
+	max-width: 100%;
 }
 tr.chat td.column2 {
 	display: none;
