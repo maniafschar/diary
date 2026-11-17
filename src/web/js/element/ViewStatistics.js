@@ -165,10 +165,14 @@ places.open list {
 places list {
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
-	padding: 0 0.75em 0.5em;
 	transition: all .4s ease-out;
 	display: grid;
 	grid-template-rows: 0fr;
+}
+
+places list>div {
+	min-height: 0;
+	display: inline-block;
 }
 places place {
 	display: block;
