@@ -374,17 +374,16 @@ chart bar {
 		if (!places.length)
 			return;
 		container.classList.add('open');
-		const dropdown = container.appendChild(document.createElement('details'));
 		const label = document.createElement('label');
 		label.textContent = 'Orte';
 		label.addEventListener('click', () => {
-			if (container.querySelector('details')?.classList.contains('open'))
+			if (container.classList.contains('open'))
 				container.classList.remove('open');
 			else
 				container.classList.add('open');
 		});
-		dropdown.appendChild(label);
-		const list = dropdown.appendChild(document.createElement('list'));
+		container.appendChild(label);
+		const list = container.appendChild(document.createElement('list'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
 		const min = places[places.length - 1].count;
 		const max = places[0].count;
