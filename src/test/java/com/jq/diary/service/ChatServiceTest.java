@@ -27,7 +27,6 @@ class ChatServiceTest {
 	private final Repository repository = mock(Repository.class);
 	private final AiService aiService = mock(AiService.class);
 	private final ContextService contextService = mock(ContextService.class);
-	private final AiContextTool aiContextTool = mock(AiContextTool.class);
 	private final ChatService chatService = new ChatService();
 	private final Contact contact = new Contact();
 
@@ -37,7 +36,6 @@ class ChatServiceTest {
 		ReflectionTestUtils.setField(this.chatService, "repository", this.repository);
 		ReflectionTestUtils.setField(this.chatService, "aiService", this.aiService);
 		ReflectionTestUtils.setField(this.chatService, "contextService", this.contextService);
-		ReflectionTestUtils.setField(this.chatService, "aiContextTool", this.aiContextTool);
 		when(this.repository.list(anyString(), eq(ChatMessage.class), eq(BigInteger.ONE))).thenReturn(List.of());
 		when(this.contextService.context(this.contact)).thenReturn("");
 		when(this.aiService.chat(anyList(), eq(true))).thenReturn("Antwort");
@@ -45,11 +43,11 @@ class ChatServiceTest {
 
 	@Test
 	void loadsAndPrioritizesTheMatchingHistoricalContext() {
-		when(this.aiContextTool.chatContext(BigInteger.ONE, Category.TRAVEL)).thenReturn("Bevorzugt Bahnreisen.");
+		when(this.contextService.chatContext(BigInteger.ONE, Category.TRAVEL)).thenReturn("Bevorzugt Bahnreisen.");
 
 		this.chatService.send(this.contact, "Welche Reiseziele passen zu meinem Urlaub?");
 
-		verify(this.aiContextTool).chatContext(BigInteger.ONE, Category.TRAVEL);
+		verify(this.contextService).chatContext(BigInteger.ONE, Category.TRAVEL);
 		final org.mockito.ArgumentCaptor<List<Content>> conversation =
 				org.mockito.ArgumentCaptor.forClass(List.class);
 		verify(this.aiService).chat(conversation.capture(), eq(true));
@@ -69,9 +67,9 @@ class ChatServiceTest {
 
 		this.chatService.send(this.contact, "Wie spät ist es?");
 
-		verify(this.aiContextTool, never()).chatContext(eq(BigInteger.ONE), eq(Category.CHAT));
-		verify(this.aiContextTool, never()).chatContext(eq(BigInteger.ONE), eq(Category.GUIDE));
-		verify(this.aiContextTool, never()).chatContext(eq(BigInteger.ONE), eq(Category.PSYCHOLOGY));
-		verify(this.aiContextTool, never()).chatContext(eq(BigInteger.ONE), eq(Category.TRAVEL));
+		verify(this.contextService, never()).chatContext(eq(BigInteger.ONE), eq(Category.CHAT));
+		verify(this.contextService, never()).chatContext(eq(BigInteger.ONE), eq(Category.GUIDE));
+		verify(this.contextService, never()).chatContext(eq(BigInteger.ONE), eq(Category.PSYCHOLOGY));
+		verify(this.contextService, never()).chatContext(eq(BigInteger.ONE), eq(Category.TRAVEL));
 	}
 }
