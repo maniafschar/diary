@@ -155,6 +155,7 @@ places label {
 	line-height: 1.5;
 	cursor: pointer;
 	user-select: none;
+	padding-left: 1.2em;
 }
 
 places.open list {
@@ -383,7 +384,7 @@ chart bar {
 				container.classList.add('open');
 		});
 		container.appendChild(label);
-		const list = container.appendChild(document.createElement('list'));
+		const list = container.appendChild(document.createElement('list')).appendChild(document.createElement('div'));
 		const fontSize = parseInt(document.body.style.fontSize) || 16;
 		const min = places[places.length - 1].count;
 		const max = places[0].count;
