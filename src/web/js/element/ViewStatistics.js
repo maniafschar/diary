@@ -172,16 +172,27 @@ places list {
 }
 places list>div {
 	min-height: 0;
-	display: inline-block;
+	display: block;
 	max-height: min(40vh, 20em);
 	overflow-y: auto;
 	padding: 0 0.75em;
 }
 places place {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 0.3em;
 	cursor: pointer;
 	overflow-wrap: anywhere;
 	line-height: 1.3;
+}
+places place > span {
+	min-width: 0;
+}
+places place input-rating {
+	flex: none;
+	float: none;
+	margin: 0 0 0 auto;
+	padding-top: 0;
 }
 places label no,
 places place no {
@@ -400,10 +411,11 @@ chart bar {
 			const ratio = max == min ? 1 : (token.count - min) / (max - min);
 			const place = list.appendChild(document.createElement('place'));
 			place.appendChild(document.createElement('no')).innerText = token.count;
-			place.appendChild(document.createTextNode(token.text));
+			place.appendChild(document.createElement('span')).textContent = token.text;
 			if (token.ratingCount) {
-				const average = token.rating / token.ratingCount / 20;
-				place.appendChild(document.createTextNode(` · Ø ${average.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Sterne`));
+				const rating = place.appendChild(document.createElement('input-rating'));
+				rating.className = 'minimal';
+				rating.setAttribute('value', token.rating / token.ratingCount);
 			}
 			place.style.opacity = 0.45 + ratio * 0.55;
 			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
