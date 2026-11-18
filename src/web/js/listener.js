@@ -314,9 +314,14 @@ address {
 				var place = listener.placeName(events[i].location);
 				if (place) {
 					if (!places.has(place.key))
-						places.set(place.key, { text: place.name, count: 0, ids: [] });
-					places.get(place.key).count++;
-					places.get(place.key).ids.push(i);
+						places.set(place.key, { text: place.name, count: 0, ids: [], rating: 0, ratingCount: 0 });
+					var placeEntry = places.get(place.key);
+					placeEntry.count++;
+					placeEntry.ids.push(i);
+					if (events[i].ratingCount) {
+						placeEntry.rating += events[i].rating || 0;
+						placeEntry.ratingCount += events[i].ratingCount;
+					}
 				}
 				if (events[i].rating) {
 					ratingSum += events[i].rating;

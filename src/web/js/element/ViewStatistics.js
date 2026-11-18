@@ -401,6 +401,10 @@ chart bar {
 			const place = list.appendChild(document.createElement('place'));
 			place.appendChild(document.createElement('no')).innerText = token.count;
 			place.appendChild(document.createTextNode(token.text));
+			if (token.ratingCount) {
+				const average = token.rating / token.ratingCount / 20;
+				place.appendChild(document.createTextNode(` · Ø ${average.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Sterne`));
+			}
 			place.style.opacity = 0.45 + ratio * 0.55;
 			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
 				detail: token,
