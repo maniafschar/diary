@@ -139,8 +139,10 @@ places label::before {
 	content: '>';
 	color: rgba(0, 0, 0, 0.3);
 	position: absolute;
-	margin-left: -0.6em;
+	margin-left: -1em;
 	transition: all 0.4s ease-out;
+	font-size: 0.8em;
+	padding-top: 0.25em;
 }
 places.open label {
 	font-weight: bold;
