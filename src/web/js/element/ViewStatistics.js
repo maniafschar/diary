@@ -366,7 +366,7 @@ chart bar {
 		svg.addEventListener('pointerup', event => event.pointerType != 'mouse' && hide());
 		svg.addEventListener('pointercancel', hide);
 		svg.addEventListener('pointerleave', event => event.pointerType == 'mouse' && hide());
-		svg.addEventListener('click', event => this.dispatchEvent(new CustomEvent('openday', {
+		svg.addEventListener('click', event => this.dispatchEvent(new CustomEvent('details', {
 			detail: nearestAt(event.clientX).entry,
 			bubbles: true,
 			composed: true

@@ -406,11 +406,6 @@ address {
 		return { key: toKey(canonical), name: canonical };
 	}
 
-	static statisticOpenDay(event) {
-		var list = document.querySelector('event view-table').list;
-		listener.updateViewImage(list[event.detail.ids[0]].id);
-	}
-
 	static statisticDetail(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
@@ -475,7 +470,8 @@ images img {
 			}
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
-			value.appendChild(document.createElement('note')).innerHTML = l.note?.replaceAll(new RegExp('(?<!\\p{L})(' + event.detail.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?!\\p{L})', 'giu'), '<b>$1</b>').replaceAll(/\n/g, '<br />') || '';
+			var highlight = event.detail.text ? new RegExp('(?<!\\p{L})(' + event.detail.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?!\\p{L})', 'giu') : null;
+			value.appendChild(document.createElement('note')).innerHTML = (highlight ? l.note?.replaceAll(highlight, '<b>$1</b>') : l.note)?.replaceAll(/\n/g, '<br />') || '';
 			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
@@ -541,7 +537,6 @@ images img {
 		document.querySelector('view-search').addEventListener('open', listener.openSearchHit);
 		document.querySelector('view-search').parentElement.addEventListener('visible', () => document.querySelector('view-search').show());
 		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
-		document.querySelector('view-statistics').addEventListener('openday', listener.statisticOpenDay);
 		var style = `
 thead {
 	display: none;
