@@ -181,6 +181,7 @@ places place {
 	overflow-wrap: anywhere;
 	line-height: 1.3;
 }
+places label no,
 places place no {
 	font-size: 0.7em;
 	opacity: 0.6;
@@ -382,7 +383,7 @@ chart bar {
 		if (!places.length)
 			return;
 		const label = document.createElement('label');
-		label.textContent = 'Orte';
+		label.innerHTML = 'Orte <no>' + places.length + '</no>';
 		label.addEventListener('click', () => {
 			if (container.classList.contains('open'))
 				container.classList.remove('open');
