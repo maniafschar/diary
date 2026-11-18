@@ -339,6 +339,7 @@ address {
 						latitude: events[i].location.latitude,
 						longitude: events[i].location.longitude,
 						altitude: events[i].location.altitude,
+						city: events[i].location.city,
 						note: events[i].note,
 						rating: events[i].rating ? events[i].rating / events[i].ratingCount : null,
 						images: events[i].eventImages.length ? events[i].eventImages.map(e => api.mediaUrl(e.imageThumbnail)) : null
