@@ -274,6 +274,7 @@ public class EventApi extends ApplicationApi {
 			filteredEvent.getLocation().setName(event.getLocation().getName());
 			filteredEvent.getLocation().setNote(event.getLocation().getNote());
 			filteredEvent.getLocation().setPhone(event.getLocation().getPhone());
+			filteredEvent.getLocation().setCity(event.getLocation().getCity());
 
 			if (event.getEventFeedbacks() != null) {
 				filteredEvent.setEventFeedbacks(new ArrayList<EventFeedback>());
