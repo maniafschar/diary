@@ -193,6 +193,7 @@ places place input-rating {
 	float: none;
 	margin: 0 0 0 auto;
 	padding-top: 0;
+	font-size: 0.8em;
 }
 places label no,
 places place no {
