@@ -139,7 +139,7 @@ places label::before {
 	content: '>';
 	color: rgba(0, 0, 0, 0.3);
 	position: absolute;
-	margin-left: -1em;
+	margin-left: -0.6em;
 	transition: all 0.4s ease-out;
 }
 places.open label {
@@ -158,7 +158,7 @@ places label {
 	line-height: 1.5;
 	cursor: pointer;
 	user-select: none;
-	padding-left: 1em;
+	padding-left: 0.25em;
 }
 places.open list {
 	grid-template-rows: 1fr;
@@ -383,7 +383,7 @@ chart bar {
 		if (!places.length)
 			return;
 		const label = document.createElement('label');
-		label.innerHTML = 'Orte <no>' + places.length + '</no>';
+		label.appendChild(document.createElement('div')).innerHTML = '<no>' + places.length + '</no>Orte';
 		label.addEventListener('click', () => {
 			if (container.classList.contains('open'))
 				container.classList.remove('open');
