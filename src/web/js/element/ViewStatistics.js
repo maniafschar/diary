@@ -414,7 +414,7 @@ chart bar {
 			place.appendChild(document.createElement('span')).textContent = token.text;
 			if (token.ratingCount) {
 				const rating = document.createElement('input-rating');
-				rating.className = 'line';
+				rating.className = 'minimal';
 				rating.setAttribute('value', token.rating / token.ratingCount);
 				place.appendChild(rating);
 			}
