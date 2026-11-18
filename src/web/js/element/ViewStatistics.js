@@ -413,9 +413,10 @@ chart bar {
 			place.appendChild(document.createElement('no')).innerText = token.count;
 			place.appendChild(document.createElement('span')).textContent = token.text;
 			if (token.ratingCount) {
-				const rating = place.appendChild(document.createElement('input-rating'));
-				rating.className = 'minimal';
+				const rating = document.createElement('input-rating');
+				rating.className = 'line';
 				rating.setAttribute('value', token.rating / token.ratingCount);
+				place.appendChild(rating);
 			}
 			place.style.opacity = 0.45 + ratio * 0.55;
 			place.addEventListener('click', () => this.dispatchEvent(new CustomEvent('details', {
