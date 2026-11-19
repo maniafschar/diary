@@ -213,7 +213,7 @@ places place input-rating {
 	font-size: 0.8em;
 }
 places label no,
-places header no,
+places sort no,
 places place no {
 	font-size: 0.7em;
 	opacity: 0.6;
