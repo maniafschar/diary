@@ -345,7 +345,7 @@ chart bar {
 		const xs = points.map(point => (point.time - t0) / DAY);
 		const n = points.length;
 		const daysTotal = (points[n - 1].entry.date - points[0].entry.date) / (1000 * 60 * 60 * 24);
-		const daysPercent = parseInt(0.5 + 100 * n / daysTotal);
+		const daysPercent = parseInt(0.5 + (100 * n / daysTotal));
 		const meanX = xs.reduce((a, b) => a + b, 0) / n;
 		const meanY = points.reduce((a, point) => a + point.value, 0) / n;
 		let cov = 0;
