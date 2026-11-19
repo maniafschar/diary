@@ -213,6 +213,7 @@ places place input-rating {
 	font-size: 0.8em;
 }
 places label no,
+places header no,,
 places place no {
 	font-size: 0.7em;
 	opacity: 0.6;
@@ -425,6 +426,7 @@ chart bar {
 		const list = container.appendChild(document.createElement('list')).appendChild(document.createElement('div'));
 		const sort = this.placeSort || (this.placeSort = { key: null, dir: 0 });
 		const header = list.appendChild(document.createElement('sort'));
+		header.appendChild(document.createElement('no'));
 		const ratingOf = token => token.ratingCount ? token.rating / token.ratingCount : -1;
 		const cycle = key => {
 			if (sort.key != key) {
@@ -438,9 +440,9 @@ chart bar {
 			}
 			this.renderPlaces();
 		};
-		[['text', 'Ort'], ['rating', 'Sterne']].forEach(([key, name]) => {
+		[['text', 'Ort {}'], ['rating', '{} Sterne']].forEach(([key, name]) => {
 			const button = header.appendChild(document.createElement('button'));
-			button.textContent = name + (sort.key == key ? (sort.dir == 1 ? ' ▲' : ' ▼') : '');
+			button.textContent = name.replace('{}', (sort.key == key ? (sort.dir == 1 ? '▲' : '▼') : '')).trim();
 			button.addEventListener('click', event => {
 				event.stopPropagation();
 				cycle(key);
