@@ -345,6 +345,7 @@ chart bar {
 		const xs = points.map(point => (point.time - t0) / DAY);
 		const n = points.length;
 		const daysTotal = (points[n - 1].entry.date - points[0].entry.date) / (1000 * 60 * 60 * 24);
+		const daysPercent = parseInt(0.5 + n / daysTotal);
 		const meanX = xs.reduce((a, b) => a + b, 0) / n;
 		const meanY = points.reduce((a, point) => a + point.value, 0) / n;
 		let cov = 0;
@@ -358,7 +359,7 @@ chart bar {
 		const format = (value, digits) => value.toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 		const direction = Math.abs(starsPerMonth) < 0.05 ? '→ stabil'
 			: starsPerMonth > 0 ? '↑ steigend' : '↓ fallend';
-		info.textContent = `${direction} (${starsPerMonth > 0 ? '+' : ''}${format(starsPerMonth, 2)} Sterne/Monat) · Ø ${format(meanY / 20, 1)} Sterne · ${n}/${daysTotal} Tage mit Eintrag`;
+		info.textContent = `${direction} (${starsPerMonth > 0 ? '+' : ''}${format(starsPerMonth, 2)} Sterne/Monat) · Ø ${format(meanY / 20, 1)} Sterne · ${n}/${daysTotal} · ${daysPercent}% Tage mit Eintrag`;
 
 		const ns = 'http://www.w3.org/2000/svg';
 		const width = 1000;
