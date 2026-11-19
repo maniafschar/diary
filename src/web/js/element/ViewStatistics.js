@@ -177,6 +177,23 @@ places list>div {
 	overflow-y: auto;
 	padding: 0 0.75em;
 }
+places sort {
+	display: flex;
+	gap: 0.5em;
+	font-size: 0.8em;
+	padding: 0.3em 0;
+	position: sticky;
+	top: 0;
+	background: inherit;
+}
+places sort button {
+	all: unset;
+	cursor: pointer;
+	opacity: 0.6;
+}
+places sort button:last-child {
+	margin-left: auto;
+}
 places place {
 	display: flex;
 	align-items: center;
@@ -406,9 +423,42 @@ chart bar {
 		});
 		container.appendChild(label);
 		const list = container.appendChild(document.createElement('list')).appendChild(document.createElement('div'));
+		const sort = this.placeSort || (this.placeSort = { key: null, dir: 0 });
+		const header = list.appendChild(document.createElement('sort'));
+		const ratingOf = token => token.ratingCount ? token.rating / token.ratingCount : -1;
+		const cycle = key => {
+			if (sort.key != key) {
+				sort.key = key;
+				sort.dir = 1;
+			} else if (sort.dir == 1)
+				sort.dir = -1;
+			else {
+				sort.key = null;
+				sort.dir = 0;
+			}
+			this.renderPlaces();
+		};
+		[['text', 'Ort'], ['rating', 'Sterne']].forEach(([key, name]) => {
+			const button = header.appendChild(document.createElement('button'));
+			button.textContent = name + (sort.key == key ? (sort.dir == 1 ? ' ▲' : ' ▼') : '');
+			button.addEventListener('click', event => {
+				event.stopPropagation();
+				cycle(key);
+			});
+		});
+		const sorted = [...places];
+		if (sort.key) {
+			const value = token => sort.key == 'text' ? token.text.toLowerCase() : ratingOf(token);
+			sorted.sort((a, b) => {
+				const va = value(a);
+				const vb = value(b);
+				const result = va < vb ? -1 : va > vb ? 1 : 0;
+				return result * sort.dir;
+			});
+		}
 		const min = places[places.length - 1].count;
 		const max = places[0].count;
-		places.forEach(token => {
+		sorted.forEach(token => {
 			const ratio = max == min ? 1 : (token.count - min) / (max - min);
 			const place = list.appendChild(document.createElement('place'));
 			place.appendChild(document.createElement('no')).innerText = token.count;
