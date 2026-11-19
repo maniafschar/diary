@@ -359,7 +359,7 @@ chart bar {
 		const format = (value, digits) => value.toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 		const direction = Math.abs(starsPerMonth) < 0.05 ? '→ stabil'
 			: starsPerMonth > 0 ? '↑ steigend' : '↓ fallend';
-		info.textContent = `${direction} (${starsPerMonth > 0 ? '+' : ''}${format(starsPerMonth, 2)} Sterne/Monat) · Ø ${format(meanY / 20, 1)} Sterne · ${n}/${daysTotal} · ${daysPercent}% Tage mit Eintrag`;
+		info.textContent = `${direction} (${starsPerMonth > 0 ? '+' : ''}${format(starsPerMonth, 2)} Sterne/Monat) · Ø ${format(meanY / 20, 1)} Sterne · ${n}/${daysTotal} Tage mit Eintrag · ${daysPercent}%`;
 
 		const ns = 'http://www.w3.org/2000/svg';
 		const width = 1000;
