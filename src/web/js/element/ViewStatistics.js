@@ -220,7 +220,8 @@ places place no {
 	opacity: 0.6;
 	position: relative;
 	display: inline-block;
-	width: 2.2em;
+	width: 3em;
+	padding-top: 0.3em;
 }
 chart {
 	position: relative;
