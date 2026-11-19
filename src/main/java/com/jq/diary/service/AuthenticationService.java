@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -147,6 +148,8 @@ public class AuthenticationService {
 			}
 			throw new AuthenticationException(AuthenticationExceptionType.WrongPassword);
 		}
+		contact.setLastInteraction(new Timestamp(Instant.now().toEpochMilli()));
+		this.repository.save(contact);
 	}
 
 	private String createEmailLoginLink(final Contact contact, final String link) {

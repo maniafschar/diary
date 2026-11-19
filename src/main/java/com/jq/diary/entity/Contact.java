@@ -1,6 +1,7 @@
 package com.jq.diary.entity;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,7 @@ public class Contact extends BaseEntity {
 	private String password;
 	private String image;
 	private String loginLink;
+	private Timestamp lastInteraction;
 	private Boolean admin = false;
 	private Boolean notification = true;
 	private Boolean verified = false;
@@ -133,6 +135,14 @@ public class Contact extends BaseEntity {
 
 	public void setLoginLink(final String loginLink) {
 		this.loginLink = loginLink;
+	}
+
+	public Timestamp getLastInteraction() {
+		return this.lastInteraction;
+	}
+
+	public void setLastInteraction(final Timestamp lastInteraction) {
+		this.lastInteraction = lastInteraction;
 	}
 
 	public Boolean getAdmin() {

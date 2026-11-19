@@ -101,7 +101,10 @@ class listener {
 				s += '<item onclick="action.participate(' + contacts[i].id + ',' + event.id + ')"' +
 					' i="' + contacts[i].id + '"' +
 					(p[contacts[i].id] ? ' contactEventId="' + p[contacts[i].id].id + '" class="selected"' : '') +
-					'>' + contacts[i].pseudonym + '</item>';
+					'>' + contacts[i].pseudonym +
+					(contacts[i].lastInteraction ?
+						'<br/><small>Zuletzt aktiv: ' + ui.formatTime(new Date(contacts[i].lastInteraction.replace('+00:00', ''))) + '</small>' : '') +
+					'</item>';
 			}
 			return s + '</participants>';
 		};
