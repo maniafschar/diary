@@ -419,10 +419,11 @@ chart bar {
 				container.classList.add('open');
 		});
 		container.appendChild(label);
-		const list = container.appendChild(document.createElement('list')).appendChild(document.createElement('div'));
-		const sort = this.placeSort || (this.placeSort = { key: null, dir: 0 });
+		var list = container.appendChild(document.createElement('list'));
 		const header = list.appendChild(document.createElement('sort'));
 		header.appendChild(document.createElement('no'));
+		list = list.appendChild(document.createElement('div'));
+		const sort = this.placeSort || (this.placeSort = { key: null, dir: 0 });
 		const ratingOf = token => token.ratingCount ? token.rating / token.ratingCount : -1;
 		const cycle = key => {
 			if (sort.key != key) {
