@@ -174,10 +174,12 @@ places list>div {
 	min-height: 0;
 	display: block;
 	max-height: min(40vh, 20em);
+	overflow-y: hidden;
 }
 places list>div>div {
 	overflow-y: auto;
 	padding: 0 0.75em;
+	height: 100%;
 }
 places sort {
 	display: flex;
