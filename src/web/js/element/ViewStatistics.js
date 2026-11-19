@@ -170,7 +170,7 @@ places list {
 	display: grid;
 	grid-template-rows: 0fr;
 }
-places list>div {
+places list>div>div {
 	min-height: 0;
 	display: block;
 	max-height: min(40vh, 20em);
@@ -179,7 +179,8 @@ places list>div {
 }
 places sort {
 	display: flex;
-	gap: 0.5em;
+	gap: 0.25em;
+	padding: 0 0.75em;
 }
 places sort button {
 	all: unset;
