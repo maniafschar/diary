@@ -180,16 +180,12 @@ places list>div {
 places sort {
 	display: flex;
 	gap: 0.5em;
-	font-size: 0.8em;
-	padding: 0.3em 0;
-	position: sticky;
-	top: 0;
-	background: inherit;
 }
 places sort button {
 	all: unset;
 	cursor: pointer;
 	opacity: 0.6;
+	font-size: 0.8em;
 }
 places sort button:last-child {
 	margin-left: auto;
