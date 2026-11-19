@@ -170,10 +170,12 @@ places list {
 	display: grid;
 	grid-template-rows: 0fr;
 }
-places list>div>div {
+places list>div {
 	min-height: 0;
 	display: block;
 	max-height: min(40vh, 20em);
+}
+places list>div>div {
 	overflow-y: auto;
 	padding: 0 0.75em;
 }
