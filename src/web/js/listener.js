@@ -19,7 +19,9 @@ class listener {
 					for (var i = 0; i < list.length; i++) {
 						var row = [];
 						row.push(list[i].verified ? list[i].name : { attributes: { class: 'pending' }, text: list[i].name });
-						row.push({ text: ('Hinzugefügt am <b>' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '</b>') + (list[i].verified ? '' : ' (noch nicht verifiziert)') + (list[i].participations ? list[i].participations : ''), attributes: { value: list[i].participations || 0 } });
+						row.push({ text: ('Hinzugefügt am <b>' + ui.formatTime(new Date(list[i].createdAt.replace('+00:00', ''))) + '</b>' +
+										(list[i].lastInteraction ? '<br/><small>Zuletzt aktiv: ' + ui.formatTime(new Date(list[i].lastInteraction.replace('+00:00', ''))) + '</small>' : '')) + 
+										(list[i].verified ? '' : ' (noch nicht verifiziert)') + (list[i].participations ? list[i].participations : ''), attributes: { value: list[i].participations || 0 } });
 						d.push(row);
 					}
 					return d;
