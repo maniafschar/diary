@@ -1,0 +1,238 @@
+@font-face {
+	font-family: 'Comfortaa';
+	font-style: normal;
+	font-weight: 400;
+	src: url(../font/Comfortaa-Regular.ttf) format('truetype');
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	color: #15213a;
+	background: linear-gradient(135deg, #fff, #fffaf7 35%, #ddf3ff 100%);
+	font-family: Comfortaa, Verdana, Arial, sans-serif;
+	line-height: 1.7;
+}
+
+a {
+	color: #173c85;
+	text-underline-offset: 0.18em;
+}
+
+a:hover {
+	color: #245db5;
+}
+
+.site-header,
+.site-footer {
+	width: min(100% - 2rem, 72rem);
+	margin: 0 auto;
+}
+
+.site-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.25rem;
+	padding: 1.2rem 0;
+	border-bottom: 1px solid rgba(21, 33, 58, 0.12);
+}
+
+.site-brand {
+	flex: 0 0 auto;
+	color: #0b245c;
+	font-size: 1.4rem;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.site-nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem 1rem;
+	font-size: 0.88rem;
+}
+
+.site-nav a,
+.site-footer a {
+	text-decoration: none;
+}
+
+.site-cta,
+.cta-panel a {
+	display: inline-block;
+	padding: 0.7rem 1rem;
+	border-radius: 999px;
+	background: #172f78;
+	color: white;
+	font-weight: 700;
+	text-decoration: none;
+	text-align: center;
+}
+
+.site-cta:hover,
+.cta-panel a:hover {
+	background: #254a9a;
+	color: white;
+}
+
+.seo-page {
+	width: min(100% - 2rem, 54rem);
+	min-height: 65vh;
+	margin: 0 auto;
+	padding: 2rem 0 4rem;
+}
+
+.breadcrumbs {
+	margin-bottom: 1.5rem;
+	color: #526078;
+	font-size: 0.88rem;
+}
+
+.breadcrumbs a {
+	color: inherit;
+}
+
+.eyebrow {
+	margin: 0 0 0.5rem;
+	color: #355a9b;
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+	color: #10275e;
+	line-height: 1.3;
+}
+
+h1 {
+	margin: 0 0 1rem;
+	font-size: clamp(2rem, 5vw, 3.2rem);
+}
+
+h2 {
+	margin: 2rem 0 0.75rem;
+	font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+h3 {
+	margin: 1.5rem 0 0.5rem;
+	font-size: 1.12rem;
+}
+
+.page-lead {
+	margin: 0 0 1.5rem;
+	font-size: 1.16rem;
+}
+
+.page-content {
+	padding: clamp(1.25rem, 4vw, 2.25rem);
+	border: 1px solid rgba(21, 33, 58, 0.08);
+	border-radius: 1.25rem;
+	background: rgba(255, 255, 255, 0.78);
+	box-shadow: 0 0.5rem 2rem rgba(20, 41, 55, 0.06);
+}
+
+.page-content > :first-child {
+	margin-top: 0;
+}
+
+.page-content > :last-child {
+	margin-bottom: 0;
+}
+
+.page-image {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 1.5rem 0;
+	border-radius: 0.9rem;
+}
+
+.cta-panel {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: 1.5rem;
+	padding: 1.25rem;
+	border-radius: 1rem;
+	background: rgba(221, 243, 255, 0.8);
+}
+
+.cta-panel p {
+	flex: 1 1 16rem;
+	margin: 0;
+}
+
+.faq-list details {
+	padding: 1rem 0;
+	border-bottom: 1px solid rgba(21, 33, 58, 0.12);
+}
+
+.faq-list summary {
+	color: #10275e;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.faq-list p {
+	margin: 0.65rem 0 0;
+}
+
+.site-footer {
+	padding: 1.5rem 0 2rem;
+	border-top: 1px solid rgba(21, 33, 58, 0.12);
+	color: #526078;
+	font-size: 0.9rem;
+}
+
+.site-footer nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.site-footer p {
+	margin: 0;
+}
+
+@media (max-width: 760px) {
+	.site-header {
+		align-items: flex-start;
+		flex-wrap: wrap;
+	}
+
+	.site-nav {
+		order: 3;
+		justify-content: flex-start;
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.site-header,
+	.site-footer {
+		width: min(100% - 1.25rem, 72rem);
+	}
+
+	.seo-page {
+		width: min(100% - 1.25rem, 54rem);
+		padding-top: 1.25rem;
+	}
+
+	.site-cta {
+		padding: 0.6rem 0.8rem;
+		font-size: 0.88rem;
+	}
+}
