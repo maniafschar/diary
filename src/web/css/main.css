@@ -612,6 +612,11 @@ a {
 	display: inline-block;
 }
 
+ul,
+ol {
+	margin: 1em 0;
+}
+
 li {
 	margin-left: -1em;
 }
