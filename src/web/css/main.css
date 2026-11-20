@@ -245,6 +245,10 @@ body>imprint.open {
 	pointer-events: auto;
 }
 
+body>imprint .toggle {
+	font-size: 0.8em;
+}
+
 body>imprint>.imprint-panel {
 	position: absolute;
 	top: 5vh;
