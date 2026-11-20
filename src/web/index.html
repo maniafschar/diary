@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <head>
-	<title>Diary Cafe</title>
-	<meta property="og:title" content="Events end · memories live on!" />
+	<title>Digitales Tagebuch für Events &amp; Erinnerungen | diary.cafe</title>
+	<meta name="description"
+		content="Sammle Events, Fotos und Geschichten in deinem digitalen Tagebuch, teile Erinnerungen mit ausgewählten Menschen und entdecke diary.cafe jetzt." />
+	<meta name="keywords" content="digitales Tagebuch, Event-Tagebuch, Erinnerungen, Fotos, Events, Tagebuch online" />
+	<meta property="og:title" content="Digitales Tagebuch für Events &amp; Erinnerungen | diary.cafe" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://diary.cafe" />
-	<meta property="og:image" content="https://diary.cafe/image/icon512.png" />
+	<meta property="og:locale" content="de_DE" />
+	<meta property="og:image" content="https://diary.cafe/image/start.png" />
 	<meta property="og:image:type" content="image/png" />
-	<meta property="og:image:width" content="512" />
-	<meta property="og:image:height" content="512" />
+	<meta property="og:image:width" content="1671" />
+	<meta property="og:image:height" content="941" />
+	<meta property="og:image:alt" content="diary.cafe: digitales Tagebuch mit Erinnerungen, Fotos und Event-Ansicht" />
 	<meta property="og:description"
-		content="Organize events, make unforgettable memories, share them in your community." />
+		content="Sammle Events, Fotos und Geschichten in deinem digitalen Tagebuch, teile Erinnerungen mit ausgewählten Menschen und entdecke diary.cafe jetzt." />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Digitales Tagebuch für Events &amp; Erinnerungen | diary.cafe" />
+	<meta name="twitter:description"
+		content="Sammle Events, Fotos und Geschichten in deinem digitalen Tagebuch, teile Erinnerungen mit ausgewählten Menschen und entdecke diary.cafe jetzt." />
+	<meta name="twitter:image" content="https://diary.cafe/image/start.png" />
+	<meta name="twitter:image:alt" content="diary.cafe: digitales Tagebuch mit Erinnerungen, Fotos und Event-Ansicht" />
 	<meta name="Copyright" content="JNet Quality Consulting GmbH, Munich, Germany. All rights reserved." />
 	<meta name="email" content="support@diary.cafe" />
-	<meta name="description" content="Organize events, make unforgettable memories, share them in your community." />
-	<meta name="keywords" content="events, memories, groups, hobbies, leisure time, pictures, scores" />
 	<meta http-equiv="Content-Security-Policy"
 		content="default-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/leaflet/; img-src 'self' blob: data: app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe https://*.openstreetmap.org; frame-src *; media-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe; font-src 'self'; connect-src 'self' app://localhost ionic://localhost https://localhost http://localhost https://diary.cafe;">
 	<meta name="robots" content="index,follow" />
@@ -27,17 +36,115 @@
 	<meta name="format-detection" content="email=no" />
 	<meta name="theme-color" content="white">
 	<link rel="canonical" href="https://diary.cafe" />
-	<link rel="apple-touch-icon" href="https://diary.cafe/image/icon.png" />
+	<link rel="apple-touch-icon" href="https://diary.cafe/image/icon512.png" />
 	<link rel="icon" type="image/x-icon" href="favicon.ico" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<meta http-equiv='content-language' content='en-en' />
+	<meta http-equiv="content-language" content="de-DE" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<script defer type="text/javascript" src="cordova.js"></script>
 	<script defer type="text/javascript" src="js/main.js"></script>
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@graph": [
+				{
+					"@type": "Organization",
+					"@id": "https://diary.cafe/#organization",
+					"name": "JNet Quality Consulting GmbH",
+					"url": "https://diary.cafe",
+					"email": "support@diary.cafe",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "https://diary.cafe/image/icon512.png",
+						"width": 512,
+						"height": 512
+					},
+					"address": {
+						"@type": "PostalAddress",
+						"streetAddress": "Whistlerweg 27b",
+						"postalCode": "81479",
+						"addressLocality": "München",
+						"addressCountry": "DE"
+					}
+				},
+				{
+					"@type": "WebSite",
+					"@id": "https://diary.cafe/#website",
+					"url": "https://diary.cafe",
+					"name": "diary.cafe",
+					"description": "Sammle Events, Fotos und Geschichten in deinem digitalen Tagebuch, teile Erinnerungen mit ausgewählten Menschen und entdecke diary.cafe jetzt.",
+					"inLanguage": "de-DE",
+					"publisher": {
+						"@id": "https://diary.cafe/#organization"
+					}
+				},
+				{
+					"@type": "SoftwareApplication",
+					"@id": "https://diary.cafe/#software",
+					"name": "diary.cafe",
+					"url": "https://diary.cafe",
+					"applicationCategory": "LifestyleApplication",
+					"operatingSystem": "Web, iOS, Android",
+					"image": "https://diary.cafe/image/start.png",
+					"description": "Sammle Events, Fotos und Geschichten in deinem digitalen Tagebuch, teile Erinnerungen mit ausgewählten Menschen und entdecke diary.cafe jetzt.",
+					"featureList": [
+						"Digitale Tagebücher mit Texten, Fotos, Orten und Bewertungen",
+						"Events organisieren und Teilnehmer verwalten",
+						"Erinnerungen mit ausgewählten Personen teilen",
+						"KI-Chat und PDF-Zusammenfassungen"
+					],
+					"offers": {
+						"@type": "Offer",
+						"price": "0",
+						"priceCurrency": "EUR",
+						"url": "https://diary.cafe"
+					},
+					"publisher": {
+						"@id": "https://diary.cafe/#organization"
+					}
+				},
+				{
+					"@type": "FAQPage",
+					"@id": "https://diary.cafe/#faq",
+					"url": "https://diary.cafe/#faq",
+					"inLanguage": "de-DE",
+					"isPartOf": {
+						"@id": "https://diary.cafe/#website"
+					},
+					"mainEntity": [
+						{
+							"@type": "Question",
+							"name": "Was ist diary.cafe?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "diary.cafe ist ein digitales Tagebuch, in dem du Erinnerungen mit Texten, Fotos, Orten und Bewertungen festhalten, Events organisieren und Inhalte mit ausgewählten Personen teilen kannst."
+							}
+						},
+						{
+							"@type": "Question",
+							"name": "Kann ich mein Tagebuch privat halten?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "Ja. Du entscheidest, mit wem du deine Tagebucheinträge und Erinnerungen teilst."
+							}
+						},
+						{
+							"@type": "Question",
+							"name": "Muss ich mich anmelden, um diary.cafe zu nutzen?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "Zum Erstellen eines eigenen Tagebuchs ist eine Registrierung erforderlich. Freigegebene Inhalte, zum Beispiel das Test-Tagebuch, kannst du auch ohne Registrierung ansehen."
+							}
+						}
+					]
+				}
+			]
+		}
+	</script>
 </head>
 
 <body onload="action.init()">
@@ -148,7 +255,7 @@
 			</element>
 			<element class="login">
 				<div style="padding-bottom: 1em; margin-top: -0.5em;">
-					<h1>Dein Tagebuch!</h1>
+					<h1>Digitales Tagebuch für Events und Erinnerungen</h1>
 					<ul style="margin-bottom: 2em;">
 						<li>Sammle Erinnerungen von Ereignissen, Orten, Menschen und Geschichten.</li>
 						<li>Bewerte sie und Deine Stimmungen.</li>
@@ -186,6 +293,24 @@
 				<div style="text-align: center;">
 					<button onclick=" action.createClient()">Erstellen</button>
 				</div>
+				<section class="seo-faq" id="faq" aria-labelledby="faq-title">
+					<h2 id="faq-title">Häufige Fragen zum digitalen Tagebuch</h2>
+					<details>
+						<summary>Was ist diary.cafe?</summary>
+						<p>diary.cafe ist ein digitales Tagebuch, in dem du Erinnerungen mit Texten, Fotos, Orten und
+							Bewertungen festhalten, Events organisieren und Inhalte mit ausgewählten Personen teilen
+							kannst.</p>
+					</details>
+					<details>
+						<summary>Kann ich mein Tagebuch privat halten?</summary>
+						<p>Ja. Du entscheidest, mit wem du deine Tagebucheinträge und Erinnerungen teilst.</p>
+					</details>
+					<details>
+						<summary>Muss ich mich anmelden, um diary.cafe zu nutzen?</summary>
+						<p>Zum Erstellen eines eigenen Tagebuchs ist eine Registrierung erforderlich. Freigegebene
+							Inhalte, zum Beispiel das Test-Tagebuch, kannst du auch ohne Registrierung ansehen.</p>
+					</details>
+				</section>
 			</element>
 		</container>
 	</main>
