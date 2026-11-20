@@ -59,7 +59,6 @@ body {
 	font-family: var(--font-family);
 }
 
-body>intro,
 body>main {
 	width: 100dvw;
 	height: 100dvh;
@@ -68,47 +67,12 @@ body>main {
 	transition: opacity .4s ease-out;
 }
 
-html.loggedIn body>intro {
-	opacity: 0 !important;
-	display: none;
-}
-
 html.loggedIn body>main {
 	opacity: 1 !important;
 }
 
 .invisible {
 	opacity: 0;
-}
-
-body>intro {
-	display: block;
-	position: relative;
-	overflow: hidden;
-}
-
-body>intro>img:first-child {
-	min-width: 100%;
-	min-height: 100%;
-}
-
-body>intro img.text,
-body>intro img.textSub {
-	position: absolute;
-	left: 0;
-	max-width: 100%;
-	max-height: 55%;
-}
-
-body>intro img.text {
-	top: 0;
-}
-
-body>intro img.textSub {
-	bottom: max(1rem, env(safe-area-inset-bottom));
-	width: min(16em, 80%);
-	left: 50%;
-	transform: translateX(-50%);
 }
 
 body>main {
