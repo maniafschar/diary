@@ -492,33 +492,10 @@ images img {
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
 	}
 
-	static scrollMain() {
-		var intro = document.querySelector('body>intro');
-		var main = document.querySelector('body>main');
-		var setOpacity = (e, value) => {
-			if (!value && !e.classList.contains('invisible'))
-				e.classList.add('invisible');
-			if (value && e.classList.contains('invisible'))
-				e.classList.remove('invisible');
-		};
-		if (window.scrollY > 0) {
-			setOpacity(main, true);
-			setOpacity(intro, false);
-		} else {
-			setOpacity(main, false);
-			setOpacity(intro, true);
-		}
-		if (document.querySelector('body > .mobile-nav-popup'))
-			dialog.openMoreMenu();
-	}
-
 	static init() {
-		listener.scrollMain();
 		window.addEventListener('scroll', () => {
 			document.querySelector('view-image').close();
-			document.querySelectorAll('body>intro, body>main').forEach(e => { if (e.classList.contains('invisible')) e.classList.remove('invisible'); });
 		}, { passive: true });
-		window.addEventListener('scrollend', listener.scrollMain, { passive: true });
 		document.addEventListener('eventParticipation', event => {
 			if (event.detail?.type != 'read')
 				listener.updateContacts();
