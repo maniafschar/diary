@@ -543,7 +543,8 @@ body h1 {
 }
 
 .marketing-feature h2,
-.account-login {
+.account-login,
+.registration h2 {
 	margin: 0 0 0.75rem;
 	font-size: 1.15rem;
 	line-height: 1.35;
