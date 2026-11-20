@@ -590,4 +590,15 @@ div.toggle>div {
 			};
 		}
 	}
+
+	static openTerms() {
+		dialog.openImprint();
+		var panel = document.querySelector('imprint>.imprint-panel');
+		var toggle = panel?.querySelector('toggle');
+		if (!panel || !toggle)
+			return;
+		toggle.classList.add('open');
+		toggle.nextElementSibling.style.gridTemplateRows = '1fr';
+		requestAnimationFrame(() => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }));
+	}
 }
