@@ -254,18 +254,93 @@
 				</eventContainer>
 			</element>
 			<element class="login">
-				<div style="padding-bottom: 1em; margin-top: -0.5em;">
-					<h1>Digitales Tagebuch für Events und Erinnerungen</h1>
-					<ul style="margin-bottom: 2em;">
-						<li>Sammle Erinnerungen von Ereignissen, Orten, Menschen und Geschichten.</li>
-						<li>Bewerte sie und Deine Stimmungen.</li>
-						<li>Teile sie nur mit denen, die Dir wichtig sind.</li>
-						<li>Sammle Likes und Kommentare für Deine Einträge.</li>
-						<li>Erstelle ein PDF mit KI Zusammenfassung in Wort und Bild!</li>
-						<li>Und vielem mehr, lass Dich überraschen!</li>
-					</ul>
-					Log Dich ein oder <b><a onclick="action.loginDemo()">teste</a></b> Aarons Tagebuch.
-				</div>
+				<section class="marketing-landing" aria-labelledby="marketing-title">
+					<header class="marketing-hero">
+						<h1 id="marketing-title">Digitales Tagebuch &amp; Event-Erinnerungen – privat teilen | diary.cafe
+						</h1>
+						<p class="marketing-lead">diary.cafe verbindet persönliches Tagebuch und Event-Organisation an
+							einem Ort. Halte fest, was du erlebt hast, und teile ausgewählte Erinnerungen mit den
+							Menschen, die dabei waren.</p>
+						<div class="marketing-actions">
+							<button type="button" class="primary"
+								onclick="document.getElementById('registration').scrollIntoView({ behavior: 'smooth', block: 'start' })">Kostenlos.
+								Jetzt starten!</button>
+							<button type="button" onclick="action.loginDemo()">Beispiel-Tagebuch ansehen</button>
+						</div>
+						<img class="marketing-visual" src="image/start.png"
+							alt="diary.cafe auf Smartphone und Laptop mit Tagebucheinträgen, Fotos und Auswertungen"
+							loading="lazy" decoding="async" />
+					</header>
+					<div class="marketing-features">
+						<section class="marketing-feature">
+							<h2>Ein digitales Tagebuch, das den Moment bewahrt</h2>
+							<p>Ein digitales Tagebuch macht aus einzelnen Erlebnissen eine Sammlung, die mit dir
+								wächst. Halte fest, was passiert ist, schreibe Gedanken dazu und ordne Einträge mit
+								Fotos, Orten, Bewertungen und deiner Stimmung ein. Ob besonderer Ausflug, gemeinsamer
+								Abend oder kleiner Alltagsmoment – du kannst die Details später wiederfinden, statt sie
+								in Chats und Fotogalerien suchen zu müssen. Dein Tagebuch bleibt persönlich und lässt
+								sich nach deinen Interessen gestalten.</p>
+						</section>
+						<section class="marketing-feature">
+							<h2>Events planen und gemeinsam erinnern</h2>
+							<p>Plane Treffen und Veranstaltungen direkt dort, wo die Erinnerungen später weiterleben.
+								Lege Events an, teile wichtige Informationen und verwalte Teilnehmer an einem Ort.
+								Nach dem Treffen kannst du Fotos, Eindrücke und Kommentare ergänzen. So entsteht nicht
+								nur eine Terminübersicht, sondern ein gemeinsamer Rückblick auf die Menschen, Orte und
+								Geschichten, die das Ereignis besonders gemacht haben.</p>
+						</section>
+						<section class="marketing-feature">
+							<h2>Privat teilen – du entscheidest</h2>
+							<p>Deine Einträge gehören dir. Entscheide gezielt, ob du Inhalte für dich behältst oder mit
+								ausgewählten Personen teilst. Ein persönliches Tagebuch muss nicht öffentlich sein:
+								Freigaben helfen dir, Erinnerungen im gewünschten Kreis zu teilen, ohne alles ins
+								offene Netz zu stellen. Für einen ersten Eindruck kannst du das Beispiel-Tagebuch
+								ansehen, ohne gleich dein eigenes anlegen zu müssen.</p>
+						</section>
+						<section class="marketing-feature">
+							<h2>Erinnerungen als KI-Zusammenfassung festhalten</h2>
+							<p>Wenn du möchtest, unterstützen KI-Funktionen dabei, Inhalte zusammenzufassen. Lass aus
+								ausgewählten Tagebucheinträgen eine PDF-Zusammenfassung in Worten und Bildern erstellen
+								und bewahre besondere Erlebnisse in einer gut teilbaren Form. Du entscheidest, welche
+								Inhalte du dafür verwendest. Zusätzlich kannst du den KI-Chat nutzen, um deine
+								Erlebnisse im Gespräch zu reflektieren.</p>
+						</section>
+						<section class="marketing-feature marketing-privacy">
+							<h2>Datenschutz und Verschlüsselung</h2>
+							<p>Die Datenschutzhinweise erläutern, wie deine Daten verarbeitet werden und welche Rechte
+								du nach DSGVO hast. Sensible Tagebuchinhalte werden laut Datenschutzerklärung
+								zusätzlich zur HTTPS-Übertragung mit einem Public-/Private-Key-Verfahren verschlüsselt.
+								Dort wird auch die Verarbeitung der KI-Funktionen auf Servern in Deutschland
+								beschrieben. Wir versprechen keine absolute Sicherheit – lies die Hinweise und teile
+								nur Inhalte, mit denen du dich wohlfühlst.</p>
+						</section>
+					</div>
+					<div class="marketing-actions marketing-actions-bottom">
+						<button type="button" class="primary"
+							onclick="document.getElementById('registration').scrollIntoView({ behavior: 'smooth', block: 'start' })">Kostenlos.
+							Jetzt starten!</button>
+						<button type="button" onclick="action.loginDemo()">Beispiel-Tagebuch ansehen</button>
+					</div>
+					<section class="seo-faq" id="faq" aria-labelledby="faq-title">
+						<h2 id="faq-title">Häufige Fragen zum digitalen Tagebuch</h2>
+						<details>
+							<summary>Was ist diary.cafe?</summary>
+							<p>diary.cafe ist ein digitales Tagebuch, in dem du Erinnerungen mit Texten, Fotos, Orten
+								und Bewertungen festhalten, Events organisieren und Inhalte mit ausgewählten Personen
+								teilen kannst.</p>
+						</details>
+						<details>
+							<summary>Kann ich mein Tagebuch privat halten?</summary>
+							<p>Ja. Du entscheidest, mit wem du deine Tagebucheinträge und Erinnerungen teilst.</p>
+						</details>
+						<details>
+							<summary>Muss ich mich anmelden, um diary.cafe zu nutzen?</summary>
+							<p>Zum Erstellen eines eigenen Tagebuchs ist eine Registrierung erforderlich. Freigegebene
+								Inhalte, zum Beispiel das Test-Tagebuch, kannst du auch ohne Registrierung ansehen.</p>
+						</details>
+					</section>
+				</section>
+				<h2 class="account-login">Du hast schon ein Tagebuch?</h2>
 				<label>Email</label>
 				<field><input type="email" name="email" /></field>
 				<label>Password</label>
@@ -276,8 +351,11 @@
 					<button onclick="action.login()">Anmelden</button>
 					<button onclick="action.loginResetPassword()">Passwort vergessen</button>
 				</div>
-				<div style="padding: 4em 0 1em 0;" class="registration">
-					<b>Möchtest Du Dein eigenes Tagebuch erstellen?</b>
+				<div style="padding: 4em 0 1em 0;" class="registration" id="registration">
+					<b>Erstelle dein eigenes Tagebuch – kostenlos</b>
+				</div>
+				<div class="account-description">
+					Für dein persönliches Tagebuch brauchst du nur einen Namen und eine gültige E-Mail-Adresse.
 				</div>
 				<label>Name Deines Tagebuchs<br /><span style="font-size: 0.8em;">kann später geändert
 						werden</span></label>
@@ -293,24 +371,6 @@
 				<div style="text-align: center;">
 					<button onclick=" action.createClient()">Erstellen</button>
 				</div>
-				<section class="seo-faq" id="faq" aria-labelledby="faq-title">
-					<h2 id="faq-title">Häufige Fragen zum digitalen Tagebuch</h2>
-					<details>
-						<summary>Was ist diary.cafe?</summary>
-						<p>diary.cafe ist ein digitales Tagebuch, in dem du Erinnerungen mit Texten, Fotos, Orten und
-							Bewertungen festhalten, Events organisieren und Inhalte mit ausgewählten Personen teilen
-							kannst.</p>
-					</details>
-					<details>
-						<summary>Kann ich mein Tagebuch privat halten?</summary>
-						<p>Ja. Du entscheidest, mit wem du deine Tagebucheinträge und Erinnerungen teilst.</p>
-					</details>
-					<details>
-						<summary>Muss ich mich anmelden, um diary.cafe zu nutzen?</summary>
-						<p>Zum Erstellen eines eigenen Tagebuchs ist eine Registrierung erforderlich. Freigegebene
-							Inhalte, zum Beispiel das Test-Tagebuch, kannst du auch ohne Registrierung ansehen.</p>
-					</details>
-				</section>
 			</element>
 		</container>
 	</main>
