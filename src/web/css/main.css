@@ -490,7 +490,7 @@ body h1 {
 	overflow: hidden;
 }
 
-.marketing-hero img {
+.marketing-hero img.title {
 	max-width: 80%;
 }
 
