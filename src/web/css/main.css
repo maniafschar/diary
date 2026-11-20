@@ -490,10 +490,14 @@ body h1 {
 	overflow: hidden;
 }
 
+.marketing-hero img {
+	max-width: 80%;
+}
+
 .marketing-hero h1 {
 	max-width: 56rem;
 	margin: 0 auto 1rem;
-	font-size: clamp(1.6rem, 3.8vw, 2.5rem);
+	font-size: clamp(1.6rem, 3.8vw, 1.8rem);
 	line-height: 1.25;
 }
 
