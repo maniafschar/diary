@@ -148,11 +148,6 @@
 </head>
 
 <body onload="action.init()">
-	<intro>
-		<img src="image/start.png" />
-		<img src="image/text.png" class="text" />
-		<img src="image/textSub.png" class="textSub" />
-	</intro>
 	<main>
 		<navigation>
 			<logo>
@@ -160,7 +155,7 @@
 				<h2 name="clientName"></h2>
 			</logo>
 			<buttons>
-				<button class="icon selected" data-type="loggedOut">
+				<button class="icon selected" data-type="loggedOut" data-nav-index="-1" onclick="ui.navigate(event)">
 					<img src="image/login.svg" />
 					<span>Einloggen</span>
 				</button>
