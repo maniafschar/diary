@@ -57,7 +57,10 @@ class ui {
 
 	static navigate(event) {
 		var i = event ? parseInt(ui.parents(event.target, 'button').getAttribute('data-nav-index')) : 0;
-		ui.navigateTo(i);
+		if (i == -1)
+			document.querySelector('main>container>element.login').scrollTo({ top: document.querySelector('main>container>element.login>.account-login').offsetTop, behavior: 'smooth' });
+		else
+			ui.navigateTo(i);
 	}
 
 	static navigateTo(i) {
