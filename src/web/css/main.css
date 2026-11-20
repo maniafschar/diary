@@ -612,6 +612,10 @@ a {
 	display: inline-block;
 }
 
+li {
+	margin-left: -1em;
+}
+
 textarea,
 input {
 	appearance: none;
@@ -765,7 +769,6 @@ toggle.open::before {
 
 div.toggle {
 	text-align: left;
-	margin: 0.5em;
 	display: grid;
 	grid-template-rows: 0fr;
 	transition: grid-template-rows 0.4s ease-out;
