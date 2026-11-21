@@ -607,10 +607,7 @@ div.toggle>div {
 		if (imprint.classList.contains('open'))
 			showTerms();
 		else {
-			imprint.querySelector('.imprint-panel').addEventListener('transitionend', event => {
-				if (event.target == imprint && event.propertyName == 'transform')
-					showTerms();
-			}, { once: true });
+			imprint.querySelector('.imprint-panel').addEventListener('transitionend', () => showTerms, { once: true });
 			dialog.openImprint();
 		}
 	}
