@@ -600,9 +600,9 @@ div.toggle>div {
 			var toggle = panel?.querySelector('toggle');
 			if (!panel || !toggle)
 				return;
+			toggle.nextElementSibling.addEventListener('transitionend', () => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }), { once: true });
 			toggle.classList.add('open');
 			toggle.nextElementSibling.style.gridTemplateRows = '1fr';
-			requestAnimationFrame(() => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }));
 		};
 		if (imprint.classList.contains('open'))
 			showTerms();
