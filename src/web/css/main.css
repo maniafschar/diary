@@ -453,9 +453,9 @@ body>main>container element div.title count {
 }
 
 body>main>container>element.login {
-	border: solid 1em transparent;
 	text-align: left;
 	overflow: auto;
+	padding: 1em;
 }
 
 body>main>container>element.event {

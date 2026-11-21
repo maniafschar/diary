@@ -592,13 +592,26 @@ div.toggle>div {
 	}
 
 	static openTerms() {
-		dialog.openImprint();
-		var panel = document.querySelector('imprint>.imprint-panel');
-		var toggle = panel?.querySelector('toggle');
-		if (!panel || !toggle)
+		var imprint = document.querySelector('imprint');
+		if (!imprint)
 			return;
-		toggle.classList.add('open');
-		toggle.nextElementSibling.style.gridTemplateRows = '1fr';
-		requestAnimationFrame(() => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }));
+		var showTerms = () => {
+			var panel = imprint.querySelector('.imprint-panel');
+			var toggle = panel?.querySelector('toggle');
+			if (!panel || !toggle)
+				return;
+			toggle.classList.add('open');
+			toggle.nextElementSibling.style.gridTemplateRows = '1fr';
+			requestAnimationFrame(() => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }));
+		};
+		if (imprint.classList.contains('open')) {
+			showTerms();
+			return;
+		}
+		imprint.addEventListener('transitionend', event => {
+			if (event.target == imprint && event.propertyName == 'transform')
+				showTerms();
+		}, { once: true });
+		dialog.openImprint();
 	}
 }
