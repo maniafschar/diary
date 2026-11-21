@@ -604,14 +604,14 @@ div.toggle>div {
 			toggle.nextElementSibling.style.gridTemplateRows = '1fr';
 			requestAnimationFrame(() => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }));
 		};
-		if (imprint.classList.contains('open')) {
+		if (imprint.classList.contains('open'))
 			showTerms();
-			return;
+		else {
+			imprint.querySelector('.imprint-panel').addEventListener('transitionend', event => {
+				if (event.target == imprint && event.propertyName == 'transform')
+					showTerms();
+			}, { once: true });
+			dialog.openImprint();
 		}
-		imprint.addEventListener('transitionend', event => {
-			if (event.target == imprint && event.propertyName == 'transform')
-				showTerms();
-		}, { once: true });
-		dialog.openImprint();
 	}
 }
