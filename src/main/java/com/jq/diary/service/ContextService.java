@@ -236,7 +236,10 @@ public class ContextService {
 						language.toLowerCase() + "sprachig" +
 						"\n* Er ist " + orientation.getLabel() + " und möchte bevorzugt dazu passende Vorschläge" +
 						"\n* Das aktuelle Datum/Uhrzeit ist " + Instant.now() +
-						"\n* contactId: " + contact.getId() + " (beim Tooling mitgeben)");
+						"\n* contactId: " + contact.getId() + " (beim Tooling mitgeben)" +
+						(contact.getNote() != null && contact.getNote().trim().length() > 0
+								? "\n* Zusatzinfo vom Benutzer: " + contact.getNote()
+								: ""));
 		final List<Event> events = this.repository.list(
 				"from Event where contact.id=?1 order by date desc, id desc",
 				Event.class, contact.getId());
