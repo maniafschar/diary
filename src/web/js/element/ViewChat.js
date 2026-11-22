@@ -19,6 +19,7 @@ class ViewChat extends HTMLElement {
 	width: 100%;
 	height: var(--chat-height, 100%);
 	position: relative;
+	transform: translateY(var(--chat-offset, 0px));
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -259,15 +260,22 @@ button:hover {
 		window.visualViewport?.removeEventListener('scroll', this.syncVisualViewport);
 		window.removeEventListener('resize', this.syncVisualViewport);
 		this.style.removeProperty('--chat-height');
+		this.style.removeProperty('--chat-offset');
 	}
 	syncVisualViewport() {
 		var viewport = window.visualViewport;
 		var bounds = this.parentElement?.getBoundingClientRect();
 		if (!viewport || !bounds || !bounds.height) {
 			this.style.removeProperty('--chat-height');
+			this.style.removeProperty('--chat-offset');
 			return;
 		}
-		var height = Math.max(0, Math.min(bounds.height, viewport.offsetTop + viewport.height - bounds.top));
+		var offset = Math.min(bounds.height, Math.max(0, viewport.offsetTop - bounds.top));
+		var height = Math.max(0, Math.min(bounds.height - offset, viewport.offsetTop + viewport.height - bounds.top - offset));
+		if (offset)
+			this.style.setProperty('--chat-offset', offset + 'px');
+		else
+			this.style.removeProperty('--chat-offset');
 		if (height < bounds.height)
 			this.style.setProperty('--chat-height', height + 'px');
 		else

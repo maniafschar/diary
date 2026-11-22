@@ -26,16 +26,27 @@ test('chat height follows the visible viewport and restores when the keyboard cl
 
 	sync();
 	assert.equal(properties.has('--chat-height'), false);
+	assert.equal(properties.has('--chat-offset'), false);
 	window.visualViewport.height = 400;
 	sync();
 	assert.equal(properties.get('--chat-height'), '350px');
 	window.visualViewport.offsetTop = 100;
 	sync();
-	assert.equal(properties.get('--chat-height'), '450px');
+	assert.equal(properties.get('--chat-height'), '400px');
+	assert.equal(properties.get('--chat-offset'), '50px');
+	window.visualViewport.offsetTop = 200;
+	sync();
+	assert.equal(properties.get('--chat-height'), '400px');
+	assert.equal(properties.get('--chat-offset'), '150px');
+	window.visualViewport.offsetTop = 0;
+	sync();
+	assert.equal(properties.get('--chat-height'), '350px');
+	assert.equal(properties.has('--chat-offset'), false);
 	window.visualViewport.height = 800;
 	sync();
 	assert.equal(properties.has('--chat-height'), false);
 	window.visualViewport = undefined;
 	sync();
 	assert.equal(properties.has('--chat-height'), false);
+	assert.equal(properties.has('--chat-offset'), false);
 });

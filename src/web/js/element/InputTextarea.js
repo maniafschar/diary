@@ -40,6 +40,12 @@ textarea {
 	height: 5em;
 }
 
+@media (max-width: 700px) {
+	:host([compact]) textarea {
+		font-size: max(1em, 16px);
+	}
+}
+
 button.speech {
 	top: 0;
 	right: 0;
