@@ -10,15 +10,19 @@ class ViewChat extends HTMLElement {
 	constructor() {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
+		this.syncVisualViewport = this.syncVisualViewport.bind(this);
 	}
 
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
 	width: 100%;
-	height: 100%;
+	height: var(--chat-height, 100%);
 	position: relative;
-	display: block;
+	transform: translateY(var(--chat-offset, 0px));
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
 	border-left: solid 1em transparent;
 	border-bottom: solid 1em transparent;
 	border-right: solid 1em transparent;
@@ -166,10 +170,14 @@ controls {
 	text-align: center;
 	margin-top: 0.5em;
 }
+controls, status, input-textarea {
+	flex: none;
+}
 history {
 	position: relative;
 	display: block;
-	height: calc(100% - 10.5em);
+	flex: 1 1 0;
+	min-height: 0;
 	overflow-y: auto;
 	margin-bottom: 1em;
 }
@@ -242,6 +250,36 @@ button:hover {
 			input.value = '';
 			ask(text);
 		};
+		window.visualViewport?.addEventListener('resize', this.syncVisualViewport);
+		window.visualViewport?.addEventListener('scroll', this.syncVisualViewport);
+		window.addEventListener('resize', this.syncVisualViewport);
+		this.syncVisualViewport();
+	}
+	disconnectedCallback() {
+		window.visualViewport?.removeEventListener('resize', this.syncVisualViewport);
+		window.visualViewport?.removeEventListener('scroll', this.syncVisualViewport);
+		window.removeEventListener('resize', this.syncVisualViewport);
+		this.style.removeProperty('--chat-height');
+		this.style.removeProperty('--chat-offset');
+	}
+	syncVisualViewport() {
+		var viewport = window.visualViewport;
+		var bounds = this.parentElement?.getBoundingClientRect();
+		if (!viewport || !bounds || !bounds.height) {
+			this.style.removeProperty('--chat-height');
+			this.style.removeProperty('--chat-offset');
+			return;
+		}
+		var offset = Math.min(bounds.height, Math.max(0, viewport.offsetTop - bounds.top));
+		var height = Math.max(0, Math.min(bounds.height - offset, viewport.offsetTop + viewport.height - bounds.top - offset));
+		if (offset)
+			this.style.setProperty('--chat-offset', offset + 'px');
+		else
+			this.style.removeProperty('--chat-offset');
+		if (height < bounds.height)
+			this.style.setProperty('--chat-height', height + 'px');
+		else
+			this.style.removeProperty('--chat-height');
 	}
 	addRetryActions(questionBubble, text) {
 		var status = this._root.querySelector('status');
