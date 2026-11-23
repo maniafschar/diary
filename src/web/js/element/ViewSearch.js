@@ -395,14 +395,15 @@ results {
 		nodes.forEach(node => {
 			if (node.parentElement.closest('span, label, date, type'))
 				return;
-			var parts = node.nodeValue.split(/([\p{L}\p{N}]+)/u);
+			var parts = node.nodeValue.split(/(#?[\p{L}\p{N}]+)/u);
 			if (parts.length < 2)
 				return;
 			var fragment = document.createDocumentFragment();
 			parts.forEach((part, i) => {
 				if (!part)
 					return;
-				if (i % 2 && terms.some(term => FuzzyMatcher.wordScore(term, FuzzyMatcher.normalize(part)) > 0)) {
+				var word = part.startsWith('#') ? part.slice(1) : part;
+				if (i % 2 && terms.some(term => FuzzyMatcher.wordScore(term, FuzzyMatcher.normalize(word)) > 0)) {
 					var mark = document.createElement('mark');
 					mark.textContent = part;
 					fragment.appendChild(mark);

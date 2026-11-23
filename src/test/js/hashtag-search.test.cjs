@@ -22,9 +22,24 @@ const events = [
 	{ id: 2, note: 'Ausflug', hashtags: 'wasser', date: '2026-01-02', rating: 60, ratingCount: 1 },
 	{ id: 3, note: 'Ruhe', hashtags: 'wasser, freunde', date: '2026-01-03', rating: 80, ratingCount: 1 }
 ];
-const document = { querySelector: () => ({ list: events }) };
+const document = {
+	querySelector: () => ({ list: events }),
+	createTreeWalker: element => ({
+		currentNode: null,
+		nextNode() {
+			if (this.currentNode)
+				return false;
+			this.currentNode = element.textNode;
+			return true;
+		}
+	}),
+	createDocumentFragment: () => ({ children: [], appendChild(node) { this.children.push(node); } }),
+	createElement: tagName => ({ tagName, textContent: '' }),
+	createTextNode: textContent => ({ textContent })
+};
 const { ViewSearch } = load('element/ViewSearch.js', {
 	document,
+	NodeFilter: { SHOW_TEXT: 4 },
 	HTMLElement: class { attachShadow() { return {}; } },
 	require: module => {
 		if (module.includes('hashtags')) return hashtags;
@@ -49,4 +64,19 @@ test('text search matches hashtags with or without a leading hash', () => {
 	const expected = [3, 1];
 	assert.deepEqual(Array.from(view.hits('freunde'), hit => hit.item.id), expected);
 	assert.deepEqual(Array.from(view.hits('#freunde'), hit => hit.item.id), expected);
+});
+
+test('highlight includes the leading hash when matching a hashtag', () => {
+	const view = new ViewSearch();
+	const cell = {
+		textNode: {
+			nodeValue: '#freunde',
+			parentElement: { closest: () => null },
+			replaceWith(fragment) { cell.highlighted = fragment.children; }
+		}
+	};
+	view.highlight(cell, fuzzy.FuzzyMatcher.terms('#freunde'));
+	assert.deepEqual(Array.from(cell.highlighted, node => [node.tagName || 'text', node.textContent]), [
+		['mark', '#freunde']
+	]);
 });
