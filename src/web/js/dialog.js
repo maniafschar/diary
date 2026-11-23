@@ -399,8 +399,8 @@ element {
 		var input = dialog.createField(element, 'Hashtags (kommagetrennt)', 'hashtags', 'input', value);
 		input.placeholder = 'z. B. freunde, glücksmoment';
 		var buttons = input.parentElement.appendChild(document.createElement('div'));
-		buttons.style.cssText = 'clear:both; display:flex; flex-wrap:wrap; gap:.3em; padding:.4em 0;';
-		input.parentElement.appendChild(document.createElement('style')).textContent = 'button[aria-pressed="true"] { outline: 2px solid darkmagenta; }';
+		buttons.style.cssText = 'clear:both; display:flex; flex-wrap:wrap; gap:.3em; padding:.4em 0; font-size: 0.8em;';
+		input.parentElement.appendChild(document.createElement('style')).textContent = 'button { padding: 0.5em 0.75em; } button[aria-pressed="true"] { outline: 2px solid darkmagenta; }';
 		var tags = [];
 		var render = () => renderHashtagButtons(buttons, tags, splitHashtags(input.value), tag => {
 			var selected = splitHashtags(input.value);
