@@ -10,7 +10,6 @@ function renderHashtagButtons(container, tags, selected, toggle) {
 		const button = container.appendChild(document.createElement('button'));
 		button.type = 'button';
 		button.textContent = tag;
-		button.setAttribute('aria-pressed', String(selected.some(value => value.toLocaleLowerCase() == tag.toLocaleLowerCase())));
 		button.onclick = () => toggle(tag);
 	});
 }
