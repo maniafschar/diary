@@ -419,7 +419,7 @@ results {
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
 		if (event.hashtags)
-			text += '<note>' + this.escapeHtml(splitHashtags(event.hashtags).join(' ')) + '</note>';
+			text += '<note>#' + this.escapeHtml(splitHashtags(event.hashtags).join(' #')) + '</note>';
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		var images = '';
