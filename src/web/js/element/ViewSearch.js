@@ -206,6 +206,11 @@ hashtag-buttons button {
 hashtag-buttons button[aria-pressed="true"] {
 	background: var(--background-clickable-highlight);
 }
+hashtag-buttons button .count {
+	font-size: 0.8em;
+	opacity: 0.6;
+	margin-left: 0.35em;
+}
 results {
 	display: block;
 	overflow-y: auto;
@@ -261,12 +266,18 @@ results {
 	}
 
 	renderHashtags() {
+		var counts = new Map();
+		document.querySelector('event view-table').list.forEach(event => {
+			new Set(splitHashtags(event.hashtags).map(tag => tag.toLocaleLowerCase())).forEach(tag => {
+				counts.set(tag, (counts.get(tag) || 0) + 1);
+			});
+		});
 		renderHashtagButtons(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, tag => {
 			this.selectedHashtags = this.selectedHashtags.includes(tag)
 				? this.selectedHashtags.filter(item => item != tag) : [...this.selectedHashtags, tag];
 			this.renderHashtags();
 			this.search();
-		});
+		}, counts);
 	}
 
 	setStars(stars) {
