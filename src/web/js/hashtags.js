@@ -15,7 +15,10 @@ function renderHashtagButtons(container, tags, selected, toggle, counts) {
 			count.className = 'count';
 			count.textContent = String(counts.get(tag.toLocaleLowerCase()) || 0);
 		}
-		button.setAttribute('aria-pressed', String(selected.some(value => value.toLocaleLowerCase() == tag.toLocaleLowerCase())));
+		if (selected.some(value => value.toLocaleLowerCase() == tag.toLocaleLowerCase()))
+			button.classList.add('pressed');
+		else
+			button.classList.remove('pressed');
 		button.onclick = () => toggle(tag);
 	});
 }
