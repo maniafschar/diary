@@ -203,7 +203,7 @@ hashtag-buttons button {
 	font-size: 0.8em;
 	transition: var(--transition-clickable);
 }
-hashtag-buttons button[aria-pressed="true"] {
+hashtag-buttons button.pressed {
 	background: var(--background-clickable-highlight);
 }
 hashtag-buttons button .count {
