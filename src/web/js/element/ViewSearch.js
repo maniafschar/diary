@@ -203,9 +203,6 @@ hashtag-buttons button {
 	font-size: 0.8em;
 	transition: var(--transition-clickable);
 }
-hashtag-buttons button[aria-pressed="true"] {
-	outline: 2px solid currentColor;
-}
 results {
 	display: block;
 	overflow-y: auto;
