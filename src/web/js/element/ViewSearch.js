@@ -3,6 +3,7 @@ import { marked } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
+import { splitHashtags, renderHashtagButtons } from '../hashtags';
 
 export { ViewSearch };
 
@@ -134,12 +135,14 @@ class ViewSearch extends HTMLElement {
 		super();
 		this._root = this.attachShadow({ mode: 'open' });
 		this.requestId = 0;
+		this.selectedHashtags = [];
 	}
 
 	connectedCallback() {
 		this._root.appendChild(document.createElement('style')).textContent = `
 :host(*) {
-	display: block;
+	display: flex;
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
 	padding: 1em;
@@ -180,10 +183,26 @@ status {
 	opacity: 0.7;
 	font-size: 0.9em;
 }
+hashtag-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3em;
+	max-height: 7em;
+	overflow-y: auto;
+	margin: 0.5em;
+}
+hashtag-buttons button {
+	font-size: 0.8em;
+	padding: 0.3em 0.6em;
+}
+hashtag-buttons button[aria-pressed="true"] {
+	outline: 2px solid currentColor;
+}
 results {
 	display: block;
 	overflow-y: auto;
-	height: calc(100% - 4em);
+	flex: 1;
+	min-height: 0;
 	padding-bottom: 2em;
 	box-sizing: border-box;
 }`;
@@ -199,6 +218,7 @@ results {
 		r.style.fontSize = '0.7em';
 		this.rating = row.appendChild(r);
 		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
+		this.hashtagButtons = this._root.appendChild(document.createElement('hashtag-buttons'));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		this.table = this.results.appendChild(document.createElement('view-table'));
@@ -211,8 +231,34 @@ results {
 
 	show() {
 		this.chatMessages = null;
+		if (this.hashtagUser != api.user?.id) {
+			this.hashtagUser = api.user?.id;
+			this.hashtags = [];
+			this.selectedHashtags = [];
+			this.renderHashtags();
+		}
+		if (api.user?.id) {
+			const userId = api.user.id;
+			api.event.getHashtags(tags => {
+				if (api.user?.id != userId)
+					return;
+				this.hashtags = tags;
+				this.selectedHashtags = this.selectedHashtags.filter(tag => tags.includes(tag));
+				this.renderHashtags();
+				this.search();
+			});
+		}
 		if (!window.matchMedia('(pointer: coarse)').matches)
 			this.input?.focus();
+	}
+
+	renderHashtags() {
+		renderHashtagButtons(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, tag => {
+			this.selectedHashtags = this.selectedHashtags.includes(tag)
+				? this.selectedHashtags.filter(item => item != tag) : [...this.selectedHashtags, tag];
+			this.renderHashtags();
+			this.search();
+		});
 	}
 
 	setStars(stars) {
@@ -228,7 +274,7 @@ results {
 		var id = ++this.requestId;
 		var text = this.input.value.trim();
 		this.clearResults();
-		if (text.length < 2 && !this.stars) {
+		if (text.length < 2 && !this.stars && !this.selectedHashtags.length) {
 			this.status.textContent = '';
 			return;
 		}
@@ -239,7 +285,7 @@ results {
 	}
 
 	loadChat(text, success) {
-		if (!api.user?.admin || this.chatMessages || text.length < 2 || this.stars)
+		if (!api.user?.admin || this.chatMessages || text.length < 2 || this.stars || this.selectedHashtags.length)
 			return success();
 		this.status.textContent = 'Suche läuft …';
 		api.chat.getMessages(messages => {
@@ -250,7 +296,7 @@ results {
 
 	hits(text) {
 		var terms = FuzzyMatcher.terms(text.slice(0, 200));
-		if (!terms.length && !this.stars)
+		if (!terms.length && !this.stars && !this.selectedHashtags.length)
 			return [];
 		var hits = [];
 		var add = (type, item, date, note, rating) => {
@@ -264,19 +310,22 @@ results {
 			hits.push({ type: type, item: item, score: score, date: this.parseDate(date), rating: rating });
 		};
 		document.querySelector('event view-table').list.forEach(event => {
+			var tags = splitHashtags(event.hashtags).map(tag => tag.toLocaleLowerCase());
+			if (!this.selectedHashtags.every(tag => tags.includes(tag.toLocaleLowerCase())))
+				return;
 			var rating = event.ratingCount ? event.rating / event.ratingCount : 0;
 			if (this.stars && Math.round(rating / 20) != this.stars)
 				return;
 			add('event', event, event.date, this.eventText(event), rating);
 		});
-		if (!this.stars)
+		if (!this.stars && !this.selectedHashtags.length)
 			(this.chatMessages || []).forEach(message => add('chat', message, message.createdAt, message.note, 0));
 		hits.sort((a, b) => b.score - a.score || (b.date.getTime() || 0) - (a.date.getTime() || 0));
 		return hits;
 	}
 
 	eventText(event) {
-		var parts = [event.note];
+		var parts = [event.note, event.hashtags];
 		(event.eventFeedbacks || []).forEach(feedback => parts.push(feedback.note));
 		var location = event.location;
 		if (location)
@@ -350,6 +399,8 @@ results {
 		var text = '';
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
+		if (event.hashtags)
+			text += '<note>' + this.escapeHtml(splitHashtags(event.hashtags).map(tag => '#' + tag).join(' ')) + '</note>';
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		var images = '';

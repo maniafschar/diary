@@ -8,6 +8,7 @@ import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jq.diary.util.Utilities;
 
@@ -21,6 +22,10 @@ import jakarta.persistence.OneToMany;
 public class Event extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String note;
+	@Column(columnDefinition = "TEXT")
+	private String hashtags;
+	@jakarta.persistence.Transient
+	private transient boolean hashtagsProvided;
 	@ManyToOne
 	private Contact contact;
 	@ManyToOne
@@ -84,6 +89,20 @@ public class Event extends BaseEntity {
 
 	public String getNote() {
 		return this.note;
+	}
+
+	public String getHashtags() {
+		return this.hashtags;
+	}
+
+	public void setHashtags(final String hashtags) {
+		this.hashtags = hashtags;
+		this.hashtagsProvided = true;
+	}
+
+	@JsonIgnore
+	public boolean isHashtagsProvided() {
+		return this.hashtagsProvided;
 	}
 
 	public void setNote(final String note) {

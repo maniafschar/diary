@@ -34,6 +34,7 @@ import com.jq.diary.repository.Repository;
 import com.jq.diary.repository.Repository.Attachment;
 import com.jq.diary.service.AuthorizationService;
 import com.jq.diary.service.EventService;
+import com.jq.diary.service.HashtagService;
 import com.jq.diary.service.LocationService;
 import com.jq.diary.service.PdfService;
 import com.jq.diary.service.PushNotificationService;
@@ -59,6 +60,15 @@ public class EventApi extends ApplicationApi {
 
 	@Autowired
 	private LocationService locationService;
+
+	@Autowired
+	private HashtagService hashtagService;
+
+	@GetMapping("hashtags")
+	public List<String> getHashtags(@RequestHeader final BigInteger contactId,
+			@RequestHeader final BigInteger clientId) {
+		return this.hashtagService.available(this.authorizationService.requireContact(contactId, clientId).getId());
+	}
 
 	@GetMapping("list")
 	public List<Event> getList(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
@@ -127,6 +137,7 @@ public class EventApi extends ApplicationApi {
 			@RequestBody final Event event) {
 		final Double rating = event.getRating();
 		event.setContact(this.authorizationService.requireContact(contactId, clientId));
+		event.setHashtags(this.hashtagService.saveManual(event.getContact(), event.getHashtags()));
 		event.setClient(this.repository.one(Client.class, clientId));
 		event.getLocation().setContact(event.getContact());
 		event.getLocation().setClient(event.getClient());
@@ -146,6 +157,9 @@ public class EventApi extends ApplicationApi {
 	@PatchMapping
 	public void patch(@RequestHeader final BigInteger contactId, @RequestBody final Event event) {
 		final Event original = this.authorizationService.requireEvent(event.getId(), contactId);
+		if (event.isHashtagsProvided())
+			original.setHashtags(this.hashtagService.saveManual(
+					this.authorizationService.requireContact(contactId, original.getClient().getId()), event.getHashtags()));
 		original.setNote(event.getNote());
 		original.setDate(event.getDate());
 		original.setLocation(this.locationService.one(event.getLocation().getId()));
@@ -168,6 +182,8 @@ public class EventApi extends ApplicationApi {
 			final Event original = this.authorizationService.requireEvent(event.getId(), contactId);
 			final Contact contact = original.getContact();
 			if (contact.getId().equals(this.authorizationService.requireContact(contactId, clientId).getId())) {
+				event.setHashtags(event.isHashtagsProvided()
+						? this.hashtagService.saveManual(contact, event.getHashtags()) : original.getHashtags());
 				event.setContact(contact);
 				event.setClient(original.getClient());
 				this.eventService.save(event);
@@ -257,6 +273,7 @@ public class EventApi extends ApplicationApi {
 			filteredEvent.setDate(event.getDate());
 			filteredEvent.setId(event.getId());
 			filteredEvent.setNote(event.getNote());
+			filteredEvent.setHashtags(event.getHashtags());
 			filteredEvent.setRating(event.getRating());
 			filteredEvent.setRatingCount(event.getRatingCount());
 

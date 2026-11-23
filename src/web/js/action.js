@@ -390,6 +390,7 @@ class action {
 				id: popup.querySelector('element input[name="id"]').value,
 				date: date,
 				note: popup.querySelector('element input-textarea[name="note"]').value,
+				hashtags: popup.querySelector('element input[name="hashtags"]').value,
 				location: {
 					id: popup.querySelector('element input-selection[name="locationId"]').getAttribute('value')
 				}
@@ -407,6 +408,7 @@ class action {
 			var event = {
 				date: date,
 				note: popup.querySelector('element input-textarea[name="note"]').value,
+				hashtags: popup.querySelector('element input[name="hashtags"]').value,
 				rating: popup.querySelector('element input-rating').getAttribute('value'),
 				location: {
 					name: popup.querySelector('element input[name="locationName"]').value,

@@ -36,6 +36,12 @@ APP_HUGGINGFACE_MODEL=google/gemma-2-2b-it
 
 The token needs Hugging Face Inference Providers permission and must remain server-side. Actual image rendering still uses Google's Gemini image API; the selected Spring AI provider generates its prompt.
 
+## Event hashtags
+
+Apply `src/main/resources/db/event-hashtags.sql` to the main database before deployment; migrations are not automatic. Events accept comma-separated hashtags (letters, numbers, underscores and hyphens). Previously used manual hashtags remain available even after removal from an event. Search buttons combine selected hashtags as an AND filter with the text and rating filters.
+
+At midnight server time, the existing AI chat service analyzes the note and average rating of events without hashtags and assigns 1–3 tags, using the event owner's manually used hashtags and the default vocabulary as guidance. Event notes, ratings and that vocabulary are sent to the configured AI service; its existing chat logging also applies. Failed or invalid responses are logged and retried on the next run. Run this job on only one application instance; set `APP_HASHTAG_AUTO_TAGGING_ENABLED=false` on the others, or on all instances to disable automatic tagging.
+
 Optional outbound AI phone conversations use Twilio Programmable Voice and Gemini. Configure these server environment variables before enabling the feature:
 
 - `TWILIO_ACCOUNT_SID`
