@@ -400,7 +400,7 @@ element {
 		input.placeholder = 'z. B. freunde, glücksmoment';
 		var buttons = input.parentElement.appendChild(document.createElement('div'));
 		buttons.style.cssText = 'clear:both; display:flex; font-size: 0.8em; width: 100%; overflow-x: auto; margin-top: 0.5em;';
-		input.parentElement.appendChild(document.createElement('style')).textContent = 'button { padding: 0.5em 0.75em; } button[aria-pressed="true"] { background: var(--background-clickable-highlight); }';
+		input.parentElement.appendChild(document.createElement('style')).textContent = 'button { padding: 0.5em 0.75em; } button.pressed { background: var(--background-clickable-highlight); }';
 		var tags = [];
 		var render = () => renderHashtagButtons(buttons, tags, splitHashtags(input.value), tag => {
 			var selected = splitHashtags(input.value);
