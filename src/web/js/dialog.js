@@ -1,6 +1,7 @@
 import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
+import { splitHashtags, renderHashtagButtons } from "./hashtags";
 
 export { dialog };
 
@@ -154,6 +155,7 @@ ${dialog.stylePictures}`;
 			};
 		}
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea');
+		dialog.hashtagField(element);
 		var rating = dialog.createField(element, 'Bewertung', 'rating', 'input-rating');
 		rating.setAttribute('type', 'edit');
 		rating.parentElement.style.textAlign = 'center';
@@ -334,6 +336,7 @@ button.confirmed::after {
 		inputDate.setAttribute('min', date.toISOString());
 		document.querySelector('event view-table').table().querySelectorAll('tr>td:first-child').forEach(td => inputDate.addOccupied(new Date(parseInt(td.getAttribute('value')))));
 		dialog.createField(element, 'Bemerkung', 'note', 'input-textarea', event.note);
+		dialog.hashtagField(element, event.hashtags);
 		dialog.createField(element, 'Ort', 'locationId', 'input-selection').classList.add('open');
 		var inputId = element.appendChild(document.createElement('input'));
 		inputId.setAttribute('type', 'hidden');
@@ -390,6 +393,23 @@ element {
 			address.style.paddingLeft = 0;
 		}
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
+	}
+
+	static hashtagField(element, value) {
+		var input = dialog.createField(element, 'Hashtags (kommagetrennt)', 'hashtags', 'input', value);
+		input.placeholder = 'z. B. freunde, glücksmoment';
+		var buttons = input.parentElement.appendChild(document.createElement('div'));
+		buttons.style.cssText = 'clear:both; display:flex; flex-wrap:wrap; gap:.3em; padding:.4em 0;';
+		input.parentElement.appendChild(document.createElement('style')).textContent = 'button[aria-pressed="true"] { outline: 2px solid darkmagenta; }';
+		var tags = [];
+		var render = () => renderHashtagButtons(buttons, tags, splitHashtags(input.value), tag => {
+			var selected = splitHashtags(input.value);
+			var found = selected.some(item => item.toLocaleLowerCase() == tag.toLocaleLowerCase());
+			input.value = (found ? selected.filter(item => item.toLocaleLowerCase() != tag.toLocaleLowerCase()) : [...selected, tag]).join(', ');
+			render();
+		});
+		input.addEventListener('input', render);
+		api.event.getHashtags(result => { tags = result; render(); });
 	}
 
 	static createField(element, label, name, type, value) {

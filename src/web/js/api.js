@@ -141,6 +141,9 @@ class api {
 	}
 
 	static event = {
+		getHashtags(success) {
+			api.ajax({ url: 'event/hashtags', success: success });
+		},
 		get(id, success) {
 			api.ajax({
 				url: 'event/' + id,

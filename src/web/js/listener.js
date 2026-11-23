@@ -73,7 +73,7 @@ class listener {
 		};
 		var addEdit = function () {
 			return api.user.id == events[i].contact.id ?
-				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, location: { id: events[i].location.id } }).replace(/"/g, '&quot;') + ')"' : '';
+				' onclick="dialog.event(' + JSON.stringify({ id: events[i].id, date: events[i].date, note: events[i].note, hashtags: events[i].hashtags, location: { id: events[i].location.id } }).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + ')"' : '';
 		};
 		var listFeedbacks = function (event) {
 			var s = '';
@@ -121,6 +121,7 @@ class listener {
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
+					(events[i].hashtags ? '<note' + addEdit() + '>' + events[i].hashtags.split(',').map(tag => '#' + tag.trim()).join(' ') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					(api.user?.id ?
 						'<separator></separator>' +
