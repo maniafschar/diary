@@ -43,3 +43,10 @@ test('selected hashtags filter events exactly and combine with text and rating',
 	view.selectedHashtags = ['WASSER'];
 	assert.deepEqual(Array.from(view.hits(''), hit => hit.item.id), [3, 1]);
 });
+
+test('text search matches hashtags with or without a leading hash', () => {
+	const view = new ViewSearch();
+	const expected = [3, 1];
+	assert.deepEqual(Array.from(view.hits('freunde'), hit => hit.item.id), expected);
+	assert.deepEqual(Array.from(view.hits('#freunde'), hit => hit.item.id), expected);
+});
