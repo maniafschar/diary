@@ -44,6 +44,8 @@ const { ViewSearch } = load('element/ViewSearch.js', {
 	require: module => {
 		if (module.includes('hashtags')) return hashtags;
 		if (module.includes('FuzzyMatcher')) return fuzzy;
+		if (module.includes('/ui')) return { ui: { formatTime: () => 'Datum' } };
+		if (module.includes('/api')) return { api: {} };
 		return {};
 	}
 });
@@ -79,4 +81,36 @@ test('highlight includes the leading hash when matching a hashtag', () => {
 	assert.deepEqual(Array.from(cell.highlighted, node => [node.tagName || 'text', node.textContent]), [
 		['mark', '#freunde']
 	]);
+});
+
+test('a hashtag button search highlights only the selected complete tags', () => {
+	const view = new ViewSearch();
+	view.input = { value: '' };
+	view.selectedHashtags = ['FREUNDE', 'me-time'];
+	view.clearResults = () => {};
+	const event = { id: 4, note: 'freunde', hashtags: 'Freunde, me-time, wasser', date: '2026-01-01' };
+	events.push(event);
+	try {
+		view.render = (hits, terms) => {
+			view.terms = terms;
+			assert.deepEqual(Array.from(hits, hit => hit.item.id), [4]);
+			assert.equal(view.eventRow(hits[0])[1].text,
+				'<note>freunde</note><note><mark>#Freunde</mark> <mark>#me-time</mark> #wasser</note>');
+		};
+		view.search();
+	} finally {
+		events.pop();
+	}
+});
+
+test('text highlighting does not nest marks inside selected hashtags', () => {
+	const view = new ViewSearch();
+	const cell = {
+		textNode: {
+			nodeValue: '#Freunde',
+			parentElement: { closest: selector => selector.split(', ').includes('mark') },
+			replaceWith() { assert.fail('selected hashtag should remain marked'); }
+		}
+	};
+	view.highlight(cell, fuzzy.FuzzyMatcher.terms('freunde'));
 });

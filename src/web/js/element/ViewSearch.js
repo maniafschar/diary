@@ -393,7 +393,7 @@ results {
 		while (walker.nextNode())
 			nodes.push(walker.currentNode);
 		nodes.forEach(node => {
-			if (node.parentElement.closest('span, label, date, type'))
+			if (node.parentElement.closest('span, label, date, type, mark'))
 				return;
 			var parts = node.nodeValue.split(/(#?[\p{L}\p{N}]+)/u);
 			if (parts.length < 2)
@@ -419,8 +419,14 @@ results {
 		var text = '';
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
-		if (event.hashtags)
-			text += '<note>#' + this.escapeHtml(splitHashtags(event.hashtags).join(' #')) + '</note>';
+		if (event.hashtags) {
+			var tags = splitHashtags(event.hashtags).map(tag => {
+				var label = '#' + this.escapeHtml(tag);
+				return this.selectedHashtags.some(selected => selected.toLocaleLowerCase() == tag.toLocaleLowerCase())
+					? '<mark>' + label + '</mark>' : label;
+			});
+			text += '<note>' + tags.join(' ') + '</note>';
+		}
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		var images = '';
