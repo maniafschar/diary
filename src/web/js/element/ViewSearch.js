@@ -185,15 +185,23 @@ status {
 }
 hashtag-buttons {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 0.3em;
-	max-height: 7em;
 	overflow-y: auto;
-	margin: 0.5em;
+	width: 100%;
+	padding-top: 0.5em;
+	margin: 0 0.5em;
 }
 hashtag-buttons button {
+	border-radius: 2em;
+	border: none;
+	background: var(--background-clickable);
+	padding: 0.5em 0.75em;
+	outline: none;
+	cursor: pointer;
+	font-family: var(--font-family);
+	margin: 0 0.5em;
+	color: white;
 	font-size: 0.8em;
-	padding: 0.3em 0.6em;
+	transition: var(--transition-clickable);
 }
 hashtag-buttons button[aria-pressed="true"] {
 	outline: 2px solid currentColor;
@@ -400,7 +408,7 @@ results {
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
 		if (event.hashtags)
-			text += '<note>' + this.escapeHtml(splitHashtags(event.hashtags).map(tag => '#' + tag).join(' ')) + '</note>';
+			text += '<note>' + this.escapeHtml(splitHashtags(event.hashtags).join(' ')) + '</note>';
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
 		var images = '';
