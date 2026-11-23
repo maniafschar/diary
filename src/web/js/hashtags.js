@@ -19,6 +19,6 @@ function renderHashtagButtons(container, tags, selected, toggle, counts) {
 			button.classList.add('pressed');
 		else
 			button.classList.remove('pressed');
-		button.onclick = () => toggle(tag);
+		button.onclick = () => toggle(tag, button);
 	});
 }

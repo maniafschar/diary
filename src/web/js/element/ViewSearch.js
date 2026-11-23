@@ -14,6 +14,24 @@ thead {
 tbody {
 	height: 100%;
 }
+@keyframes search-result-appear {
+	from {
+		opacity: 0;
+		transform: translateY(0.35em);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+tbody tr {
+	animation: search-result-appear .3s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+	tbody tr {
+		animation: none;
+	}
+}
 tr {
 	padding: 0 0.5em 0.5em 0.5em;
 	display: grid;
@@ -272,10 +290,10 @@ results {
 				counts.set(tag, (counts.get(tag) || 0) + 1);
 			});
 		});
-		renderHashtagButtons(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, tag => {
+		renderHashtagButtons(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, (tag, button) => {
 			this.selectedHashtags = this.selectedHashtags.includes(tag)
 				? this.selectedHashtags.filter(item => item != tag) : [...this.selectedHashtags, tag];
-			this.renderHashtags();
+			button.classList.toggle('pressed', this.selectedHashtags.some(item => item.toLocaleLowerCase() == tag.toLocaleLowerCase()));
 			this.search();
 		}, counts);
 	}
