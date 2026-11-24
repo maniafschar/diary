@@ -417,9 +417,7 @@ a {
 		}, { once: true });
 		var next = description.parentElement.insertBefore(document.createElement('description'), description);
 		next.classList.add('next');
-		next.innerHTML = this.list[this.index].description +
-			(this.list[this.index].hashtags ?
-				'<note>' + this.list[this.index].hashtags.split(',').map(tag => '#' + tag.trim()).join(' ') + '</note>' : '');
+		next.innerHTML = this.list[this.index].description;
 		setTimeout(() => { description.style.opacity = 0; next.style.opacity = 1; }, 50);
 		var position = 0;
 		for (var i = 0; i < this.list.length; i++) {
