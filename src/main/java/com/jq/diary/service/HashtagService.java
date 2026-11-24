@@ -121,7 +121,7 @@ public class HashtagService {
 		final String answer = this.aiService.chat(conversation, false);
 		try {
 			final JsonNode array = JSON.readTree(answer);
-			if (array == null || !array.isArray() || array.size() < 1 || array.size() > 3)
+			if (array == null || !array.isArray() || array.size() < 1)
 				throw new IllegalArgumentException("AI response must be an array of 1–5 hashtags");
 			final List<String> raw = new ArrayList<>();
 			for (final JsonNode node : array) {
