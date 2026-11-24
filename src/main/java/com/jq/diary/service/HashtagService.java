@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,19 +21,25 @@ import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import com.jq.diary.entity.Contact;
 import com.jq.diary.entity.Event;
+import com.jq.diary.entity.Ticket;
 import com.jq.diary.entity.UserHashtag;
 import com.jq.diary.repository.Repository;
+import com.jq.diary.util.Utilities;
 
 @Service
 public class HashtagService {
-	private static final Logger log = LoggerFactory.getLogger(HashtagService.class);
 	private static final String DEFAULTS = "eseen, trinken, party, philosophie, wasser, dankbarkeit, glücksmoment, nachdenklich, stressabbau, gelassenheit, hochgefühl, melancholie, stolz, gedankenkarussell, selbstreflexion, erkenntnis, lernmoment, persönlichkeitsentwicklung, achtsamkeit, mentalHealth, wachstum, alltagsmagie, kleineFreuden, highlightDesTages, erinnerung, wochenendrückblick, meTime, abenteuer, freunde, familie, ziele, träume, manifestation, pläne, neuanfang, motivation, wunschliste, kopfkino, seelenfutter";
 	private static final ObjectMapper JSON = new ObjectMapper();
 
 	@Autowired
 	private Repository repository;
+
 	@Autowired
 	private AiService aiService;
+
+	@Autowired
+	private AdminService adminService;
+
 	@Value("${app.hashtag.auto-tagging-enabled:true}")
 	private boolean enabled = true;
 
@@ -96,7 +100,7 @@ public class HashtagService {
 			try {
 				this.tag(event);
 			} catch (final RuntimeException ex) {
-				log.warn("Automatische Hashtags für Event {} fehlgeschlagen; erneuter Versuch beim nächsten Lauf.", event.getId(), ex);
+				this.adminService.createTicket(new Ticket("Hashtag for " + event.getId() + "\n" + Utilities.stackTraceToString(ex)));
 			}
 		}
 	}
