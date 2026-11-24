@@ -727,9 +727,8 @@ chart bar {
 				for (const [form, cnt] of current.forms.entries()) {
 					match.forms.set(form, (match.forms.get(form) || 0) + cnt);
 				}
-			} else {
+			} else
 				mergedClusters.push(current);
-			}
 		}
 	
 		// 5. TF-IDF & MEHRWORT-GEWICHTUNG
@@ -772,9 +771,8 @@ chart bar {
 					topItem.keyword.toLowerCase().includes(item.keyword.toLowerCase()) &&
 					item.count <= topItem.count * 1.25
 			);
-			if (!isRedundantSubterm) {
+			if (!isRedundantSubterm)
 				finalResults.push(item);
-			}
 		}
 	
 		return finalResults;
