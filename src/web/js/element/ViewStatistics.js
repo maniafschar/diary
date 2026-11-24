@@ -589,12 +589,10 @@ chart bar {
 	}
 
 	extract() {
-		const {
-			topN = 60,
-			minWordLength = 3,
-			maxPhraseLength = 3, // Bis zu 3 Wörter pro Fachbegriff (Trigramme)
-			chunkSize = 250
-		} = options;
+		const topN = 60;
+		const minWordLength = 3;
+		const maxPhraseLength = 3; // Bis zu 3 Wörter pro Fachbegriff (Trigramme)
+		const chunkSize = 250;
 	
 		// 1. NORMALISIERUNG & KONSEVATIVES STEMMING
 		const normalize = str =>
