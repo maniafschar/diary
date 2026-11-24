@@ -491,15 +491,16 @@ chart bar {
 		if (tokens.length == 0)
 			return positions;
 		var wordcloud = this._root.querySelector('wordcloud');
-		var min = tokens[tokens.length - 1].count;
-		var max = tokens[0].count;
+		var min = Math.min(...tokens.map(token => token.count));
+		var max = Math.max(...tokens.map(token => token.count));
 		var width = wordcloud.offsetWidth;
 		var height = wordcloud.offsetHeight;
 		var nextLoop = true;
 		for (var i = 0; i < tokens.length; i++) {
 			const next = { word: document.createElement('word'), token: tokens[i] };
 			next.word.innerText = next.token.text;
-			next.word.style.fontSize = (((next.token.count - min) / (max - min) + 0.8) * fontSize) + 'px';
+			const ratio = max == min ? 1 : (next.token.count - min) / (max - min);
+			next.word.style.fontSize = ((ratio + 0.8) * fontSize) + 'px';
 			next.word.addEventListener('click', event => {
 				this.dispatchEvent(new CustomEvent('details', {
 					detail: next.token,
@@ -521,7 +522,7 @@ chart bar {
 				positions.push(next);
 				next.word.style.left = next.x + 'px';
 				next.word.style.top = (next.y + (next.vertical ? (next.word.offsetWidth - next.word.offsetHeight) / 2 : 0)) + 'px';
-				next.word.style.color = this.createColor((next.token.count - min) / (max - min));
+				next.word.style.color = this.createColor(ratio);
 			}
 		}
 	}
@@ -633,11 +634,12 @@ chart bar {
 	
 		// 3. TEXT IN PHRASEN-SEQUENZEN ZERLEGEN
 		// Satzzeichen trennen Sätze; Stoppwörter trennen Kandidaten-Sequenzen
-		const sentences = this.text.split(/[.!?;:()\[\]"„“]+/);
 		const phraseGroups = new Map();
 		let wordCounter = 0;
 	
-		for (const sentence of sentences) {
+		for (const { sentence, id } of this.text.flatMap(entry =>
+			entry.text.split(/[.!?;:()\[\]"„“]+/).map(sentence => ({ sentence, id: entry.id }))
+		)) {
 			const rawTokens = sentence
 				.replace(/[^a-zA-ZäöüÄÖÜß\s-]/g, " ")
 				.split(/\s+/)
@@ -670,6 +672,7 @@ chart bar {
 								wordCount: len,
 								count: 0,
 								chunks: new Set(),
+								ids: new Set(),
 								forms: new Map()
 							});
 						}
@@ -677,6 +680,7 @@ chart bar {
 						const group = phraseGroups.get(stemKey);
 						group.count += 1;
 						group.chunks.add(chunkIdx);
+						group.ids.add(id);
 						group.forms.set(displayPhrase, (group.forms.get(displayPhrase) || 0) + 1);
 					}
 				}
@@ -716,6 +720,7 @@ chart bar {
 			if (match) {
 				match.count += current.count;
 				current.chunks.forEach((ch) => match.chunks.add(ch));
+				current.ids.forEach((id) => match.ids.add(id));
 				for (const [form, cnt] of current.forms.entries()) {
 					match.forms.set(form, (match.forms.get(form) || 0) + cnt);
 				}
@@ -742,9 +747,11 @@ chart bar {
 	
 				return {
 					keyword: sortedForms[0][0],
+					text: sortedForms[0][0],
 					words: cluster.wordCount,
 					score: Number(score.toFixed(2)),
 					count: cluster.count,
+					ids: Array.from(cluster.ids),
 					sectionSpread: `${cluster.chunks.size}/${totalChunks}`,
 					variants: sortedForms.map(([w, c]) => `${w} (${c})`)
 				};
