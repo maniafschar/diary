@@ -936,7 +936,7 @@ chart bar {
 		'anderer', 'anderes', 'auch', 'auf', 'aus', 'bei', 'bereits', 'bin', 'bis', 'bist', 'da', 'dabei', 'dadurch', 'dafür',
 		'dagegen', 'daher',
 		'damit', 'danach', 'dann', 'darauf', 'daraus', 'darin', 'darüber', 'darum', 'darunter', 'das', 'dass', 'daß', 'davon',
-		'davor', 'dazu', 'dein', 'deine', 'dem', 'den', 'denn', 'der', 'deren', 'des', 'dessen', 'dich', 'die', 'dies', 'diese',
+		'davor', 'dazu', 'dein', 'deine', 'deines', 'dem', 'den', 'denn', 'der', 'deren', 'des', 'dessen', 'dich', 'die', 'dies', 'diese',
 		'dieselbe', 'diesem', 'diesen', 'dieser', 'dieses', 'dir', 'doch', 'dort', 'du', 'durch', 'ebenso', 'ein', 'eine', 'einem',
 		'einen', 'einer', 'eines', 'einige', 'einigem', 'einigen', 'einiger', 'einiges', 'einmal', 'er', 'es', 'etwas', 'euch',
 		'euer', 'euere', 'für', 'gegen', 'gewesen', 'hab', 'habe', 'haben', 'hat', 'hatte', 'hatten', 'hier', 'hin', 'hinter',
