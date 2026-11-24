@@ -640,11 +640,10 @@ chart bar {
 		for (const { sentence, id } of this.text.flatMap(entry =>
 			entry.text.split(/[.!?;:()\[\]"„“]+/).map(sentence => ({ sentence, id: entry.id }))
 		)) {
-			const rawTokens = sentence
-				.replace(/[^a-zA-ZäöüÄÖÜß\s-]/g, " ")
-				.split(/\s+/)
-				.map(w => w.replace(/^-+|-+$/g, ""))
-				.filter(w => w.length > 0);
+			const rawTokens = Array.from(sentence.matchAll(/[a-zA-ZäöüÄÖÜß-]+/g), match => {
+				const original = match[0].replace(/^-+|-+$/g, "");
+				return { original, start: match.index + match[0].indexOf(original) };
+			}).filter(token => token.original.length > 0);
 	
 			let currentSequence = [];
 	
@@ -673,7 +672,8 @@ chart bar {
 								count: 0,
 								chunks: new Set(),
 								ids: new Set(),
-								forms: new Map()
+								forms: new Map(),
+								matches: new Set()
 							});
 						}
 	
@@ -682,11 +682,13 @@ chart bar {
 						group.chunks.add(chunkIdx);
 						group.ids.add(id);
 						group.forms.set(displayPhrase, (group.forms.get(displayPhrase) || 0) + 1);
+						const last = slice[slice.length - 1];
+						group.matches.add(sentence.slice(slice[0].start, last.start + last.original.length));
 					}
 				}
 			};
 	
-			for (const token of rawTokens) {
+			for (const { original: token, start } of rawTokens) {
 				const chunkIdx = Math.floor(wordCounter / chunkSize);
 				wordCounter++;
 	
@@ -697,6 +699,7 @@ chart bar {
 				} else {
 					currentSequence.push({
 						original: token,
+						start: start,
 						stem: stemWord(normalize(token)),
 						isCapitalized: /^[A-ZÄÖÜ]/.test(token)
 					});
@@ -721,6 +724,7 @@ chart bar {
 				match.count += current.count;
 				current.chunks.forEach((ch) => match.chunks.add(ch));
 				current.ids.forEach((id) => match.ids.add(id));
+				current.matches.forEach((form) => match.matches.add(form));
 				for (const [form, cnt] of current.forms.entries()) {
 					match.forms.set(form, (match.forms.get(form) || 0) + cnt);
 				}
@@ -752,6 +756,7 @@ chart bar {
 					score: Number(score.toFixed(2)),
 					count: cluster.count,
 					ids: Array.from(cluster.ids),
+					matches: Array.from(cluster.matches),
 					sectionSpread: `${cluster.chunks.size}/${totalChunks}`,
 					variants: sortedForms.map(([w, c]) => `${w} (${c})`)
 				};
