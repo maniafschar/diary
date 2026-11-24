@@ -590,9 +590,8 @@ chart bar {
 	}
 
 	extract() {
-		const topN = 60;
-		const minWordLength = 3;
-		const maxPhraseLength = 3; // Bis zu 3 Wörter pro Fachbegriff (Trigramme)
+		const minWordLength = 2;
+		const maxPhraseLength = 1; // Bis zu x Wörter pro Fachbegriff (Trigramme)
 		const chunkSize = 250;
 	
 		// 1. NORMALISIERUNG & KONSEVATIVES STEMMING
@@ -776,7 +775,6 @@ chart bar {
 			if (!isRedundantSubterm) {
 				finalResults.push(item);
 			}
-			if (finalResults.length >= topN) break;
 		}
 	
 		return finalResults;
