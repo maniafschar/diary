@@ -473,22 +473,28 @@ images {
 images img {
 	border-radius: 0.5em;
 	margin: 0.5em;
+}
+input-rating {
+	position: absolute;
+	right: 0;
+	font-size: 0.8em;
+	margin-right: 0;
 }`;
 		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
 			var label = items.appendChild(document.createElement('label'));
-			if (l.rating) {
-				var rating = label.appendChild(document.createElement('input-rating'));
-				rating.classList.add('line');
-				rating.setAttribute('value', l.rating);
-			}
-			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
+			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', ''))) + ' ' + l.location.name;
 			var value = items.appendChild(document.createElement('value'));
 			var note = value.appendChild(document.createElement('note'));
 			listener.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
 			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
+			if (l.rating) {
+				var rating = value.appendChild(document.createElement('input-rating'));
+				rating.classList.add('line');
+				rating.setAttribute('value', l.rating);
+			}
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
 				images.appendChild(document.createElement('img')).src = api.mediaUrl(l.eventImages[i2].imageThumbnail);
