@@ -476,9 +476,8 @@ images img {
 }
 input-rating {
 	position: absolute;
-	right: 0;
+	right: 0.5em;
 	font-size: 0.8em;
-	margin-right: 0;
 }`;
 		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
 		var items = e.appendChild(document.createElement('list'));
