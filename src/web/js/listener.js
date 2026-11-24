@@ -148,6 +148,7 @@ date,
 note {
 	position: relative;
 	display: block;
+	white-space: pre-line;
 	margin-bottom: 1em;
 	cursor: pointer;
 }
@@ -479,8 +480,8 @@ images img {
 			}
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', '')));
 			var value = items.appendChild(document.createElement('value'));
-			var highlight = event.detail.text ? new RegExp('(?<!\\p{L})(' + event.detail.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?!\\p{L})', 'giu') : null;
-			value.appendChild(document.createElement('note')).innerHTML = (highlight ? l.note?.replaceAll(highlight, '<b>$1</b>') : l.note)?.replaceAll(/\n/g, '<br />') || '';
+			var note = value.appendChild(document.createElement('note'));
+			listener.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
 			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
 			var images = value.appendChild(document.createElement('images'));
 			for (var i2 = 0; i2 < l.eventImages.length; i2++)
@@ -491,6 +492,27 @@ images img {
 			document.dispatchEvent(new CustomEvent('popup'));
 		});
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
+	}
+
+	static highlightStatisticNote(element, text, matches) {
+		if (!matches.length) {
+			element.textContent = text;
+			return;
+		}
+		var alternatives = matches.filter(Boolean).sort((a, b) => b.length - a.length)
+			.map(match => match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+		if (!alternatives.length) {
+			element.textContent = text;
+			return;
+		}
+		var pattern = new RegExp('(?<!\\p{L})(?:' + alternatives.join('|') + ')(?!\\p{L})', 'giu');
+		var last = 0;
+		for (const match of text.matchAll(pattern)) {
+			element.appendChild(document.createTextNode(text.slice(last, match.index)));
+			element.appendChild(document.createElement('b')).textContent = match[0];
+			last = match.index + match[0].length;
+		}
+		element.appendChild(document.createTextNode(text.slice(last)));
 	}
 
 	static init() {

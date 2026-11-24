@@ -47,7 +47,26 @@ test('returns entry IDs for repeated words and merged spelling variants', () => 
 	assert.equal(word.count, 3);
 	assert.deepEqual(Array.from(word.ids).sort(), [4, 8]);
 	assert.deepEqual(Array.from(word.variants), ['Gartenarbeit (2)', 'Gartenarbeitt (1)']);
+	assert.deepEqual(Array.from(word.matches), ['Gartenarbeit', 'Gartenarbeitt']);
 	assert.deepEqual(Array.from(results.find(item => item.keyword === 'Urlaub').ids), [2]);
+});
+
+test('preserves the original matching forms and separators for merged phrases', () => {
+	const results = extract([
+		{ id: 1, text: 'Neue, Gartenarbeit. Neue Gartenarbeit.' },
+		{ id: 2, text: 'Neue Gartenarbeitt.' }
+	]);
+	const phrase = results.find(item => item.keyword === 'Neue Gartenarbeit');
+	assert.equal(phrase.count, 3);
+	assert.deepEqual(Array.from(phrase.ids).sort(), [1, 2]);
+	assert.deepEqual(Array.from(phrase.matches), ['Neue, Gartenarbeit', 'Neue Gartenarbeit', 'Neue Gartenarbeitt']);
+});
+
+test('keeps differently inflected words grouped for highlighting', () => {
+	const results = extract([{ id: 1, text: 'Gartenarbeit. Gartenarbeit. Gartenarbeiten.' }]);
+	const word = results.find(item => item.keyword === 'Gartenarbeit');
+	assert.equal(word.count, 3);
+	assert.deepEqual(Array.from(word.matches), ['Gartenarbeit', 'Gartenarbeiten']);
 });
 
 test('tracks phrase IDs without creating phrases across entry boundaries', () => {
