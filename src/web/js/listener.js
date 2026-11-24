@@ -451,6 +451,10 @@ word no {
 	right: 0;
 	top: 1.7em;
 }
+label {
+	padding: 0.4em 0.7em 0 0.7em;
+	color: initial;
+}
 date {
 	position: relative;
 }
