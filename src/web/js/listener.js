@@ -112,7 +112,6 @@ class listener {
 				src: listImages(events[i]),
 				index: events[i].id,
 				text: events[i].note,
-				hashtags: events[i].hashtags,
 				label: (ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + ' ' + (events[i].location.name || '')).trim(),
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ?
@@ -121,7 +120,8 @@ class listener {
 					'<br/><br/><separator></separator>' +
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
-					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
+					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + 
+					 	(events[i].hashtags ? '<hashtags>' + events[i].hashtags.split(',').map(tag => '#' + tag.trim()).join(' ') + '</hashtags>' : '') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					(api.user?.id ?
 						'<separator></separator>' +
@@ -239,6 +239,12 @@ img.speak {
 address {
 	cursor: pointer;
 	font-style: normal;
+}
+hashtags {
+	position: relative;
+	display: block;
+	padding-top: 1em;
+	font-size: 0.8em;
 }`);
 	}
 
