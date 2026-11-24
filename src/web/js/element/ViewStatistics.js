@@ -268,7 +268,7 @@ chart bar span {
 	color: white;
 }
 chart tick {
-    opacity: 0.5;
+		opacity: 0.5;
 	font-size: 0.8em;
 	white-space: nowrap;
 	text-align: center;
@@ -589,28 +589,189 @@ chart bar {
 	}
 
 	extract() {
-		var list = [];
-		for (var i = 0; i < this.text.length; i++) {
-			var s = this.text[i].text.replaceAll(/[ \+\t\r\n,\.\-\_\!\?\[\]\{\}';:\/\(\)…0-9]/g, ' ')
-				.replaceAll(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g, '')
-				.replaceAll(/[\u2700-\u27BF][\uFE0E-\uFE0F]?/g, '')
-				.trim().toLowerCase().split(' ');
-			for (var i2 = 0; i2 < s.length; i2++) {
-				if (s[i2].trim().length > 1) {
-					var token = list.find(e => e.text == s[i2]);
-					if (token) {
-						token.count++;
-						if (!token.ids.includes(this.text[i].id))
-							token.ids.push(this.text[i].id);
-					} else if (!this.STOP_WORDS.includes(s[i2]))
-						list.push({ count: 1, text: s[i2], ids: [this.text[i].id] });
+		const {
+			topN = 60,
+			minWordLength = 3,
+			maxPhraseLength = 3, // Bis zu 3 Wörter pro Fachbegriff (Trigramme)
+			chunkSize = 250
+		} = options;
+	
+		// 1. NORMALISIERUNG & KONSEVATIVES STEMMING
+		const normalize = str =>
+			str
+				.normalize("NFC")
+				.toLowerCase()
+				.replace(/ä/g, "ae")
+				.replace(/ö/g, "oe")
+				.replace(/ü/g, "ue")
+				.replace(/ß/g, "ss");
+	
+		const stemWord = normWord => {
+			if (normWord.length < 5) return normWord;
+			return normWord.replace(/(innen|ungen|ern|em|en|er|es|e|s)$/, "");
+		};
+	
+		// 2. KOMPOSITA-SICHERE LEVENSHTEIN-PRÜFUNG (Für einzelne Wörter & ganze Phrasen)
+		const isTypoMatch = (stemA, stemB) => {
+			if (Math.abs(stemA.length - stemB.length) > 1) return false;
+			if (stemA.length < 7 || stemB.length < 7) return false;
+			if (stemA.slice(0, 3) !== stemB.slice(0, 3)) return false;
+	
+			const matrix = Array.from({ length: stemA.length + 1 }, (_, i) => [i]);
+			for (let j = 0; j <= stemB.length; j++) matrix[0][j] = j;
+	
+			for (let i = 1; i <= stemA.length; i++) {
+				for (let j = 1; j <= stemB.length; j++) {
+					const cost = stemA[i - 1] === stemB[j - 1] ? 0 : 1;
+					matrix[i][j] = Math.min(
+						matrix[i - 1][j] + 1,
+						matrix[i][j - 1] + 1,
+						matrix[i - 1][j - 1] + cost
+					);
 				}
 			}
+			return matrix[stemA.length][stemB.length] === 1;
+		};
+	
+		// 3. TEXT IN PHRASEN-SEQUENZEN ZERLEGEN
+		// Satzzeichen trennen Sätze; Stoppwörter trennen Kandidaten-Sequenzen
+		const sentences = this.text.split(/[.!?;:()\[\]"„“]+/);
+		const phraseGroups = new Map();
+		let wordCounter = 0;
+	
+		for (const sentence of sentences) {
+			const rawTokens = sentence
+				.replace(/[^a-zA-ZäöüÄÖÜß\s-]/g, " ")
+				.split(/\s+/)
+				.map(w => w.replace(/^-+|-+$/g, ""))
+				.filter(w => w.length > 0);
+	
+			let currentSequence = [];
+	
+			const flushSequence = (seq, chunkIdx) => {
+				if (seq.length === 0) return;
+	
+				// Alle 1- bis N-Gramme innerhalb der gültigen Wortfolge bilden
+				for (let start = 0; start < seq.length; start++) {
+					for (let len = 1; len <= maxPhraseLength && start + len <= seq.length; len++) {
+						const slice = seq.slice(start, start + len);
+	
+						// Mindestens ein Wort in der Phrase muss ein großgeschriebenes Substantiv sein
+						const hasNoun = slice.some((t) => t.isCapitalized);
+						if (!hasNoun) continue;
+	
+						// Einzelwörter unter Mindestlänge überspringen
+						if (len === 1 && slice[0].original.length < Math.max(minWordLength, 4)) continue;
+	
+						const stemKey = slice.map(t => t.stem).join(" ");
+						const displayPhrase = slice.map(t => t.original).join(" ");
+	
+						if (!phraseGroups.has(stemKey)) {
+							phraseGroups.set(stemKey, {
+								stem: stemKey,
+								wordCount: len,
+								count: 0,
+								chunks: new Set(),
+								forms: new Map()
+							});
+						}
+	
+						const group = phraseGroups.get(stemKey);
+						group.count += 1;
+						group.chunks.add(chunkIdx);
+						group.forms.set(displayPhrase, (group.forms.get(displayPhrase) || 0) + 1);
+					}
+				}
+			};
+	
+			for (const token of rawTokens) {
+				const chunkIdx = Math.floor(wordCounter / chunkSize);
+				wordCounter++;
+	
+				const lower = token.toLowerCase();
+				if (this.STOP_WORDS.has(lower) || token.length < minWordLength) {
+					flushSequence(currentSequence, chunkIdx);
+					currentSequence = [];
+				} else {
+					currentSequence.push({
+						original: token,
+						stem: stemWord(normalize(token)),
+						isCapitalized: /^[A-ZÄÖÜ]/.test(token)
+					});
+				}
+			}
+			flushSequence(currentSequence, Math.floor(wordCounter / chunkSize));
 		}
-		list.sort((e, e2) => e2.count - e.count);
-		return list;
+	
+		const totalChunks = Math.max(1, Math.ceil(wordCounter / chunkSize));
+	
+		// 4. TIPPFEHLER-CLUSTERING (Sortiert nach Häufigkeit)
+		const sortedGroups = Array.from(phraseGroups.values()).sort((a, b) => b.count - a.count);
+		const mergedClusters = [];
+	
+		for (const current of sortedGroups) {
+			// Nur Phrasen mit gleicher Wortanzahl gegeneinander auf Tippfehler prüfen
+			const match = mergedClusters.find(
+				(c) => c.wordCount === current.wordCount && isTypoMatch(c.stem, current.stem)
+			);
+	
+			if (match) {
+				match.count += current.count;
+				current.chunks.forEach((ch) => match.chunks.add(ch));
+				for (const [form, cnt] of current.forms.entries()) {
+					match.forms.set(form, (match.forms.get(form) || 0) + cnt);
+				}
+			} else {
+				mergedClusters.push(current);
+			}
+		}
+	
+		// 5. TF-IDF & MEHRWORT-GEWICHTUNG
+		const totalItems = mergedClusters.reduce((sum, c) => sum + c.count, 0);
+	
+		let scoredResults = mergedClusters
+			.filter((c) => c.wordCount === 1 || c.count >= 2) // Mehrwort-Phrasen müssen mind. 2x vorkommen
+			.map((cluster) => {
+				const tf = cluster.count / totalItems;
+				const idf = Math.log((totalChunks + 1) / (cluster.chunks.size + 1)) + 1;
+	
+				// Mehrwort-Fachbegriffe (2 oder 3 Wörter) und lange Komposita höher bewerten
+				const phraseBoost = cluster.wordCount === 1 ? 1.0 : cluster.wordCount === 2 ? 1.8 : 2.2;
+				const compoundBoost = cluster.wordCount === 1 && cluster.stem.length >= 12 ? 1.25 : 1.0;
+	
+				const score = tf * idf * phraseBoost * compoundBoost * 1000;
+				const sortedForms = Array.from(cluster.forms.entries()).sort((a, b) => b[1] - a[1]);
+	
+				return {
+					keyword: sortedForms[0][0],
+					words: cluster.wordCount,
+					score: Number(score.toFixed(2)),
+					count: cluster.count,
+					sectionSpread: `${cluster.chunks.size}/${totalChunks}`,
+					variants: sortedForms.map(([w, c]) => `${w} (${c})`)
+				};
+			})
+			.sort((a, b) => b.score - a.score);
+	
+		// 6. REDUNDANZ-BEREINIGUNG (Substring-Deduplizierung)
+		// Wenn "künstliche Intelligenz" 10x vorkommt, soll "Intelligenz" nicht nochmal als separates Top-Keyword doppelt zählen
+		const finalResults = [];
+		for (const item of scoredResults) {
+			const isRedundantSubterm = finalResults.some(
+				(topItem) =>
+					topItem.words > item.words &&
+					topItem.keyword.toLowerCase().includes(item.keyword.toLowerCase()) &&
+					item.count <= topItem.count * 1.25
+			);
+			if (!isRedundantSubterm) {
+				finalResults.push(item);
+			}
+			if (finalResults.length >= topN) break;
+		}
+	
+		return finalResults;
 	}
-
+	
 	positionNext(position, positions, width, height) {
 		var offset = parseInt(Math.random() * positions.length);
 		for (var i = 0; i < positions.length; i++) {
@@ -748,7 +909,7 @@ chart bar {
 		return position.x + position.word.offsetWidth < width && position.y + position.word.offsetHeight < height;
 	}
 
-	STOP_WORDS = [
+	STOP_WORDS = new Set([
 		// English
 		'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', "aren't", 'as', 'at',
 		'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', "can't", 'cannot', 'could',
@@ -766,15 +927,23 @@ chart bar {
 		'yourselves',
 		// German
 		'aber', 'alle', 'allem', 'allen', 'aller', 'alles', 'als', 'also', 'am', 'an', 'ander', 'andere', 'anderem', 'anderen',
-		'anderer', 'anderes', 'auch', 'auf', 'aus', 'bei', 'bin', 'bis', 'bist', 'da', 'damit', 'dann', 'das', 'dass', 'dazu',
-		'dein', 'deine', 'dem', 'den', 'denn', 'der', 'die', 'dies', 'diese', 'diesem', 'diesen', 'dieser', 'dieses', 'dir',
-		'doch', 'dort', 'du', 'durch', 'ein', 'eine', 'einem', 'einen', 'einer', 'eines', 'er', 'es', 'etwas', 'euch', 'für',
-		'gegen', 'gewesen', 'haben', 'hat', 'hatte', 'hier', 'ich', 'ihm', 'ihn', 'ihnen', 'ihr', 'ihre', 'im', 'in', 'ist',
-		'jede', 'jeder', 'jedes', 'jetzt', 'kann', 'kein', 'keine', 'können', 'machen', 'man', 'mehr', 'mein', 'meine', 'mich',
-		'mir', 'mit', 'muss', 'nach', 'nicht', 'nichts', 'noch', 'nur', 'ob', 'oder', 'ohne', 'sehr', 'sein', 'seine', 'selbst',
-		'sich', 'sie', 'sind', 'so', 'solche', 'soll', 'sondern', 'sonst', 'um', 'und', 'uns', 'unser', 'unter', 'vom', 'von',
-		'vor', 'war', 'waren', 'was', 'weil', 'weiter', 'welche', 'wenn', 'wie', 'wieder', 'will', 'wir', 'wird', 'wo', 'zu',
-		'zum', 'zur', 'über',
+		'anderer', 'anderes', 'auch', 'auf', 'aus', 'bei', 'bereits', 'bin', 'bis', 'bist', 'da', 'dabei', 'dadurch', 'dafür',
+		'dagegen', 'daher',
+		'damit', 'danach', 'dann', 'darauf', 'daraus', 'darin', 'darüber', 'darum', 'darunter', 'das', 'dass', 'daß', 'davon',
+		'davor', 'dazu', 'dein', 'deine', 'dem', 'den', 'denn', 'der', 'deren', 'des', 'dessen', 'dich', 'die', 'dies', 'diese',
+		'dieselbe', 'diesem', 'diesen', 'dieser', 'dieses', 'dir', 'doch', 'dort', 'du', 'durch', 'ebenso', 'ein', 'eine', 'einem',
+		'einen', 'einer', 'eines', 'einige', 'einigem', 'einigen', 'einiger', 'einiges', 'einmal', 'er', 'es', 'etwas', 'euch',
+		'euer', 'euere', 'für', 'gegen', 'gewesen', 'hab', 'habe', 'haben', 'hat', 'hatte', 'hatten', 'hier', 'hin', 'hinter',
+		'ich', 'ihm', 'ihn', 'ihnen', 'ihr', 'ihre', 'im', 'in', 'indem', 'ins', 'insbesondere', 'ist', 'jede', 'jedem', 'jeden', 'jeder',
+		'jedes', 'jedoch', 'jene', 'jenem', 'jenen', 'jener', 'jenes', 'jetzt', 'kann', 'kein', 'keine', 'keinem', 'keinen', 'keiner',
+		'keines', 'können', 'könnte', 'machen', 'man', 'manche', 'manchem', 'manchen', 'mancher', 'manches', 'mehr', 'mein',
+		'meine', 'mich', 'mir', 'mit', 'muss', 'müssen', 'musste', 'nach', 'nicht', 'nichts', 'noch', 'nun', 'nur', 'ob', 'oder', 'ohne',
+		'sehr', 'sein', 'seine', 'seinem', 'seinen', 'seiner', 'seines', 'selbst', 'sich', 'sie', 'sind', 'so', 'solche',
+		'solchem', 'solchen', 'solcher', 'solches', 'soll', 'sollen', 'sollte', 'somit', 'sondern', 'sonst', 'sowie', 'über', 'um', 'und', 'uns',
+		'unser', 'unsere', 'unter', 'viel', 'vom', 'von', 'vor', 'während', 'war', 'waren', 'warst', 'was', 'weg', 'weil',
+		'weiter', 'welche', 'welchem', 'welchen', 'welcher', 'welches', 'wen', 'wenn', 'werde', 'werden', 'wie', 'wieder',
+		'will', 'wir', 'wird', 'wirst', 'wo', 'wollen', 'wollte', 'wurde', 'wurden', 'würde', 'würden', 'zu',
+		'zum', 'zur', 'zwar', 'zwischen',
 		// French, Italian, and Spanish
 		'ai', 'aie', 'alors', 'au', 'aucun', 'aussi', 'autre', 'aux', 'avec', 'ce', 'ceci', 'cela', 'ces', 'cette', 'comme',
 		'comment', 'dans', 'de', 'dedans', 'dehors', 'depuis', 'des', 'du', 'elle', 'elles', 'en', 'encore', 'est', 'et', 'eux',
@@ -790,5 +959,5 @@ chart bar {
 		'le', 'les', 'lo', 'los', 'me', 'mi', 'mis', 'mucho', 'muy', 'más', 'nada', 'ni', 'no', 'nos', 'nosotros', 'o', 'otra',
 		'otro', 'para', 'pero', 'por', 'porque', 'que', 'quien', 'se', 'sin', 'sobre', 'su', 'sus', 'también', 'te', 'ti', 'todo',
 		'tu', 'tus', 'un', 'una', 'uno', 'ya', 'yo'
-	];
+	]);
 }
