@@ -658,8 +658,8 @@ chart bar {
 						const hasNoun = slice.some((t) => t.isCapitalized);
 						if (!hasNoun) continue;
 	
-						// Einzelwörter unter Mindestlänge überspringen
-						if (len === 1 && slice[0].original.length < Math.max(minWordLength, 4)) continue;
+						// Einzelwörter unter Mindestlänge überspringen, wenn zusammengesetzte Wörter erlaubt sind
+						if (len === 1 && maxPhraseLength > 1 && slice[0].original.length < Math.max(minWordLength, 4)) continue;
 	
 						const stemKey = slice.map(t => t.stem).join(" ");
 						const displayPhrase = slice.map(t => t.original).join(" ");
