@@ -112,6 +112,7 @@ class listener {
 				src: listImages(events[i]),
 				index: events[i].id,
 				text: events[i].note,
+				hashtags: events[i].hashtags,
 				label: (ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + ' ' + (events[i].location.name || '')).trim(),
 				description: '<date' + addEdit() + '>' + ui.formatTime(new Date(events[i].date.replace('+00:00', ''))) + '</date>' +
 					(events[i].location.address ?
@@ -121,7 +122,6 @@ class listener {
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') + '</note>' : '') +
-					(events[i].hashtags ? '<note' + addEdit() + '>' + events[i].hashtags.split(',').map(tag => '#' + tag.trim()).join(' ') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					(api.user?.id ?
 						'<separator></separator>' +
