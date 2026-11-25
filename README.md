@@ -13,6 +13,10 @@ Before deploying, apply `src/main/resources/db/location-address-details.sql` to 
 
 The `addressDetails` property in Location and Event API responses contains the complete address object returned by Nominatim, using its original field names, such as `road`, `house_number`, `postcode`, `city`, `state_district`, `state`, `country` and `country_code`. Fields vary by location and may be absent. The existing `address` is unchanged. Existing locations and new locations with coordinates are enriched in the background, at most once every 15 seconds; missing coordinates cannot be enriched. Failures are logged and retried. Nominatim receives the coordinates; no request is sent for locations without them. Run background enrichment on only one application instance (set `APP_LOCATION_ADDRESS_ENRICHMENT_ENABLED=false` on the others), and account for other applications sharing the same Nominatim usage limit.
 
+## Event image dimensions
+
+Apply `src/main/resources/db/event-image-dimensions.sql` before deploying; migrations are not automatic. The server calculates missing `width` and `height` values from original event images and videos in the background, one record every 15 seconds. Video dimensions account for display rotation. Missing or unreadable attachments are logged and retried after the remaining records have been scanned. Run the job on one application instance with access to the attachments; set `APP_EVENT_IMAGE_DIMENSION_ENRICHMENT_ENABLED=false` on other instances.
+
 ## Cordova mobile app
 
 The same web client can be built into native iOS and Android WebView apps. Run `npm install` once, then use a simulator or connected device with:
