@@ -314,6 +314,8 @@ public class EventApi extends ApplicationApi {
 					filteredEventImage.setId(eventImage.getId());
 					filteredEventImage.setImage(eventImage.getImage());
 					filteredEventImage.setImageThumbnail(eventImage.getImageThumbnail());
+					filteredEventImage.setWidth(eventImage.getWidth());
+					filteredEventImage.setHeight(eventImage.getHeight());
 					filteredEvent.getEventImages().add(filteredEventImage);
 				}
 			}
