@@ -526,6 +526,8 @@ a {
 					imageContainer.style.height = '12em';
 				var progress = imageContainer.querySelector('progress-bar');
 				this.imageProgressTimer = setTimeout(() => progress.open(), 400);
+				if (current.src?.indexOf('/med/') > 0 || current.querySelector('source')?.src)
+					setTimeout(() => current.style.opacity = 0, 50);
 				var image = this.imageLoad = new Image();
 				image.onload = () => {
 					clearTimeout(this.imageProgressTimer);
@@ -536,24 +538,17 @@ a {
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
-					var cleanUp = first => {
-						if (first == true) {
-							next.style.opacity = 0;
-							setTimeout(() => next.style.opacity = 1, 50);
-						}
-						next.classList.remove('next');
-						next.previousSibling.remove();
-						video.querySelector('source').src = '';
-						video.style.display = 'none';
-						this.loading = false;
-						if (speak && this.speak)
-							this.speakText();
-					};
-					if (current.src?.indexOf('/med/') > 0 || current.querySelector('source')?.src)
-						current.addEventListener('transitionend', cleanUp, { once: true });
-					else
-						cleanUp(true);
-					setTimeout(() => { current.style.opacity = 0; next.style.opacity = 1; }, 50);
+					if (current.src?.indexOf('/med/') < 0 && !current.querySelector('source')?.src) {
+						next.style.opacity = 0;
+						setTimeout(() => next.style.opacity = 1, 50);
+					}
+					next.classList.remove('next');
+					next.previousSibling.remove();
+					video.querySelector('source').src = '';
+					video.style.display = 'none';
+					this.loading = false;
+					if (speak && this.speak)
+						this.speakText();
 				};
 				image.onerror = () => {
 					clearTimeout(this.imageProgressTimer);
