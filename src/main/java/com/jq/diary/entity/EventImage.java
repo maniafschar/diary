@@ -14,6 +14,24 @@ public class EventImage extends BaseEntity {
 	private Contact contact;
 	private String image;
 	private String imageThumbnail;
+	private Integer width;
+	private Integer height;
+
+	public Integer getWidth() {
+		return this.width;
+	}
+
+	public void setWidth(final Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return this.height;
+	}
+
+	public void setHeight(final Integer height) {
+		this.height = height;
+	}
 
 	public Contact getContact() {
 		return this.contact;
