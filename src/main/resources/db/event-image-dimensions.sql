@@ -1,0 +1,2 @@
+ALTER TABLE event_image ADD COLUMN width INT NULL;
+ALTER TABLE event_image ADD COLUMN height INT NULL;

@@ -54,7 +54,11 @@ class listener {
 		var listImages = function (event) {
 			var list = [];
 			for (var i = 0; i < event.eventImages.length; i++)
-				list.push(event.eventImages[i].image);
+				list.push({
+					src: event.eventImages[i].image,
+					width: event.eventImages[i].width,
+					height: event.eventImages[i].height
+				});
 			return list;
 		};
 		var listImageThumbnails = function (event) {
