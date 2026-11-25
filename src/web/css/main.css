@@ -209,10 +209,6 @@ body>imprint.open {
 	pointer-events: auto;
 }
 
-body>imprint .toggle {
-	font-size: 0.8em;
-}
-
 body>imprint>.imprint-panel {
 	position: absolute;
 	top: 5vh;
@@ -225,6 +221,8 @@ body>imprint>.imprint-panel {
 	box-shadow: 0 0 1em rgba(20, 41, 55, 0.2);
 	transition: transform 0.35s ease;
 	pointer-events: auto;
+	max-width: min(50rem, 94%);
+	font-size: 0.8em;
 }
 
 body>imprint.open>.imprint-panel {
