@@ -1,7 +1,9 @@
 package com.jq.diary.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
@@ -10,6 +12,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.EmailException;
@@ -147,6 +153,15 @@ public class EventService {
 			img = Utilities.createVideoThumbnail(tempFile.getAbsolutePath());
 		} catch (final Exception ex) {
 			img = Attachment.image(eventImage.getImage());
+		}
+		try {
+			final BufferedImage image = ImageIO.read(new ByteArrayInputStream(img));
+			if (image == null)
+				throw new IOException("Unsupported image format");
+			eventImage.setWidth(image.getWidth());
+			eventImage.setHeight(image.getHeight());
+		} catch (final IOException ex) {
+			throw new RuntimeException("Unable to read uploaded image dimensions", ex);
 		}
 		eventImage.setImageThumbnail(Attachment.createImage("jpg", Utilities.scaleImage(img, 150)));
 		this.repository.save(eventImage);

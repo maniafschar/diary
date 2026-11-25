@@ -20,6 +20,12 @@ container {
 	z-index: 600;
 }
 
+:host([inline]) container {
+	position: absolute;
+	pointer-events: none;
+	background: none;
+}
+
 loader {
 	position: absolute;
 	top: calc(50% - 6em);
@@ -28,6 +34,13 @@ loader {
 	height: 12em;
 	border-radius: 50%;
 	perspective: 800px;
+}
+
+:host([inline]) loader {
+	top: calc(50% - 2em);
+	left: calc(50% - 2em);
+	width: 4em;
+	height: 4em;
 }
 
 loader div {
@@ -93,18 +106,22 @@ loader .three {
 		loader.appendChild(document.createElement('div')).classList.add('one');
 		loader.appendChild(document.createElement('div')).classList.add('two');
 		loader.appendChild(document.createElement('div')).classList.add('three');
-		document.addEventListener('progressbar', event => event.detail?.type == 'open' ? this.open() : this.close());
+		if (!this.hasAttribute('inline'))
+			document.addEventListener('progressbar', event => event.detail?.type == 'open' ? this.open() : this.close());
 	}
 
 	open() {
 		var container = this._root.querySelector('container');
+		clearTimeout(this.closeTimer);
 		container.style.display = 'block';
-		setTimeout(() => container.style.opacity = 1, 10);
+		this.openTimer = setTimeout(() => container.style.opacity = 1, 10);
 	}
 
 	close() {
 		var container = this._root.querySelector('container');
+		clearTimeout(this.openTimer);
+		clearTimeout(this.closeTimer);
 		container.style.opacity = null;
-		setTimeout(() => container.style.display = null, 400);
+		this.closeTimer = setTimeout(() => container.style.display = null, 400);
 	}
 }

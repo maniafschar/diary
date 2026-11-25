@@ -6,6 +6,8 @@ class ViewImage extends HTMLElement {
 	index = 0;
 	speak = false;
 	speakJob = null;
+	imageLoad = null;
+	imageProgressTimer = null;
 	touchStartX;
 	touchStartY;
 	constructor() {
@@ -68,6 +70,14 @@ imageContainer {
 	transition: all .4s ease-out;
 	overflow: hidden;
 }
+imageContainer.loading {
+	background: linear-gradient(90deg, #e5e5e5 25%, #f5f5f5 50%, #e5e5e5 75%);
+	background-size: 200% 100%;
+	animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+@keyframes skeleton-loading {
+	to { background-position: -200% 0; }
+}
 imageContainer img {
 	width: 100%;
 	transition: all .4s ease-out;
@@ -84,6 +94,23 @@ imageContainer video.next {
 	left: 0;
 	top: 0;
 	opacity: 0;
+}
+imageContainer progress-bar {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 2;
+}
+imageContainer load-error {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	pointer-events: none;
+	color: #8b0000;
+}
+imageContainer load-error[hidden] {
+	display: none;
 }
 hint {
 	position: absolute;
@@ -281,6 +308,12 @@ a {
 		imageContainer.appendChild(document.createElement('img'));
 		var video = imageContainer.appendChild(document.createElement('video'));
 		video.appendChild(document.createElement('source')).type = 'video/mp4';
+		var progress = document.createElement('progress-bar');
+		progress.setAttribute('inline', '');
+		imageContainer.appendChild(progress);
+		var error = imageContainer.appendChild(document.createElement('load-error'));
+		error.hidden = true;
+		error.textContent = 'Das Bild konnte nicht geladen werden.';
 		data.appendChild(document.createElement('description'));
 		var buttons = this._root.appendChild(document.createElement('buttons'));
 		var next = buttons.appendChild(document.createElement('button'));
@@ -332,6 +365,7 @@ a {
 	}
 
 	close() {
+		this.cancelImageLoad();
 		this._root.host.addEventListener('transitionend',
 			() => this._root.scrollTop = 0, { capture: false, passive: true, once: true });
 		this._root.host.style.transform = '';
@@ -345,6 +379,8 @@ a {
 	}
 
 	open(list, index, style) {
+		this.cancelImageLoad();
+		this.loading = false;
 		var img = this._root.querySelector('imageContainer img');
 		img.src = '';
 		img.style.display = 'none';
@@ -366,6 +402,19 @@ a {
 		this._root.host.style.transition = 'all ease-out .4s';
 		this._root.host.style.transform = 'scale(1)';
 		document.body.style.overflow = 'hidden';
+	}
+
+	cancelImageLoad() {
+		clearTimeout(this.imageProgressTimer);
+		if (this.imageLoad) {
+			this.imageLoad.onload = null;
+			this.imageLoad.onerror = null;
+			this.imageLoad = null;
+		}
+		var container = this._root.querySelector('imageContainer');
+		container.classList.remove('loading');
+		container.querySelector('progress-bar').close();
+		container.querySelector('load-error').hidden = true;
 	}
 
 	navigate(forward) {
@@ -429,13 +478,15 @@ a {
 	}
 
 	updateImage(index, speak) {
+		this.cancelImageLoad();
 		var data = this._root.querySelector('data');
 		var nav = data.querySelector('nav');
 		var imageContainer = data.querySelector('imageContainer');
 		var img = imageContainer.querySelector('img');
 		var video = imageContainer.querySelector('video');
 		video.pause();
-		var src = this.list[this.index].src[index];
+		var imageData = this.list[this.index].src[index];
+		var src = typeof imageData == 'string' ? imageData : imageData?.src;
 		if (src) {
 			var selectDot = () => {
 				if (nav.querySelector('dot')) {
@@ -459,7 +510,7 @@ a {
 						next.play();
 					}, 50);
 				}, { once: true });
-				var next = video.parentElement.appendChild(document.createElement('video'));
+				var next = video.parentElement.insertBefore(document.createElement('video'), imageContainer.querySelector('progress-bar'));
 				next.controls = true;
 				next.autoplay = true;
 				next.setAttribute('playsinline', true);
@@ -468,11 +519,20 @@ a {
 				next.load();
 				setTimeout(() => current.style.opacity = 0, 50);
 			} else {
-				setTimeout(() => document.dispatchEvent(new CustomEvent('progressbar', { detail: { type: 'open' } })), 400);
-				var image = new Image();
+				if (imageData?.width > 0 && imageData?.height > 0) {
+					imageContainer.style.height = (imageData.height * data.offsetWidth / imageData.width) + 'px';
+					imageContainer.classList.add('loading');
+				} else if (!imageContainer.offsetHeight)
+					imageContainer.style.height = '12em';
+				var progress = imageContainer.querySelector('progress-bar');
+				this.imageProgressTimer = setTimeout(() => progress.open(), 400);
+				var image = this.imageLoad = new Image();
 				image.onload = () => {
-					document.dispatchEvent(new CustomEvent('progressbar'));
+					clearTimeout(this.imageProgressTimer);
+					this.imageLoad = null;
+					progress.close();
 					imageContainer.style.height = (image.height * data.offsetWidth / image.width) + 'px';
+					imageContainer.classList.remove('loading');
 					var next = img.parentElement.insertBefore(image, video);
 					next.classList.add('next');
 					selectDot();
@@ -495,7 +555,14 @@ a {
 						cleanUp(true);
 					setTimeout(() => { current.style.opacity = 0; next.style.opacity = 1; }, 50);
 				};
-				image.onerror = () => this.loading = false;
+				image.onerror = () => {
+					clearTimeout(this.imageProgressTimer);
+					this.imageLoad = null;
+					progress.close();
+					imageContainer.classList.remove('loading');
+					imageContainer.querySelector('load-error').hidden = false;
+					this.loading = false;
+				};
 				image.src = api.mediaUrl(src);
 			}
 		} else {
