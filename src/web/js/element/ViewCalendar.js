@@ -138,7 +138,7 @@ class ViewCalendar extends HTMLElement {
 	
 .day-num span.holiday {
 	font-size: 0.7em;
-	margin-left: 0.4em;
+	margin-top: 0.3em;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
