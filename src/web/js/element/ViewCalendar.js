@@ -125,7 +125,8 @@ class ViewCalendar extends HTMLElement {
 }
 
 .day-num {
-	display: block;
+	display: flex;
+	align-items: center;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -138,7 +139,20 @@ class ViewCalendar extends HTMLElement {
 .day-num span.holiday {
 	font-size: 0.7em;
 	margin-left: 0.4em;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
+
+.day-rating {
+	flex: none;
+	margin-left: auto;
+	width: 1.8em;
+	height: 1.8em;
+	border-radius: 50%;
+	padding: 0.15em;
+}
+
+.day-rating svg { display: block; width: 100%; height: 100%; }
 
 .cal-day.other-month>div {
 	opacity: 0.3;
@@ -182,36 +196,6 @@ class ViewCalendar extends HTMLElement {
 	text-overflow: ellipsis;
 	cursor: pointer;
 	position: relative;
-}
-
-.event-pill::after {
-	content: ' ';
-	position: absolute;
-	right: 0;
-	top: 0.5em;
-	width: 0.8em;
-	height: 0.8em;
-	border-radius: 50% 0 0 50%;
-}
-
-.event-pill.rank80::after {
-	background: rgba(255, 223, 0, 0.8);
-}
-
-.event-pill.rank60::after {
-	background: rgba(192, 192, 192, 0.6);
-}
-
-.event-pill.rank40::after {
-	background: rgba(235, 147, 80, 0.4);
-}
-
-.event-pill.rank20::after {
-	background: rgba(235, 147, 80, 0.25);
-}
-
-.event-pill.rank0::after {
-	background: rgba(235, 147, 80, 0.1);
 }`;
 		var wrapper = document.createElement('div');
 		wrapper.classList.add('calendar-wrapper');
@@ -417,36 +401,29 @@ class ViewCalendar extends HTMLElement {
 		const dayEvents = this.events[dateKey] || [];
 		if (dayEvents.length) {
 			cell.classList.add('has-events');
+			const ratingCount = dayEvents.reduce((sum, event) => sum + (event.ratingCount || 0), 0);
+			if (ratingCount) {
+				const average = dayEvents.reduce((sum, event) => sum + (event.ratingCount ? event.rating : 0), 0) / ratingCount;
+				const ratio = Math.max(0, Math.min(1, average / 100));
+				const mouth = ratio < 0.4 ? 'M7 16 Q12 11 17 16' : ratio < 0.6 ? 'M7 15 H17' : 'M7 14 Q12 19 17 14';
+				const badge = numEl.appendChild(document.createElement('span'));
+				badge.className = 'day-rating';
+				badge.style.background = `hsl(${8 + ratio * 132} 82% 62%)`;
+				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1 })} Sterne`;
+				badge.setAttribute('aria-label', badge.title);
+				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="white" stroke="black" stroke-width="1.5"/><circle cx="8.5" cy="9" r="1" fill="black"/><circle cx="15.5" cy="9" r="1" fill="black"/><path d="${mouth}" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+			}
 			const list = document.createElement('div');
 			list.className = 'event-list';
 			dayEvents.forEach(ev => {
 				const pill = document.createElement('div');
-				pill.className = 'event-pill'
-				if (ev.rating) {
-					if (ev.rating > 80)
-						pill.classList.add('rank80');
-					else if (ev.rating > 60)
-						pill.classList.add('rank60');
-					else if (ev.rating > 40)
-						pill.classList.add('rank40');
-					else if (ev.rating > 20)
-						pill.classList.add('rank20');
-					else
-						pill.classList.add('rank0');
-				}
+				pill.className = 'event-pill';
 				pill.textContent = ev.name;
-				pill.addEventListener('click', e => {
-					e.stopPropagation();
-					if (this.openDetail)
-						this.openDetail(ev);
-					else
-						alert(JSON.stringify(ev));
-				});
 				list.appendChild(pill);
 			});
 			cell.appendChild(list);
 		}
-		cell.addEventListener('click', () => this.openDetail({ day: d, month: m + 1, year: y }));
+		cell.addEventListener('click', () => this.openDetail?.({ day: d, month: m + 1, year: y, events: dayEvents }));
 		return cell;
 	}
 

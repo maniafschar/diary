@@ -311,7 +311,12 @@ hashtags {
 
 			var viewCalendar = document.querySelector('view-calendar');
 			viewCalendar.reset();
-			viewCalendar.setOpenDetail(event => event.id ? listener.updateViewImage(event.id) : api.user?.id ? dialog.add(event) : null);
+			viewCalendar.setOpenDetail(day => {
+				if (day.events.length)
+					listener.statisticDetail({ detail: { dateLabel: `${day.day}.${day.month}.${day.year}`, ids: day.events.map(event => event.index) } });
+				else if (api.user?.id)
+					dialog.add({ day: day.day, month: day.month, year: day.year });
+			});
 			var map = [];
 			var rating = [];
 			var text = [];
@@ -348,7 +353,12 @@ hashtags {
 						ids = [];
 					}
 				}
-				viewCalendar.addEvent(events[i].date.substring(0, 10), { id: events[i].id, name: events[i].note || 'Kein Text', rating: events[i].rating });
+				viewCalendar.addEvent(events[i].date.substring(0, 10), {
+					index: i,
+					name: [events[i].date.substring(11, 16), events[i].location.name].filter(Boolean).join(' '),
+					rating: events[i].rating || 0,
+					ratingCount: events[i].ratingCount || 0
+				});
 				if (events[i].location.latitude)
 					map.push({
 						id: events[i].id,
@@ -487,7 +497,11 @@ input-rating {
 	right: 0.5em;
 	font-size: 0.8em;
 }`;
-		e.appendChild(document.createElement('word')).innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
+		var heading = e.appendChild(document.createElement('word'));
+		if (event.detail.dateLabel)
+			heading.textContent = event.detail.dateLabel;
+		else
+			heading.innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
 			var l = list[event.detail.ids[i]];
