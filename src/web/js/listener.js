@@ -357,7 +357,7 @@ hashtags {
 				}
 				viewCalendar.addEvent(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(), {
 					index: i,
-					name: [date.getHours() + ':' + date.getMinutes(), events[i].location.name].filter(Boolean).join(' '),
+					name: [date.getHours() + ':' + date.getMinutes(), events[i].location.name, events[i].note ? ', ' + events[i].note.substring(0, Math.min(events[i].note.length, 30)) : ''].filter(Boolean).join(' ').trim(),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
