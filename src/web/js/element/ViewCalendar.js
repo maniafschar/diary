@@ -404,7 +404,7 @@ class ViewCalendar extends HTMLElement {
 				const average = dayEvents.reduce((sum, event) => sum + (event.ratingCount ? event.rating : 0), 0) / ratingCount;
 				const ratio = Math.max(0, Math.min(1, average / 100));
 				const mouth = ratio < 0.3333 ? 'M7 17 Q12 12 17 17' : ratio < 0.6666 ? 'M7 16 H17' : 'M7 15 Q12 20 17 15';
-				const color = ratio < 0.3333 ? 'bronze' : ratio < 0.6666 ? 'silver' : 'gold';
+				const color = ratio < 0.3333 ? '#CD7F32' : ratio < 0.6666 ? '#C0C0C0' : '#FFD700';
 				const badge = numEl.appendChild(document.createElement('span'));
 				badge.className = 'day-rating';
 				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1 })} Sterne`;
