@@ -357,7 +357,7 @@ hashtags {
 				}
 				viewCalendar.addEvent(date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2), {
 					index: i,
-					name: [date.getHours() + ':' + date.getMinutes(), events[i].location.name, events[i].note ? ', ' + events[i].note.substring(0, Math.min(events[i].note.length, 30)) : ''].filter(Boolean).join(' ').trim(),
+					name: date.getHours() + ':' + date.getMinutes() + ' ' + events[i].location.name + (events[i].note ? ', ' + events[i].note.substring(0, Math.min(events[i].note.length, 30)).trim() : ''),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
