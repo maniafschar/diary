@@ -328,7 +328,8 @@ hashtags {
 				return address;
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
-				var date = new Date(Date.UTC(new Date(events[i].date.replace('+00:00', ''))));
+				var date = new Date(events[i].date.replace('+00:00', ''));
+				date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
 				var place = listener.placeName(events[i].location);
@@ -356,7 +357,7 @@ hashtags {
 				}
 				viewCalendar.addEvent(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(), {
 					index: i,
-					name: [date.getHour() + ':' + date.getMinute(), events[i].location.name].filter(Boolean).join(' '),
+					name: [date.getHours() + ':' + date.getMinutes(), events[i].location.name].filter(Boolean).join(' '),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
