@@ -328,7 +328,7 @@ hashtags {
 				return address;
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
-				var date = ui.formatTime(new Date(events[i].date.replace('+00:00', '')));
+				var date = new Date(Date.UTC(new Date(events[i].date.replace('+00:00', ''))));
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
 				var place = listener.placeName(events[i].location);
@@ -347,23 +347,23 @@ hashtags {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
-					if (i == 0 || ui.formatTime(new Date(events[i - 1].date.replace('+00:00', ''))).split(' ')[1] != date.split(' ')[1]) {
-						rating.push({ ids: ids, date: new Date(Date.UTC(new Date(events[i].date.replace('+00:00', '')))), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
+					if (i == 0 || new Date(events[i - 1].date.replace('+00:00', '')).toISOString().substring(0, 10) != new Date(events[i].date.replace('+00:00', '')).toISOString().substring(0, 10)) {
+						rating.push({ ids: ids, date: date, rating: parseInt(ratingSum / ratingCountSum + 0.5) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
 					}
 				}
-				viewCalendar.addEvent(date.substring(0, 10), {
+				viewCalendar.addEvent(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(), {
 					index: i,
-					name: [date.split(' ')[2], events[i].location.name].filter(Boolean).join(' '),
+					name: [date.getHour() + ':' + date.getMinute(), events[i].location.name].filter(Boolean).join(' '),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
 				if (events[i].location.latitude)
 					map.push({
 						id: events[i].id,
-						date: date,
+						date: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))),
 						name: events[i].location.name,
 						address: formatAddress(events[i].location.address),
 						latitude: events[i].location.latitude,
