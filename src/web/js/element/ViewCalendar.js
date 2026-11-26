@@ -405,13 +405,13 @@ class ViewCalendar extends HTMLElement {
 			if (ratingCount) {
 				const average = dayEvents.reduce((sum, event) => sum + (event.ratingCount ? event.rating : 0), 0) / ratingCount;
 				const ratio = Math.max(0, Math.min(1, average / 100));
-				const mouth = ratio < 0.4 ? 'M7 18 Q12 13 17 18' : ratio < 0.6 ? 'M7 17 H17' : 'M7 16 Q12 21 17 16';
+				const mouth = ratio < 0.3333 ? 'M7 17 Q12 12 17 17' : ratio < 0.6666 ? 'M7 16 H17' : 'M7 15 Q12 20 17 15';
+				const color = ratio < 0.3333 ? 'bronze' : ratio < 0.6666 ? 'silver' : 'gold';
 				const badge = numEl.appendChild(document.createElement('span'));
 				badge.className = 'day-rating';
-				badge.style.background = `rgba(${(8 + ratio * 132) * 2.55}, 170, 79, 0.8)`;
 				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1 })} Sterne`;
 				badge.setAttribute('aria-label', badge.title);
-				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="7" r="1" fill="black"/><circle cx="15.5" cy="7" r="1" fill="black"/><path d="${mouth}" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="1" fill="${color}"/><circle cx="15.5" cy="8" r="1" fill="${color}"/><path d="${mouth}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/></svg>`;
 			}
 			const list = document.createElement('div');
 			list.className = 'event-list';
