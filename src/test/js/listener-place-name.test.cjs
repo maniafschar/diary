@@ -66,8 +66,8 @@ test('the statistics popup highlights all supplied forms in each entry', () => {
 	const originalCreateElement = document.createElement;
 	document.createElement = createElement;
 	document.querySelector = () => ({ list: [
-		{ id: 10, date: '2026-01-01', note: 'Alten.', eventImages: [] },
-		{ id: 11, date: '2026-01-02', note: 'alter.', eventImages: [] }
+		{ id: 10, date: '2026-01-01', location: { name: '' }, note: 'Alten.', eventImages: [] },
+		{ id: 11, date: '2026-01-02', location: { name: '' }, note: 'alter.', eventImages: [] }
 	] });
 	let popup;
 	document.dispatchEvent = event => { popup = event; };
@@ -75,10 +75,37 @@ test('the statistics popup highlights all supplied forms in each entry', () => {
 		moduleExports.listener.statisticDetail({
 			detail: { text: 'Alten', count: 2, ids: [0, 1], matches: ['Alten', 'alter'] }
 		});
+
 		const list = popup.detail.body.children.find(child => child.tagName === 'list');
 		const notes = list.children.filter(child => child.tagName === 'value').map(value => value.children[0]);
 		assert.deepEqual(notes.map(note => note.children.find(child => child.tagName === 'b').textContent),
 			['Alten', 'alter']);
+	} finally {
+		document.createElement = originalCreateElement;
+	}
+});
+
+test('the day popup uses its date as heading and lists all supplied entries without highlighting it', () => {
+	const createElement = tagName => ({
+		tagName, children: [], classList: { add() {} },
+		appendChild(child) { this.children.push(child); return child; },
+		setAttribute() {}, addEventListener() {}
+	});
+	const originalCreateElement = document.createElement;
+	document.createElement = createElement;
+	document.querySelector = () => ({ list: [
+		{ id: 10, date: '2026-01-02', location: { name: 'Berlin' }, note: '2.1.2026', eventImages: [] },
+		{ id: 11, date: '2026-01-02', location: { name: 'Hamburg' }, note: 'Unbewertet', eventImages: [] }
+	] });
+	let popup;
+	document.dispatchEvent = event => { popup = event; };
+	try {
+		moduleExports.listener.statisticDetail({ detail: { dateLabel: '2.1.2026', ids: [0, 1] } });
+		const body = popup.detail.body;
+		assert.equal(body.children.find(child => child.tagName === 'word').textContent, '2.1.2026');
+		const list = body.children.find(child => child.tagName === 'list');
+		const notes = list.children.filter(child => child.tagName === 'value').map(value => value.children[0]);
+		assert.deepEqual(notes.map(note => note.textContent), ['2.1.2026', 'Unbewertet']);
 	} finally {
 		document.createElement = originalCreateElement;
 	}
