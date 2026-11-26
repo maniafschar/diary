@@ -328,6 +328,7 @@ hashtags {
 				return address;
 			};
 			for (var i = events.length - 1; i >= 0; i--) {
+				var date = ui.formatTime(new Date(events[i].date.replace('+00:00', '')));
 				if (events[i].note)
 					text.push({ id: i, text: events[i].note });
 				var place = listener.placeName(events[i].location);
@@ -346,23 +347,23 @@ hashtags {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
-					if (i == 0 || events[i - 1].date.substring(0, 10) != events[i].date.substring(0, 10)) {
-						rating.push({ ids: ids, date: new Date(events[i].date.substring(0, 10)), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
+					if (i == 0 || ui.formatTime(new Date(events[i - 1].date.replace('+00:00', ''))).substring(0, 10) != date.substring(0, 10)) {
+						rating.push({ ids: ids, date: new Date(date.substring(0, 10)), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
 					}
 				}
-				viewCalendar.addEvent(events[i].date.substring(0, 10), {
+				viewCalendar.addEvent(date.substring(0, 10), {
 					index: i,
-					name: [events[i].date.substring(11, 16), events[i].location.name].filter(Boolean).join(' '),
+					name: [date.substring(11, 16), events[i].location.name].filter(Boolean).join(' '),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
 				if (events[i].location.latitude)
 					map.push({
 						id: events[i].id,
-						date: ui.formatTime(new Date(events[i].date.replace('+00:00', ''))),
+						date: date,
 						name: events[i].location.name,
 						address: formatAddress(events[i].location.address),
 						latitude: events[i].location.latitude,
