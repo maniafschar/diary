@@ -153,7 +153,7 @@ places.open label::before {
 }
 places label {
 	text-align: left;
-	margin: 0.5em;
+	margin: 0.1em 0.5em;
 	display: grid;
 	grid-template-rows: 0fr;
 	transition: grid-template-rows 0.4s ease-out;
