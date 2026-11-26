@@ -148,8 +148,6 @@ class ViewCalendar extends HTMLElement {
 	margin-left: auto;
 	width: 1.8em;
 	height: 1.8em;
-	border-radius: 50%;
-	padding: 0.15em;
 }
 
 .day-rating svg { display: block; width: 100%; height: 100%; }
@@ -411,7 +409,7 @@ class ViewCalendar extends HTMLElement {
 				badge.className = 'day-rating';
 				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1 })} Sterne`;
 				badge.setAttribute('aria-label', badge.title);
-				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="1" fill="${color}"/><circle cx="15.5" cy="8" r="1" fill="${color}"/><path d="${mouth}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="2" fill="${color}"/><circle cx="15.5" cy="8" r="2" fill="${color}"/><path d="${mouth}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/></svg>`;
 			}
 			const list = document.createElement('div');
 			list.className = 'event-list';
