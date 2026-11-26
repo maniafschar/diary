@@ -426,7 +426,7 @@ class ViewCalendar extends HTMLElement {
 					this.openDetail({ day: d, month: m + 1, year: y, events: dayEvents });
 			});
 		}
-		cell.addEventListener('click', () => this.openDetail?.());
+		cell.addEventListener('click', () => this.openDetail?.({ day: d, month: m + 1, year: y }));
 		return cell;
 	}
 
