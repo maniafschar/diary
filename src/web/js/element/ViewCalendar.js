@@ -407,7 +407,7 @@ class ViewCalendar extends HTMLElement {
 				const color = ratio < 0.3333 ? '#CD7F32' : ratio < 0.6666 ? '#C0C0C0' : '#FFD700';
 				const badge = numEl.appendChild(document.createElement('span'));
 				badge.className = 'day-rating';
-				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1 })} Sterne`;
+				badge.title = `Ø ${(average / 20).toLocaleString('de-DE', { maximumFractionDigits: 1, minimumFractionDigits: 1 })} Sterne`;
 				badge.setAttribute('aria-label', badge.title);
 				badge.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="2" fill="${color}"/><circle cx="15.5" cy="8" r="2" fill="${color}"/><path d="${mouth}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/></svg>`;
 			}
@@ -420,8 +420,8 @@ class ViewCalendar extends HTMLElement {
 				list.appendChild(pill);
 			});
 			cell.appendChild(list);
+			list.addEventListener('click', () => this.openDetail?.({ day: d, month: m + 1, year: y, events: dayEvents }));
 		}
-		cell.addEventListener('click', () => this.openDetail?.({ day: d, month: m + 1, year: y, events: dayEvents }));
 		return cell;
 	}
 
