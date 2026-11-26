@@ -312,10 +312,10 @@ hashtags {
 			var viewCalendar = document.querySelector('view-calendar');
 			viewCalendar.reset();
 			viewCalendar.setOpenDetail(day => {
-				if (day.events.length)
+				if (day.events?.length)
 					listener.statisticDetail({ detail: { dateLabel: `${day.day}.${day.month}.${day.year}`, ids: day.events.map(event => event.index) } });
 				else if (api.user?.id)
-					dialog.add({ day: day.day, month: day.month, year: day.year });
+					dialog.add(day);
 			});
 			var map = [];
 			var rating = [];
