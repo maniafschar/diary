@@ -420,8 +420,13 @@ class ViewCalendar extends HTMLElement {
 				list.appendChild(pill);
 			});
 			cell.appendChild(list);
-			list.addEventListener('click', () => this.openDetail?.({ day: d, month: m + 1, year: y, events: dayEvents }));
+			list.addEventListener('click', event => {
+				event.stopPropagation();
+				if (this.openDetail)
+					this.openDetail({ day: d, month: m + 1, year: y, events: dayEvents });
+			});
 		}
+		cell.addEventListener('click', () => this.openDetail());
 		return cell;
 	}
 
