@@ -347,8 +347,8 @@ hashtags {
 					ratingSum += events[i].rating;
 					ratingCountSum += events[i].ratingCount;
 					ids.push(i);
-					if (i == 0 || ui.formatTime(new Date(events[i - 1].date.replace('+00:00', ''))).substring(0, 10) != date.substring(0, 10)) {
-						rating.push({ ids: ids, date: new Date(date.substring(0, 10)), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
+					if (i == 0 || ui.formatTime(new Date(events[i - 1].date.replace('+00:00', ''))).split(' ')[1] != date.split(' ')[1]) {
+						rating.push({ ids: ids, date: new Date(Date.UTC(new Date(events[i].date.replace('+00:00', '')))), rating: parseInt(ratingSum / ratingCountSum + 0.5) });
 						ratingSum = 0;
 						ratingCountSum = 0;
 						ids = [];
@@ -356,7 +356,7 @@ hashtags {
 				}
 				viewCalendar.addEvent(date.substring(0, 10), {
 					index: i,
-					name: [date.substring(11, 16), events[i].location.name].filter(Boolean).join(' '),
+					name: [date.split(' ')[2], events[i].location.name].filter(Boolean).join(' '),
 					rating: events[i].rating || 0,
 					ratingCount: events[i].ratingCount || 0
 				});
