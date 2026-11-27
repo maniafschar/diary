@@ -245,12 +245,6 @@ img.speak {
 address {
 	cursor: pointer;
 	font-style: normal;
-}
-hashtags {
-	position: relative;
-	display: block;
-	padding-top: 1em;
-	font-size: 0.8em;
 }`);
 	}
 
