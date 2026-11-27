@@ -206,9 +206,6 @@ ${hashtagStyle}
 hashtags hashtag {
 	cursor: pointer;
 }
-hashtags hashtag.pressed  {
-	color: white;
-}
 results {
 	display: block;
 	overflow-y: auto;
