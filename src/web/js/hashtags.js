@@ -16,8 +16,8 @@ hashtags hashtag {
 	position: relative;
 	display: inline-block;
 	border-radius: 2em;
-	background: rgba(0, 150, 255, 0.1);
-	padding: 0.25em 0.5em;
+	background: rgba(50, 150, 255, 0.1);
+	padding: 0.25em 0.75em;
 	font-family: var(--font-family);
 	margin: 0 0.5em;
 	color: rgba(0, 0, 0, 0.8);
