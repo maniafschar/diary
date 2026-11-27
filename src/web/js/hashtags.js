@@ -10,7 +10,6 @@ hashtags {
 	padding-top: 0.5em;
 	white-space: nowrap;
 	text-align: center;
-	height: 2em;
 }
 hashtags hashtag {
 	position: relative;
