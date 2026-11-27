@@ -53,6 +53,8 @@ public class LocationApi extends ApplicationApi {
 			location.setContact(this.authorizationService.requireContact(contactId, clientId));
 		else {
 			final Contact contact = this.repository.one(Location.class, location.getId()).getContact();
+			if (contact == null)
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 			if (!this.authorizationService.requireContact(contactId, clientId).getId().equals(contact.getId()))
 				throw new IllegalArgumentException(
 						"Access to client " + clientId + " for user " + contactId + " " + contact.getName()

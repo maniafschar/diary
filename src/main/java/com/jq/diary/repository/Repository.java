@@ -130,7 +130,7 @@ public class Repository {
 			return null;
 		}
 
-		private static void delete(final BaseEntity entity) {
+		public static void delete(final BaseEntity entity) {
 			final Field[] fields = entity.getClass().getDeclaredFields();
 			for (final Field field : fields) {
 				if (RESOLVABLE_COLUMNS.matcher(field.getName()).matches()) {
