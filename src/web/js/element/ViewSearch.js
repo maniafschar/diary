@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
-import { splitHashtags, renderHashtagButtons } from '../hashtags';
+import { splitHashtags, renderHashtagButtons, hashtagButtonsMarkup, hashtagButtonStyle } from '../hashtags';
 
 export { ViewSearch };
 
@@ -71,6 +71,10 @@ td.column2 note {
 	padding: 0.5em 0.5em 0 0.5em;
 	white-space: pre-line;
 	word-break: break-word;
+}
+${hashtagButtonStyle}
+td.column2 hashtag-buttons {
+	margin-left: -0.5em;
 }
 td.column2 images {
 	max-height: initial;
@@ -201,34 +205,7 @@ status {
 	opacity: 0.7;
 	font-size: 0.9em;
 }
-hashtag-buttons {
-	display: flex;
-	overflow-y: auto;
-	width: 100%;
-	padding-top: 0.5em;
-	margin: 0 0.5em;
-}
-hashtag-buttons button {
-	border-radius: 2em;
-	border: none;
-	background: var(--background-clickable);
-	padding: 0.5em 0.75em;
-	outline: none;
-	cursor: pointer;
-	font-family: var(--font-family);
-	margin: 0 0.5em;
-	color: white;
-	font-size: 0.8em;
-	transition: var(--transition-clickable);
-}
-hashtag-buttons button.pressed {
-	background: var(--background-clickable-highlight);
-}
-hashtag-buttons button .count {
-	font-size: 0.8em;
-	opacity: 0.6;
-	margin-left: 0.35em;
-}
+${hashtagButtonStyle}
 results {
 	display: block;
 	overflow-y: auto;
@@ -438,12 +415,7 @@ results {
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
 		if (event.hashtags) {
-			var tags = splitHashtags(event.hashtags).map(tag => {
-				var label = '#' + this.escapeHtml(tag);
-				return this.selectedHashtags.some(selected => selected.toLocaleLowerCase() == tag.toLocaleLowerCase())
-					? '<mark>' + label + '</mark>' : label;
-			});
-			text += '<note>' + tags.join(' ') + '</note>';
+			text += '<note>' + hashtagButtonsMarkup(splitHashtags(event.hashtags), this.selectedHashtags) + '</note>';
 		}
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
