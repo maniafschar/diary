@@ -36,8 +36,8 @@ class action {
 			action.registerPushDevice();
 		}, { once: true });
 		if (document.location.search) {
-			api.access = new URL(window.location.href).searchParams?.get('access');
-			if (api.access)
+			api.tempAccessToken = new URL(window.location.href).searchParams?.get('access');
+			if (api.tempAccessToken)
 				document.dispatchEvent(new CustomEvent('event'));
 			else {
 				var popup = document.createElement('div');
@@ -281,14 +281,14 @@ class action {
 	}
 
 	static logoff(access) {
-		if (api.access) {
+		if (api.tempAccessToken) {
 			api.authentication.getEmail(email => {
 				document.dispatchEvent(new CustomEvent('popup', {
 					detail: {
 						body: '<div style="text-align: center;">Möchtest Du Dein eigenes Tagebuch erstellen?<br/><br/><button onclick="action.prefillRegistraation(&quot;' + email + '&quot;)">Ja</button></div>'
 					}
 				}));
-				api.access = null;
+				api.tempAccessToken = null;
 				action.logoff(true);
 			});
 			return;

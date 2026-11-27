@@ -253,7 +253,7 @@ address {
 			document.querySelector('element.login input').value = '';
 			document.querySelector('element.login input-password').reset();
 			document.querySelector('element.login input-checkbox[name="login"]').setAttribute('checked', 'false');
-			if (api.access && !events.length)
+			if (api.tempAccessToken && !events.length)
 				return;
 			if (api.user?.id)
 				document.querySelector('body navigation').classList.add('loggedIn');
@@ -392,7 +392,7 @@ address {
 			document.querySelectorAll('body navigation button[data-type="loggedIn"]').forEach(e => e.classList.add('visible'));
 			document.querySelectorAll('body navigation button[data-type="loggedInAuthor"]').forEach(e => api.user?.admin ? e.classList.add('visible') : e.classList.remove('visible'));
 			document.querySelectorAll('body navigation button[data-type="loggedOut"]').forEach(e => e.classList.remove('visible'));
-			if (api.access)
+			if (api.tempAccessToken)
 				api.authentication.getClient(client => clientName.innerText = client.name);
 			else {
 				var viewImage = document.querySelector("view-image");
@@ -400,7 +400,7 @@ address {
 					setTimeout(() => listener.updateViewImage(viewImage.list[viewImage.index].index), 100);
 			}
 		});
-		if (!api.access && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
+		if (!api.tempAccessToken && !document.querySelector('user view-table').table().querySelector('tbody')?.childElementCount)
 			listener.updateContacts();
 		else
 			api.activateProgressbar();

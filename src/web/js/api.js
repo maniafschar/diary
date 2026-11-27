@@ -82,14 +82,14 @@ class api {
 
 		getClient(success) {
 			api.ajax({
-				url: 'authentication/client/' + api.access,
+				url: 'authentication/client/' + api.tempAccessToken,
 				success: success
 			});
 		},
 
 		getEmail(success) {
 			api.ajax({
-				url: 'authentication/email/' + api.access,
+				url: 'authentication/email/' + api.tempAccessToken,
 				success: success
 			});
 		},
@@ -167,10 +167,10 @@ class api {
 		},
 
 		getList(success) {
-			if (api.access)
+			if (api.tempAccessToken)
 				api.user = { id: 0 };
 			api.ajax({
-				url: 'event/list' + (api.access ? '/' + api.access : ''),
+				url: 'event/list' + (api.tempAccessToken ? '/' + api.tempAccessToken : ''),
 				success: success
 			});
 		},
@@ -495,7 +495,7 @@ class api {
 	static logoff() {
 		api.user = null;
 		api.clients = {};
-		api.access = null;
+		api.tempAccessToken = null;
 	}
 
 	static ajax(param) {
