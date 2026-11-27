@@ -1,5 +1,7 @@
 package com.jq.diary.service;
 
+import com.jq.diary.entity.Ticket;
+
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 class EmailService {
 	@Autowired
 	private MailCreateor mailCreateor;
+
+	@Autowired
+	private AdminService adminService;
 
 	@Value("${app.mail.host}")
 	private String emailHost;
@@ -39,6 +44,7 @@ class EmailService {
 		email.setSubject("Diary Cafe: Deine Registrierung");
 		email.setMsg(text);
 		email.send();
+		this.adminService.createTicket(new Ticket("Email to: " + address + "\ntext: " + text));
 	}
 
 	@Component
