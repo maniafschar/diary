@@ -48,7 +48,8 @@ public class ContactService {
 
 	@Transactional
 	public void delete(final Contact contact) {
-		if (BigInteger.ONE.equals(contact.getId()) || "aaron@diary.cafe".equalsIgnoreCase(contact.getEmail()))
+		if (BigInteger.ONE.equals(contact.getId()) || "aaron@diary.cafe".equalsIgnoreCase(contact.getEmail())
+				|| "mani.afschar@jq-consulting.de".equalsIgnoreCase(contact.getEmail()))
 			return;
 
 		final BigInteger id = contact.getId();
