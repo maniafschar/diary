@@ -28,7 +28,7 @@ class action {
 	static pushRegistrationStarted = false;
 	static pushToken;
 	static init() {
-		action.logoff();
+		action.logoff(true);
 		action.resize();
 		listener.init();
 		document.addEventListener('deviceready', () => {
