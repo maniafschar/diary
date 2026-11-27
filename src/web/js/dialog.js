@@ -1,6 +1,7 @@
 import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
+import { listener } from "./listener";
 import { splitHashtags, renderHashtags, hashtagStyle } from "./hashtags";
 
 export { dialog };
@@ -633,13 +634,17 @@ input-rating {
 			heading.innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
 		var items = e.appendChild(document.createElement('list'));
 		for (var i = 0; i < event.detail.ids.length; i++) {
-			var l = list[event.detail.ids[i]];
+			let l = list[event.detail.ids[i]];
 			var label = items.appendChild(document.createElement('label'));
 			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', ''))) + ' ' + l.location.name;
 			var value = items.appendChild(document.createElement('value'));
 			var note = value.appendChild(document.createElement('note'));
-			listener.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
-			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
+			dialog.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
+			value.addEventListener('click', event => {
+				event.stopPropagation();
+				listener.updateViewImage(l.id);
+				document.dispatchEvent(new CustomEvent('popup'));
+			});
 			if (l.rating) {
 				var rating = value.appendChild(document.createElement('input-rating'));
 				rating.classList.add('line');
@@ -654,6 +659,27 @@ input-rating {
 			document.dispatchEvent(new CustomEvent('popup'));
 		});
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
+	}
+
+	static highlightStatisticNote(element, text, matches) {
+		if (!matches.length) {
+			element.textContent = text;
+			return;
+		}
+		var alternatives = matches.filter(Boolean).sort((a, b) => b.length - a.length)
+			.map(match => match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+		if (!alternatives.length) {
+			element.textContent = text;
+			return;
+		}
+		var pattern = new RegExp('(?<!\\p{L})(?:' + alternatives.join('|') + ')(?!\\p{L})', 'giu');
+		var last = 0;
+		for (const match of text.matchAll(pattern)) {
+			element.appendChild(document.createTextNode(text.slice(last, match.index)));
+			element.appendChild(document.createElement('b')).textContent = match[0];
+			last = match.index + match[0].length;
+		}
+		element.appendChild(document.createTextNode(text.slice(last)));
 	}
 
 	static openTerms() {
