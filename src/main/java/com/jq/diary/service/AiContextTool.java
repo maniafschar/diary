@@ -11,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -37,11 +39,11 @@ public class AiContextTool {
 	public String webSearch(@ToolParam(description = "Suchanfrage") final String query) {
 		if (query == null || query.isBlank())
 			return "Leere Suchanfrage.";
-		String response = this
+		final String response = this
 				.get("https://html.duckduckgo.com/html/?q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
 		if (response.contains("Please email the following code to:")) {
-        	Pattern pattern = Pattern.compile("to:\\s*(?<email>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})\\s*Code:\\s*(?<code>\\w+)");
-        	Matcher matcher = pattern.matcher(text);
+        	final Pattern pattern = Pattern.compile("to:\\s*(?<email>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})\\s*Code:\\s*(?<code>\\w+)");
+        	final Matcher matcher = pattern.matcher(response);
 	        if (matcher.find())
 				emailService.send(matcher.group("email"), matcher.group("code"));
 		}
