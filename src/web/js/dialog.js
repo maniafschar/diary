@@ -1,7 +1,7 @@
 import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
-import { splitHashtags, renderHashtagButtons, hashtagButtonStyle } from "./hashtags";
+import { splitHashtags, renderHashtags, hashtagStyle } from "./hashtags";
 
 export { dialog };
 
@@ -398,11 +398,11 @@ element {
 	static hashtagField(element, value) {
 		var input = dialog.createField(element, 'Hashtags (kommagetrennt)', 'hashtags', 'input', value);
 		input.placeholder = 'z. B. freunde, glücksmoment';
-		var buttons = input.parentElement.appendChild(document.createElement('hashtag-buttons'));
+		var buttons = input.parentElement.appendChild(document.createElement('hashtags'));
 		buttons.style.marginTop = '0.5em';
-		input.parentElement.appendChild(document.createElement('style')).textContent = hashtagButtonStyle;
+		input.parentElement.appendChild(document.createElement('style')).textContent = hashtagStyle;
 		var tags = [];
-		var render = () => renderHashtagButtons(buttons, tags, splitHashtags(input.value), tag => {
+		var render = () => renderHashtags(buttons, tags, splitHashtags(input.value), tag => {
 			var selected = splitHashtags(input.value);
 			var found = selected.some(item => item.toLocaleLowerCase() == tag.toLocaleLowerCase());
 			input.value = (found ? selected.filter(item => item.toLocaleLowerCase() != tag.toLocaleLowerCase()) : [...selected, tag]).join(', ');
