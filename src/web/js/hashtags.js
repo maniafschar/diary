@@ -2,26 +2,25 @@ export { splitHashtags, renderHashtags, hashtagsMarkup, hashtagStyle };
 
 const hashtagStyle = `
 hashtags {
+	position: relative;
 	display: block;
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
 	padding-top: 0.5em;
-	margin: 0 0.5em;
 	white-space: nowrap;
 	text-align: center;
+	height: 2em;
 }
 hashtags hashtag {
+	position: relative;
+	display: inline-block;
 	border-radius: 2em;
-	border: none;
 	background: var(--background-clickable);
 	padding: 0.5em 0.75em;
-	outline: none;
-	cursor: pointer;
 	font-family: var(--font-family);
 	margin: 0 0.5em;
 	color: white;
-	font-size: 0.8em;
 	transition: var(--transition-clickable);
 }
 hashtags hashtag.pressed {
