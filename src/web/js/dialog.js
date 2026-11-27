@@ -681,25 +681,4 @@ input-rating {
 		}
 		element.appendChild(document.createTextNode(text.slice(last)));
 	}
-
-	static openTerms() {
-		var imprint = document.querySelector('imprint');
-		if (!imprint)
-			return;
-		var showTerms = () => {
-			var panel = imprint.querySelector('.imprint-panel');
-			var toggle = panel?.querySelector('toggle');
-			if (!panel || !toggle)
-				return;
-			toggle.nextElementSibling.addEventListener('transitionend', () => panel.scrollTo({ top: toggle.offsetTop, behavior: 'smooth' }), { once: true });
-			toggle.classList.add('open');
-			toggle.nextElementSibling.style.gridTemplateRows = '1fr';
-		};
-		if (imprint.classList.contains('open'))
-			showTerms();
-		else {
-			imprint.querySelector('.imprint-panel').addEventListener('transitionend', () => showTerms(), { once: true });
-			dialog.openImprint();
-		}
-	}
 }
