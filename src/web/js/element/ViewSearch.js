@@ -73,9 +73,6 @@ td.column2 note {
 	word-break: break-word;
 }
 ${hashtagStyle}
-td.column2 hashtags {
-	margin-left: -0.5em;
-}
 td.column2 images {
 	max-height: initial;
 	text-align: center;
@@ -206,6 +203,12 @@ status {
 	font-size: 0.9em;
 }
 ${hashtagStyle}
+hashtags hashtag {
+	cursor: pointer;
+}
+hashtags hashtag.pressed  {
+	color: white;
+}
 results {
 	display: block;
 	overflow-y: auto;
