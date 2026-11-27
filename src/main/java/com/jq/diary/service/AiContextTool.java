@@ -50,6 +50,7 @@ public class AiContextTool {
 				} catch (Exception ex) {
 					this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
 				}
+			}
 		}
 		return response;
 	}
