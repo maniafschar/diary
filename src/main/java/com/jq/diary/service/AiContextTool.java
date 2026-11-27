@@ -44,8 +44,12 @@ public class AiContextTool {
 		if (response.contains("Please email the following code to:")) {
         	final Pattern pattern = Pattern.compile("to:\\s*(?<email>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})\\s*Code:\\s*(?<code>\\w+)");
         	final Matcher matcher = pattern.matcher(response);
-	        if (matcher.find())
-				emailService.send(matcher.group("email"), matcher.group("code"));
+	        if (matcher.find()) {
+				try {
+					this.emailService.send(matcher.group("email"), matcher.group("code"));
+				} catch (Exception ex) {
+					this.adminService.createTicket(new Ticket(Ticket.ERROR + Utilities.stackTraceToString(ex)));
+				}
 		}
 		return response;
 	}
