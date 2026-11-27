@@ -264,6 +264,8 @@ ${dialog.stylePictures}`;
 		var button = dialog.createButton(popup, 'action.contactPatch()').querySelector('button');
 		if (!contact.verified)
 			button.innerText = 'Email senden';
+		if (api.user.admin && contact.id == api.user.id)
+			dialog.createButton(popup, 'action.contactDelete()').innerText = 'Profil löschen';
 		document.dispatchEvent(new CustomEvent('popup', { detail: { body: popup } }));
 	}
 
