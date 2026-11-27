@@ -2,7 +2,7 @@ import { api } from "./api";
 import { InputDate } from "./element/InputDate";
 import { ui } from "./ui";
 import { listener } from "./listener";
-import { splitHashtags, renderHashtags, hashtagStyle } from "./hashtags";
+import { splitHashtags, renderHashtags, hashtagsMarkup, hashtagStyle } from "./hashtags";
 
 export { dialog };
 
@@ -626,7 +626,8 @@ input-rating {
 	position: absolute;
 	right: 0.5em;
 	font-size: 0.8em;
-}`;
+}
+${hashtagStyle}`;
 		var heading = e.appendChild(document.createElement('word'));
 		if (event.detail.dateLabel)
 			heading.textContent = event.detail.dateLabel;
@@ -640,6 +641,9 @@ input-rating {
 			var value = items.appendChild(document.createElement('value'));
 			var note = value.appendChild(document.createElement('note'));
 			dialog.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
+			var hashtags = splitHashtags(l.hashtags);
+			if (hashtags.length)
+				value.insertAdjacentHTML('beforeend', hashtagsMarkup(hashtags));
 			value.addEventListener('click', event => {
 				event.stopPropagation();
 				listener.updateViewImage(l.id);

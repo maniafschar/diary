@@ -282,6 +282,9 @@ address {
 						var date = new Date(list[i].date.replace('+00:00', ''));
 						var label = ui.formatTime(date) + ' ' + list[i].location.name;
 						var text = list[i].note ? '<note>' + list[i].note.replace(/\n/g, ' ').trim() + '</note>' : '', textSort = text;
+						var hashtags = splitHashtags(list[i].hashtags);
+						if (hashtags.length)
+							text += hashtagsMarkup(hashtags);
 						var images = '';
 						if (list[i].eventImages) {
 							for (var i2 = 0; i2 < list[i].eventImages.length; i2++)
@@ -530,7 +533,7 @@ td.column2 images img {
 	padding: 0 0.25em;
 	border-radius: 0.5em;
 }`;
-		document.querySelector('event view-table').setStyle(style);
+		document.querySelector('event view-table').setStyle(style + '\n' + hashtagStyle);
 		document.querySelector('user view-table').setStyle(style + '\ntr.pending td.column1{color:grey;}\ntd.column2{padding:0.5em;}');
 	}
 }
