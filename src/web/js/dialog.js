@@ -547,25 +547,6 @@ div.toggle>div {
 		}, { once: true });
 	}
 
-	static openImprint() {
-		var e = document.querySelector('imprint');
-		if (!e)
-			return;
-		if (e.classList.contains('open')) {
-			e.classList.remove('open');
-			return;
-		}
-		e.classList.add('open');
-		ui.freeze(true);
-		if (!e.onclick) {
-			e.onclick = event => {
-				if (event.target.nodeName != 'TOGGLE') {
-					e.classList.remove('open');
-					ui.freeze(false);
-				}
-			};
-		}
-	}
 	static eventList(event) {
 		var list = document.querySelector('event view-table').list;
 		var e = document.createElement('div');
