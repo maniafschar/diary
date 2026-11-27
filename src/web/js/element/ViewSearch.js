@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import { api } from '../api';
 import { FuzzyMatcher } from '../FuzzyMatcher';
 import { ui } from '../ui';
-import { splitHashtags, renderHashtagButtons, hashtagButtonsMarkup, hashtagButtonStyle } from '../hashtags';
+import { splitHashtags, renderHashtags, hashtagsMarkup, hashtagStyle } from '../hashtags';
 
 export { ViewSearch };
 
@@ -72,7 +72,7 @@ td.column2 note {
 	white-space: pre-line;
 	word-break: break-word;
 }
-${hashtagButtonStyle}
+${hashtagStyle}
 td.column2 hashtag-buttons {
 	margin-left: -0.5em;
 }
@@ -205,7 +205,7 @@ status {
 	opacity: 0.7;
 	font-size: 0.9em;
 }
-${hashtagButtonStyle}
+${hashtagStyle}
 results {
 	display: block;
 	overflow-y: auto;
@@ -267,7 +267,7 @@ results {
 				counts.set(tag, (counts.get(tag) || 0) + 1);
 			});
 		});
-		renderHashtagButtons(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, (tag, button) => {
+		renderHashtags(this.hashtagButtons, this.hashtags || [], this.selectedHashtags, (tag, button) => {
 			this.selectedHashtags = this.selectedHashtags.includes(tag)
 				? this.selectedHashtags.filter(item => item != tag) : [...this.selectedHashtags, tag];
 			button.classList.toggle('pressed', this.selectedHashtags.some(item => item.toLocaleLowerCase() == tag.toLocaleLowerCase()));
@@ -415,7 +415,7 @@ results {
 		if (event.note)
 			text += '<note>' + this.escapeHtml(this.snippet(event.note, this.terms)) + '</note>';
 		if (event.hashtags) {
-			text += '<note>' + hashtagButtonsMarkup(splitHashtags(event.hashtags), this.selectedHashtags) + '</note>';
+			text += '<note>' + hashtagsMarkup(splitHashtags(event.hashtags), this.selectedHashtags) + '</note>';
 		}
 		if (hit.rating)
 			text += '<input-rating class="line" value="' + hit.rating.toFixed(1) + '"></input-rating>';
