@@ -1,4 +1,4 @@
-export { splitHashtags, renderHashtagButtons, hashtagButtonsMarkup, hashtagButtonStyle };
+export { splitHashtags, renderHashtags, hashtagsMarkup, hashtagStyle };
 
 const hashtagStyle = `
 hashtags {

@@ -1,7 +1,7 @@
 import { api } from "./api";
 import { dialog } from "./dialog";
 import { ui } from "./ui";
-import { splitHashtags, hashtagButtonsMarkup, hashtagButtonStyle } from "./hashtags";
+import { splitHashtags, hashtagsMarkup, hashtagStyle } from "./hashtags";
 
 export { listener };
 
@@ -126,7 +126,7 @@ class listener {
 					(events[i].note ? '<img class="speak" onclick="this.getRootNode().host.toggleSpeak()" src="image/speaker.svg" />' : '') +
 					(events[i].rating ? listRatings(events[i]) : '') +
 					(events[i].note ? '<note' + addEdit() + '>' + events[i].note.replace(/\n/g, '<br/>') +
-						(events[i].hashtags ? hashtagButtonsMarkup(splitHashtags(events[i].hashtags)) : '') + '</note>' : '') +
+						(events[i].hashtags ? hashtagsMarkup(splitHashtags(events[i].hashtags)) : '') + '</note>' : '') +
 					listFeedbacks(events[i]) +
 					(api.user?.id ?
 						'<separator></separator>' +
@@ -139,7 +139,7 @@ class listener {
 			});
 		}
 		document.querySelector('view-image').open(list, index,
-			`${hashtagButtonStyle}
+			`${hashtagStyle}
 rating {
 	font-size: 0.8em;
 	padding: 0.5em 1em 0 1em;

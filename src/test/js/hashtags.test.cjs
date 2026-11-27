@@ -11,10 +11,16 @@ const code = babel.transformSync(source, {
 }).code;
 const moduleExports = {};
 const document = {
-	createElement: () => ({
+	createElement: tagName => ({
+		tagName,
 		children: [],
 		appendChild(child) { this.children.push(child); return child; },
-		setAttribute(name, value) { this[name] = value; }
+		classList: {
+			values: new Set(),
+			add(value) { this.values.add(value); },
+			remove(value) { this.values.delete(value); },
+			contains(value) { return this.values.has(value); }
+		}
 	})
 };
 vm.runInNewContext(code, { exports: moduleExports, document });
@@ -28,11 +34,18 @@ test('hashtag buttons reflect and toggle case-insensitive selections', () => {
 	};
 	let clicked;
 	moduleExports.renderHashtags(container, ['freunde', 'familie'], selected, tag => clicked = tag);
-	assert.equal(container.children[0].textContent, '#freunde');
-	assert.true(container.children[0].classList.contains('pressed'));
-	assert.false(container.children[1].classList.contains('pressed'));
+	assert.equal(container.children[0].tagName, 'hashtag');
+	assert.equal(container.children[0].textContent, 'freunde');
+	assert.equal(container.children[0].classList.contains('pressed'), true);
+	assert.equal(container.children[1].classList.contains('pressed'), false);
 	container.children[1].onclick();
 	assert.equal(clicked, 'familie');
+});
+
+test('hashtag markup escapes text and marks selections', () => {
+	assert.equal(moduleExports.hashtagsMarkup(['<Freunde>'], ['<freunde>']),
+		'<hashtags><hashtag class="pressed">&lt;Freunde&gt;</hashtag></hashtags>');
+	assert.match(moduleExports.hashtagStyle, /hashtags hashtag/);
 });
 
 test('hashtag buttons display per-tag result counts when provided', () => {
