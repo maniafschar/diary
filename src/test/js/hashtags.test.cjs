@@ -27,7 +27,7 @@ test('hashtag buttons reflect and toggle case-insensitive selections', () => {
 		appendChild(button) { this.children.push(button); return button; }
 	};
 	let clicked;
-	moduleExports.renderHashtagButtons(container, ['freunde', 'familie'], selected, tag => clicked = tag);
+	moduleExports.renderHashtags(container, ['freunde', 'familie'], selected, tag => clicked = tag);
 	assert.equal(container.children[0].textContent, '#freunde');
 	assert.true(container.children[0].classList.contains('pressed'));
 	assert.false(container.children[1].classList.contains('pressed'));
@@ -41,7 +41,7 @@ test('hashtag buttons display per-tag result counts when provided', () => {
 		replaceChildren() { this.children = []; },
 		appendChild(button) { this.children.push(button); return button; }
 	};
-	moduleExports.renderHashtagButtons(container, ['Freunde'], [], () => {}, new Map([['freunde', 3]]));
+	moduleExports.renderHashtags(container, ['Freunde'], [], () => {}, new Map([['freunde', 3]]));
 	assert.equal(container.children[0].children[0].className, 'count');
 	assert.equal(container.children[0].children[0].textContent, '3');
 });
