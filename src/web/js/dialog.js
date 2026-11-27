@@ -565,6 +565,96 @@ div.toggle>div {
 			};
 		}
 	}
+	static eventList(event) {
+		var list = document.querySelector('event view-table').list;
+		var e = document.createElement('div');
+		e.appendChild(document.createElement('style')).textContent = `
+list {
+	display: block;
+	position: relative;
+	max-height: 70vh;
+	overflow-y: auto;
+}
+value {
+	width: 100%;
+	cursor: pointer;
+}
+word {
+	font-weight: bold;
+	display: block;
+	position: relative;
+	text-align: center;
+	padding-bottom: 1em;
+}
+word no {
+	font-size: 0.8em;
+	opacity: 0.2;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 1.7em;
+}
+label {
+	padding: 0.4em 0.8em 0 0.7em;
+	color: initial;
+}
+date {
+	position: relative;
+}
+note {
+	position: relative;
+	display: block;
+}
+note b {
+	color: blue;
+}
+images {
+	position: relative;
+	display: block;
+	text-align: center;
+	white-space: nowrap;
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+images img {
+	border-radius: 0.5em;
+	margin: 0.5em 0.5em 0 0.5em;
+}
+input-rating {
+	position: absolute;
+	right: 0.5em;
+	font-size: 0.8em;
+}`;
+		var heading = e.appendChild(document.createElement('word'));
+		if (event.detail.dateLabel)
+			heading.textContent = event.detail.dateLabel;
+		else
+			heading.innerHTML = event.detail.text ? event.detail.text + ' · ' + event.detail.count : '<input-rating value="' + event.detail.rating + '"></input-rating><no>' + event.detail.rating + '%</no>';
+		var items = e.appendChild(document.createElement('list'));
+		for (var i = 0; i < event.detail.ids.length; i++) {
+			var l = list[event.detail.ids[i]];
+			var label = items.appendChild(document.createElement('label'));
+			label.appendChild(document.createElement('date')).innerText = ui.formatTime(new Date(l.date.replace('+00:00', ''))) + ' ' + l.location.name;
+			var value = items.appendChild(document.createElement('value'));
+			var note = value.appendChild(document.createElement('note'));
+			listener.highlightStatisticNote(note, l.note || '', event.detail.matches || (event.detail.text ? [event.detail.text] : []));
+			value.setAttribute('onclick', 'event.stopPropagation();listener.updateViewImage(' + l.id + ');document.dispatchEvent(new CustomEvent("popup"))');
+			if (l.rating) {
+				var rating = value.appendChild(document.createElement('input-rating'));
+				rating.classList.add('line');
+				rating.setAttribute('value', l.rating);
+			}
+			var images = value.appendChild(document.createElement('images'));
+			for (var i2 = 0; i2 < l.eventImages.length; i2++)
+				images.appendChild(document.createElement('img')).src = api.mediaUrl(l.eventImages[i2].imageThumbnail);
+		}
+		e.addEventListener('click', () => {
+			listener.updateViewImage(list[event.detail.ids[0]].id);
+			document.dispatchEvent(new CustomEvent('popup'));
+		});
+		document.dispatchEvent(new CustomEvent('popup', { detail: { body: e } }));
+	}
 
 	static openTerms() {
 		var imprint = document.querySelector('imprint');
