@@ -73,7 +73,7 @@ td.column2 note {
 	word-break: break-word;
 }
 ${hashtagStyle}
-td.column2 hashtag-buttons {
+td.column2 hashtags {
 	margin-left: -0.5em;
 }
 td.column2 images {
@@ -226,7 +226,7 @@ results {
 		r.style.fontSize = '0.7em';
 		this.rating = row.appendChild(r);
 		this.rating.setOnchange(value => this.setStars(Math.round(value / 20)));
-		this.hashtagButtons = this._root.appendChild(document.createElement('hashtag-buttons'));
+		this.hashtagButtons = this._root.appendChild(document.createElement('hashtags'));
 		this.status = this._root.appendChild(document.createElement('status'));
 		this.results = this._root.appendChild(document.createElement('results'));
 		this.table = this.results.appendChild(document.createElement('view-table'));
