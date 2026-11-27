@@ -7,7 +7,7 @@ class api {
 	static url = api.serverUrl + '/rest/api/';
 	static clients = {};
 	static user;
-	static access;
+	static tempAccessToken;
 	static progressbar = false;
 
 	static mediaUrl(path) {
