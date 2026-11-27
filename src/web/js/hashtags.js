@@ -16,11 +16,11 @@ hashtags hashtag {
 	position: relative;
 	display: inline-block;
 	border-radius: 2em;
-	background: var(--background-clickable);
-	padding: 0.5em 0.75em;
+	background: rgba(0, 150, 255, 0.1);
+	padding: 0.25em 0.5em;
 	font-family: var(--font-family);
 	margin: 0 0.5em;
-	color: white;
+	color: rgba(0, 0, 0, 0.8);
 	transition: var(--transition-clickable);
 }
 hashtags hashtag.pressed {
