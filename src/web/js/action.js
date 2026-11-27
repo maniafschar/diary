@@ -332,7 +332,11 @@ class action {
 	static contactDelete() {
 		var button = document.querySelector('dialog-popup').content().querySelector('button.delete');
 		if (button.classList.contains('confirmed'))
-			api.contact.delete(() => action.logoff());
+			api.contact.delete(() => {
+				if (window.localStorage)
+					window.localStorage.removeItem('login');
+				action.logoff(true);
+			});
 		else
 			button.classList.add('confirmed');
 	}

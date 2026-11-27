@@ -87,6 +87,11 @@ public class ContactApi extends ApplicationApi {
 		return Utilities.filter(this.contactService.list(this.repository.one(Client.class, clientId)));
 	}
 
+	@DeleteMapping
+	public void delete(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId) {
+		this.contactService.delete(this.authorizationService.requireContact(contactId, clientId));
+	}
+
 	@GetMapping("event/{eventId}")
 	public List<ContactEvent> getEvent(@PathVariable final BigInteger eventId,
 			@RequestHeader final BigInteger contactId) {

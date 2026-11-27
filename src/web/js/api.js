@@ -477,7 +477,7 @@ class api {
 				method: 'DELETE',
 				success: success
 			});
-		}
+		},
 
 		deleteEvent(id, success) {
 			api.ajax({

@@ -265,7 +265,7 @@ ${dialog.stylePictures}`;
 		if (!contact.verified)
 			button.innerText = 'Email senden';
 		if (api.user.admin && contact.id == api.user.id) {
-			button = dialog.createButton(popup, 'action.contactDelete()');
+			button = dialog.createButton(popup, 'action.contactDelete()').querySelector('button');
 			button.classList.add('delete');
 			button.innerText = 'Profil löschen';
 		}
