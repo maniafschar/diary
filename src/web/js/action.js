@@ -293,8 +293,11 @@ class action {
 			});
 			return;
 		}
-		if (!access)
+		if (!access) {
 			api.authentication.deleteToken();
+			if (window.localStorage)
+				window.localStorage.removeItem('login');
+		}
 		api.logoff();
 		document.querySelectorAll('event view-table, user view-table').forEach(e => {
 			if (e.table().querySelector('tbody'))
