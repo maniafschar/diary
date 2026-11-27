@@ -335,7 +335,7 @@ class action {
 	static contactDelete() {
 		var button = document.querySelector('dialog-popup').content().querySelector('button.delete');
 		if (button.classList.contains('confirmed'))
-			api.contact.delete(() => action.logoff(true));
+			api.contact.delete(() => action.logoff());
 		else
 			button.classList.add('confirmed');
 	}
