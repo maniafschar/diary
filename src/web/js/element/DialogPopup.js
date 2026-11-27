@@ -201,6 +201,18 @@ button.icon img {
 	height: 60%;
 }
 
+button.confirmed {
+	background: rgba(255, 100, 100, 0.6);
+}
+
+button.confirmed::before {
+	content: 'endgültig ';
+}
+
+button.confirmed::after {
+	content: '?';
+}
+
 buttons {
 	position: relative;
 	display: block;
