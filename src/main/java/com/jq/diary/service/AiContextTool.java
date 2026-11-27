@@ -28,14 +28,24 @@ public class AiContextTool {
 			.followRedirects(HttpClient.Redirect.NEVER).build();
 
 	@Autowired
+	private EmailService emailService;
+
+	@Autowired
 	private AdminService adminService;
 
 	@Tool(description = "Sucht im Internet nach aktuellen Informationen (z.B. Veranstaltungen, Orte, Nachrichten) und liefert Trefferlisten mit Titel, URL und Auszug.")
 	public String webSearch(@ToolParam(description = "Suchanfrage") final String query) {
 		if (query == null || query.isBlank())
 			return "Leere Suchanfrage.";
-		return this
+		String response = this
 				.get("https://html.duckduckgo.com/html/?q=" + URLEncoder.encode(query.trim(), StandardCharsets.UTF_8));
+		if (response.contains("Please email the following code to:")) {
+        	Pattern pattern = Pattern.compile("to:\\s*(?<email>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})\\s*Code:\\s*(?<code>\\w+)");
+        	Matcher matcher = pattern.matcher(text);
+	        if (matcher.find())
+				emailService.send(matcher.group("email"), matcher.group("code"));
+		}
+		return response;
 	}
 
 	@Tool(description = "Lädt eine öffentliche Webseite (http/https) und liefert ihren Text.")
