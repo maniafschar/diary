@@ -165,7 +165,7 @@ class ui {
 			showTerms();
 		else {
 			imprint.querySelector('.imprint-panel').addEventListener('transitionend', () => showTerms(), { once: true });
-			dialog.openImprint();
+			ui.openImprint();
 		}
 	}
 }
