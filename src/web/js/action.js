@@ -329,6 +329,14 @@ class action {
 			document.querySelector('html').scrollTo({ top: document.querySelector('element.login .registration').getBoundingClientRect().top + document.querySelector('html').scrollTop, behavior: 'smooth' }), 50);
 	}
 
+	static contactDelete() {
+		var button = document.querySelector('dialog-popup').content().querySelector('button.delete');
+		if (button.classList.contains('confirmed'))
+			api.contact.delete(() => action.logoff());
+		else
+			button.classList.add('confirmed');
+	}
+
 	static eventDelete(id) {
 		var button = document.querySelector('dialog-popup').content().querySelector('button.delete');
 		if (button.classList.contains('confirmed'))
