@@ -177,7 +177,7 @@ button {
 	outline: none;
 	cursor: pointer;
 	font-family: var(--font-family);
-	margin: 0 0.5em;
+	margin: 0.5em;
 	color: white;
 	font-size: 1em;
 	transition: var(--transition-clickable)
