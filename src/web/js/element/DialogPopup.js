@@ -202,7 +202,7 @@ button.icon img {
 }
 
 button.confirmed {
-	background: rgba(255, 100, 100, 0.6);
+	background: red;
 }
 
 button.confirmed::before {
