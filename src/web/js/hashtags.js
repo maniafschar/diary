@@ -25,6 +25,7 @@ hashtags hashtag {
 }
 hashtags hashtag.pressed {
 	background: var(--background-clickable-highlight);
+	color: white;
 }
 hashtags hashtag .count {
 	font-size: 0.8em;
