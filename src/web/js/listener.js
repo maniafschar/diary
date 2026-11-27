@@ -568,6 +568,7 @@ input-rating {
 			}
 		});
 		document.addEventListener('contact', listener.updateContacts);
+		document.addEventListener('dialog-client', dialog.client);
 		document.addEventListener('event', listener.updateEvents);
 		document.querySelector('view-chat').parentElement.addEventListener('visible', () => {
 			if (!document.querySelector('view-chat').initialized())
