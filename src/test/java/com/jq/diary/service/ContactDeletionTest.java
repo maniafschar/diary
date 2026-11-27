@@ -1,8 +1,10 @@
 package com.jq.diary.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.HashSet;
@@ -143,6 +145,17 @@ class ContactDeletionTest {
 		demo.setEmail("Aaron@diary.cafe");
 		this.service.delete(first);
 		this.service.delete(demo);
+	}
+
+	@Test
+	void identifiesDemoUserCaseInsensitively() {
+		final Contact demo = new Contact();
+		demo.setEmail("Aaron@diary.cafe");
+		final Contact other = new Contact();
+		other.setEmail("other@example.com");
+
+		assertTrue(this.service.isDemoUser(demo));
+		assertFalse(this.service.isDemoUser(other));
 	}
 
 	private static Contact contact(final EntityManager em, final Client client, final String email) {

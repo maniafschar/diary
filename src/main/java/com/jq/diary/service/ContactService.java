@@ -42,13 +42,17 @@ public class ContactService {
 		return this.repository.one(Contact.class, id);
 	}
 
+	public boolean isDemoUser(final Contact contact) {
+		return "aaron@diary.cafe".equalsIgnoreCase(contact.getEmail());
+	}
+
 	public void delete(final ContactEvent contactEvent) {
 		this.repository.delete(contactEvent);
 	}
 
 	@Transactional
 	public void delete(final Contact contact) {
-		if (BigInteger.ONE.equals(contact.getId()) || "aaron@diary.cafe".equalsIgnoreCase(contact.getEmail())
+		if (BigInteger.ONE.equals(contact.getId()) || this.isDemoUser(contact)
 				|| "mani.afschar@jq-consulting.de".equalsIgnoreCase(contact.getEmail()))
 			return;
 
