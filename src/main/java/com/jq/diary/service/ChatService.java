@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import com.jq.diary.util.Utilities;
 
 @Service
 public class ChatService {
+	private static final Logger log = LoggerFactory.getLogger(ChatService.class);
 	private static final int MAX_HISTORY_MESSAGES = 30;
 	private static final String SYSTEM_PROMPT = "Du bist ein freundlicher, knapper KI-Chatassistent, "
 			+ "handle nie als Mensch. Antworte passend zum bisherigen Gespräch und benutze die beigefügten Kontexte der "
@@ -75,7 +78,10 @@ public class ChatService {
 						return Flux.error(new IllegalStateException("Spring AI chat request failed."));
 					this.repository.save(this.createMessage(contact, AiService.ACTOR_MODEL, response));
 					return Flux.empty();
-				}));
+				}))
+				.doOnError(error -> log.error("Failed to complete streamed chat response.", error))
+				// Keep the upstream subscription alive if the HTTP client disconnects.
+				.cache();
 	}
 
 	private List<Content> conversation(final Contact contact, final ChatMessage userMessage) {
