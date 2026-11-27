@@ -309,7 +309,7 @@ address {
 			viewCalendar.reset();
 			viewCalendar.setOpenDetail(day => {
 				if (day.events?.length)
-					listener.statisticDetail({ detail: { dateLabel: `${day.day}.${day.month}.${day.year}`, ids: day.events.map(event => event.index) } });
+					dialog.eventList({ detail: { dateLabel: `${day.day}.${day.month}.${day.year}`, ids: day.events.map(event => event.index) } });
 				else if (api.user?.id)
 					dialog.add(day);
 			});
@@ -434,27 +434,6 @@ address {
 		return { key: toKey(canonical), name: canonical };
 	}
 
-	static highlightStatisticNote(element, text, matches) {
-		if (!matches.length) {
-			element.textContent = text;
-			return;
-		}
-		var alternatives = matches.filter(Boolean).sort((a, b) => b.length - a.length)
-			.map(match => match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-		if (!alternatives.length) {
-			element.textContent = text;
-			return;
-		}
-		var pattern = new RegExp('(?<!\\p{L})(?:' + alternatives.join('|') + ')(?!\\p{L})', 'giu');
-		var last = 0;
-		for (const match of text.matchAll(pattern)) {
-			element.appendChild(document.createTextNode(text.slice(last, match.index)));
-			element.appendChild(document.createElement('b')).textContent = match[0];
-			last = match.index + match[0].length;
-		}
-		element.appendChild(document.createTextNode(text.slice(last)));
-	}
-
 	static init() {
 		window.addEventListener('scroll', () => {
 			document.querySelector('view-image').close();
@@ -485,7 +464,7 @@ address {
 		});
 		document.querySelector('view-search').addEventListener('open', listener.openSearchHit);
 		document.querySelector('view-search').parentElement.addEventListener('visible', () => document.querySelector('view-search').show());
-		document.querySelector('view-statistics').addEventListener('details', listener.statisticDetail);
+		document.querySelector('view-statistics').addEventListener('details', dialog.eventList);
 		var style = `
 thead {
 	display: none;
