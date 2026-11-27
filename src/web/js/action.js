@@ -280,7 +280,7 @@ class action {
 			});
 	}
 
-	static logoff(access) {
+	static logoff(preserveLogin) {
 		if (api.tempAccessToken) {
 			api.authentication.getEmail(email => {
 				document.dispatchEvent(new CustomEvent('popup', {
@@ -293,7 +293,7 @@ class action {
 			});
 			return;
 		}
-		if (!access) {
+		if (!preserveLogin) {
 			api.authentication.deleteToken();
 			if (window.localStorage)
 				window.localStorage.removeItem('login');
