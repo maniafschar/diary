@@ -471,6 +471,14 @@ class api {
 			});
 		},
 
+		delete(success) {
+			api.ajax({
+				url: 'contact',
+				method: 'DELETE',
+				success: success
+			});
+		}
+
 		deleteEvent(id, success) {
 			api.ajax({
 				url: 'contact/event/' + id,
