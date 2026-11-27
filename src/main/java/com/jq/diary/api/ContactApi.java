@@ -48,6 +48,8 @@ public class ContactApi extends ApplicationApi {
 	public BigInteger patch(@RequestHeader final BigInteger contactId, @RequestHeader final BigInteger clientId,
 			@RequestBody final Contact contact) throws EmailException {
 		final Contact user = this.authorizationService.requireContact(contactId, clientId);
+		if ("aaron@diary.cafe".equalsIgnoreCase(user.getEmail()))
+			return;
 		if (contact.getId() == null) {
 			contact.getClients().add(this.repository.one(Client.class, clientId));
 			contact.setCurrentClientId(contact.getClients().iterator().next().getId());
